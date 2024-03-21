@@ -81,6 +81,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     user-select: none;  
   }
   `
+  @property({type: Number, attribute: true, reflect: true})
+  counter = 0;
 
   @property({ type: Boolean })
   videoLoaded: boolean = false;
@@ -191,6 +193,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         }
       });
       const newInteraction = document.createElement('interaction-container') as InteractionContainer;
+      newInteraction.counter = this.counter++;
       this.drawer.appendChild(newInteraction);
     }
   }
@@ -217,7 +220,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   settingSelectionHandler = (e: CustomEvent) => {
-    console.log(e.detail);
+    if(!this.videoLoaded) return;
+    this.video.playbackRate = e.detail.item.value;
   }
 
 
@@ -259,9 +263,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                 <sl-menu-item>
                   Playback Speed
                   <sl-menu slot='submenu'>
-                    <sl-menu-item value='0,5'>0.5x</sl-menu-item>
+                    <sl-menu-item value='0.25'>0.25x</sl-menu-item>
+                    <sl-menu-item value='0.5'>0.5x</sl-menu-item>
                     <sl-menu-item value='1'>1x</sl-menu-item>
-                    <sl-menu-item value='1,5'>1.5x</sl-menu-item>
+                    <sl-menu-item value='1.5'>1.5x</sl-menu-item>
                     <sl-menu-item value='2'>2x</sl-menu-item>
                   <sl-menu>
                 </sl-menu-item>
@@ -285,15 +290,20 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 export class InteractionContainer extends LitElementWw {
 
 
-
   @property({ type: Boolean, attribute: true, reflect: true})
   active = true;
 
   @property({type: Number, attribute: true, reflect: true})
   startTime = 0;
 
+  @property({type: Number, attribute: true, reflect: true})
+  counter = 0;
+
   @property({type: String, attribute: true, reflect: true})
   interactionType;
+
+  @query('#drawer-content')
+  drawerContent;
 
   static get scopedElements() {
     return {
@@ -306,14 +316,14 @@ export class InteractionContainer extends LitElementWw {
     }
   }
 
-  static readonly styles = css``;
+  static styles = css``;
 
 
 
   updated(changedProperties){
     changedProperties.forEach((oldValue, property) => {
       if(property == 'active') {
-        this.style.display = this.active ? 'flex' : 'none';
+        this.drawerContent.style.display = this.active ? 'flex' : 'none';
       }
     });
   }
