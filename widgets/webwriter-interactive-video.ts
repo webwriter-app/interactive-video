@@ -43,6 +43,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     width: 100%
   }
 
+
   #controls {
     width: 98%;
     margin-left: 1%;
@@ -77,85 +78,98 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   #time-stamp {
     color: white;
+    user-select: none;  
   }
-  
   `
 
   @property({ type: Boolean })
-  fileSelected: boolean = false;
+  videoLoaded: boolean = false;
 
   @query('#container-vertical')
-  _container;
+  container;
 
   @query('#progress-bar')
-  _progressBar;
+  progressBar;
 
   @query('#interactions-drawer')
-  _drawer : SlDrawer;
+  drawer : SlDrawer;
 
   @query('#time-stamp')
-  _timeStamp;
+  timeStamp;
 
   @query('#video')
-  _video;
+  video : HTMLVideoElement;
 
   @query('#volume-slider')
-  _volumeSlider;
+  volumeSlider;
 
   @query('#drawer-slot')
-  _drawerSlot;
+  drawerSlot;
+
+  @query('#play')
+  playButton : SlButton;
 
   firstUpdated() {
-    this._video.controls = false;
-    this._progressBar.tooltipFormatter = (value: number) => this._formatTime(Math.floor((value / 100) * this._video.duration));
-    this._video.volume = 0.5;
-    this._volumeSlider.value = 50;
+    this.progressBar.disabled = true;
+    this.volumeSlider.value = 10;
+    this.volumeSlider.disabled = true;
   }
 
   closeDrawer(e: CustomEvent) {
-    this._drawer.open = !this._drawer.open;
+    if(!this.videoLoaded) return;
+    this.drawer.open = !this.drawer.open;
   }
 
   handlePlayClick = (e: CustomEvent) => {
-    const playButton = e.target as SlButton;
-    this._video.paused == true ? this._video.play() : this._video.pause();
-    playButton.innerHTML = this._video.paused ? 'Play' : 'Pause';
+    this.startStopVideo()
   }
 
+  startStopVideo() {
+    if(!this.videoLoaded) return;
+    if(this.video.ended) {
+      this.video.currentTime = 0;
+    }
+    this.video.paused ? this.video.play() : this.video.pause();
+    this.playButton.innerHTML = this.video.paused ? 'Play' : 'Pause';
+  }
+
+
+
   handleMuteClick = (e: CustomEvent) => {
+    if(!this.videoLoaded) return;
     const t = e.target as SlButton;
-    t.innerHTML = this._video.muted ? 'Mute' : 'Unmute';
-    this._video.muted = !this._video.muted;
+    t.innerHTML = this.video.muted ? 'Mute' : 'Unmute';
+    this.video.muted = !this.video.muted;
   }
 
   handleProgressChange = (e: CustomEvent) => {
     const progressBar = e.target as SlRange;
-    let currentTime = (progressBar.value / 100) * this._video.duration;
-    this._video.currentTime = Math.floor(currentTime);
+    let currentTime = (progressBar.value / 100) * this.video.duration;
+    this.video.currentTime = Math.floor(currentTime);
   }
 
   handleVolumeChange = (e: CustomEvent) => {
     const volumeSlider = e.target as SlRange;
-    this._video.volume = volumeSlider.value / 100;
+    this.video.volume = volumeSlider.value / 100;
   }
 
   handleTimeUpdate = (e: CustomEvent) => {
-    this._progressBar.value = (this._video.currentTime / this._video.duration) * 100;
-    this._timeStamp.innerHTML = this._formatTime(this._video.currentTime) + '/' + this._formatTime(this._video.duration);
+    this.progressBar.value = (this.video.currentTime / this.video.duration) * 100;
+    this.timeStamp.innerHTML = this.formatTime(this.video.currentTime) + '/' + this.formatTime(this.video.duration);
   }
 
-  _formatTime(time: number) {
+  formatTime(time: number) {
     const flooredTime = Math.floor(time);
-    if (this._video.duration < 3600) {
+    if (this.video.duration < 3600) {
       const seconds = flooredTime % 60, minutes = Math.floor(flooredTime / 60);
-      let result = this._fillSecondsMinutes(seconds, minutes);
+      let result = this.fillSecondsMinutes(seconds, minutes);
       return result;
     }
     const hours = flooredTime % 3600, minutes = Math.floor((flooredTime % 3600) / 60), seconds = flooredTime % 60;
-    return hours.toString() + ':' + this._fillSecondsMinutes(seconds, minutes);
+    return hours.toString() + ':' + this.fillSecondsMinutes(seconds, minutes);
   }
 
-  _fillSecondsMinutes(seconds: number, minutes: number) {
+  fillSecondsMinutes(seconds: number, minutes: number) {
     if (seconds < 10 && minutes < 10) {
       return '0' + minutes + ':' + '0' + seconds;
     } else if (seconds < 10 && minutes > 10) {
@@ -167,16 +181,17 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   handleAddClick = (e: CustomEvent) => {
-    if(!this._drawer.open) {
-      this._drawer.open = true;
-      const newInteraction = document.createElement('interaction-container') as InteractionContainer;
-      this._drawer.appendChild(newInteraction);
-      const slot = this._drawer.shadowRoot.querySelector('slot.drawer__body') as HTMLSlotElement;
+    if(!this.videoLoaded) return;
+    if(!this.drawer.open) {
+      this.drawer.open = true;
+      const slot = this.drawer.shadowRoot.querySelector('slot.drawer__body') as HTMLSlotElement;
       slot.assignedElements().forEach((element) => {
         if(element instanceof InteractionContainer) {
-          console.log(element);
+          element.active = false;
         }
       });
+      const newInteraction = document.createElement('interaction-container') as InteractionContainer;
+      this.drawer.appendChild(newInteraction);
     }
   }
 
@@ -186,26 +201,43 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       document.exitFullscreen();
     }
     else {
-      this._container.requestFullscreen();
+      this.container.requestFullscreen();
     }
   }
 
   handleLoadedMetadata = (e: CustomEvent) => {
-    this._timeStamp.innerHTML = '00:00/' + this._formatTime(this._video.duration);
+    this.videoLoaded = true;
+    this.progressBar.disabled = false;
+    this.timeStamp.innerHTML = '00:00/' + this.formatTime(this.video.duration);
+    this.progressBar.tooltipFormatter = (value: number) => this.formatTime(Math.floor((value / 100) * this.video.duration));
+    this.video.controls = false;
+    this.video.volume = 0.1;
+    this.volumeSlider.disabled = false;
+
   }
 
-  _settingSelectionHandler = (e: CustomEvent) => {
+  settingSelectionHandler = (e: CustomEvent) => {
     console.log(e.detail);
   }
 
+
+  seek(value: number) {
+    if(!this.videoLoaded) return;
+    this.video.currentTime += value;
+  }
+
+  handleVideoClick = (e: MouseEvent) => {
+    if(!this.videoLoaded) return;
+    this.startStopVideo();
+  }
 
 
   render() {
     return html`
     <div id='container-vertical'>
-      <div class='container-video'>
-        <video id='video' preload='metadata'  poster="https://assets.codepen.io/32795/poster.png" @timeupdate=${this.handleTimeUpdate} @loadedmetadata=${this.handleLoadedMetadata}>
-          <source id='mp4' src="http://media.w3.org/2010/05/sintel/trailer.mp4" type='video/mp4' />
+      <div class='container-video' @click=${this.handleVideoClick}>
+        <video id='video' preload='metadata'  poster='https://assets.codepen.io/32795/poster.png' @timeupdate=${this.handleTimeUpdate} @loadedmetadata=${this.handleLoadedMetadata}>
+          <source id='mp4' src='http://media.w3.org/2010/05/sintel/trailer.mp4' type='video/mp4' />
         </video>
       </div>
       <div id='controls'>
@@ -218,10 +250,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
             <p id='time-stamp'>00:00/00:00</p>
           </div>
           <div id='controls-lower-right'>
-            <sl-button @click=${this.handleMuteClick}>Mute</sl-button>
+            <sl-button id='play' @click=${this.handleMuteClick}>Mute</sl-button>
             <sl-range id='volume-slider' @sl-change=${this.handleVolumeChange}></sl-range>
             <sl-button @click=${this.handleAddClick}>Add</sl-button>
-            <sl-dropdown placement='top-start' id='settings-menu' @sl-select=${this._settingSelectionHandler}>
+            <sl-dropdown placement='top-start' id='settings-menu' @sl-select=${this.settingSelectionHandler}>
               <sl-button slot='trigger'>Settings</sl-button>
               <sl-menu>
                 <sl-menu-item>
@@ -253,8 +285,15 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 export class InteractionContainer extends LitElementWw {
 
 
-  @property({ type: Boolean, attribute: true })
+
+  @property({ type: Boolean, attribute: true, reflect: true})
   active = true;
+
+  @property({type: Number, attribute: true, reflect: true})
+  startTime = 0;
+
+  @property({type: String, attribute: true, reflect: true})
+  interactionType;
 
   static get scopedElements() {
     return {
@@ -267,11 +306,19 @@ export class InteractionContainer extends LitElementWw {
     }
   }
 
-  static readonly styles = css`
+  static readonly styles = css``;
 
-  `
 
-  _interactionTypeSelectionHandler = (e: CustomEvent) => {
+
+  updated(changedProperties){
+    changedProperties.forEach((oldValue, property) => {
+      if(property == 'active') {
+        this.style.display = this.active ? 'flex' : 'none';
+      }
+    });
+  }
+
+  interactionTypeSelectionHandler = (e: CustomEvent) => {
     if(e.detail.item.value==1) {
       this.shadowRoot.getElementById('replace-interaction-settings').hidden = false;
       this.shadowRoot.getElementById('overlay-interaction-settings').hidden = true;
@@ -285,8 +332,9 @@ export class InteractionContainer extends LitElementWw {
   render() {
 
     return html`
-    <div>
-      <sl-dropdown label='Interaction Type' id='interaction-type-dropdown' @sl-select=${this._interactionTypeSelectionHandler}>
+
+    <div id='drawer-content'>
+      <sl-dropdown label='Interaction Type' id='interaction-type-dropdown' @sl-select=${this.interactionTypeSelectionHandler}>
           <sl-button slot='trigger' id='interaction-type-button' caret>Interaction Type</sl-button>
           <sl-menu>
             <sl-menu-item value='1'>Replace</sl-menu-item>
