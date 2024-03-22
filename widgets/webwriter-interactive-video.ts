@@ -87,6 +87,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property({ type: Boolean })
   videoLoaded: boolean = false;
 
+  @property({ type: String})
+  videoDurationFormatted: string = '00:00';
+
   @query('#container-vertical')
   container;
 
@@ -157,7 +160,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   handleTimeUpdate = (e: CustomEvent) => {
     this.progressBar.value = (this.video.currentTime / this.video.duration) * 100;
-    this.timeStamp.innerHTML = this.formatTime(this.video.currentTime) + '/' + this.formatTime(this.video.duration);
+    this.timeStamp.innerHTML = this.formatTime(this.video.currentTime) + '/' + this.videoDurationFormatted;
   }
 
   formatTime(time: number) {
@@ -216,7 +219,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.video.controls = false;
     this.video.volume = 0.1;
     this.volumeSlider.disabled = false;
-
+    this.videoDurationFormatted = this.formatTime(this.video.duration);
   }
 
   settingSelectionHandler = (e: CustomEvent) => {
@@ -316,12 +319,12 @@ export class InteractionContainer extends LitElementWw {
     }
   }
 
-  static styles = css``;
+  static readonly styles = css``;
 
 
 
   updated(changedProperties){
-    changedProperties.forEach((oldValue, property) => {
+    changedProperties.forEach((_oldValue, property) => {
       if(property == 'active') {
         this.drawerContent.style.display = this.active ? 'flex' : 'none';
       }
@@ -342,7 +345,6 @@ export class InteractionContainer extends LitElementWw {
   render() {
 
     return html`
-
     <div id='drawer-content'>
       <sl-dropdown label='Interaction Type' id='interaction-type-dropdown' @sl-select=${this.interactionTypeSelectionHandler}>
           <sl-button slot='trigger' id='interaction-type-button' caret>Interaction Type</sl-button>
