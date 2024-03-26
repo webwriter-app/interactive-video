@@ -84,13 +84,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   `
 
-  @property({type: Number, attribute: true, reflect: true})
+  @property({ type: Number, attribute: true, reflect: true })
   counter = 0;
 
   @property({ type: Boolean })
   videoLoaded: boolean = false;
 
-  @property({ type: String})
+  @property({ type: String })
   videoDurationFormatted: string = '00:00';
 
   @query('#container-vertical')
@@ -100,13 +100,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   progressBar;
 
   @query('#interactions-drawer')
-  drawer : SlDrawer;
+  drawer: SlDrawer;
 
   @query('#time-stamp')
   timeStamp;
 
   @query('#video')
-  video : HTMLVideoElement;
+  video: HTMLVideoElement;
 
   @query('#volume-slider')
   volumeSlider;
@@ -115,7 +115,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   drawerSlot;
 
   @query('#play')
-  playButton : SlButton;
+  playButton: SlButton;
 
   @query('#interactionslot')
   interactionSlot;
@@ -127,7 +127,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   closeDrawer(e: CustomEvent) {
-    if(!this.videoLoaded) return;
+    if (!this.videoLoaded) return;
     this.drawer.open = !this.drawer.open;
   }
 
@@ -136,8 +136,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   startStopVideo() {
-    if(!this.videoLoaded) return;
-    if(this.video.ended) {
+    if (!this.videoLoaded) return;
+    if (this.video.ended) {
       this.video.currentTime = 0;
     }
     this.video.paused ? this.video.play() : this.video.pause();
@@ -147,7 +147,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
 
   handleMuteClick = (e: CustomEvent) => {
-    if(!this.videoLoaded) return;
+    if (!this.videoLoaded) return;
     const t = e.target as SlButton;
     t.innerHTML = this.video.muted ? 'Mute' : 'Unmute';
     this.video.muted = !this.video.muted;
@@ -192,19 +192,19 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   handleAddClick = (e: CustomEvent) => {
-    if(!this.videoLoaded) return;
-    if(!this.drawer.open) {
+    if (!this.videoLoaded) return;
+    if (!this.drawer.open) {
       this.drawer.open = true;
       const slot = this.drawer.shadowRoot.querySelector('slot.drawer__body') as HTMLSlotElement;
       slot.assignedElements().forEach((element) => {
-        if(element instanceof InteractionSettings) {
+        if (element instanceof InteractionSettings) {
           element.active = false;
         }
       });
       const newInteraction = document.createElement('interaction-settings') as InteractionSettings;
       newInteraction.counter = this.counter++;
       newInteraction.startTime = this.video.currentTime.toString();
-      
+
       this.drawer.appendChild(newInteraction);
     }
   }
@@ -228,51 +228,53 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.video.volume = 0.1;
     this.volumeSlider.disabled = false;
     this.videoDurationFormatted = this.formatTime(this.video.duration);
-    const interactionTest = document.createElement('ww-interaction') as WwInteraction;
-    const p = document.createElement('p');
-    p.innerHTML = 'Test';
+    const interactionTest = this.ownerDocument.createElement('ww-interaction') as WwInteraction;
+    const p = this.ownerDocument.createElement('p');
     interactionTest.appendChild(p)
     this.container.appendChild(interactionTest);
     console.log(interactionTest);
-    console.log(this.interactionSlot);
 
   }
 
   settingSelectionHandler = (e: CustomEvent) => {
-    if(!this.videoLoaded) return;
+    if (!this.videoLoaded) return;
     this.video.playbackRate = e.detail.item.value;
   }
 
 
   seek(value: number) {
-    if(!this.videoLoaded) return;
+    if (!this.videoLoaded) return;
     this.video.currentTime += value;
   }
 
   handleVideoClick = (e: MouseEvent) => {
-    if(!this.videoLoaded) return;
+    if (!this.videoLoaded) return;
     this.startStopVideo();
   }
 
 
   render() {
     return html`
-    <slot></slot>
     <div id='container-vertical'>
+      <slot></slot>
+      <!-- container for the video element -->
       <div class='container-video' @click=${this.handleVideoClick}>
         <video id='video' preload='metadata'  poster='https://assets.codepen.io/32795/poster.png' @timeupdate=${this.handleTimeUpdate} @loadedmetadata=${this.handleLoadedMetadata}>
           <source id='mp4' src='http://media.w3.org/2010/05/sintel/trailer.mp4' type='video/mp4' />
         </video>
       </div>
+      <!-- container for the controls -->
       <div id='controls'>
         <div id='progress-bar-container'>
           <sl-range id='progress-bar' @sl-change=${this.handleProgressChange}></sl-range>
         </div>
         <div id='controls-lower'>
+          <!-- contains the play button and the time stamp -->
           <div id='controls-lower-left'>
             <sl-button id='play' @click=${this.handlePlayClick}>Play</sl-button>
             <p id='time-stamp'>00:00/00:00</p>
           </div>
+          <!-- contains the volume slider and other controls -->
           <div id='controls-lower-right'>
             <sl-button id='play' @click=${this.handleMuteClick}>Mute</sl-button>
             <sl-range id='volume-slider' @sl-change=${this.handleVolumeChange}></sl-range>
@@ -293,15 +295,17 @@ export class WebwriterInteractiveVideo extends LitElementWw {
               </sl-menu>
             </sl-dropdown>
             <sl-button id='fullscreen-button' @click=${this.handleFullscreenClick}>FS</sl-button>
-          </div>
+          </div>  
         </div>
       </div>
+
+      <!-- drawer for adding and managing interactions -->
       <sl-drawer label='Add Interaction' contained id='interactions-drawer'>
         <slot name='interaction-setting-slot' id='drawer-slot'></slot>
         <sl-button slot="footer" variant="primary" @click=${this.closeDrawer}>Close</sl-button>
       </sl-drawer>
     </div>
-    `;
+  `;
   }
 }
 
@@ -312,7 +316,7 @@ export class WwInteraction extends LitElementWw {
   `;
 
   render() {
-    return html `
+    return html`
     <slot></slot>`;
   }
 }
@@ -321,19 +325,19 @@ export class WwInteraction extends LitElementWw {
 export class InteractionSettings extends LitElementWw {
 
 
-  @property({ type: Boolean, attribute: true, reflect: true})
+  @property({ type: Boolean, attribute: true, reflect: true })
   active = true;
 
-  @property({type: Number, attribute: true, reflect: true})
+  @property({ type: Number, attribute: true, reflect: true })
   startTime = '';
-  
-  @property({type: Number, attribute: true, reflect: true})
+
+  @property({ type: Number, attribute: true, reflect: true })
   endTime = '';
 
-  @property({type: Number, attribute: true, reflect: true})
+  @property({ type: Number, attribute: true, reflect: true })
   counter = 0;
 
-  @property({type: String, attribute: true, reflect: true})
+  @property({ type: String, attribute: true, reflect: true })
   interactionType;
 
   @query('#drawer-content')
@@ -359,16 +363,16 @@ export class InteractionSettings extends LitElementWw {
 
 
 
-  updated(changedProperties){
+  updated(changedProperties) {
     changedProperties.forEach((_oldValue, property) => {
-      if(property == 'active') {
+      if (property == 'active') {
         this.drawerContent.style.display = this.active ? 'flex' : 'none';
       }
     });
   }
 
   interactionTypeSelectionHandler = (e: CustomEvent) => {
-    if(e.detail.item.value==1) {
+    if (e.detail.item.value == 1) {
       this.shadowRoot.getElementById('replace-interaction-settings').hidden = false;
       this.shadowRoot.getElementById('overlay-interaction-settings').hidden = true;
     } else {
@@ -405,15 +409,15 @@ export class InteractionSettings extends LitElementWw {
   }
 }
 
-  /*
-  In den attributen der elemente (z.b. hotspot element) kann man da text reinschreiben in den slot und als attribut des elements zusätzliche daten speichern
-  marker rumziehen lassen, sonst on click (add) default values einfügen
-  man wählt in der leiste die interaktion aus und kriegt einen draghandler wo man die direkt länger/kürzer ziehen kann
-  nicht davon abhängig machen was drinsteckt
+/*
+In den attributen der elemente (z.b. hotspot element) kann man da text reinschreiben in den slot und als attribut des elements zusätzliche daten speichern
+marker rumziehen lassen, sonst on click (add) default values einfügen
+man wählt in der leiste die interaktion aus und kriegt einen draghandler wo man die direkt länger/kürzer ziehen kann
+nicht davon abhängig machen was drinsteckt
 
-  2 arten:punktuell: pausieren das video und ersetzen das widget komplett
-          zeitspanne: haben eine start und endzeit und liegen auf dem widget
-        
+2 arten:punktuell: pausieren das video und ersetzen das widget komplett
+        zeitspanne: haben eine start und endzeit und liegen auf dem widget
+      
 
-  aggregate funktionen für alle interaktionen/einige interaktionen, z.b. shift-click für mehrere nach dem clicken der ersten
-  */
+aggregate funktionen für alle interaktionen/einige interaktionen, z.b. shift-click für mehrere nach dem clicken der ersten
+*/
