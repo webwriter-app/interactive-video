@@ -22,11 +22,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       'sl-card': SlCard,
       'sl-icon-button': SlIconButton,
       'sl-drawer': SlDrawer,
-      'interaction-container': InteractionContainer,
+      'interaction-settings': InteractionSettings,
       'sl-range': SlRange,
       'sl-dropdown': SlDropdown,
       'sl-menu': SlMenu,
-      'sl-menu-item': SlMenuItem
+      'sl-menu-item': SlMenuItem,
+      'ww-interaction': WwInteraction
     }
   }
 
@@ -80,7 +81,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     color: white;
     user-select: none;  
   }
+
   `
+
   @property({type: Number, attribute: true, reflect: true})
   counter = 0;
 
@@ -113,6 +116,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   @query('#play')
   playButton : SlButton;
+
+  @query('#interactionslot')
+  interactionSlot;
 
   firstUpdated() {
     this.progressBar.disabled = true;
@@ -191,12 +197,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       this.drawer.open = true;
       const slot = this.drawer.shadowRoot.querySelector('slot.drawer__body') as HTMLSlotElement;
       slot.assignedElements().forEach((element) => {
-        if(element instanceof InteractionContainer) {
+        if(element instanceof InteractionSettings) {
           element.active = false;
         }
       });
-      const newInteraction = document.createElement('interaction-container') as InteractionContainer;
+      const newInteraction = document.createElement('interaction-settings') as InteractionSettings;
       newInteraction.counter = this.counter++;
+      newInteraction.startTime = this.video.currentTime.toString();
+      
       this.drawer.appendChild(newInteraction);
     }
   }
@@ -220,6 +228,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.video.volume = 0.1;
     this.volumeSlider.disabled = false;
     this.videoDurationFormatted = this.formatTime(this.video.duration);
+    const interactionTest = document.createElement('ww-interaction') as WwInteraction;
+    const p = document.createElement('p');
+    p.innerHTML = 'Test';
+    interactionTest.appendChild(p)
+    this.container.appendChild(interactionTest);
+    console.log(interactionTest);
+    console.log(this.interactionSlot);
+
   }
 
   settingSelectionHandler = (e: CustomEvent) => {
@@ -241,6 +257,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   render() {
     return html`
+    <slot></slot>
     <div id='container-vertical'>
       <div class='container-video' @click=${this.handleVideoClick}>
         <video id='video' preload='metadata'  poster='https://assets.codepen.io/32795/poster.png' @timeupdate=${this.handleTimeUpdate} @loadedmetadata=${this.handleLoadedMetadata}>
@@ -280,7 +297,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         </div>
       </div>
       <sl-drawer label='Add Interaction' contained id='interactions-drawer'>
-        <slot name='interaction-container-slot' id='drawer-slot'></slot>
+        <slot name='interaction-setting-slot' id='drawer-slot'></slot>
         <sl-button slot="footer" variant="primary" @click=${this.closeDrawer}>Close</sl-button>
       </sl-drawer>
     </div>
@@ -288,16 +305,30 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 }
 
+@customElement('ww-interaction')
+export class WwInteraction extends LitElementWw {
 
-@customElement('interaction-container')
-export class InteractionContainer extends LitElementWw {
+  static readonly styles = css`
+  `;
+
+  render() {
+    return html `
+    <slot></slot>`;
+  }
+}
+
+@customElement('interaction-settings')
+export class InteractionSettings extends LitElementWw {
 
 
   @property({ type: Boolean, attribute: true, reflect: true})
   active = true;
 
   @property({type: Number, attribute: true, reflect: true})
-  startTime = 0;
+  startTime = '';
+  
+  @property({type: Number, attribute: true, reflect: true})
+  endTime = '';
 
   @property({type: Number, attribute: true, reflect: true})
   counter = 0;
@@ -319,7 +350,12 @@ export class InteractionContainer extends LitElementWw {
     }
   }
 
-  static readonly styles = css``;
+  static readonly styles = css`
+    #drawer-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }`;
 
 
 
@@ -347,21 +383,23 @@ export class InteractionContainer extends LitElementWw {
     return html`
     <div id='drawer-content'>
       <sl-dropdown label='Interaction Type' id='interaction-type-dropdown' @sl-select=${this.interactionTypeSelectionHandler}>
-          <sl-button slot='trigger' id='interaction-type-button' caret>Interaction Type</sl-button>
-          <sl-menu>
-            <sl-menu-item value='1'>Replace</sl-menu-item>
-            <sl-menu-item value='2'>Overlay</sl-menu-item>
-          </sl-menu>
-        </sl-dropdown>
-        <div id='interaction-settings-container'>
-          <div id='overlay-interaction-settings' hidden>
-            <sl-input label='Start Time'></sl-input>
-            <sl-input label='End Time'></sl-input>
-          </div>
-          <div id='replace-interaction-settings' hidden>
-            <sl-input label='Timestamp'></sl-input>
-          </div>
+        <sl-button slot='trigger' id='interaction-type-button' caret>Interaction Type</sl-button>
+        <sl-menu>
+          <sl-menu-item value='1'>Replace</sl-menu-item>
+          <sl-menu-item value='2'>Overlay</sl-menu-item>
+        </sl-menu>
+      </sl-dropdown>
+      <div id='interaction-settings-container'>
+        <div id='overlay-interaction-settings' hidden>
+          <sl-input label='Start Time'>${this.startTime}</sl-input>
+          <sl-input label='End Time'>${this.endTime}</sl-input>
+          <!-- This should accept a Text input and overlay it onto the widget -->
         </div>
+        <div id='replace-interaction-settings' hidden>
+          <sl-input label='Timestamp'></sl-input>
+          <slot></slot>
+        </div>
+      </div>
     </div>
     `;
   }
