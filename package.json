@@ -2,11 +2,20 @@
   "name": "@webwriter/interactive-video",
   "version": "0.0.1",
   "exports": {
-    "./widgets/webwriter-interactive-video": "./widgets/webwriter-interactive-video.ts"
+    "./widgets/webwriter-interactive-video": "./widgets/webwriter-interactive-video.ts",
+    "./widgets/ww-interaction": "./widgets/ww-interaction.ts"
   },
   "keywords": [
     "webwriter-widget"
   ],
+  "editingConfig":{
+    "./widgets/webwriter-interactive-video": {
+      "content": "ww-interaction*"
+    },
+    "./widgets/ww-interaction.ts": {
+      "content": "flow*"
+    }
+  },
   "license": "MIT",
   "author": "Tarik Vural",
   "dependencies": {

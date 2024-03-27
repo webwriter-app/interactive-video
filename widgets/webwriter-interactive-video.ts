@@ -12,6 +12,8 @@ import SlDropdown from '@shoelace-style/shoelace/dist/components/dropdown/dropdo
 import SlMenu from '@shoelace-style/shoelace/dist/components/menu/menu.js'
 import SlMenuItem from '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js'
 
+import { InteractionSettings } from "./ww-interaction"
+
 @customElement("webwriter-interactive-video")
 export class WebwriterInteractiveVideo extends LitElementWw {
   static get scopedElements() {
@@ -26,8 +28,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       'sl-range': SlRange,
       'sl-dropdown': SlDropdown,
       'sl-menu': SlMenu,
-      'sl-menu-item': SlMenuItem,
-      'ww-interaction': WwInteraction
+      'sl-menu-item': SlMenuItem
     }
   }
 
@@ -117,14 +118,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @query('#play')
   playButton: SlButton;
 
-  @query('#interactionslot')
-  interactionSlot;
 
-  firstUpdated() {
-    this.progressBar.disabled = true;
-    this.volumeSlider.value = 10;
-    this.volumeSlider.disabled = true;
-  }
 
   closeDrawer(e: CustomEvent) {
     if (!this.videoLoaded) return;
@@ -136,6 +130,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   startStopVideo() {
+    console.log(this);
     if (!this.videoLoaded) return;
     if (this.video.ended) {
       this.video.currentTime = 0;
@@ -170,42 +165,32 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   formatTime(time: number) {
-    const flooredTime = Math.floor(time);
-    if (this.video.duration < 3600) {
-      const seconds = flooredTime % 60, minutes = Math.floor(flooredTime / 60);
-      let result = this.fillSecondsMinutes(seconds, minutes);
-      return result;
-    }
-    const hours = flooredTime % 3600, minutes = Math.floor((flooredTime % 3600) / 60), seconds = flooredTime % 60;
-    return hours.toString() + ':' + this.fillSecondsMinutes(seconds, minutes);
+    let result =''
+    const flooredTime = Math.floor(time), hours = Math.floor(time / 3600), minutes = Math.floor((flooredTime % 3600) / 60), seconds = flooredTime % 60;
+    if(hours > 0) result += hours.toString() + ':';
+    minutes < 10 ? result += '0' + minutes.toString() + ':' : result += minutes.toString() + ':';
+    seconds < 10 ? result += '0' + seconds.toString() : result += seconds.toString();
+    return result;
   }
 
-  fillSecondsMinutes(seconds: number, minutes: number) {
-    if (seconds < 10 && minutes < 10) {
-      return '0' + minutes + ':' + '0' + seconds;
-    } else if (seconds < 10 && minutes > 10) {
-      return minutes.toString() + ':' + '0' + seconds;
-    } else if (seconds > 10 && minutes < 10) {
-      return '0' + minutes + ':' + seconds;
-    }
-    return minutes.toString() + ':' + seconds.toString();
-  }
 
   handleAddClick = (e: CustomEvent) => {
     if (!this.videoLoaded) return;
     if (!this.drawer.open) {
       this.drawer.open = true;
+      /* einschränken, dass nur interactionsettings reinkommen */
       const slot = this.drawer.shadowRoot.querySelector('slot.drawer__body') as HTMLSlotElement;
       slot.assignedElements().forEach((element) => {
         if (element instanceof InteractionSettings) {
           element.active = false;
         }
       });
-      const newInteraction = document.createElement('interaction-settings') as InteractionSettings;
-      newInteraction.counter = this.counter++;
-      newInteraction.startTime = this.video.currentTime.toString();
-
-      this.drawer.appendChild(newInteraction);
+      /*  in editingConfig hinzufügen, dass InteractionSettings viable slot content ist*/
+      const interactionContainer = document.createElement('interaction-settings') as InteractionSettings;
+      interactionContainer.slot = 'interaction-setting-slot';
+      interactionContainer.counter = this.counter++;
+      interactionContainer.startTime = this.video.currentTime;
+      this.appendChild(interactionContainer);
     }
   }
 
@@ -228,12 +213,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.video.volume = 0.1;
     this.volumeSlider.disabled = false;
     this.videoDurationFormatted = this.formatTime(this.video.duration);
-    const interactionTest = this.ownerDocument.createElement('ww-interaction') as WwInteraction;
-    const p = this.ownerDocument.createElement('p');
-    interactionTest.appendChild(p)
-    this.container.appendChild(interactionTest);
-    console.log(interactionTest);
-
   }
 
   settingSelectionHandler = (e: CustomEvent) => {
@@ -252,11 +231,18 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.startStopVideo();
   }
 
+  firstUpdated() {
+    this.progressBar.disabled = true;
+    this.volumeSlider.value = 10;
+    this.volumeSlider.disabled = true;
+  }
+
 
   render() {
-    return html`
+    return html`      
     <div id='container-vertical'>
-      <slot></slot>
+      
+    <slot></slot>
       <!-- container for the video element -->
       <div class='container-video' @click=${this.handleVideoClick}>
         <video id='video' preload='metadata'  poster='https://assets.codepen.io/32795/poster.png' @timeupdate=${this.handleTimeUpdate} @loadedmetadata=${this.handleLoadedMetadata}>
@@ -309,105 +295,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 }
 
-@customElement('ww-interaction')
-export class WwInteraction extends LitElementWw {
 
-  static readonly styles = css`
-  `;
-
-  render() {
-    return html`
-    <slot></slot>`;
-  }
-}
-
-@customElement('interaction-settings')
-export class InteractionSettings extends LitElementWw {
-
-
-  @property({ type: Boolean, attribute: true, reflect: true })
-  active = true;
-
-  @property({ type: Number, attribute: true, reflect: true })
-  startTime = '';
-
-  @property({ type: Number, attribute: true, reflect: true })
-  endTime = '';
-
-  @property({ type: Number, attribute: true, reflect: true })
-  counter = 0;
-
-  @property({ type: String, attribute: true, reflect: true })
-  interactionType;
-
-  @query('#drawer-content')
-  drawerContent;
-
-  static get scopedElements() {
-    return {
-      'sl-button': SlButton,
-      'sl-menu': SlMenu,
-      'sl-menu-item': SlMenuItem,
-      'sl-dropdown': SlDropdown,
-      'sl-input': SlInput,
-
-    }
-  }
-
-  static readonly styles = css`
-    #drawer-content {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }`;
-
-
-
-  updated(changedProperties) {
-    changedProperties.forEach((_oldValue, property) => {
-      if (property == 'active') {
-        this.drawerContent.style.display = this.active ? 'flex' : 'none';
-      }
-    });
-  }
-
-  interactionTypeSelectionHandler = (e: CustomEvent) => {
-    if (e.detail.item.value == 1) {
-      this.shadowRoot.getElementById('replace-interaction-settings').hidden = false;
-      this.shadowRoot.getElementById('overlay-interaction-settings').hidden = true;
-    } else {
-      this.shadowRoot.getElementById('replace-interaction-settings').hidden = true;
-      this.shadowRoot.getElementById('overlay-interaction-settings').hidden = false;
-    }
-  }
-
-
-  render() {
-
-    return html`
-    <div id='drawer-content'>
-      <sl-dropdown label='Interaction Type' id='interaction-type-dropdown' @sl-select=${this.interactionTypeSelectionHandler}>
-        <sl-button slot='trigger' id='interaction-type-button' caret>Interaction Type</sl-button>
-        <sl-menu>
-          <sl-menu-item value='1'>Replace</sl-menu-item>
-          <sl-menu-item value='2'>Overlay</sl-menu-item>
-        </sl-menu>
-      </sl-dropdown>
-      <div id='interaction-settings-container'>
-        <div id='overlay-interaction-settings' hidden>
-          <sl-input label='Start Time'>${this.startTime}</sl-input>
-          <sl-input label='End Time'>${this.endTime}</sl-input>
-          <!-- This should accept a Text input and overlay it onto the widget -->
-        </div>
-        <div id='replace-interaction-settings' hidden>
-          <sl-input label='Timestamp'></sl-input>
-          <slot></slot>
-        </div>
-      </div>
-    </div>
-    `;
-  }
-}
 
 /*
 In den attributen der elemente (z.b. hotspot element) kann man da text reinschreiben in den slot und als attribut des elements zusätzliche daten speichern
