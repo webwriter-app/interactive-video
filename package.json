@@ -3,16 +3,16 @@
   "version": "0.0.1",
   "exports": {
     "./widgets/webwriter-interactive-video": "./widgets/webwriter-interactive-video.ts",
-    "./widgets/ww-interaction": "./widgets/ww-interaction.ts"
+    "./widgets/webwriter-video-interaction": "./widgets/webwriter-video-interaction.ts"
   },
   "keywords": [
     "webwriter-widget"
   ],
   "editingConfig":{
     "./widgets/webwriter-interactive-video": {
-      "content": "ww-interaction*"
+      "content": "flow*"
     },
-    "./widgets/ww-interaction.ts": {
+    "./widgets/webwriter-video-interaction": {
       "content": "flow*"
     }
   },

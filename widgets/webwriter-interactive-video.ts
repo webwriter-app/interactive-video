@@ -12,7 +12,7 @@ import SlDropdown from '@shoelace-style/shoelace/dist/components/dropdown/dropdo
 import SlMenu from '@shoelace-style/shoelace/dist/components/menu/menu.js'
 import SlMenuItem from '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js'
 
-import { InteractionSettings } from "./ww-interaction"
+import { WwVideoInteraction } from "./webwriter-video-interaction"
 
 @customElement("webwriter-interactive-video")
 export class WebwriterInteractiveVideo extends LitElementWw {
@@ -24,7 +24,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       'sl-card': SlCard,
       'sl-icon-button': SlIconButton,
       'sl-drawer': SlDrawer,
-      'interaction-settings': InteractionSettings,
       'sl-range': SlRange,
       'sl-dropdown': SlDropdown,
       'sl-menu': SlMenu,
@@ -181,15 +180,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       /* einschränken, dass nur interactionsettings reinkommen */
       const slot = this.drawer.shadowRoot.querySelector('slot.drawer__body') as HTMLSlotElement;
       slot.assignedElements().forEach((element) => {
-        if (element instanceof InteractionSettings) {
+        if (element instanceof WwVideoInteraction) {
           element.active = false;
         }
       });
       /*  in editingConfig hinzufügen, dass InteractionSettings viable slot content ist*/
-      const interactionContainer = document.createElement('interaction-settings') as InteractionSettings;
+      const interactionContainer = document.createElement('webwriter-video-interaction');
       interactionContainer.slot = 'interaction-setting-slot';
-      interactionContainer.counter = this.counter++;
-      interactionContainer.startTime = this.video.currentTime;
       this.appendChild(interactionContainer);
     }
   }

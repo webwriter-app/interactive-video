@@ -12,20 +12,9 @@ import SlDropdown from '@shoelace-style/shoelace/dist/components/dropdown/dropdo
 import SlMenu from '@shoelace-style/shoelace/dist/components/menu/menu.js'
 import SlMenuItem from '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js'
 
-@customElement('ww-interaction')
-export class WwInteraction extends LitElementWw {
-
-  static readonly styles = css`
-  `;
-
-  render() {
-    return html`
-    <slot></slot>`;
-  }
-}
 /* In eigene Datei legen, editingConfig und export anpassen*/
-@customElement('interaction-settings')
-export class InteractionSettings extends LitElementWw {
+@customElement('webwriter-video-interaction')
+export class WwVideoInteraction extends LitElementWw {
 
 
   @property({ type: Boolean, attribute: true, reflect: true })
@@ -87,8 +76,8 @@ export class InteractionSettings extends LitElementWw {
       this.replace.hidden = false;
       this.overlay.hidden = true;
     } else {
-      this.replace.hidden = true;
-      this.overlay.hidden = false;
+        this.replace.hidden = true;
+        this.overlay.hidden = false;
     }
   }
 
