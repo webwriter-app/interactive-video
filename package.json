@@ -3,23 +3,26 @@
   "version": "0.0.1",
   "exports": {
     "./widgets/webwriter-interactive-video": "./widgets/webwriter-interactive-video.ts",
-    "./widgets/webwriter-video-interaction": "./widgets/webwriter-video-interaction.ts"
+    "./widgets/webwriter-video-interaction": "./widgets/webwriter-video-interaction.ts",
+    "./widgets/webwriter-interactive-container": "./widgets/webwriter-interactive-container.ts",
+    "./widgets/webwriter-interactive-bauble": "./widgets/webwriter-interactive-bauble.ts"
   },
   "keywords": [
     "webwriter-widget"
   ],
-  "editingConfig":{
-    "./widgets/webwriter-interactive-video": {
-      "content": "flow*"
-    },
+  "editingConfig": {
     "./widgets/webwriter-video-interaction": {
-      "content": "flow*"
+      "content": "(p|flow)+"
+    },
+    "./widgets/webwriter-interactive-video": {
+      "content": "webwriter-video-interaction*"
     }
   },
   "license": "MIT",
   "author": "Tarik Vural",
   "dependencies": {
     "@shoelace-style/shoelace": "^2.14.0",
+    "@types/node": "^20.12.12",
     "@webwriter/lit": "^1.5.2",
     "lit": "^3.1.2"
   }
