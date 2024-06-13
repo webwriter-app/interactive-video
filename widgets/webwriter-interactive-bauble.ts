@@ -1,4 +1,4 @@
-import { html, css } from "lit"
+import { html, css, PropertyValueMap, LitElement } from "lit"
 import { LitElementWw } from "@webwriter/lit"
 import { customElement, property, query } from "lit/decorators.js"
 
@@ -6,20 +6,46 @@ import { customElement, property, query } from "lit/decorators.js"
 export class WwInteractiveBauble extends LitElementWw {
     static styles = css`
         :host {
-            display: block;
-            width: 50px;
-            height: 50px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background-color: red;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: grab;
+            position: absolute;
+        }
+        
+        :host(.dragging) {
+            cursor: grabbing;
         }
     `;
 
-    @property({ type: Number })
+    static nextId = 1;
+
+    @property({ type: Number , attribute: true, reflect: true})
     id;
+
+    @property({ type: Number, attribute: true, reflect: true})
+    offset;
+
+
+    protected firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+        this.style.left = `${this.offset}px`;
+    }
+
+    updated(changedProperties) {
+        changedProperties.forEach((_oldValue, property) => {
+            if (property == 'offset') {
+                this.style.transform = 'translateX(${this.marginLeft}px)';
+            }
+        });
+    }
 
     render() {
         return html`
-            <p>${this.id}</p>
+            <p style="pointer-events: none;">${this.id}</p>
         `;
     }
 }

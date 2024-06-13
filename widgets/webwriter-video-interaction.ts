@@ -1,38 +1,41 @@
-import { html, css } from "lit"
+import { html, css, LitElement } from "lit"
 import { LitElementWw } from "@webwriter/lit"
 import { customElement, property, query } from "lit/decorators.js"
 
 /* In eigene Datei legen, editingConfig und export anpassen*/
 @customElement('webwriter-video-interaction')
 export class WwVideoInteraction extends LitElementWw {
-  // Static property to hold the next ID
-  static nextId = 0;
 
-  // Instance property to hold this instance's ID
   @property({ type: Number })
   id;
 
   constructor() {
     super();
-    this.id = WwVideoInteraction.nextId++;
   }
 
+  
   @property({ type: Boolean, attribute: true, reflect: true })
   active = true;
-
-  @property({type: Number})
-  index;
 
   
 
   static readonly styles = css`
     slot {
       display: block;
-      height: 1em;
+      height: 2em;
       background-color: red;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    slot::slotted(p) {
+      width: 360px;
+      height: 100%;
+      display: block;
     }
  `;
 
+  static shadowRootOptions = {...LitElement.shadowRootOptions, delegatesFocus: true };
 
 
   updated(changedProperties) {

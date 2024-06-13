@@ -1,5 +1,6 @@
-import { html, css } from "lit"
+import { html, css, _$LE } from "lit"
 import { LitElementWw } from "@webwriter/lit"
+import { LitElement } from "lit"
 import { customElement, property, query } from "lit/decorators.js"
 import SlButton from '@shoelace-style/shoelace/dist/components/button/button.js'
 import SlInput from '@shoelace-style/shoelace/dist/components/input/input.js'
@@ -13,7 +14,8 @@ import SlMenu from '@shoelace-style/shoelace/dist/components/menu/menu.js'
 import SlMenuItem from '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js'
 import { videoData } from '../models/videoData'
 import {WwInteractiveBauble} from './webwriter-interactive-bauble'
-import { WwVideoInteraction } from "./webwriter-video-interaction"
+import { WwVideoInteraction } from './webwriter-video-interaction'
+import SlCheckbox from "@shoelace-style/shoelace/dist/components/checkbox/checkbox.js"
 
 @customElement("webwriter-interactive-video")
 export class WebwriterInteractiveVideo extends LitElementWw {
@@ -29,7 +31,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       'sl-dropdown': SlDropdown,
       'sl-menu': SlMenu,
       'sl-menu-item': SlMenuItem,
-      'webwriter-interactive-bauble': WwInteractiveBauble
+      'webwriter-interactive-bauble': WwInteractiveBauble,
+      'sl-checkbox': SlCheckbox
     }
   }
 
@@ -58,6 +61,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     position: absolute;
     bottom: 0;
     justify-content: space-between;
+  }
+
+  #controls-upper {
+    transform: translateY(-27px);
   }
 
   #controls-lower {
@@ -93,8 +100,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   #replace-timestamp {
+    margin-top: 10px;
     margin-bottom: 10px;
   }
+  
+  #interaction-button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+    
 
   #return-button {
     position: absolute;
@@ -137,12 +152,20 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @query('#interaction-slot')
   interactionSlot : HTMLSlotElement;
 
-  @property()
-  activeElement : WwVideoInteraction;
+  @query('#replace-timestamp')
+  replaceTimestamp : SlInput;
 
   @property()
-  videoData : Map<Number, videoData>
-   
+  activeElement : number;
+
+  @property()
+  videoData : Map<number, videoData> = new Map()
+
+  @property()
+  lastTimeupdate : number = 0;
+
+  @property({type: Boolean})
+  showInteractions: boolean = false;
  
   /* ------------------------------------------------------------------------------------------------------------------------------------- */
 
@@ -153,11 +176,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     if (!this.videoLoaded) return;
     if (!this.drawer.open) {
       this.drawer.open = true;
-      if(this.activeElement) {
-        this.activeElement.active = false;
-      }
     }
+    this.hideDrawerContent();
   }
+
+  static shadowRootOptions = {...LitElement.shadowRootOptions, delegatesFocus: true };
+
 
   /*
   * Handles the selection of the interaction type in the dropdown menu, and adds an interactive element into the container
@@ -168,24 +192,34 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   handleInteractionTypeSelected = (e: CustomEvent) => {
     if(!this.videoLoaded) return;
     if (e.detail.item.value == 1) { // replace
-      this.interactionSlot.assignedElements().forEach((element) => {
-        (element as WwVideoInteraction).active = false;
-      });
-      this.shadowRoot.getElementById('replace-interaction-settings').hidden = false;
-      this.shadowRoot.getElementById('overlay-interaction-settings').hidden = true;
-      //create interaction element and append it, it will find its way into the slot :)
-      // TODO: adding the startTime before doesnt work, doing it after is wonky ? 
+      this.showReplaceSettings();
       const interaction = document.createElement('webwriter-video-interaction') as WwVideoInteraction;
+      interaction.setAttribute("id", `${WwInteractiveBauble.nextId++}`);
       this.videoData.set(interaction.id, {isReplace: true, startTime: this.video.currentTime, endTime: 0});
       interaction.slot = 'interaction-slot';
-      console.log(this.videoData.get(interaction.id));
-      this.activeElement = interaction;
+      this.activeElement = interaction.id;
       this.appendChild(interaction);
+      this.changeActiveElement(interaction.id);
+      this.replaceTimestamp.value = this.formatTime(this.video.currentTime);
     } else { // overlay
-      this.shadowRoot.getElementById('replace-interaction-settings').hidden = true;
-      this.shadowRoot.getElementById('overlay-interaction-settings').hidden = false;
+      this.showOverlaySettings();
 
     }
+  }
+
+  hideDrawerContent() {
+    this.shadowRoot.getElementById('replace-interaction-settings').hidden = true;
+    this.shadowRoot.getElementById('overlay-interaction-settings').hidden = true;
+  }
+
+  showReplaceSettings() {
+    this.shadowRoot.getElementById('replace-interaction-settings').hidden = false;
+    this.shadowRoot.getElementById('overlay-interaction-settings').hidden = true;
+  }
+
+  showOverlaySettings() {
+    this.shadowRoot.getElementById('replace-interaction-settings').hidden = true;
+    this.shadowRoot.getElementById('overlay-interaction-settings').hidden = false;
   }
 
   /*
@@ -195,12 +229,59 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.progressBar.disabled = true;
     this.volumeSlider.value = 10;
     this.volumeSlider.disabled = true;
-    this.videoData = new Map();
   }
 
+  
+  handleBaubleClick(event: MouseEvent) {
+      const clickedElement = event.target as WwInteractiveBauble;
+      this.changeActiveElement(clickedElement.id);
+      this.replaceTimestamp.value = this.formatTime(this.videoData.get(clickedElement.id).startTime);
+      console.log(this.videoData.get(clickedElement.id).startTime);
+      if(!this.drawer.open) this.drawer.open=true;
+  }
+
+  changeActiveElement(newActive: number) {
+    this.interactionSlot.assignedElements().forEach((element: WwVideoInteraction) => {
+      if(element.id == newActive) {
+        element.active = true;
+      } else {
+        element.active = false;
+      } 
+    });
+  }
+
+  handleInputChange = (e: CustomEvent) => {
+    const input = e.target as SlInput;
+    const segments = input.value.split(':');
+    console.log(segments);
+    console.log(segments.some((x => {return isNaN(Number(x))})));
+    if(segments.length <=1 || segments.length > 3 || segments.some((x => {return isNaN(Number(x))}))) {
+      this.replaceTimestamp.helpText = 'invalid time format, please use hh:mm:ss or mm:ss';
+      return;
+    } else if(segments.length  === 3) {
+      this.videoData.get(this.activeElement).startTime = parseInt(segments[0]) * 3600+parseInt(segments[1])*60+parseInt(segments[2]); 
+    } else {
+      this.videoData.get(this.activeElement).startTime = parseInt(segments[0]) * 60+parseInt(segments[1]); 
+    }
+    
+    this.replaceTimestamp.helpText = '';
+  }
+
+  calculateOffset() {
+    const rect = this.video.getBoundingClientRect();
+    return (this.video.currentTime / this.video.duration) * 0.95 * rect.width;
+  }
+
+  handleShowInteractionsChange = (e: CustomEvent) => {
+    const target = e.target as SlCheckbox;
+    this.showInteractions = target.checked;
+  }
 
   render() {
     return html`
+    <div>
+      <sl-checkbox @sl-change=${this.handleShowInteractionsChange} style='overflow: hidden'>Show Interactions</sl-checkbox>
+    </div>
     <div id='container-vertical'>
         <!-- container for the video element -->
         <div class='container-video' @click=${this.handleVideoClick}>
@@ -211,8 +292,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         <!-- container for the controls -->
         <div id='controls'>
           <div id='controls-upper'>
-            ${this.videoData.forEach((value, key) => {
-              html`<webwriter-interactive-bauble id=${key}></webwriter-interactive-bauble>`
+            ${Array.from(this.videoData.entries()).map(([key, value]) => {
+              return html`<webwriter-interactive-bauble offset=${this.calculateOffset()} draggable="true" @click=${this.handleBaubleClick} id=${key}></webwriter-interactive-bauble>`;
             })}
           </div>
           <div id='progress-bar-container'>
@@ -259,12 +340,15 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           </sl-dropdown>
           <div id='interaction-settings-container'>
             <div id='replace-interaction-settings' hidden>
-              <sl-input id='replace-timestamp' label='Timestamp'></sl-input>
+              <sl-input id='replace-timestamp' label='Timestamp' @sl-change=${this.handleInputChange}></sl-input>
               <!-- container for the interactive elements -->
               <div id='interaction-container'>
                 <slot name='interaction-slot' id='interaction-slot'>  
                 </slot>
-                <sl-button @click=${this.toggleInteractionView}> ${this.interactionActive? 'Return to Video' : 'View Interaction'} </sl-button>
+                <div id='interaction-button-group'>
+                  <sl-button @click=${this.toggleInteractionView}> ${this.interactionActive? 'Return to Video' : 'View Interaction'} </sl-button>
+                  ${this.interactionActive ? html``: html`<sl-button variant='danger' @click=${this.testDelete}> Delete </sl-button>`}
+                </div>
               </div>
           </div>
             <div id='overlay-interaction-settings' hidden>
@@ -278,6 +362,19 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     `
   };
 
+  testDelete() {
+    let activeId; 
+    this.interactionSlot.assignedElements().forEach((element) => {
+      if(element instanceof WwVideoInteraction && element.active) {
+         activeId = element.id;
+        element.remove();
+      }
+    });
+    this.videoData.delete(activeId);
+    this.drawer.hide();
+    this.requestUpdate();
+  }
+
   toggleInteractionView() {
     if(this.interactionActive) {
       this.minimizeInteraction();
@@ -286,16 +383,21 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+  
 
   /**
    * 
    * Minimizes the interaction container.
    */
   minimizeInteraction() {
+    //this.drawer.hide();
+    //maybe delay this code so the animation of the drawer closing isnt playing
     this.interactionContainer.style.position = 'relative';
     this.interactionContainer.style.zIndex = '0';
     this.interactionContainer.style.backgroundColor = 'transparent';
-    this.interactionContainer.style.display = 'block';
+    this.interactionContainer.style.left = '0';
+    this.interactionContainer.style.width = '100%';
+    this.interactionContainer.style.height = '30%';
     this.interactionContainer.style.color = 'black';
     this.interactionContainer.style.fontSize = '1em';
     this.interactionActive = false;
@@ -305,21 +407,17 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * Maximizes the interaction container and displays it on the screen.
    */
   maximizeInteraction = () => {
-    console.log('maximinizing interaction with id: ' + this.activeElement.id)
     this.drawer.open = true;
     const rect = this.shadowRoot.querySelector('#container-vertical').getBoundingClientRect() as DOMRect;
-    console.log(rect);
-    for(const key in rect) {
-      if (typeof rect[key] === 'number') {
-        this.interactionContainer.style[key] = `${rect[key]}px`;
-      }
-    }
     this.interactionContainer.style.position = 'fixed';
     this.interactionContainer.style.zIndex = '1000';
     this.interactionContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
     this.interactionContainer.style.display = 'block';
     this.interactionContainer.style.color = 'white';
     this.interactionContainer.style.fontSize = '2em';
+    for(const key in rect) {
+      this.interactionContainer.style[key] = `${rect[key]}px`;
+    }
     this.interactionActive = true;
   }
 
@@ -328,7 +426,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       document.exitFullscreen();
     }
     else {
-      this.shadowRoot.querySelector('#container-vertical').requestFullscreen();
+      this.requestFullscreen();
     }
   }
 
@@ -342,29 +440,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.video.currentTime += value;
   }
 
-  
+  /*
+  * speichere den letzten wert und schau ob starttime übersprungen wurde
+  */
   handleTimeUpdate = (e: CustomEvent) => {
-    console.log(this.video.currentTime)
+    if(this.showInteractions) {
     this.videoData.forEach((value, key) => {
       if(value.isReplace) {
-        //when a interaction is found
-        if(this.video.currentTime <= value.startTime + 0.15 && this.video.currentTime >= value.startTime - 0.15) {
-          //but its not the active Element
-          if(this.activeElement.id != key) {
-            //look through all the assigned Elements
-            this.interactionSlot.assignedElements().forEach((element: WwVideoInteraction) => {
-              //find the right one
-              if(element.id == key) {
-                //make it active
-                element.active = true;
-                //and tell the widget that it is now active
-                this.activeElement = element;
-                //otherwise
-              } else {
-                //deactive it
-                element.active = false;
-              } 
-            });
+        if(this.lastTimeupdate <= value.startTime && this.video.currentTime >= value.startTime) {
+          if(this.activeElement != key) {
+            this.changeActiveElement(key);
           }
           if(!this.video.paused)  {
             this.video.pause();
@@ -373,8 +458,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         }
       }
     })
-    this.progressBar.value = (this.video.currentTime / this.video.duration) * 100;
-    this.timeStamp.innerHTML = this.formatTime(this.video.currentTime) + '/' + this.videoDurationFormatted;
+    }
+    this.lastTimeupdate = this.video.currentTime;
+    this.progressBar.value = (this.video.currentTime / this.video.duration)*100;
+    this.timeStamp.innerHTML = this.formatTime(this.lastTimeupdate) + '/' + this.videoDurationFormatted;
   }
 
   handleProgressChange = (e: CustomEvent) => {
@@ -446,18 +533,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
 
 
-/*
-fragen: counter incremented um 2?
-
-aggregate funktionen für alle interaktionen/einige interaktionen, z.b. shift-click für mehrere nach dem clicken der ersten
-
-    if (!this.drawer.open) {
-      this.drawer.open = true;
-      this.drawerSlot.assignedElements().forEach((element) => {
-        if (element instanceof WwVideoInteraction) {
-          element.active = false;
-        }
-      });
-      interactionContainer.startTime = Math.floor(this.video.currentTime);
-    }
-*/
+// TODOS:
+// baubles perfekt alignen, maybe was zu tun mit progress bar step size?
+// video hochladen - options funktionieren nicht?
+// stop progressbar progression while seeking
+// aggregate funktionen für alle interaktionen/einige interaktionen, z.b. shift-click für mehrere nach dem clicken der ersten

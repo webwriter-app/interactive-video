@@ -4,7 +4,6 @@
   "exports": {
     "./widgets/webwriter-interactive-video": "./widgets/webwriter-interactive-video.ts",
     "./widgets/webwriter-video-interaction": "./widgets/webwriter-video-interaction.ts",
-    "./widgets/webwriter-interactive-container": "./widgets/webwriter-interactive-container.ts",
     "./widgets/webwriter-interactive-bauble": "./widgets/webwriter-interactive-bauble.ts"
   },
   "keywords": [
