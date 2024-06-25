@@ -6,8 +6,9 @@ import { customElement, property, query } from "lit/decorators.js"
 @customElement('webwriter-video-interaction')
 export class WwVideoInteraction extends LitElementWw {
 
-  @property({ type: Number })
+  @property({ type: Number, attribute: true, reflect: true })
   id;
+
 
   constructor() {
     super();

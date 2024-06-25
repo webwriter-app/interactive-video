@@ -28,17 +28,19 @@ export class WwInteractiveBauble extends LitElementWw {
     id;
 
     @property({ type: Number, attribute: true, reflect: true})
+    initialOffset;
+
+    @property({ type: Number, attribute: true, reflect: true})
     offset;
 
-
     protected firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
-        this.style.left = `${this.offset}px`;
+        this.style.left = `${this.initialOffset}px`;
     }
 
     updated(changedProperties) {
         changedProperties.forEach((_oldValue, property) => {
             if (property == 'offset') {
-                this.style.transform = 'translateX(${this.marginLeft}px)';
+                this.style.left = `${this.offset}px`;
             }
         });
     }

@@ -119,6 +119,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
   `
 
+
   @property({ type: Boolean })
   videoLoaded: boolean = false;
 
@@ -130,6 +131,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   @query('#progress-bar')
   progressBar;
+
+  @query('#controls-upper')
+  upperControls: HTMLDivElement;
 
   @query('#interactions-drawer')
   drawer: SlDrawer;
@@ -233,11 +237,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   
   handleBaubleClick(event: MouseEvent) {
-      const clickedElement = event.target as WwInteractiveBauble;
-      this.changeActiveElement(clickedElement.id);
-      this.replaceTimestamp.value = this.formatTime(this.videoData.get(clickedElement.id).startTime);
-      console.log(this.videoData.get(clickedElement.id).startTime);
-      if(!this.drawer.open) this.drawer.open=true;
+    const clickedElement = event.target as WwInteractiveBauble;
+    this.changeActiveElement(clickedElement.id);
+    this.activeElement = clickedElement.id;
+    this.replaceTimestamp.value = this.formatTime(this.videoData.get(clickedElement.id).startTime);
+    if(!this.drawer.open) this.drawer.open=true;
   }
 
   changeActiveElement(newActive: number) {
@@ -253,28 +257,47 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   handleInputChange = (e: CustomEvent) => {
     const input = e.target as SlInput;
     const segments = input.value.split(':');
-    console.log(segments);
-    console.log(segments.some((x => {return isNaN(Number(x))})));
     if(segments.length <=1 || segments.length > 3 || segments.some((x => {return isNaN(Number(x))}))) {
       this.replaceTimestamp.helpText = 'invalid time format, please use hh:mm:ss or mm:ss';
       return;
     } else if(segments.length  === 3) {
-      this.videoData.get(this.activeElement).startTime = parseInt(segments[0]) * 3600+parseInt(segments[1])*60+parseInt(segments[2]); 
+      let newTime = parseInt(segments[0]) * 3600+parseInt(segments[1])*60+parseInt(segments[2]); 
+      if(newTime > this.video.duration || newTime < 0) {
+        this.replaceTimestamp.helpText = 'please stay within the videos duration'
+        return;
+      } else {
+        this.videoData.get(this.activeElement).startTime = newTime
+      }
     } else {
-      this.videoData.get(this.activeElement).startTime = parseInt(segments[0]) * 60+parseInt(segments[1]); 
+      let newTime = parseInt(segments[0]) * 60+parseInt(segments[1]); 
+      if(newTime > this.video.duration || newTime < 0) {
+        this.replaceTimestamp.helpText = 'please stay within the videos duration'
+        return;
+      } else {
+        this.videoData.get(this.activeElement).startTime = newTime;
+      }
     }
-    
     this.replaceTimestamp.helpText = '';
+    this.updateBaublePositions();
   }
 
-  calculateOffset() {
-    const rect = this.video.getBoundingClientRect();
-    return (this.video.currentTime / this.video.duration) * 0.95 * rect.width;
+  calculateOffset(forPosition?) {
+    const rect = this.video.getBoundingClientRect()
+    if(forPosition) {
+      return (forPosition / this.video.duration) * 0.95 * rect.width;
+    };
+    return (this.video.currentTime / this.video.duration) * 0.95 * rect.width ; 
   }
 
   handleShowInteractionsChange = (e: CustomEvent) => {
     const target = e.target as SlCheckbox;
     this.showInteractions = target.checked;
+  }
+
+  handleBaubleDragged = (e:DragEvent) => {
+    e.preventDefault();
+    const leftPosition = e.clientX;
+    console.log(`Cursor left position: ${leftPosition}`);
   }
 
   render() {
@@ -293,7 +316,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         <div id='controls'>
           <div id='controls-upper'>
             ${Array.from(this.videoData.entries()).map(([key, value]) => {
-              return html`<webwriter-interactive-bauble offset=${this.calculateOffset()} draggable="true" @click=${this.handleBaubleClick} id=${key}></webwriter-interactive-bauble>`;
+              return html`<webwriter-interactive-bauble initialOffset=${this.calculateOffset()} @dragend=${this.handleBaubleDragged} draggable="true" @click=${this.handleBaubleClick} id=${key}></webwriter-interactive-bauble>`;
             })}
           </div>
           <div id='progress-bar-container'>
@@ -385,6 +408,17 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   
 
+  updateBaublePositions() {
+    const children = this.upperControls.children as any;
+    for(let child of children)  {
+      if(!(child instanceof WwInteractiveBauble)) continue;
+      if(child.id != this.activeElement) continue;
+      const newOffset = this.calculateOffset(this.videoData.get(child.id).startTime)
+      if(newOffset) child.setAttribute('offset',`${newOffset}`);
+      
+    }
+  }
+
   /**
    * 
    * Minimizes the interaction container.
@@ -392,7 +426,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   minimizeInteraction() {
     //this.drawer.hide();
     //maybe delay this code so the animation of the drawer closing isnt playing
-    this.interactionContainer.style.position = 'relative';
+    this.interactionContainer.style.position = 'initial';
     this.interactionContainer.style.zIndex = '0';
     this.interactionContainer.style.backgroundColor = 'transparent';
     this.interactionContainer.style.left = '0';
@@ -401,6 +435,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.interactionContainer.style.color = 'black';
     this.interactionContainer.style.fontSize = '1em';
     this.interactionActive = false;
+    this.interactionContainer.style.transform = 'translateX(7px)';
   }
 
   /**
@@ -418,6 +453,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     for(const key in rect) {
       this.interactionContainer.style[key] = `${rect[key]}px`;
     }
+    this.interactionContainer.style.transform = 'translateX(-20px)';
     this.interactionActive = true;
   }
 
@@ -429,6 +465,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       this.requestFullscreen();
     }
   }
+
+  
 
   settingSelectionHandler = (e: CustomEvent) => {
     if (!this.videoLoaded) return;
@@ -468,6 +506,15 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     const progressBar = e.target as SlRange;
     let currentTime = (progressBar.value / 100) * this.video.duration;
     this.video.currentTime = Math.floor(currentTime);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener('fullscreenchange', this.handleFullscreenChange);
+  }
+
+  handleFullscreenChange = (event: Event) => {
+    this.updateBaublePositions();
   }
   
   handleVolumeChange = (e: CustomEvent) => {
@@ -514,6 +561,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.startStopVideo()
   }
 
+
   /*
   * Sets up the video element once the metadata has been loaded
   */
@@ -534,7 +582,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
 
 // TODOS:
-// baubles perfekt alignen, maybe was zu tun mit progress bar step size?
-// video hochladen - options funktionieren nicht?
-// stop progressbar progression while seeking
-// aggregate funktionen für alle interaktionen/einige interaktionen, z.b. shift-click für mehrere nach dem clicken der ersten
+// save videoData in an attribute and rebuild data structure when the widget is reloaded
+// figure out why there is multiple widgets showing when you do switch
+// bauble offset changen wenn input geändert wird
+// bauble drag and drop (drag to delete?)
+// calc bauble offset in %
+// video hochladen - options funktionieren nicht? - funktionalität existiert bereits in vorhandenem video widget - fragen ob ich das einfach übernehmen kann
