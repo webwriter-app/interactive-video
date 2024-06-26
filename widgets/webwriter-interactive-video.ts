@@ -2,20 +2,35 @@ import { html, css, _$LE } from "lit"
 import { LitElementWw } from "@webwriter/lit"
 import { LitElement } from "lit"
 import { customElement, property, query } from "lit/decorators.js"
-import SlButton from '@shoelace-style/shoelace/dist/components/button/button.js'
-import SlInput from '@shoelace-style/shoelace/dist/components/input/input.js'
-import SlIcon from '@shoelace-style/shoelace/dist/components/icon/icon.js'
-import SlCard from '@shoelace-style/shoelace/dist/components/card/card.js'
-import SlIconButton from '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js'
-import SlDrawer from '@shoelace-style/shoelace/dist/components/drawer/drawer.js'
-import SlRange from '@shoelace-style/shoelace/dist/components/range/range.js'
-import SlDropdown from '@shoelace-style/shoelace/dist/components/dropdown/dropdown.js'
-import SlMenu from '@shoelace-style/shoelace/dist/components/menu/menu.js'
-import SlMenuItem from '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js'
+
+import SlButton from '@shoelace-style/shoelace/dist/components/button/button.component.js'
+import SlInput from '@shoelace-style/shoelace/dist/components/input/input.component.js'
+import SlCard from '@shoelace-style/shoelace/dist/components/card/card.component.js'
+import SlIconButton from '@shoelace-style/shoelace/dist/components/icon-button/icon-button.component.js'
+import SlDrawer from '@shoelace-style/shoelace/dist/components/drawer/drawer.component.js'
+import SlRange from '@shoelace-style/shoelace/dist/components/range/range.component.js'
+import SlDropdown from '@shoelace-style/shoelace/dist/components/dropdown/dropdown.component.js'
+import SlMenu from '@shoelace-style/shoelace/dist/components/menu/menu.component.js'
+import SlMenuItem from '@shoelace-style/shoelace/dist/components/menu-item/menu-item.component.js'
+import SlCheckbox from '@shoelace-style/shoelace/dist/components/checkbox/checkbox.component.js'
+
 import { videoData } from '../models/videoData'
 import {WwInteractiveBauble} from './webwriter-interactive-bauble'
 import { WwVideoInteraction } from './webwriter-video-interaction'
-import SlCheckbox from "@shoelace-style/shoelace/dist/components/checkbox/checkbox.js"
+
+import play from "../assets/play.svg"
+import pause from "../assets/pause.svg"
+import volumeDown from "../assets/volumeDown.svg"
+import volumeOff from "../assets/volumeOff.svg"
+import volumeMute from "../assets/volumeMute.svg"
+import volumeUp from "../assets/volumeUp.svg"
+
+import add from "../assets/add.svg"
+import fullscreenEnter from "../assets/fullscreenEnter.svg"
+import fullscreenExit from "../assets/fullscreenExit.svg"
+import gear from "../assets/gear.svg"
+import trash from "../assets/trash.svg"
+
 
 @customElement("webwriter-interactive-video")
 export class WebwriterInteractiveVideo extends LitElementWw {
@@ -23,7 +38,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     return {
       'sl-button': SlButton,
       'sl-input': SlInput,
-      'sl-icon': SlIcon,
       'sl-card': SlCard,
       'sl-icon-button': SlIconButton,
       'sl-drawer': SlDrawer,
@@ -64,7 +78,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   #controls-upper {
-    transform: translateY(-27px);
+    height:20px;
   }
 
   #controls-lower {
@@ -109,6 +123,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     flex-direction: row;
     justify-content: space-between;
   }
+
+  .icon-button {
+    text-align: center;
+    font-size: 2rem;
+  }
+
+  #add-button {
+    color: hsl(200.4 98% 39.4%);
+  }
+
     
 
   #return-button {
@@ -147,9 +171,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @query('#volume-slider')
   volumeSlider;
 
-  @query('#play')
-  playButton: SlButton;
-
   @query('#interaction-container')
   interactionContainer : HTMLDivElement;
 
@@ -162,6 +183,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property()
   activeElement : number;
 
+  @query('#drop-area')
+  dropArea;
+
   @property()
   videoData : Map<number, videoData> = new Map()
 
@@ -171,6 +195,22 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property({type: Boolean})
   showInteractions: boolean = false;
  
+  // Button queries
+
+  @query('#play')
+  playButton: SlButton;
+
+  @query('#mute-volume-button')
+  muteButton: SlButton;
+
+  @query('#fullscreen-button')
+  fullscreenButton: SlButton;
+
+  @query('#add-button')
+  addButton: SlButton;
+
+  @query('#settings-button')
+  settingsButton: SlButton;
   /* ------------------------------------------------------------------------------------------------------------------------------------- */
 
   /*
@@ -201,7 +241,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       interaction.setAttribute("id", `${WwInteractiveBauble.nextId++}`);
       this.videoData.set(interaction.id, {isReplace: true, startTime: this.video.currentTime, endTime: 0});
       interaction.slot = 'interaction-slot';
-      this.activeElement = interaction.id;
       this.appendChild(interaction);
       this.changeActiveElement(interaction.id);
       this.replaceTimestamp.value = this.formatTime(this.video.currentTime);
@@ -230,9 +269,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   * Sets up some default values for the overlay
   */
   firstUpdated() {
-    this.progressBar.disabled = true;
     this.volumeSlider.value = 10;
-    this.volumeSlider.disabled = true;
+
+    // disable controls until video is loaded
+    this.progressBar.setAttribute('disabled');
+    this.volumeSlider.setAttribute('disabled');
+    this.muteButton.disabled = true;
+    this.fullscreenButton.disabled = true;
+    this.settingsButton.disabled = true;
+    this.addButton.disabled = true;
+    this.playButton.disabled = true;
   }
 
   
@@ -245,6 +291,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   changeActiveElement(newActive: number) {
+    this.activeElement = newActive;
     this.interactionSlot.assignedElements().forEach((element: WwVideoInteraction) => {
       if(element.id == newActive) {
         element.active = true;
@@ -257,7 +304,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   handleInputChange = (e: CustomEvent) => {
     const input = e.target as SlInput;
     const segments = input.value.split(':');
-    if(segments.length <=1 || segments.length > 3 || segments.some((x => {return isNaN(Number(x))}))) {
+    if(segments.length <=1 || segments.length > 3 || segments.some((x => { return isNaN(Number(x)) }) )) {
       this.replaceTimestamp.helpText = 'invalid time format, please use hh:mm:ss or mm:ss';
       return;
     } else if(segments.length  === 3) {
@@ -294,47 +341,93 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.showInteractions = target.checked;
   }
 
-  handleBaubleDragged = (e:DragEvent) => {
-    e.preventDefault();
-    const leftPosition = e.clientX;
-    console.log(`Cursor left position: ${leftPosition}`);
+  handleBaubleDragStart = (e:DragEvent) => {
+    e.dataTransfer.setData('id', (e.target as WwInteractiveBauble).id);
+    e.dataTransfer.setData('previousActive', `${this.activeElement}`);
+    this.changeActiveElement((e.target as WwInteractiveBauble).id);
+    this.addButton.setAttribute('src',`${trash}`)
+    this.addButton.style.color = 'hsl(0 72.2% 50.6%)';
+  }
+  
+  handleBaubleDragEnd = (e:DragEvent) => {
+    this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
+    this.dropArea.style.background =  'none'
+    this.addButton.setAttribute('src',`${add}`)
+    this.addButton.style.color = 'hsl(200.4 98% 39.4%)';
+  }
+
+  handleBaubleDroppedOnDropArea(e: DragEvent) {
+    const rect = this.dropArea.getBoundingClientRect();
+    const distanceFromLeft = e.clientX - rect.left;
+    this.videoData.get(parseInt(e.dataTransfer.getData('id'))).startTime = Math.floor(this.video.duration * (distanceFromLeft/rect.width));
+    this.updateBaublePositions();
+    this.dropArea.style.background =  'none';
+    this.addButton.setAttribute('src',`${add}`)
+    this.addButton.style.color = 'hsl(200.4 98% 39.4%)';
+    this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
+  }
+  
+
+  handleBaubleDroppedOnAdd(e: DragEvent) {
+    this.dropArea.style.background =  'none';
+    this.deleteElement();
+    this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
+    this.addButton.setAttribute('src',`${add}`)
+    this.addButton.style.color = 'hsl(200.4 98% 39.4%)';
+  }
+
+  handleBaubleDraggedOverDropArea(e: DragEvent) {
+    this.dropArea.style.background = 'rgba(0.5,0.5,0.5,0.5)'
+  }
+
+  handleBaubleLeaveDropArea(e: DragEvent) {
+    this.dropArea.style.background =  'none'
   }
 
   render() {
     return html`
-    <div>
+    <div style='display:flex;'>
       <sl-checkbox @sl-change=${this.handleShowInteractionsChange} style='overflow: hidden'>Show Interactions</sl-checkbox>
     </div>
     <div id='container-vertical'>
         <!-- container for the video element -->
         <div class='container-video' @click=${this.handleVideoClick}>
-          <video id='video' preload='metadata'  poster='https://assets.codepen.io/32795/poster.png' @timeupdate=${this.handleTimeUpdate} @loadedmetadata=${this.handleLoadedMetadata}>
-            <source id='mp4' src='http://media.w3.org/2010/05/sintel/trailer.mp4' type='video/mp4' />
+          <video id='video' preload='metadata' src="http://media.w3.org/2010/05/sintel/trailer.mp4" poster='https://assets.codepen.io/32795/poster.png' @timeupdate=${this.handleTimeUpdate} @loadedmetadata=${this.handleLoadedMetadata}>
+            <source id='mp4'  type='video/mp4' />
           </video>
         </div>
         <!-- container for the controls -->
         <div id='controls'>
-          <div id='controls-upper'>
-            ${Array.from(this.videoData.entries()).map(([key, value]) => {
-              return html`<webwriter-interactive-bauble initialOffset=${this.calculateOffset()} @dragend=${this.handleBaubleDragged} draggable="true" @click=${this.handleBaubleClick} id=${key}></webwriter-interactive-bauble>`;
-            })}
+          <div id='drop-area' @drop=${this.handleBaubleDroppedOnDropArea} @dragover=${this.handleBaubleDraggedOverDropArea} @dragleave=${this.handleBaubleLeaveDropArea}>
+            <div id='controls-upper'>
+              ${Array.from(this.videoData.entries()).map(([key, value]) => {
+                return html`
+                <webwriter-interactive-bauble 
+                  style='transform: translateY(0px);'
+                  initialOffset=${this.calculateOffset()}
+                  @dragstart=${this.handleBaubleDragStart}
+                  @dragend=${this.handleBaubleDragEnd} 
+                  draggable="true" 
+                  @click=${this.handleBaubleClick} 
+                  id=${key}>
+                </webwriter-interactive-bauble>`;
+              })}
+            </div>
           </div>
-          <div id='progress-bar-container'>
             <sl-range id='progress-bar' @sl-change=${this.handleProgressChange}></sl-range>
-          </div>
           <div id='controls-lower'>
             <!-- contains the play button and the time stamp -->
             <div id='controls-lower-left'>
-              <sl-button id='play' @click=${this.handlePlayClick}>Play</sl-button>
+              <sl-icon-button class='icon-button' id='play' @click=${this.handlePlayClick} src='${play}'></sl-icon-button>
               <p id='time-stamp'>00:00/00:00</p>
             </div>
             <!-- contains the volume slider and other controls -->
             <div id='controls-lower-right'>
-              <sl-button id='play' @click=${this.handleMuteClick}>Mute</sl-button>
+              <sl-icon-button class='icon-button' id='mute-volume-button' @click=${this.handleMuteClick} src='${volumeDown}'></sl-icon-button>
               <sl-range id='volume-slider' @sl-change=${this.handleVolumeChange}></sl-range>
-              <sl-button @click=${this.handleAddClick}>Add</sl-button>
+              <sl-icon-button class='icon-button' src='${add}' id='add-button' @click=${this.handleAddClick} @drop=${this.handleBaubleDroppedOnAdd} enabled=${this.isContentEditable}></sl-icon-button>
               <sl-dropdown placement='top-start' id='settings-menu' @sl-select=${this.settingSelectionHandler}>
-                <sl-button slot='trigger'>Settings</sl-button>
+                <sl-icon-button class='icon-button' id='settings-button' src='${gear}' slot='trigger'></sl-icon-button>
                 <sl-menu>
                   <sl-menu-item>
                     Playback Speed
@@ -348,7 +441,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                   </sl-menu-item>
                 </sl-menu>
               </sl-dropdown>
-              <sl-button id='fullscreen-button' @click=${this.handleFullscreenClick}>FS</sl-button>
+              <sl-icon-button class='icon-button' id='fullscreen-button' src='${fullscreenEnter}' @click=${this.handleFullscreenClick}></sl-icon-button>
             </div>  
           </div>
         </div>
@@ -366,11 +459,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
               <sl-input id='replace-timestamp' label='Timestamp' @sl-change=${this.handleInputChange}></sl-input>
               <!-- container for the interactive elements -->
               <div id='interaction-container'>
-                <slot name='interaction-slot' id='interaction-slot'>  
-                </slot>
+                ${this.isContentEditable ? html`<slot name='interaction-slot' id='interaction-slot'> </slot>`: null}
                 <div id='interaction-button-group'>
                   <sl-button @click=${this.toggleInteractionView}> ${this.interactionActive? 'Return to Video' : 'View Interaction'} </sl-button>
-                  ${this.interactionActive ? html``: html`<sl-button variant='danger' @click=${this.testDelete}> Delete </sl-button>`}
+                  ${this.interactionActive ? html``: html`<sl-button variant='danger' @click=${this.deleteElement}> Delete </sl-button>`}
                 </div>
               </div>
           </div>
@@ -385,7 +477,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     `
   };
 
-  testDelete() {
+  deleteElement() {
     let activeId; 
     this.interactionSlot.assignedElements().forEach((element) => {
       if(element instanceof WwVideoInteraction && element.active) {
@@ -406,16 +498,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
-  
-
   updateBaublePositions() {
     const children = this.upperControls.children as any;
     for(let child of children)  {
       if(!(child instanceof WwInteractiveBauble)) continue;
-      if(child.id != this.activeElement) continue;
       const newOffset = this.calculateOffset(this.videoData.get(child.id).startTime)
       if(newOffset) child.setAttribute('offset',`${newOffset}`);
-      
     }
   }
 
@@ -459,14 +547,20 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   handleFullscreenClick = () => {
     if (document.fullscreenElement) {
+      this.fullscreenButton.setAttribute('src',`${fullscreenEnter}`);
       document.exitFullscreen();
     }
     else {
+      this.fullscreenButton.setAttribute('src',`${fullscreenExit}`);
       this.requestFullscreen();
     }
   }
 
-  
+  volumeButtonIconHelper() {
+    if(this.video.muted) return;
+    if(this.volumeSlider.value === 0) this.muteButton.setAttribute('src',`${volumeOff}`);
+    else this.volumeSlider.value < 50 ? this.muteButton.setAttribute('src',`${volumeDown}`) : this.muteButton.setAttribute('src',`${volumeUp}`) 
+  }
 
   settingSelectionHandler = (e: CustomEvent) => {
     if (!this.videoLoaded) return;
@@ -491,6 +585,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           }
           if(!this.video.paused)  {
             this.video.pause();
+            this.playButton.setAttribute('src',`${play}`);
           }
           this.maximizeInteraction();
         }
@@ -520,6 +615,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   handleVolumeChange = (e: CustomEvent) => {
     const volumeSlider = e.target as SlRange;
     this.video.volume = volumeSlider.value / 100;
+    this.volumeButtonIconHelper();
   }
 
   formatTime(time: number) {
@@ -541,10 +637,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     if (this.video.ended) {
       this.video.currentTime = 0;
     }
-    this.video.paused ? this.video.play() : this.video.pause();
-    this.playButton.innerHTML = this.video.paused ? 'Play' : 'Pause';
+    if(this.video.paused) {
+      this.video.play();
+      this.playButton.setAttribute('src',`${pause}`)
+    }  else {
+      this.video.pause();
+      this.playButton.setAttribute('src',`${play}`)
+    }
   }
-
   closeDrawer(e: CustomEvent) {
     if (!this.videoLoaded) return;
     this.drawer.open = !this.drawer.open;
@@ -553,8 +653,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   handleMuteClick = (e: CustomEvent) => {
     if (!this.videoLoaded) return;
     const t = e.target as SlButton;
-    t.innerHTML = this.video.muted ? 'Mute' : 'Unmute';
-    this.video.muted = !this.video.muted;
+    if(this.video.muted) {
+      this.video.muted = false;
+      this.volumeButtonIconHelper();
+    } else {
+      this.video.muted = true;
+      this.muteButton.setAttribute('src',`${volumeMute}`)
+    }
   }
 
   handlePlayClick = (e: CustomEvent) => {
@@ -566,13 +671,19 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   * Sets up the video element once the metadata has been loaded
   */
   handleLoadedMetadata = () => {
-    this.videoLoaded = true;
-    this.progressBar.disabled = false;
+    if(this.isContentEditable) this.addButton.disabled = false;
     this.timeStamp.innerHTML = '00:00/' + this.formatTime(this.video.duration);
     this.progressBar.tooltipFormatter = (value: number) => this.formatTime(Math.floor((value / 100) * this.video.duration));
     this.video.controls = false;
     this.video.volume = 0.1;
-    this.volumeSlider.disabled = false;
+    this.videoLoaded = true;
+    this.progressBar.removeAttribute('disabled');
+    this.volumeSlider.removeAttribute('disabled');
+    this.muteButton.disabled = false;
+    this.playButton.disabled = false;
+    this.addButton.disabled = false;
+    this.settingsButton.disabled = false;
+    this.fullscreenButton.disabled = false;
     this.videoDurationFormatted = this.formatTime(this.video.duration);
   }
 }  
@@ -582,6 +693,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
 
 // TODOS:
+// first updated wird auch beim neu aufbauen aufgerufen
+// choose which methods should only be applicable when content is editable
 // save videoData in an attribute and rebuild data structure when the widget is reloaded
 // figure out why there is multiple widgets showing when you do switch
 // bauble offset changen wenn input geändert wird
