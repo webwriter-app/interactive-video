@@ -1,4 +1,5 @@
 import { html, css, _$LE } from "lit"
+import {guard} from 'lit/directives/guard.js'
 import { LitElementWw } from "@webwriter/lit"
 import { LitElement } from "lit"
 import { customElement, property, query } from "lit/decorators.js"
@@ -69,20 +70,29 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property({ type: String })
   videoDurationFormatted: string = '00:00';
 
+  @property({ type: String, attribute: true, reflect: true,})
+  videoBase64: string = '';
+
+  @query('#fileInput')
+  fileInput: HTMLInputElement;
+
+  @property({ attribute: false })
+  files: FileList;
+
   @query('#progress-bar')
   progressBar;
 
   @query('#controls-upper')
   upperControls: HTMLDivElement;
 
+  @query('#video')
+  videoElement: HTMLVideoElement;
+
   @query('#interactions-drawer')
   drawer: SlDrawer;
 
   @query('#time-stamp')
   timeStamp;
-
-  @query('#video')
-  video: HTMLVideoElement;
 
   @query('#volume-slider')
   volumeSlider;
@@ -139,6 +149,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   @query('#settings-button')
   settingsButton: SlButton;
+
+  @property({type: HTMLVideoElement})
+  video;
+
   /* ------------------------------------------------------------------------------------------------------------------------------------- */
 
   /*
@@ -226,7 +240,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   * Sets up some default values for the overlay
   */
   firstUpdated() {
-    this.volumeSlider.value = 10;
+    /*this.volumeSlider.value = 10;
     this.interactionSlot.assignedElements().forEach((element: WwVideoInteraction) => {
       element.active = false;
     });
@@ -238,6 +252,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.settingsButton.disabled = true;
     this.addButton.disabled = true;
     this.playButton.disabled = true;
+    */
   }
 
   
@@ -398,15 +413,24 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   render() {
     return html`
-    <div style='display:flex;'>
+    <div style='display:flex;' part='options'>
       <sl-checkbox @sl-change=${this.handleShowInteractionsChange} style='overflow: hidden'>Show Interactions</sl-checkbox>
+      <input name="fileInput" id="fileInput" type="file" @change=${this.videoToBase64} />
     </div>
-    <div id='container-vertical'>
+
+    ${this.videoBase64?
+      this.widget()
+      : html`<sl-button @click=${() => this.fileInput.click()}>Upload</sl-button>`
+    }
+    `
+  };
+
+  widget() {
+    return html`
+      <div id='container-vertical'>
         <!-- container for the video element -->
         <div class='container-video' @click=${this.handleVideoClick}>
-          <video id='video' preload='metadata' src="http://media.w3.org/2010/05/sintel/trailer.mp4" poster='https://assets.codepen.io/32795/poster.png' @timeupdate=${this.handleTimeUpdate} @loadedmetadata=${this.handleLoadedMetadata}>
-            <source id='mp4'  type='video/mp4' />
-          </video>
+          ${this.video}
           ${this.videoLoaded ? this.renderOverlays() : undefined}
         </div>
         <!-- container for the controls -->
@@ -490,11 +514,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           </div>
           <sl-button slot="footer" style="margin-top: 10px" variant="primary" @click=${this.closeDrawer}>Close</sl-button>
         </sl-drawer>
-      </div>
-    `
-  };
-
-  
+      </div>`;
+  }
   
   handleOverlayPositionChange(e: CustomEvent) {
     const input = e.target as SlInput;
@@ -685,6 +706,35 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     seconds < 10 ? result += '0' + seconds.toString() : result += seconds.toString();
     return result;
   }
+
+  videoToBase64(e: Event) {
+    this.files = (e.target as HTMLInputElement).files ?? this.files;
+    let audioFile = this.files[0];
+
+    console.log('reader');
+
+    let reader = new FileReader();
+
+    reader.onloadstart = (e) => {
+        console.log('onloadstart', e);
+    };
+
+    reader.onprogress = (e) => {
+        console.log('onprogress', e);
+    };
+
+    reader.onload = (e) => {
+        console.log('onload', e);
+        const video = document.createElement('video');
+        video.src = e.target?.result as string;
+
+        video.addEventListener('loadedmetadata', () => {
+          console.log('loadedmetadata', video.duration);
+            this.videoBase64 = e.target?.result as string;
+        });
+    };
+    reader.readAsDataURL(audioFile);
+}
   
   handleVideoClick = (e: MouseEvent) => {
     if (!this.videoLoaded) return;
@@ -864,12 +914,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
 // TODOS:
 // 
-// video upload von anderem video widget yoinken
+// video upload fixen
 // first updated wird auch beim neu aufbauen aufgerufen
 // choose which methods should only be applicable when content is editable
-// save videoData in an attribute and rebuild data structure when the widget is reloaded
-// figure out why there is multiple widgets showing when you do switch
-// bauble offset changen wenn input geändert wird
-// bauble drag and drop (drag to delete?)
-// calc bauble offset in %
-// video hochladen - options funktionieren nicht? - funktionalität existiert bereits in vorhandenem video widget - fragen ob ich das einfach übernehmen kann
