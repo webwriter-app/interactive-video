@@ -1,4 +1,4 @@
-import { html, css, _$LE } from "lit"
+import { html, css, _$LE, PropertyValueMap } from "lit"
 import {guard} from 'lit/directives/guard.js'
 import { LitElementWw } from "@webwriter/lit"
 import { LitElement } from "lit"
@@ -240,19 +240,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   * Sets up some default values for the overlay
   */
   firstUpdated() {
-    /*this.volumeSlider.value = 10;
-    this.interactionSlot.assignedElements().forEach((element: WwVideoInteraction) => {
-      element.active = false;
-    });
-    // disable controls until video is loaded
-    this.progressBar.setAttribute('disabled');
-    this.volumeSlider.setAttribute('disabled');
-    this.muteButton.disabled = true;
-    this.fullscreenButton.disabled = true;
-    this.settingsButton.disabled = true;
-    this.addButton.disabled = true;
-    this.playButton.disabled = true;
-    */
+    if(this.videoBase64) {
+      this.setupVideo(this.videoBase64);
+    }
+    this.updateBaublePositions();
   }
 
   
@@ -359,11 +350,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   handleBaubleDragStart = (e:DragEvent) => {
+    console.log('drag start',e)
     e.dataTransfer.setData('id', (e.target as WwInteractiveBauble).id);
     e.dataTransfer.setData('previousActive', `${this.activeElement}`);
     this.changeActiveElement((e.target as WwInteractiveBauble).id);
     this.changeAddToTrash();
-    console.log('1');
   }
 
   changeAddToTrash() {
@@ -413,17 +404,67 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   render() {
     return html`
-    <div style='display:flex;' part='options'>
-      <sl-checkbox @sl-change=${this.handleShowInteractionsChange} style='overflow: hidden'>Show Interactions</sl-checkbox>
-      <input name="fileInput" id="fileInput" type="file" @change=${this.videoToBase64} />
-    </div>
+      <div style='display:flex;' part='options'>
+        <sl-checkbox @sl-change=${this.handleShowInteractionsChange} style='overflow: hidden'>Show Interactions</sl-checkbox>
+      </div>
+      
+      ${this.videoLoaded ? this.widget() 
+        :html`
+        <div id="file-input-area" 
+           @dragover=${this.handleDragOverFileInputArea}
+           @drop=${this.handleDropOnFileInputArea}>
+          <input name="fileInput" id="fileInput" type="file" accept="video/*" @change=${this.handleFileInput} />
+          <p>Drag & drop a video file here, or click to select a file</p>
+        </div>
+        <sl-input id="url-input" placeholder="Enter video URL" @sl-change=${this.handleUrlInput}></sl-input>`}
+        <textarea>http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</textarea>
+    `;
+  }
 
-    ${this.videoBase64?
-      this.widget()
-      : html`<sl-button @click=${() => this.fileInput.click()}>Upload</sl-button>`
+  handleDragOverFileInputArea(e: DragEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  handleDropOnFileInputArea(e: DragEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    const files = e.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.handleFile(files[0]);
     }
-    `
-  };
+  }
+
+  handleFileInput(e: Event) {
+    const fileInput = e.target as HTMLInputElement;
+    const file = fileInput.files?.[0];
+    if (file) {
+      this.handleFile(file);
+    }
+  }
+
+  handleFile(file: File) {
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      const result = e.target?.result as string;
+      if (result) {
+        this.videoBase64 = result;
+        this.setupVideo(result);
+      }
+    };
+    reader.onerror = (error) => {
+      console.error('Error reading file:', error);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  handleUrlInput(e: CustomEvent) {
+    const input = e.target as SlInput;
+    const url = input.value;
+    if (url) {
+      this.setupVideo(url);
+    }
+  }
 
   widget() {
     return html`
@@ -440,7 +481,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
               ${Array.from(this.videoData.entries()).map(([key, value]) => {
                 return html`
                 <webwriter-interactive-bauble 
-                  style='transform: translateY(0px);'
+                  style='transform: translateY(-2px);'
                   initialOffset=${this.calculateOffset()}
                   @dragstart=${this.handleBaubleDragStart}
                   @dragend=${this.handleBaubleDragEnd} 
@@ -563,13 +604,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
 
   updateBaublePositions() {
+    if(!this.upperControls) return;
     const children = this.upperControls.children as any;
     for(let child of children)  {
       if(!(child instanceof WwInteractiveBauble)) continue;
       const newOffset = this.calculateOffset(this.videoData.get(child.id).startTime)
       if(newOffset) {
         child.setAttribute('offset',`${newOffset}`);
-        console.log('puttin child with id ' + child.id + ' to ' + newOffset);
       }
     }
   }
@@ -676,6 +717,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     const progressBar = e.target as SlRange;
     let currentTime = (progressBar.value / 100) * this.video.duration;
     this.video.currentTime = Math.floor(currentTime);
+    this.timeStamp.value = this.formatTime(currentTime) + '/' + this.videoDurationFormatted;
   }
 
   connectedCallback() {
@@ -693,6 +735,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
   
   handleVolumeChange = (e: CustomEvent) => {
+    console.log('volume change',e)
     const volumeSlider = e.target as SlRange;
     this.video.volume = volumeSlider.value / 100;
     this.volumeButtonIconHelper();
@@ -708,33 +751,44 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   videoToBase64(e: Event) {
-    this.files = (e.target as HTMLInputElement).files ?? this.files;
-    let audioFile = this.files[0];
-
-    console.log('reader');
-
-    let reader = new FileReader();
-
-    reader.onloadstart = (e) => {
-        console.log('onloadstart', e);
+    const fileInput = e.target as HTMLInputElement;
+    const file = fileInput.files?.[0];
+  
+    if (!file) {
+      console.error('No file selected');
+      return;
+    }
+  
+    const reader = new FileReader();
+  
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      const result = e.target?.result as string;
+      if (result) {
+        this.videoBase64 = result;
+        this.setupVideo(result);
+      }
     };
-
-    reader.onprogress = (e) => {
-        console.log('onprogress', e);
+  
+    reader.onerror = (error) => {
+      console.error('Error reading file:', error);
     };
-
-    reader.onload = (e) => {
-        console.log('onload', e);
-        const video = document.createElement('video');
-        video.src = e.target?.result as string;
-
-        video.addEventListener('loadedmetadata', () => {
-          console.log('loadedmetadata', video.duration);
-            this.videoBase64 = e.target?.result as string;
-        });
-    };
-    reader.readAsDataURL(audioFile);
-}
+  
+    reader.readAsDataURL(file);
+  }
+  
+  setupVideo(src: string) {
+    this.video = document.createElement('video');
+    this.video.src = src;
+    this.video.style.width = '100%';
+    this.video.addEventListener('timeupdate', this.handleTimeUpdate);
+    this.video.addEventListener('click', this.handleVideoClick);
+    this.video.addEventListener('canplaythrough', this.handleVideoLoaded);
+    this.video.addEventListener('loadedmetadata', () => {
+      this.handleLoadedMetadata();
+      this.videoLoaded = true;
+      this.requestUpdate();
+    });
+  }
   
   handleVideoClick = (e: MouseEvent) => {
     if (!this.videoLoaded) return;
@@ -794,7 +848,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                         height: ${data.size?.height || 100}px;
                         z-index: ${this.overlayZIndex};
                         background: green;">
-              ${(data.content || '')}
+              <p>${(data.content || '')}</p>
               <sl-icon style="position: absolute; bottom: 0; right: 0; ${this.overlayZIndex+1};"  @mousedown="${this.startResizing}" src=${resize}></sl-icon>
             </div>
           `;
@@ -802,7 +856,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         return null;
       });
   }
-  
+
   handleOverlayClicked = (event: MouseEvent) => {
     event.stopPropagation();
     if(this.isDragging){
@@ -851,6 +905,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   
   startResizing(e: MouseEvent) {
     if(this.drawer.open) return;
+    if(!(e.target as HTMLElement).matches('sl-icon')) return;
     e.stopPropagation();
     const overlay = (e.currentTarget as HTMLElement).parentElement as HTMLElement;
     const startX = e.clientX;
@@ -888,25 +943,18 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
 
+  handleVideoLoaded = () => {
+    if(this.videoLoaded) return;
+    this.addButton.disabled = !this.isContentEditable;
+    this.timeStamp.innerHTML = '00:00/' + this.formatTime(this.video.duration);
+    this.progressBar.tooltipFormatter = (value: number) => this.formatTime(Math.floor((value / 100) * this.video.duration));
+    this.video.volume = 0.1;
+  }
   /*
   * Sets up the video element once the metadata has been loaded
   */
   handleLoadedMetadata = () => {
-    if(this.isContentEditable) this.addButton.disabled = false;
-    this.timeStamp.innerHTML = '00:00/' + this.formatTime(this.video.duration);
-    this.progressBar.tooltipFormatter = (value: number) => this.formatTime(Math.floor((value / 100) * this.video.duration));
-    this.video.controls = false;
-    this.video.volume = 0.1;
-    this.videoLoaded = true;
-    this.progressBar.removeAttribute('disabled');
-    this.volumeSlider.removeAttribute('disabled');
-    this.muteButton.disabled = false;
-    this.playButton.disabled = false;
-    this.addButton.disabled = false;
-    this.settingsButton.disabled = false;
-    this.fullscreenButton.disabled = false;
     this.videoDurationFormatted = this.formatTime(this.video.duration);
-    this.updateBaublePositions();
   }
 
 
