@@ -2,8 +2,8 @@ import { html, css, PropertyValueMap, LitElement } from "lit"
 import { LitElementWw } from "@webwriter/lit"
 import { customElement, property, query } from "lit/decorators.js"
 
-@customElement("webwriter-interactive-bauble")
-export class WwInteractiveBauble extends LitElementWw {
+@customElement("webwriter-replace-bauble")
+export class WwReplaceBauble extends LitElementWw {
     static styles = css`
         :host {
             width: 20px;

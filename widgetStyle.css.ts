@@ -76,7 +76,32 @@ export const style = css`
 
   .icon-button {
     text-align: center;
+    color: white;
     font-size: 2rem;
+  }
+
+  .chapter-list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .chapter-item {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .chapter-item sl-input {
+    margin-bottom: 0.5rem;
+  }
+
+  .chapter-item sl-button {
+    margin-right: 0.5rem;
+  }
+
+  .chapter-info {
+    margin-bottom: 0.5rem;
   }
 
   #add-button {

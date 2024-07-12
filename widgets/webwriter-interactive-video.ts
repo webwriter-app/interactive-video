@@ -15,10 +15,11 @@ import SlMenu from '@shoelace-style/shoelace/dist/components/menu/menu.component
 import SlMenuItem from '@shoelace-style/shoelace/dist/components/menu-item/menu-item.component.js'
 import SlCheckbox from '@shoelace-style/shoelace/dist/components/checkbox/checkbox.component.js'
 import SlIcon from '@shoelace-style/shoelace/dist/components/icon/icon.component.js'
+import SlColorPicker from "@shoelace-style/shoelace/dist/components/color-picker/color-picker.component.js"
 import { SlTextarea } from "@shoelace-style/shoelace"
 
 import { videoData } from '../models/videoData'
-import {WwInteractiveBauble} from './webwriter-interactive-bauble'
+import {WwReplaceBauble} from './webwriter-replace-bauble'
 import { WwVideoInteraction } from './webwriter-video-interaction'
 import { style } from '../widgetStyle.css'
 
@@ -35,6 +36,7 @@ import fullscreenExit from "../assets/fullscreenExit.svg"
 import gear from "../assets/gear.svg"
 import trash from "../assets/trash.svg"
 import resize from "../assets/resize.svg"
+import chapter from "../assets/chapter.svg"
 
 
 
@@ -52,9 +54,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       'sl-dropdown': SlDropdown,
       'sl-menu': SlMenu,
       'sl-menu-item': SlMenuItem,
-      'webwriter-interactive-bauble': WwInteractiveBauble,
+      'webwriter-replace-bauble': WwReplaceBauble,
       'sl-checkbox': SlCheckbox,
-      'sl-icon': SlIcon
+      'sl-icon': SlIcon,
+      'sl-color-picker': SlColorPicker
     }
   }
 
@@ -63,6 +66,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   @property({ type: Boolean })
   videoLoaded: boolean = false;
+
+
 
   @property({type: Boolean})
   interactionActive= false;
@@ -75,6 +80,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   @query('#fileInput')
   fileInput: HTMLInputElement;
+
+  @query('#color-picker')
+  colorPicker: SlColorPicker;
+
+  @query('#chapters-drawer')
+  chaptersDrawer: SlDrawer;
 
   @property({ attribute: false })
   files: FileList;
@@ -121,17 +132,23 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property({type: Boolean})
   showInteractions = false;
 
+  @property({type: Boolean})
+  showOverlay = true;
+
   @property({ type: String, attribute: true, reflect: true })
   interactionConfig: string = '[]';
-
-  @property({type: Boolean, attribute: true, reflect: true})
-  hasChapters = false;
 
   @property({type: Number})
   overlayZIndex = 50;
 
   @property({type: Boolean})
   isDragging = false;
+
+  @property({ type: Boolean, attribute: true, reflect: true })
+  hasChapters = false;
+
+  @property({ type: String, attribute: true, reflect: true })
+  chapterConfig: string = '[]';
  
   // Button queries
 
@@ -181,7 +198,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     if (e.detail.item.value == 1) { // replace
       this.showReplaceSettings();
       const interaction = document.createElement('webwriter-video-interaction') as WwVideoInteraction;
-      interaction.setAttribute("id", `${WwInteractiveBauble.nextId++}`);
+      interaction.setAttribute("id", `${WwReplaceBauble.nextId++}`);
       this.videoData.set(interaction.id, {
         isReplace: true, 
         startTime: this.video.currentTime, 
@@ -193,7 +210,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     } else { // overlay
       this.showOverlaySettings();
       const interaction = document.createElement('webwriter-video-interaction') as WwVideoInteraction;
-      interaction.setAttribute("id", `${WwInteractiveBauble.nextId++}`);
+      interaction.setAttribute("id", `${WwReplaceBauble.nextId++}`);
       this.videoData.set(interaction.id, {
         isReplace: false,
         startTime: this.video.currentTime,
@@ -244,11 +261,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       this.setupVideo(this.videoBase64);
     }
     this.updateBaublePositions();
+    this.requestUpdate();
   }
 
   
   handleBaubleClick(event: MouseEvent) {
-    const clickedElement = event.target as WwInteractiveBauble;
+    const clickedElement = event.target as WwReplaceBauble;
     this.clickEventHelper(clickedElement.id);
     
   }
@@ -270,6 +288,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       (this.shadowRoot.querySelector('sl-textarea[label="Content"]') as SlInput).value = `${interactionData.content}`;
       (this.shadowRoot.querySelector('sl-input[label="Width"]') as SlInput).value = `${interactionData.size.width}`;
       (this.shadowRoot.querySelector('sl-input[label="Height"]') as SlInput).value = `${interactionData.size.height}`;
+      this.colorPicker.setAttribute('value', interactionData.color);
     }
     
     if (!this.drawer.open) {
@@ -307,41 +326,42 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
 
-  handleTimeInputChange = (e: CustomEvent) => {
+  handleTimeInputChange = (e: CustomEvent, index?: number) => {
     const input = e.target as SlInput;
-    const segments = input.value.split(':');
-    if(segments.length <=1 || segments.length > 3 || segments.some((x => { return isNaN(Number(x)) }) )) {
-      input.helpText = 'invalid time format, please use hh:mm:ss or mm:ss';
-      return;
-    } else if(segments.length  === 3) {
-      let newTime = parseInt(segments[0]) * 3600+parseInt(segments[1])*60+parseInt(segments[2]); 
-      if(newTime > this.video.duration || newTime < 0) {
-        input.helpText = 'please stay within the videos duration'
-        return;
+    const newTime = this.parseTime(input.value);
+    
+    if (newTime !== null) {
+      if (index !== undefined) {
+        // Chapter-specific behavior
+        this.updateChapterTime(index, newTime);
       } else {
-        this.videoData.get(this.activeElement).startTime = newTime
+        // Existing videoData behavior
+        const activeElement = this.activeElement;
+        if (activeElement !== undefined) {
+          const data = this.videoData.get(activeElement);
+          if (data) {
+            if (input.label === 'Start Time') {
+              data.startTime = newTime;
+            } else if (input.label === 'End Time') {
+              data.endTime = newTime;
+            }
+            this.videoData.set(activeElement, data);
+            this.saveInteractionConfig();
+          }
+        }
       }
+      input.value = this.formatTime(newTime); // Update input with formatted time
     } else {
-      let newTime = parseInt(segments[0]) * 60+parseInt(segments[1]); 
-      if(newTime > this.video.duration || newTime < 0) {
-        input.helpText = 'please stay within the videos duration'
-        return;
-      } else {
-        this.videoData.get(this.activeElement).startTime = newTime;
-      }
+      input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
     }
-    input.helpText = '';
-    this.saveInteractionConfig();
     this.updateBaublePositions();
+    this.requestUpdate();
   }
 
-  calculateOffset(forPosition?) {
-    if(!this.videoLoaded) return;
-    const rect = this.video.getBoundingClientRect()
-    if(forPosition) {
-      return (forPosition / this.video.duration) * 0.95 * rect.width;
-    };
-    return (this.video.currentTime / this.video.duration) * 0.95 * rect.width ; 
+  calculateOffset(time: number) {
+    if(!this.videoLoaded || !this.video) return;
+    const rect = this.video.getBoundingClientRect();
+    return (time / this.video.duration) * 0.95 * rect.width;
   }
 
   handleShowInteractionsChange = (e: CustomEvent) => {
@@ -351,9 +371,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   handleBaubleDragStart = (e:DragEvent) => {
     console.log('drag start',e)
-    e.dataTransfer.setData('id', (e.target as WwInteractiveBauble).id);
+    e.dataTransfer.setData('id', (e.target as WwReplaceBauble).id);
     e.dataTransfer.setData('previousActive', `${this.activeElement}`);
-    this.changeActiveElement((e.target as WwInteractiveBauble).id);
+    this.changeActiveElement((e.target as WwReplaceBauble).id);
     this.changeAddToTrash();
   }
 
@@ -367,59 +387,165 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.addButton.style.color = 'hsl(200.4 98% 39.4%)';
   }
   
-  handleBaubleDragEnd = (e:DragEvent) => {
-    this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
-    this.dropArea.style.background =  'none'
-    this.addButton.setAttribute('src',`${add}`)
-    this.addButton.style.color = 'hsl(200.4 98% 39.4%)';
-  }
 
-  handleBaubleDroppedOnDropArea(e: DragEvent) {
-    const rect = this.dropArea.getBoundingClientRect();
-    const distanceFromLeft = e.clientX - rect.left;
-    this.videoData.get(parseInt(e.dataTransfer.getData('id'))).startTime = Math.floor(this.video.duration * (distanceFromLeft/rect.width));
-    this.saveInteractionConfig();
-    this.updateBaublePositions();
-    this.dropArea.style.background =  'none';
-    this.changeTrashToAdd();
-    this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
-  }
+
+
   
-
-  handleBaubleDroppedOnAdd(e: DragEvent) {
-    console.log('something was dropped on add, and it was',e.target);
-    this.dropArea.style.background =  'none';
-    this.deleteElement();
-    this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
-    this.changeTrashToAdd();
-  }
-
-  handleBaubleDraggedOverDropArea(e: DragEvent) {
-    this.dropArea.style.background = 'rgba(0.5,0.5,0.5,0.5)'
-  }
-
-  handleBaubleLeaveDropArea(e: DragEvent) {
-    this.dropArea.style.background =  'none'
+  handleShowOverlayChange = (e: CustomEvent) => {
+    const target = e.target as SlCheckbox;
+    this.showOverlay = target.checked;
   }
 
   render() {
     return html`
-      <div style='display:flex;' part='options'>
-        <sl-checkbox @sl-change=${this.handleShowInteractionsChange} style='overflow: hidden'>Show Interactions</sl-checkbox>
-      </div>
-      
+      <!-- teacher options bugged, maybe its a focus issue idk im putting it here so i can access them -->
+      ${this.renderTeacherOptions()}
       ${this.videoLoaded ? this.widget() 
-        :html`
-        <div id="file-input-area" 
-           @dragover=${this.handleDragOverFileInputArea}
-           @drop=${this.handleDropOnFileInputArea}>  
-          <textarea>http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</textarea>
-          <input name="fileInput" id="fileInput" type="file" accept="video/*" @change=${this.handleFileInput} />
-          <p>Drag & drop a video file here, or click to select a file</p>
-        </div>
-        <sl-input id="url-input" placeholder="Enter video URL" @sl-change=${this.handleUrlInput}></sl-input>`}
+        : this.renderFileInputArea()}
     `;
   }
+
+  
+
+  renderTeacherOptions() {
+    return html`
+    <div style='display:flex;'>
+      <sl-checkbox @sl-change=${this.handleShowInteractionsChange} style='overflow: hidden'>Show Interactions</sl-checkbox>
+      <sl-checkbox checked @sl-change=${this.handleShowOverlayChange} style='overflow: hidden'>Show Overlays</sl-checkbox>
+      <sl-checkbox @sl-change=${this.handleHasChaptersChange} style='overflow: hidden'>Has Chapters</sl-checkbox>
+    </div>`
+  }
+
+  handleHasChaptersChange = (e: CustomEvent) => {
+    const target = e.target as SlCheckbox;
+    this.hasChapters = target.checked;
+    this.requestUpdate();
+  }
+
+  renderChaptersDrawer() {
+    return html`
+      <sl-drawer contained label="Chapters" id="chapters-drawer">
+        ${this.renderChaptersList()}
+        <sl-button @click=${this.addChapter}>Add Chapter</sl-button>
+      </sl-drawer>
+    `;
+  }
+
+  toggleChaptersDrawer() {
+    console.log('opening chapters drawer');
+    this.chaptersDrawer.open = !this.chaptersDrawer.open;
+  }
+
+  getCurrentChapter(): { title: string, startTime: number } | null {
+    if (!this.hasChapters) return null;
+    
+    const chapters = JSON.parse(this.chapterConfig);
+    for (let i = chapters.length - 1; i >= 0; i--) {
+      if (this.video.currentTime >= chapters[i].startTime) {
+        return chapters[i];
+      }
+    }
+    return null;
+  }
+  
+  renderChaptersList() {
+    const chapters = JSON.parse(this.chapterConfig);
+    return html`
+      <ul class="chapter-list">
+        ${chapters.map((chapter, index) => html`
+          <li class="chapter-item">
+            ${this.isContentEditable 
+              ? html`
+                <sl-input label="Title" value=${chapter.title} @sl-change=${(e) => this.updateChapterTitle(index, e.target.value)}></sl-input>
+                ${index === 0 
+                  ? html`<p>Start Time: 00:00</p>`
+                  : html`
+                    <sl-input 
+                      label="Start Time" 
+                      value=${this.formatTime(chapter.startTime)} 
+                      @sl-change=${(e) => this.handleTimeInputChange(e, index)}
+                    ></sl-input>
+                  `
+                }
+                ${index > 0 ? html`<sl-button variant="danger" @click=${() => this.deleteChapter(index)}>Delete</sl-button>` : ''}
+              `
+              : html`
+                <div class="chapter-info">
+                  <strong>${chapter.title}</strong> - Start Time: ${this.formatTime(chapter.startTime)}
+                </div>
+              `
+            }
+            <sl-button variant="primary" @click=${() => this.jumpToChapter(index)}>Jump to Chapter</sl-button>
+          </li>
+        `)}
+      </ul>
+    `;
+  }
+
+  jumpToChapter(index: number) {
+    const chapters = JSON.parse(this.chapterConfig);
+    if (chapters[index]) {
+      this.video.currentTime = chapters[index].startTime;
+    }
+  }
+
+  addChapter() {
+    const chapters = JSON.parse(this.chapterConfig);
+    const lastChapter = chapters[chapters.length - 1];
+    const newStartTime = lastChapter ? Math.min(lastChapter.startTime + 60, this.video.duration) : 0;
+    chapters.push({
+      title: `Chapter ${chapters.length + 1}`,
+      startTime: newStartTime
+    });
+    this.updateChapters(chapters);
+  }
+
+  updateChapterTime(index: number, newTime: number) {
+    if (index === 0) return; // Prevent changing the start time of the first chapter
+    let chapters = JSON.parse(this.chapterConfig);
+    
+    // Ensure chapters are in order
+    if (index > 0 && newTime <= chapters[index - 1].startTime) {
+      return; // Don't allow setting time before previous chapter
+    }
+    if (index < chapters.length - 1 && newTime >= chapters[index + 1].startTime) {
+      return; // Don't allow setting time after next chapter
+    }
+    
+    chapters[index].startTime = newTime;
+    this.updateChapters(chapters);
+  }
+
+  updateChapterTitle(index: number, newTitle: string) {
+    const chapters = JSON.parse(this.chapterConfig);
+    chapters[index].title = newTitle;
+    this.updateChapters(chapters);
+  }
+
+  parseTime(timeStr: string): number | null {
+    const parts = timeStr.toString().split(':').map(Number);
+    if (parts.length === 2) {
+      return parts[0] * 60 + parts[1];
+    } else if (parts.length === 3) {
+      return parts[0] * 3600 + parts[1] * 60 + parts[2];
+    }
+    return null;
+  }
+
+  updateChapters(chapters: any[]) {
+    // Sort chapters by start time
+    chapters.sort((a, b) => a.startTime - b.startTime);
+    this.chapterConfig = JSON.stringify(chapters);
+    this.requestUpdate();
+  }
+
+  deleteChapter(index: number) {
+    const chapters = JSON.parse(this.chapterConfig);
+    chapters.splice(index, 1);
+    this.updateChapters(chapters);
+  }
+
+
 
   handleDragOverFileInputArea(e: DragEvent) {
     e.preventDefault();
@@ -480,6 +606,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           ${this.renderProgressBar()}
           ${this.renderLowerControls()}
         </div>
+        ${this.renderChaptersDrawer()}
         ${this.renderInteractionDrawer()}
       </div>`;
   }
@@ -502,12 +629,19 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     </div>`
   }
 
+  renderCurrentChapter() {
+    const currentChapter = this.getCurrentChapter();
+    return currentChapter ? html`<div id="current-chapter">${currentChapter.title}</div>` : '';
+  }
+
   renderLowerControls() {
     return html`
     <div id='controls-lower'>
       <div id='controls-lower-left'>
         <sl-icon-button class='icon-button' id='play' @click=${this.handlePlayClick} src='${play}'></sl-icon-button>
         <p id='time-stamp'>00:00/00:00</p>
+        ${this.hasChapters ? html`<sl-icon-button class='icon-button' id='chapters-button' @click=${this.toggleChaptersDrawer} src='${chapter}'></sl-icon-button>` : ''}
+        ${this.renderCurrentChapter()}
       </div>
       <!-- contains the volume slider and other controls -->
       <div id='controls-lower-right'>
@@ -529,26 +663,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         <sl-menu-item value='2'>Overlay</sl-menu-item>
       </sl-menu>
     </sl-dropdown>`
-  }
-
-  renderReplaceBaubles() {
-    return html`
-    <div id='drop-area' @drop=${this.handleBaubleDroppedOnDropArea} @dragover=${this.handleBaubleDraggedOverDropArea} @dragleave=${this.handleBaubleLeaveDropArea}>
-      <div id='controls-upper'>
-        ${Array.from(this.videoData.entries()).map(([key, value]) => {
-          return html`
-          <webwriter-interactive-bauble 
-          style='transform: translateY(-2px);'
-          initialOffset=${this.calculateOffset()}
-          @dragstart=${this.handleBaubleDragStart}
-          @dragend=${this.handleBaubleDragEnd} 
-          draggable="true" 
-          @click=${this.handleBaubleClick} 
-          id=${key}>
-          </webwriter-interactive-bauble>`;
-        })}
-      </div>
-    </div>`
   }
 
   renderVideoSettings() {
@@ -588,19 +702,21 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   renderOverlayInteractionSettings() {
     return html`
-    <div id='overlay-interaction-settings' hidden>
-      <sl-input label='Start Time' @sl-change=${this.handleTimeInputChange}></sl-input>
-      <sl-input label='End Time' @sl-change=${this.handleTimeInputChange}></sl-input>
-      <sl-input label='X Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
-      <sl-input label='Y Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
-      <sl-textarea label='Content' @sl-change=${this.handleOverlayContentChange}></sl-textarea>
-      <sl-input label='Width' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
-      <sl-input label='Height' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
-      <div class='interaction-button-group' slot="footer">
-        <sl-button  style="margin-top: 10px" variant="primary" @click=${this.closeDrawer}>Close</sl-button>
-        ${this.interactionActive ? html``: html`<sl-button style="margin-top: 10px" variant='danger' @click=${this.deleteElement}> Delete </sl-button>`}
-      </div>
-    </div>`
+      <div id='overlay-interaction-settings' hidden>
+        <sl-input label='Start Time' @sl-change=${this.handleTimeInputChange}></sl-input>
+        <sl-input label='End Time' @sl-change=${this.handleTimeInputChange}></sl-input>
+        <sl-input label='X Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
+        <sl-input label='Y Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
+        <sl-textarea label='Content' @sl-change=${this.handleOverlayContentChange}></sl-textarea>
+        <sl-input label='Width' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
+        <sl-input label='Height' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
+        <p> Color </p>
+        <sl-color-picker label="Overlay Color" id='color-picker' @sl-change=${this.handleOverlayColorChange}></sl-color-picker>
+        <div class='interaction-button-group' slot="footer">
+          <sl-button  style="margin-top: 10px" variant="primary" @click=${this.closeDrawer}>Close</sl-button>
+          ${this.interactionActive ? html``: html`<sl-button style="margin-top: 10px" variant='danger' @click=${this.deleteElement}> Delete </sl-button>`}
+        </div>
+      </div>`
   }
   
   handleOverlayPositionChange(e: CustomEvent) {
@@ -650,14 +766,20 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   updateBaublePositions() {
     if(!this.upperControls) return;
-    const children = this.upperControls.children as any;
-    for(let child of children)  {
-      if(!(child instanceof WwInteractiveBauble)) continue;
-      const newOffset = this.calculateOffset(this.videoData.get(child.id).startTime)
-      if(newOffset) {
-        child.setAttribute('offset',`${newOffset}`);
+    const children = this.upperControls.children;
+    Array.from(children).forEach((child: Element) => {
+      if(child instanceof WwReplaceBauble) {
+        const id = parseInt(child.id);
+        const data = this.videoData.get(id);
+        if(data) {
+          const newOffset = this.calculateOffset(data.startTime);
+          if(newOffset !== undefined) {
+            child.setAttribute('offset', `${newOffset}`);
+          }
+        }
       }
-    }
+    });
+    this.requestUpdate();
   }
 
     toggleInteractionView() {
@@ -737,7 +859,15 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   * speichere den letzten wert und schau ob starttime übersprungen wurde
   */
   handleTimeUpdate = (e: CustomEvent) => {
-    if(this.showInteractions) {
+    if(this.showInteractions || !this.isContentEditable) {
+      this.replaceInteractionHelper();
+    }
+    this.lastTimeupdate = this.video.currentTime;
+    this.progressBar.value = (this.video.currentTime / this.video.duration)*100;
+    this.timeStamp.innerHTML = this.formatTime(this.lastTimeupdate) + '/' + this.videoDurationFormatted;
+  }
+
+  replaceInteractionHelper() {
     this.videoData.forEach((value, key) => {
       if(value.isReplace) {
         if(this.lastTimeupdate <= value.startTime && this.video.currentTime >= value.startTime) {
@@ -751,11 +881,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           this.maximizeInteraction();
         }
       }
-    })
-    }
-    this.lastTimeupdate = this.video.currentTime;
-    this.progressBar.value = (this.video.currentTime / this.video.duration)*100;
-    this.timeStamp.innerHTML = this.formatTime(this.lastTimeupdate) + '/' + this.videoDurationFormatted;
+    });
   }
 
   handleProgressChange = (e: CustomEvent) => {
@@ -770,6 +896,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.videoLoaded = false;
     document.addEventListener('fullscreenchange', this.handleFullscreenChange);
     this.loadInteractionConfig();
+    this.renderChaptersList();
   }
 
   disconnectedCallback(): void {
@@ -786,13 +913,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.volumeButtonIconHelper();
   }
 
-  formatTime(time: number) {
-    let result =''
-    const flooredTime = Math.floor(time), hours = Math.floor(time / 3600), minutes = Math.floor((flooredTime % 3600) / 60), seconds = flooredTime % 60;
-    if(hours > 0) result += hours.toString() + ':';
-    minutes < 10 ? result += '0' + minutes.toString() + ':' : result += minutes.toString() + ':';
-    seconds < 10 ? result += '0' + seconds.toString() : result += seconds.toString();
-    return result;
+  formatTime(time: number): string {
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
+    const seconds = Math.floor(time % 60);
+    
+    if (hours > 0) {
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    } else {
+      return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
   }
 
   videoToBase64(e: Event) {
@@ -860,23 +990,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.drawer.open = !this.drawer.open;
   }
 
-  handleMuteClick = (e: CustomEvent) => {
-    if (!this.videoLoaded) return;
-    const t = e.target as SlButton;
-    if(this.video.muted) {
-      this.video.muted = false;
-      this.volumeButtonIconHelper();
-    } else {
-      this.video.muted = true;
-      this.muteButton.setAttribute('src',`${volumeMute}`)
-    }
-  }
-
   handlePlayClick = (e: CustomEvent) => {
     this.startStopVideo()
   }
 
   renderOverlays() {
+    if(!this.showOverlay && this.isContentEditable) return;
     return Array.from(this.videoData.entries())
       .filter(([_, data]) => !data.isReplace)
       .map(([id, data]) => {
@@ -892,14 +1011,32 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                         width: ${data.size?.width || 100}px; 
                         height: ${data.size?.height || 100}px;
                         z-index: ${this.overlayZIndex};
-                        background: green;">
-              <p>${(data.content || '')}</p>
-              <sl-icon style="position: absolute; bottom: 0; right: 0; ${this.overlayZIndex+1};"  @mousedown="${this.startResizing}" src=${resize}></sl-icon>
+                        background-color: ${data.color || '#ffffff'};
+                        border-radius: 8px;
+                        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                        padding: 10px;
+                        font-family: Arial, sans-serif;
+                        overflow: hidden;">
+              <p style="margin: 0; color: ${this.getContrastColor(data.color || '#ffffff')};">${(data.content || '')}</p>
+              <sl-icon style="position: absolute; bottom: 5px; right: 5px; color: ${this.getContrastColor(data.color || '#ffffff')};"  @mousedown="${this.startResizing}" src=${resize}></sl-icon>
             </div>
           `;
         }
         return null;
       });
+  }
+
+  getContrastColor(hexColor: string): string {
+    // Convert hex to RGB
+    const r = parseInt(hexColor.slice(1, 3), 16);
+    const g = parseInt(hexColor.slice(3, 5), 16);
+    const b = parseInt(hexColor.slice(5, 7), 16);
+  
+    // Calculate luminance
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  
+    // Return black or white depending on luminance
+    return luminance > 0.5 ? '#000000' : '#ffffff';
   }
 
   handleOverlayClicked = (event: MouseEvent) => {
@@ -994,7 +1131,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.timeStamp.innerHTML = '00:00/' + this.formatTime(this.video.duration);
     this.progressBar.tooltipFormatter = (value: number) => this.formatTime(Math.floor((value / 100) * this.video.duration));
     this.video.volume = 0.1;
+    
+    // Initialize chapters
+    if (this.hasChapters && JSON.parse(this.chapterConfig).length === 0) {
+      this.chapterConfig = JSON.stringify([{
+        title: 'Chapter 1',
+        startTime: 0
+      }]);
+    }
   }
+
   /*
   * Sets up the video element once the metadata has been loaded
   */
@@ -1002,11 +1148,96 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.videoDurationFormatted = this.formatTime(this.video.duration);
   }
 
+  renderFileInputArea() {
+    return html`
+    <div id="file-input-area" 
+    @dragover=${this.handleDragOverFileInputArea}
+    @drop=${this.handleDropOnFileInputArea}>  
+      <textarea>http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</textarea>
+      <input name="fileInput" id="fileInput" type="file" accept="video/*" @change=${this.handleFileInput} />
+      <p>Drag & drop a video file here, or click to select a file</p>
+    </div>
+    <sl-input id="url-input" placeholder="Enter video URL" @sl-change=${this.handleUrlInput}></sl-input>`
+  }
 
+  renderReplaceBaubles() {
+    return html`
+    <div id='drop-area' @drop=${this.handleBaubleDroppedOnDropArea} @dragover=${this.handleBaubleDraggedOverDropArea} @dragleave=${this.handleBaubleLeaveDropArea}>
+      <div id='controls-upper'>
+        ${Array.from(this.videoData.entries()).map(([key, value]) => {
+          return html`
+          <webwriter-replace-bauble 
+          style='transform: translateY(-2px);'
+          offset=${this.calculateOffset(value.startTime)}
+          @dragstart=${this.handleBaubleDragStart}
+          @dragend=${this.handleBaubleDragEnd} 
+          draggable="true" 
+          @click=${this.handleBaubleClick} 
+          id=${key}>
+          </webwriter-replace-bauble>`;
+        })}
+      </div>
+    </div>`
+  }
+
+  handleBaubleDroppedOnDropArea(e: DragEvent) {
+    const rect = this.dropArea.getBoundingClientRect();
+    const distanceFromLeft = e.clientX - rect.left;
+    this.videoData.get(parseInt(e.dataTransfer.getData('id'))).startTime = Math.floor(this.video.duration * (distanceFromLeft/rect.width));
+    this.saveInteractionConfig();
+    this.updateBaublePositions();
+    this.dropArea.style.background =  'none';
+    this.changeTrashToAdd();
+    this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
+    this.requestUpdate();
+  }
+  
+
+  handleBaubleDroppedOnAdd(e: DragEvent) {
+    console.log('something was dropped on add, and it was',e.target);
+    this.dropArea.style.background =  'none';
+    this.deleteElement();
+    this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
+    this.changeTrashToAdd();
+  }
+
+  handleBaubleDraggedOverDropArea(e: DragEvent) {
+    this.dropArea.style.background = 'rgba(0.5,0.5,0.5,0.5)'
+  }
+
+  handleBaubleLeaveDropArea(e: DragEvent) {
+    this.dropArea.style.background =  'none'
+  }
+
+  handleBaubleDragEnd = (e:DragEvent) => {
+    this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
+    this.dropArea.style.background =  'none'
+    this.addButton.setAttribute('src',`${add}`)
+    this.addButton.style.color = 'hsl(200.4 98% 39.4%)';
+  }
+
+  handleMuteClick = (e: CustomEvent) => {
+    if (!this.videoLoaded) return;
+    const t = e.target as SlButton;
+    if(this.video.muted) {
+      this.video.muted = false;
+      this.volumeButtonIconHelper();
+    } else {
+      this.video.muted = true;
+      this.muteButton.setAttribute('src',`${volumeMute}`)
+    }
+  }
+
+  handleOverlayColorChange(e: CustomEvent) {
+    const colorPicker = e.target as SlColorPicker;
+    const data = this.videoData.get(this.activeElement);
+    if (data) {
+      data.color = colorPicker.value;
+      this.saveInteractionConfig();
+    }
+  }
 }  
 
 // TODOS:
-// 
-// video upload fixen
 // first updated wird auch beim neu aufbauen aufgerufen
 // choose which methods should only be applicable when content is editable
