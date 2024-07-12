@@ -20,6 +20,7 @@ import { SlTextarea } from "@shoelace-style/shoelace"
 
 import { videoData } from '../models/videoData'
 import {WwReplaceBauble} from './webwriter-replace-bauble'
+import { WwOverlayVisualizer } from "./webwriter-overlay-visualizer"
 import { WwVideoInteraction } from './webwriter-video-interaction'
 import { style } from '../widgetStyle.css'
 
@@ -57,7 +58,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       'webwriter-replace-bauble': WwReplaceBauble,
       'sl-checkbox': SlCheckbox,
       'sl-icon': SlIcon,
-      'sl-color-picker': SlColorPicker
+      'sl-color-picker': SlColorPicker,
+      'webwriter-overlay-visualizer': WwOverlayVisualizer
     }
   }
 
@@ -603,12 +605,61 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         <!-- container for the controls -->
         <div id='controls'>
           ${this.renderReplaceBaubles()}
+          ${this.renderOverlayVisualizers()}
           ${this.renderProgressBar()}
           ${this.renderLowerControls()}
         </div>
         ${this.renderChaptersDrawer()}
         ${this.renderInteractionDrawer()}
       </div>`;
+  }
+
+  handleOverlayVisualizerMouseDown(e: MouseEvent) {
+    const visualizer = e.currentTarget as WwOverlayVisualizer;
+    const startX = e.clientX;
+    const initialStartOffset = visualizer.startOffset;
+    const initialEndOffset = visualizer.endOffset;
+    const duration = initialEndOffset - initialStartOffset;
+  
+    const onMouseMove = (e: MouseEvent) => {
+      const deltaX = e.clientX - startX;
+      let newStartOffset = initialStartOffset + deltaX;
+      let newEndOffset = initialEndOffset + deltaX;
+  
+      // Constrain to video boundaries
+      if (newStartOffset < 0) {
+        newStartOffset = 0;
+        newEndOffset = duration;
+      } else if (newEndOffset > this.video.duration) {
+        newEndOffset = this.video.duration;
+        newStartOffset = newEndOffset - duration;
+      }
+  
+      visualizer.startOffset = newStartOffset;
+      visualizer.endOffset = newEndOffset;
+  
+      // Update videoData
+      const id = parseInt(visualizer.id);
+      const data = this.videoData.get(id);
+      if (data) {
+        data.startTime = this.offsetToTime(newStartOffset);
+        data.endTime = this.offsetToTime(newEndOffset);
+      }
+    };
+  
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      this.saveInteractionConfig();
+    };
+  
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  }
+  
+  offsetToTime(offset: number): number {
+    const rect = this.video.getBoundingClientRect();
+    return (offset / (0.95 * rect.width)) * this.video.duration;
   }
 
   renderInteractionDrawer() {
@@ -725,8 +776,19 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     if (!isNaN(value)) {
       const data = this.videoData.get(this.activeElement);
       data.position = data.position || { x: 0, y: 0 };
-      data.position[input.label.toLowerCase() as 'x' | 'y'] = value;
+      if (input.label.toLowerCase() === 'x') {
+        data.position.x = value;
+      } else if (input.label.toLowerCase() === 'y') {
+        data.position.y = value;
+      } else if (input.label.toLowerCase() === 'start time') {
+        const oldDuration = data.endTime - data.startTime;
+        data.startTime = value;
+        data.endTime = Math.min(value + oldDuration, this.video.duration);
+      } else if (input.label.toLowerCase() === 'end time') {
+        data.endTime = Math.max(value, data.startTime);
+      }
       this.saveInteractionConfig();
+      this.requestUpdate();
     }
   }
   
@@ -1164,19 +1226,38 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     return html`
     <div id='drop-area' @drop=${this.handleBaubleDroppedOnDropArea} @dragover=${this.handleBaubleDraggedOverDropArea} @dragleave=${this.handleBaubleLeaveDropArea}>
       <div id='controls-upper'>
-        ${Array.from(this.videoData.entries()).map(([key, value]) => {
-          return html`
-          <webwriter-replace-bauble 
-          style='transform: translateY(-2px);'
-          offset=${this.calculateOffset(value.startTime)}
-          @dragstart=${this.handleBaubleDragStart}
-          @dragend=${this.handleBaubleDragEnd} 
-          draggable="true" 
-          @click=${this.handleBaubleClick} 
-          id=${key}>
-          </webwriter-replace-bauble>`;
-        })}
+        ${Array.from(this.videoData.entries())
+          .filter(([_, value]) => value.isReplace)
+          .map(([key, value]) => {
+            return html`
+            <webwriter-interactive-bauble 
+            style='transform: translateY(-2px);'
+            offset=${this.calculateOffset(value.startTime)}
+            @dragstart=${this.handleBaubleDragStart}
+            @dragend=${this.handleBaubleDragEnd} 
+            draggable="true" 
+            @click=${this.handleBaubleClick} 
+            id=${key}>
+            </webwriter-interactive-bauble>`;
+          })}
       </div>
+    </div>`
+  }
+
+  renderOverlayVisualizers() {
+    return html`
+    <div id='overlay-visualizers'>
+      ${Array.from(this.videoData.entries())
+        .filter(([_, value]) => !value.isReplace)
+        .map(([key, value]) => {
+          return html`
+          <webwriter-overlay-visualizer 
+            id=${key}
+            .startOffset=${this.calculateOffset(value.startTime)}
+            .endOffset=${this.calculateOffset(value.endTime)}
+            @mousedown=${this.handleOverlayVisualizerMouseDown}
+          ></webwriter-overlay-visualizer>`;
+        })}
     </div>`
   }
 
@@ -1239,5 +1320,4 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 }  
 
 // TODOS:
-// first updated wird auch beim neu aufbauen aufgerufen
 // choose which methods should only be applicable when content is editable
