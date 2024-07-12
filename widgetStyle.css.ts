@@ -17,7 +17,6 @@ export const style = css`
     width: 100%
   }
 
-
   #controls {
     width: 98%;
     margin-left: 1%;
@@ -69,7 +68,7 @@ export const style = css`
     margin-bottom: 10px;
   }
   
-  #interaction-button-group {
+  .interaction-button-group {
     display: flex;
     flex-direction: row;
     justify-content: space-between;

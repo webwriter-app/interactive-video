@@ -412,12 +412,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         :html`
         <div id="file-input-area" 
            @dragover=${this.handleDragOverFileInputArea}
-           @drop=${this.handleDropOnFileInputArea}>
+           @drop=${this.handleDropOnFileInputArea}>  
+          <textarea>http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</textarea>
           <input name="fileInput" id="fileInput" type="file" accept="video/*" @change=${this.handleFileInput} />
           <p>Drag & drop a video file here, or click to select a file</p>
         </div>
         <sl-input id="url-input" placeholder="Enter video URL" @sl-change=${this.handleUrlInput}></sl-input>`}
-        <textarea>http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</textarea>
     `;
   }
 
@@ -476,86 +476,131 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         </div>
         <!-- container for the controls -->
         <div id='controls'>
-          <div id='drop-area' @drop=${this.handleBaubleDroppedOnDropArea} @dragover=${this.handleBaubleDraggedOverDropArea} @dragleave=${this.handleBaubleLeaveDropArea}>
-            <div id='controls-upper'>
-              ${Array.from(this.videoData.entries()).map(([key, value]) => {
-                return html`
-                <webwriter-interactive-bauble 
-                  style='transform: translateY(-2px);'
-                  initialOffset=${this.calculateOffset()}
-                  @dragstart=${this.handleBaubleDragStart}
-                  @dragend=${this.handleBaubleDragEnd} 
-                  draggable="true" 
-                  @click=${this.handleBaubleClick} 
-                  id=${key}>
-                </webwriter-interactive-bauble>`;
-              })}
-            </div>
-          </div>
-            <sl-range id='progress-bar' @sl-change=${this.handleProgressChange}></sl-range>
-          <div id='controls-lower'>
-            <!-- contains the play button and the time stamp -->
-            <div id='controls-lower-left'>
-              <sl-icon-button class='icon-button' id='play' @click=${this.handlePlayClick} src='${play}'></sl-icon-button>
-              <p id='time-stamp'>00:00/00:00</p>
-            </div>
-            <!-- contains the volume slider and other controls -->
-            <div id='controls-lower-right'>
-              <sl-icon-button class='icon-button' id='mute-volume-button' @click=${this.handleMuteClick} src='${volumeDown}'></sl-icon-button>
-              <sl-range id='volume-slider' @sl-change=${this.handleVolumeChange}></sl-range>
-              <sl-icon-button class='icon-button' src='${add}' id='add-button' @click=${this.handleAddClick} @drop=${this.handleBaubleDroppedOnAdd} enabled=${this.isContentEditable}></sl-icon-button>
-              <sl-dropdown placement='top-start' id='settings-menu' @sl-select=${this.settingSelectionHandler}>
-                <sl-icon-button class='icon-button' id='settings-button' src='${gear}' slot='trigger'></sl-icon-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    Playback Speed
-                    <sl-menu slot='submenu'>
-                      <sl-menu-item value='0.25'>0.25x</sl-menu-item>
-                      <sl-menu-item value='0.5'>0.5x</sl-menu-item>
-                      <sl-menu-item value='1'>1x</sl-menu-item>
-                      <sl-menu-item value='1.5'>1.5x</sl-menu-item>
-                      <sl-menu-item value='2'>2x</sl-menu-item>
-                    <sl-menu>
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              <sl-icon-button class='icon-button' id='fullscreen-button' src='${fullscreenEnter}' @click=${this.handleFullscreenClick}></sl-icon-button>
-            </div>  
-          </div>
+          ${this.renderReplaceBaubles()}
+          ${this.renderProgressBar()}
+          ${this.renderLowerControls()}
         </div>
-        <!-- drawer for adding and managing interactions -->
-        <sl-drawer style="z-index: 100;"label='Add Interaction' contained id='interactions-drawer'>
-          <sl-dropdown label='Interaction Type' id='interaction-type-dropdown' @sl-select=${this.handleInteractionTypeSelected}>
-            <sl-button slot='trigger' id='interaction-type-button' caret>Interaction Type</sl-button>
-            <sl-menu>
-              <sl-menu-item value='1'>Replace</sl-menu-item>
-              <sl-menu-item value='2'>Overlay</sl-menu-item>
-            </sl-menu>
-          </sl-dropdown>
-          <div id='interaction-settings-container'>
-            <div id='replace-interaction-settings' hidden>
-              <sl-input id='replace-timestamp' label='Timestamp' @sl-change=${this.handleTimeInputChange}></sl-input>
-              <!-- container for the interactive elements -->
-              <div id='interaction-container'>
-                ${this.isContentEditable ? html`<slot name='interaction-slot' id='interaction-slot'> </slot>`: null}
-                <div id='interaction-button-group'>
-                  <sl-button @click=${this.toggleInteractionView}> ${this.interactionActive? 'Return to Video' : 'View Interaction'} </sl-button>
-                  ${this.interactionActive ? html``: html`<sl-button variant='danger' @click=${this.deleteElement}> Delete </sl-button>`}
-                </div>
-              </div>
-          </div>
-          <div id='overlay-interaction-settings' hidden>
-            <sl-input label='Start Time' @sl-change=${this.handleTimeInputChange}></sl-input>
-            <sl-input label='End Time' @sl-change=${this.handleTimeInputChange}></sl-input>
-            <sl-input label='X Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
-            <sl-input label='Y Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
-            <sl-textarea label='Content' @sl-change=${this.handleOverlayContentChange}></sl-textarea>
-            <sl-input label='Width' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
-            <sl-input label='Height' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
-          </div>
-          <sl-button slot="footer" style="margin-top: 10px" variant="primary" @click=${this.closeDrawer}>Close</sl-button>
-        </sl-drawer>
+        ${this.renderInteractionDrawer()}
       </div>`;
+  }
+
+  renderInteractionDrawer() {
+    return html`
+    <sl-drawer style="z-index: 100;"label='Add Interaction' contained id='interactions-drawer'>
+      ${this.renderInteractionTypeSelector()}
+      <div id='interaction-settings-container'>
+        ${this.renderReplaceInteractionSettings()}
+        ${this.renderOverlayInteractionSettings()}
+      </div>
+    </sl-drawer>`
+  }
+
+  renderProgressBar() {
+    return html`
+    <div id='progress-bar-container'>
+      <sl-range id='progress-bar' @sl-change=${this.handleProgressChange}></sl-range>
+    </div>`
+  }
+
+  renderLowerControls() {
+    return html`
+    <div id='controls-lower'>
+      <div id='controls-lower-left'>
+        <sl-icon-button class='icon-button' id='play' @click=${this.handlePlayClick} src='${play}'></sl-icon-button>
+        <p id='time-stamp'>00:00/00:00</p>
+      </div>
+      <!-- contains the volume slider and other controls -->
+      <div id='controls-lower-right'>
+        <sl-icon-button class='icon-button' id='mute-volume-button' @click=${this.handleMuteClick} src='${volumeDown}'></sl-icon-button>
+        <sl-range id='volume-slider' @sl-change=${this.handleVolumeChange}></sl-range>
+        <sl-icon-button class='icon-button' src='${add}' id='add-button' @click=${this.handleAddClick} @drop=${this.handleBaubleDroppedOnAdd} enabled=${this.isContentEditable}></sl-icon-button>
+        ${this.renderVideoSettings()}
+        <sl-icon-button class='icon-button' id='fullscreen-button' src='${fullscreenEnter}' @click=${this.handleFullscreenClick}></sl-icon-button>
+      </div>
+    </div>`
+  }
+
+  renderInteractionTypeSelector() {
+    return html`
+    <sl-dropdown label='Interaction Type' id='interaction-type-dropdown' @sl-select=${this.handleInteractionTypeSelected}>
+      <sl-button slot='trigger' id='interaction-type-button' caret>Interaction Type</sl-button>
+      <sl-menu>
+        <sl-menu-item value='1'>Replace</sl-menu-item>
+        <sl-menu-item value='2'>Overlay</sl-menu-item>
+      </sl-menu>
+    </sl-dropdown>`
+  }
+
+  renderReplaceBaubles() {
+    return html`
+    <div id='drop-area' @drop=${this.handleBaubleDroppedOnDropArea} @dragover=${this.handleBaubleDraggedOverDropArea} @dragleave=${this.handleBaubleLeaveDropArea}>
+      <div id='controls-upper'>
+        ${Array.from(this.videoData.entries()).map(([key, value]) => {
+          return html`
+          <webwriter-interactive-bauble 
+          style='transform: translateY(-2px);'
+          initialOffset=${this.calculateOffset()}
+          @dragstart=${this.handleBaubleDragStart}
+          @dragend=${this.handleBaubleDragEnd} 
+          draggable="true" 
+          @click=${this.handleBaubleClick} 
+          id=${key}>
+          </webwriter-interactive-bauble>`;
+        })}
+      </div>
+    </div>`
+  }
+
+  renderVideoSettings() {
+    return html`
+    <sl-dropdown placement='top-start' id='settings-menu' @sl-select=${this.settingSelectionHandler}>
+      <sl-icon-button class='icon-button' id='settings-button' src='${gear}' slot='trigger'></sl-icon-button>
+      <sl-menu>
+        <sl-menu-item>
+          Playback Speed
+          <sl-menu slot='submenu'>
+            <sl-menu-item value='0.25'>0.25x</sl-menu-item>
+            <sl-menu-item value='0.5'>0.5x</sl-menu-item>
+            <sl-menu-item value='1'>1x</sl-menu-item>
+            <sl-menu-item value='1.5'>1.5x</sl-menu-item>
+            <sl-menu-item value='2'>2x</sl-menu-item>
+          <sl-menu>
+        </sl-menu-item>
+      </sl-menu>
+    </sl-dropdown>`
+  }
+
+  renderReplaceInteractionSettings() {
+    return html`
+    <div id='replace-interaction-settings' hidden>
+      <sl-input id='replace-timestamp' label='Timestamp' @sl-change=${this.handleTimeInputChange}></sl-input>
+      <!-- container for the interactive elements -->
+      <div id='interaction-container'>
+        ${this.isContentEditable ? html`<slot name='interaction-slot' id='interaction-slot'> </slot>`: null}
+        <div class='interaction-button-group'>
+          <sl-button @click=${this.toggleInteractionView}> ${this.interactionActive? 'Return to Video' : 'View Interaction'} </sl-button>
+          ${this.interactionActive ? html``: html`<sl-button variant='danger' @click=${this.deleteElement}> Delete </sl-button>`}
+        </div>               
+        <sl-button slot="footer" style="margin-top: 10px" variant="primary" @click=${this.closeDrawer}>Close</sl-button>
+      </div>
+    </div>`
+  }
+
+  renderOverlayInteractionSettings() {
+    return html`
+    <div id='overlay-interaction-settings' hidden>
+      <sl-input label='Start Time' @sl-change=${this.handleTimeInputChange}></sl-input>
+      <sl-input label='End Time' @sl-change=${this.handleTimeInputChange}></sl-input>
+      <sl-input label='X Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
+      <sl-input label='Y Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
+      <sl-textarea label='Content' @sl-change=${this.handleOverlayContentChange}></sl-textarea>
+      <sl-input label='Width' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
+      <sl-input label='Height' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
+      <div class='interaction-button-group' slot="footer">
+        <sl-button  style="margin-top: 10px" variant="primary" @click=${this.closeDrawer}>Close</sl-button>
+        ${this.interactionActive ? html``: html`<sl-button style="margin-top: 10px" variant='danger' @click=${this.deleteElement}> Delete </sl-button>`}
+      </div>
+    </div>`
   }
   
   handleOverlayPositionChange(e: CustomEvent) {
