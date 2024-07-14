@@ -201,8 +201,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       interaction.setAttribute("id", `${WwReplaceBauble.nextId++}`);
       this.videoData.set(interaction.id, {
         isReplace: true, 
-        startTime: this.video.currentTime, 
-        endTime: 0});
+        startTime: this.video.currentTime});
       interaction.slot = 'interaction-slot';
       this.appendChild(interaction);
       this.changeActiveElement(interaction.id);
@@ -955,14 +954,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.video = document.createElement('video');
     this.video.src = src;
     this.video.style.width = '100%';
+    this.video.addEventListener('loadedmetadata', this.handleMetadataLoaded);
+    this.video.addEventListener('canplaythrough', this.handleCanPlayThrough);
     this.video.addEventListener('timeupdate', this.handleTimeUpdate);
     this.video.addEventListener('click', this.handleVideoClick);
-    this.video.addEventListener('canplaythrough', this.handleVideoLoaded);
-    this.video.addEventListener('loadedmetadata', () => {
-      this.handleLoadedMetadata();
-      this.videoLoaded = true;
-      this.requestUpdate();
-    });
   }
   
   handleVideoClick = (e: MouseEvent) => {
@@ -1124,28 +1119,57 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     document.addEventListener('mouseup', onMouseUp);
   }
 
-
-  handleVideoLoaded = () => {
-    if(this.videoLoaded) return;
-    this.addButton.disabled = !this.isContentEditable;
-    this.timeStamp.innerHTML = '00:00/' + this.formatTime(this.video.duration);
-    this.progressBar.tooltipFormatter = (value: number) => this.formatTime(Math.floor((value / 100) * this.video.duration));
-    this.video.volume = 0.1;
-    
-    // Initialize chapters
-    if (this.hasChapters && JSON.parse(this.chapterConfig).length === 0) {
-      this.chapterConfig = JSON.stringify([{
-        title: 'Chapter 1',
-        startTime: 0
-      }]);
-    }
+  handleCanPlayThrough = () => {
+    if (this.videoLoaded) return;
+    this.videoLoaded = true;
+  
+    setTimeout(() => {
+      if (this.addButton) {
+        this.addButton.disabled = !this.isContentEditable;
+      }
+  
+      if (this.progressBar) {
+        this.progressBar.value = 0;
+      }
+  
+      if (this.video) {
+        this.video.volume = 0.1;
+      }
+  
+      if (this.volumeSlider) {
+        this.volumeSlider.value = 10;
+      }
+  
+      if (this.hasChapters && JSON.parse(this.chapterConfig).length === 0) {
+        this.chapterConfig = JSON.stringify([{
+          title: 'Chapter 1',
+          startTime: 0
+        }]);
+      }
+  
+      this.requestUpdate();
+  
+      console.log('Video can play through');
+    }, 0);
   }
 
-  /*
-  * Sets up the video element once the metadata has been loaded
-  */
-  handleLoadedMetadata = () => {
+  handleMetadataLoaded = () => {
     this.videoDurationFormatted = this.formatTime(this.video.duration);
+    
+    setTimeout(() => {
+      if (this.progressBar) {
+        this.progressBar.max = 100;
+        this.progressBar.tooltipFormatter = (value: number) => {
+          return this.formatTime(Math.floor((value / 100) * this.video.duration));
+        };
+      }
+  
+      if (this.timeStamp) {
+        this.timeStamp.innerHTML = `00:00/${this.videoDurationFormatted}`;
+      }
+  
+      this.requestUpdate();
+    }, 0);
   }
 
   renderFileInputArea() {
