@@ -67,6 +67,10 @@ export const style = css`
     margin-top: 10px;
     margin-bottom: 10px;
   }
+
+  #current-chapter {
+    color: white;
+  }
   
   .interaction-button-group {
     display: flex;

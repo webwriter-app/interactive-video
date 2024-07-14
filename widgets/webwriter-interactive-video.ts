@@ -16,6 +16,7 @@ import SlMenuItem from '@shoelace-style/shoelace/dist/components/menu-item/menu-
 import SlCheckbox from '@shoelace-style/shoelace/dist/components/checkbox/checkbox.component.js'
 import SlIcon from '@shoelace-style/shoelace/dist/components/icon/icon.component.js'
 import SlColorPicker from "@shoelace-style/shoelace/dist/components/color-picker/color-picker.component.js"
+import SlDetails from '@shoelace-style/shoelace/dist/components/details/details.component.js'
 import { SlTextarea } from "@shoelace-style/shoelace"
 
 import { videoData } from '../models/videoData'
@@ -57,7 +58,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       'webwriter-replace-bauble': WwReplaceBauble,
       'sl-checkbox': SlCheckbox,
       'sl-icon': SlIcon,
-      'sl-color-picker': SlColorPicker
+      'sl-color-picker': SlColorPicker,
+      'sl-details': SlDetails
     }
   }
 
@@ -149,7 +151,36 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   @property({ type: String, attribute: true, reflect: true })
   chapterConfig: string = '[]';
- 
+
+  @query('sl-input[label="Start Time"]')
+  overlayStartTimeInput: SlInput;
+  
+  @query('sl-input[label="End Time"]')
+  overlayEndTimeInput: SlInput;
+
+  @query('sl-input[label="X Position"]')
+  OverlayXPositionInput: SlInput;
+
+  @query('sl-input[label="Y Position"]')
+  OverlayYPositionInput: SlInput;
+
+  @query('sl-textarea[label="Content"]')
+  overlayContentInput: SlInput;
+
+  @query('sl-input[label="Width"]')
+  overlayWidthInput: SlInput;
+
+  @query('sl-input[label="Height"]')
+  overlayHeightInput: SlInput;
+
+  @query('#replace-interaction-settings')
+  replaceInteractionSettings: HTMLElement;
+
+  @query('#overlay-interaction-settings')
+  overlayInteractionSettings: HTMLElement;
+
+
+
   // Button queries
 
   @query('#play')
@@ -228,28 +259,28 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   setOverlaySettingsContentFromVideoSetting() {
     const data = this.videoData.get(this.activeElement);
-    (this.shadowRoot.querySelector('sl-input[label="Start Time"]') as SlInput).value = this.formatTime(data.startTime);
-    (this.shadowRoot.querySelector('sl-input[label="End Time"]') as SlInput).value = this.formatTime(data.endTime);
-    (this.shadowRoot.querySelector('sl-input[label="X Position"]') as SlInput).value = `${data.position.x}`;
-    (this.shadowRoot.querySelector('sl-input[label="Y Position"]') as SlInput).value = `${data.position.y}`;
-    (this.shadowRoot.querySelector('sl-textarea[label="Content"]') as SlInput).value = `${data.content}`;
-    (this.shadowRoot.querySelector('sl-input[label="Width"]') as SlInput).value = `${data.size.width}`;
-    (this.shadowRoot.querySelector('sl-input[label="Height"]') as SlInput).value = `${data.size.height}`;
+    this.overlayStartTimeInput.value = this.formatTime(data.startTime);
+    this.overlayEndTimeInput.value = this.formatTime(data.endTime);
+    this.OverlayXPositionInput.value = `${data.position.x}`;
+    this.OverlayYPositionInput.value = `${data.position.y}`;
+    this.overlayContentInput.value = `${data.content}`;
+    this.overlayWidthInput.value = `${data.size.width}`;
+    this.overlayHeightInput.value = `${data.size.height}`;
   }
 
   hideDrawerContent() {
-    this.shadowRoot.getElementById('replace-interaction-settings').hidden = true;
-    this.shadowRoot.getElementById('overlay-interaction-settings').hidden = true;
+    this.replaceInteractionSettings.hidden = true;
+    this.overlayInteractionSettings.hidden = true;
   }
 
   showReplaceSettings() {
-    this.shadowRoot.getElementById('replace-interaction-settings').hidden = false;
-    this.shadowRoot.getElementById('overlay-interaction-settings').hidden = true;
+    this.replaceInteractionSettings.hidden = false;
+    this.overlayInteractionSettings.hidden = true;
   }
 
   showOverlaySettings() {
-    this.shadowRoot.getElementById('replace-interaction-settings').hidden = true;
-    this.shadowRoot.getElementById('overlay-interaction-settings').hidden = false;
+    this.replaceInteractionSettings.hidden = true;
+    this.overlayInteractionSettings.hidden = false;
   }
 
   /*
@@ -280,13 +311,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     } else {
       this.showOverlaySettings();
       // Update overlay settings inputs
-      (this.shadowRoot.querySelector('sl-input[label="Start Time"]') as SlInput).value = this.formatTime(interactionData.startTime);
-      (this.shadowRoot.querySelector('sl-input[label="End Time"]') as SlInput).value  = this.formatTime(interactionData.endTime);
-      (this.shadowRoot.querySelector('sl-input[label="X Position"]') as SlInput).value = `${interactionData.position.x}`;
-      (this.shadowRoot.querySelector('sl-input[label="Y Position"]') as SlInput).value = `${interactionData.position.y}`;
-      (this.shadowRoot.querySelector('sl-textarea[label="Content"]') as SlInput).value = `${interactionData.content}`;
-      (this.shadowRoot.querySelector('sl-input[label="Width"]') as SlInput).value = `${interactionData.size.width}`;
-      (this.shadowRoot.querySelector('sl-input[label="Height"]') as SlInput).value = `${interactionData.size.height}`;
+      this.overlayStartTimeInput.value = this.formatTime(interactionData.startTime);
+      this.overlayEndTimeInput.value  = this.formatTime(interactionData.endTime);
+      this.OverlayXPositionInput.value = `${interactionData.position.x}`;
+      this.OverlayYPositionInput.value = `${interactionData.position.y}`;
+      this.overlayContentInput.value = `${interactionData.content}`;
+      this.overlayWidthInput.value = `${interactionData.size.width}`;
+      this.overlayHeightInput.value = `${interactionData.size.height}`;
       this.colorPicker.setAttribute('value', interactionData.color);
     }
     
@@ -331,16 +362,19 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     
     if (newTime !== null) {
       if (index !== undefined) {
-        // Chapter-specific behavior
         this.updateChapterTime(index, newTime);
       } else {
-        // Existing videoData behavior
         const activeElement = this.activeElement;
         if (activeElement !== undefined) {
           const data = this.videoData.get(activeElement);
           if (data) {
             if (input.label === 'Start Time') {
               data.startTime = newTime;
+              console.log('New time:', newTime, 'old end time:', data.endTime);
+              if(newTime > data.endTime){
+                data.endTime = newTime + 5;
+                this.overlayEndTimeInput.value = this.formatTime(data.endTime);
+              }
             } else if (input.label === 'End Time') {
               data.endTime = newTime;
             }
@@ -349,7 +383,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           }
         }
       }
-      input.value = this.formatTime(newTime); // Update input with formatted time
+      input.value = this.formatTime(newTime);
     } else {
       input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
     }
@@ -500,15 +534,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   updateChapterTime(index: number, newTime: number) {
-    if (index === 0) return; // Prevent changing the start time of the first chapter
+    if (index === 0) return;
     let chapters = JSON.parse(this.chapterConfig);
     
-    // Ensure chapters are in order
     if (index > 0 && newTime <= chapters[index - 1].startTime) {
-      return; // Don't allow setting time before previous chapter
+      return;
     }
     if (index < chapters.length - 1 && newTime >= chapters[index + 1].startTime) {
-      return; // Don't allow setting time after next chapter
+      return;
     }
     
     chapters[index].startTime = newTime;
@@ -532,7 +565,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   updateChapters(chapters: any[]) {
-    // Sort chapters by start time
     chapters.sort((a, b) => a.startTime - b.startTime);
     this.chapterConfig = JSON.stringify(chapters);
     this.requestUpdate();
@@ -704,13 +736,15 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       <div id='overlay-interaction-settings' hidden>
         <sl-input label='Start Time' @sl-change=${this.handleTimeInputChange}></sl-input>
         <sl-input label='End Time' @sl-change=${this.handleTimeInputChange}></sl-input>
-        <sl-input label='X Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
-        <sl-input label='Y Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
         <sl-textarea label='Content' @sl-change=${this.handleOverlayContentChange}></sl-textarea>
-        <sl-input label='Width' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
-        <sl-input label='Height' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
         <p> Color </p>
         <sl-color-picker label="Overlay Color" id='color-picker' @sl-change=${this.handleOverlayColorChange}></sl-color-picker>
+        <sl-details style='margin-top:10px;' summary="Advanced Options">
+          <sl-input label='X Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
+          <sl-input label='Y Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
+          <sl-input label='Width' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
+          <sl-input label='Height' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
+        </sl-details>
         <div class='interaction-button-group' slot="footer">
           <sl-button  style="margin-top: 10px" variant="primary" @click=${this.closeDrawer}>Close</sl-button>
           ${this.interactionActive ? html``: html`<sl-button style="margin-top: 10px" variant='danger' @click=${this.deleteElement}> Delete </sl-button>`}
@@ -719,13 +753,22 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
   
   handleOverlayPositionChange(e: CustomEvent) {
+    console.log('handleOverlayPositionChange called');
     const input = e.target as SlInput;
     const value = parseFloat(input.value);
+    console.log(`Input label: ${input.label}, value: ${value}`);
     if (!isNaN(value)) {
       const data = this.videoData.get(this.activeElement);
+      console.log('Current data:', data);
       data.position = data.position || { x: 0, y: 0 };
-      data.position[input.label.toLowerCase() as 'x' | 'y'] = value;
+      if (input.label.toLowerCase() === 'x position') {
+        data.position.x = value;
+      } else if (input.label.toLowerCase() === 'y position') {
+        data.position.y = value;
+      }
+      console.log('Updated data:', data);
       this.saveInteractionConfig();
+      this.requestUpdate();
     }
   }
   
@@ -995,6 +1038,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       .filter(([_, data]) => !data.isReplace)
       .map(([id, data]) => {
         if (this.video.currentTime >= data.startTime && this.video.currentTime <= data.endTime) {
+          console.log(`Rendering overlay for id ${id}, position:`, data.position);
           return html`
             <div class="overlay-interaction" 
                  id="overlay-${id}"
@@ -1022,15 +1066,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   getContrastColor(hexColor: string): string {
-    // Convert hex to RGB
     const r = parseInt(hexColor.slice(1, 3), 16);
     const g = parseInt(hexColor.slice(3, 5), 16);
     const b = parseInt(hexColor.slice(5, 7), 16);
-  
-    // Calculate luminance
+
     const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  
-    // Return black or white depending on luminance
     return luminance > 0.5 ? '#000000' : '#ffffff';
   }
 
@@ -1263,5 +1303,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 }  
 
 // TODOS:
-// first updated wird auch beim neu aufbauen aufgerufen
+// overlay timestamp broken quick fix
+// can change mid chapter start time to be more than later chapter start time
+// ask for input on what chapters should do if start time of one chapter is after start time of next,
+// should they swap in place or should it just not be allowed and discard edit / display helptext
 // choose which methods should only be applicable when content is editable
