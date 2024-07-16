@@ -152,25 +152,25 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property({ type: String, attribute: true, reflect: true })
   chapterConfig: string = '[]';
 
-  @query('sl-input[label="Start Time"]')
+  @query('#overlay-start-time-input')
   overlayStartTimeInput: SlInput;
   
-  @query('sl-input[label="End Time"]')
+  @query('#overlay-end-time-input')
   overlayEndTimeInput: SlInput;
 
-  @query('sl-input[label="X Position"]')
+  @query('#overlay-x-position-input')
   OverlayXPositionInput: SlInput;
 
-  @query('sl-input[label="Y Position"]')
+  @query('#overlay-y-position-input')
   OverlayYPositionInput: SlInput;
 
-  @query('sl-textarea[label="Content"]')
+  @query('#overlay-content-input')
   overlayContentInput: SlInput;
 
-  @query('sl-input[label="Width"]')
+  @query('#overlay-width-input')
   overlayWidthInput: SlInput;
 
-  @query('sl-input[label="Height"]')
+  @query('#overlay-height-input')
   overlayHeightInput: SlInput;
 
   @query('#replace-interaction-settings')
@@ -201,11 +201,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property({type: HTMLVideoElement})
   video;
 
-  /* ------------------------------------------------------------------------------------------------------------------------------------- */
-
-  /*
-  * Handles clicking of the Add button in the video control bar
-  */
+  
   handleAddClick = () => {
     if (!this.videoLoaded) return;
     if (!this.drawer.open) {
@@ -297,8 +293,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   
   handleBaubleClick(event: MouseEvent) {
     const clickedElement = event.target as WwReplaceBauble;
-    this.clickEventHelper(clickedElement.id);
-    
+    if(event.ctrlKey) {
+      this.video.currentTime = this.videoData.get(clickedElement.id).startTime;
+      return;
+    } else {
+      this.clickEventHelper(clickedElement.id);
+    }
   }
 
   clickEventHelper(id: number){
@@ -364,24 +364,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       if (index !== undefined) {
         this.updateChapterTime(index, newTime);
       } else {
-        const activeElement = this.activeElement;
-        if (activeElement !== undefined) {
-          const data = this.videoData.get(activeElement);
-          if (data) {
-            if (input.label === 'Start Time') {
-              data.startTime = newTime;
-              console.log('New time:', newTime, 'old end time:', data.endTime);
-              if(newTime > data.endTime){
-                data.endTime = newTime + 5;
-                this.overlayEndTimeInput.value = this.formatTime(data.endTime);
-              }
-            } else if (input.label === 'End Time') {
-              data.endTime = newTime;
-            }
-            this.videoData.set(activeElement, data);
-            this.saveInteractionConfig();
-          }
-        }
+        this.baubleTimeUpdateHelper(newTime, this.activeElement, input);
       }
       input.value = this.formatTime(newTime);
     } else {
@@ -389,6 +372,26 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
     this.updateBaublePositions();
     this.requestUpdate();
+  }
+
+  baubleTimeUpdateHelper(newTime: number, index: number,input: SlInput) {
+          const data = this.videoData.get(index);
+          if (data) {
+            if (input === this.overlayStartTimeInput) {
+              data.startTime = newTime;
+              console.log('New time:', newTime, 'old end time:', data.endTime);
+              if(newTime > data.endTime){
+                data.endTime = newTime + 5;
+                this.overlayEndTimeInput.value = this.formatTime(data.endTime);
+              }
+            } else if (input === this.overlayEndTimeInput) {
+              data.endTime = newTime;
+            } else if (input === this.replaceTimestamp) {
+              data.startTime = newTime;
+            }
+            this.videoData.set(index, data);
+            this.saveInteractionConfig();
+          }
   }
 
   calculateOffset(time: number) {
@@ -489,7 +492,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           <li class="chapter-item">
             ${this.isContentEditable 
               ? html`
-                <sl-input label="Title" value=${chapter.title} @sl-change=${(e) => this.updateChapterTitle(index, e.target.value)}></sl-input>
+                <sl-input label="Title" 
+                          value=${chapter.title} 
+                          @sl-change=${(e) => this.updateChapterTitle(index, e.target.value)}>
+                </sl-input>
                 ${index === 0 
                   ? html`<p>Start Time: 00:00</p>`
                   : html`
@@ -676,9 +682,19 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       </div>
       <!-- contains the volume slider and other controls -->
       <div id='controls-lower-right'>
-        <sl-icon-button class='icon-button' id='mute-volume-button' @click=${this.handleMuteClick} src='${volumeDown}'></sl-icon-button>
+        <sl-icon-button class='icon-button' 
+                        id='mute-volume-button' 
+                        @click=${this.handleMuteClick} 
+                        src='${volumeDown}'>
+        </sl-icon-button>
         <sl-range id='volume-slider' @sl-change=${this.handleVolumeChange}></sl-range>
-        <sl-icon-button class='icon-button' src='${add}' id='add-button' @click=${this.handleAddClick} @drop=${this.handleBaubleDroppedOnAdd} enabled=${this.isContentEditable}></sl-icon-button>
+        <sl-icon-button class='icon-button' 
+                        src='${add}' 
+                        id='add-button' 
+                        @click=${this.handleAddClick} 
+                        @drop=${this.handleBaubleDroppedOnAdd} 
+                        enabled=${this.isContentEditable}>
+        </sl-icon-button>
         ${this.renderVideoSettings()}
         <sl-icon-button class='icon-button' id='fullscreen-button' src='${fullscreenEnter}' @click=${this.handleFullscreenClick}></sl-icon-button>
       </div>
@@ -734,20 +750,36 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   renderOverlayInteractionSettings() {
     return html`
       <div id='overlay-interaction-settings' hidden>
-        <sl-input label='Start Time' @sl-change=${this.handleTimeInputChange}></sl-input>
-        <sl-input label='End Time' @sl-change=${this.handleTimeInputChange}></sl-input>
-        <sl-textarea label='Content' @sl-change=${this.handleOverlayContentChange}></sl-textarea>
+        <sl-input id='overlay-start-time-input' label='Start Time' @sl-change=${this.handleTimeInputChange}></sl-input>
+        <sl-input id='overlay-end-time-input' label='End Time' @sl-change=${this.handleTimeInputChange}></sl-input>
+        <sl-textarea label='Content' id='overlay-content-input' @sl-change=${this.handleOverlayContentChange}></sl-textarea>
         <p> Color </p>
         <sl-color-picker label="Overlay Color" id='color-picker' @sl-change=${this.handleOverlayColorChange}></sl-color-picker>
         <sl-details style='margin-top:10px;' summary="Advanced Options">
-          <sl-input label='X Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
-          <sl-input label='Y Position' type="number" @sl-change=${this.handleOverlayPositionChange}></sl-input>
-          <sl-input label='Width' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
-          <sl-input label='Height' type="number" @sl-change=${this.handleOverlaySizeChange}></sl-input>
+          <sl-input label='X Position' 
+                    id='overlay-x-position-input' 
+                    type="number" 
+                    @sl-change=${this.handleOverlayPositionChange}>
+          </sl-input>
+          <sl-input label='Y Position' 
+                    id='overlay-y-position-input' 
+                    type="number" 
+                    @sl-change=${this.handleOverlayPositionChange}>
+          </sl-input>
+          <sl-input label='Width' 
+                    id='overlay-width-input'  
+                    type="number" 
+                    @sl-change=${this.handleOverlaySizeChange}>
+          </sl-input>
+          <sl-input label='Height' 
+                    id='overlay-height-input' 
+                    type="number"
+                     @sl-change=${this.handleOverlaySizeChange}>
+          </sl-input>
         </sl-details>
         <div class='interaction-button-group' slot="footer">
           <sl-button  style="margin-top: 10px" variant="primary" @click=${this.closeDrawer}>Close</sl-button>
-          ${this.interactionActive ? html``: html`<sl-button style="margin-top: 10px" variant='danger' @click=${this.deleteElement}> Delete </sl-button>`}
+          ${this.interactionActive ? null : html`<sl-button style="margin-top: 10px" variant='danger' @click=${this.deleteElement}> Delete </sl-button>`}
         </div>
       </div>`
   }
@@ -884,7 +916,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   volumeButtonIconHelper() {
     if(this.video.muted) return;
     if(this.volumeSlider.value === 0) this.muteButton.setAttribute('src',`${volumeOff}`);
-    else this.volumeSlider.value < 50 ? this.muteButton.setAttribute('src',`${volumeDown}`) : this.muteButton.setAttribute('src',`${volumeUp}`) 
+    else {
+      this.volumeSlider.value < 50 ?  this.muteButton.setAttribute('src',`${volumeDown}`) 
+                                      : this.muteButton.setAttribute('src',`${volumeUp}`) 
+    }
   }
 
   settingSelectionHandler = (e: CustomEvent) => {
@@ -1005,6 +1040,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   
   handleVideoClick = (e: MouseEvent) => {
     if (!this.videoLoaded) return;
+    e.stopPropagation();
     this.startStopVideo();
   }
 
@@ -1025,7 +1061,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   closeDrawer() {
     if (!this.videoLoaded) return;
     this.overlayZIndex = 50;
-    this.drawer.open = !this.drawer.open;
+    this.drawer.open = false;
   }
 
   handlePlayClick = (e: CustomEvent) => {
@@ -1054,10 +1090,15 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                         border-radius: 8px;
                         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
                         padding: 10px;
-                        font-family: Arial, sans-serif;
                         overflow: hidden;">
               <p style="margin: 0; color: ${this.getContrastColor(data.color || '#ffffff')};">${(data.content || '')}</p>
-              <sl-icon style="position: absolute; bottom: 5px; right: 5px; color: ${this.getContrastColor(data.color || '#ffffff')};"  @mousedown="${this.startResizing}" src=${resize}></sl-icon>
+              <sl-icon style="position: absolute; 
+                              bottom: 5px; 
+                              right: 5px; 
+                              color: ${this.getContrastColor(data.color || '#ffffff')};"  
+                              @mousedown="${this.startResizing}" 
+                              src=${resize}>
+              </sl-icon>
             </div>
           `;
         }
@@ -1226,18 +1267,20 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   renderReplaceBaubles() {
     return html`
-    <div id='drop-area' @drop=${this.handleBaubleDroppedOnDropArea} @dragover=${this.handleBaubleDraggedOverDropArea} @dragleave=${this.handleBaubleLeaveDropArea}>
+    <div  id='drop-area' 
+          @drop=${this.handleBaubleDroppedOnDropArea} 
+          @dragover=${this.handleBaubleDraggedOverDropArea} 
+          @dragleave=${this.handleBaubleLeaveDropArea}>
       <div id='controls-upper'>
         ${Array.from(this.videoData.entries()).map(([key, value]) => {
           return html`
-          <webwriter-replace-bauble 
-          style='transform: translateY(-2px);'
-          offset=${this.calculateOffset(value.startTime)}
-          @dragstart=${this.handleBaubleDragStart}
-          @dragend=${this.handleBaubleDragEnd} 
-          draggable="true" 
-          @click=${this.handleBaubleClick} 
-          id=${key}>
+          <webwriter-replace-bauble style='transform: translateY(-2px);'
+                                    offset=${this.calculateOffset(value.startTime)}
+                                    @dragstart=${this.handleBaubleDragStart}
+                                    @dragend=${this.handleBaubleDragEnd} 
+                                    draggable="true" 
+                                    @click=${this.handleBaubleClick} 
+                                    id=${key}>
           </webwriter-replace-bauble>`;
         })}
       </div>
@@ -1245,8 +1288,15 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   handleBaubleDroppedOnDropArea(e: DragEvent) {
+    console.log(e);
     const rect = this.dropArea.getBoundingClientRect();
     const distanceFromLeft = e.clientX - rect.left;
+    this.overlayStartTimeInput
+    this.replaceTimestamp
+    this.baubleTimeUpdateHelper(Math.floor(this.video.duration * (distanceFromLeft/rect.width)), 
+                                parseInt(e.dataTransfer.getData('id')), 
+                                this.videoData.get(parseInt(e.dataTransfer.getData('id'))).isReplace? this.replaceTimestamp
+                                : this.overlayStartTimeInput);
     this.videoData.get(parseInt(e.dataTransfer.getData('id'))).startTime = Math.floor(this.video.duration * (distanceFromLeft/rect.width));
     this.saveInteractionConfig();
     this.updateBaublePositions();
@@ -1258,7 +1308,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   
 
   handleBaubleDroppedOnAdd(e: DragEvent) {
-    console.log('something was dropped on add, and it was',e.target);
     this.dropArea.style.background =  'none';
     this.deleteElement();
     this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
@@ -1303,7 +1352,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 }  
 
 // TODOS:
-// overlay timestamp broken quick fix
 // can change mid chapter start time to be more than later chapter start time
 // ask for input on what chapters should do if start time of one chapter is after start time of next,
 // should they swap in place or should it just not be allowed and discard edit / display helptext

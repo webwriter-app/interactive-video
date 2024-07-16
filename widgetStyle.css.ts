@@ -15,6 +15,7 @@ export const style = css`
 
   #video {
     width: 100%
+    object-fit: contain;
   }
 
   #controls {
