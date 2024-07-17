@@ -1352,6 +1352,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 }  
 
 // TODOS:
+// sticky progressbar
+// sort functions by use (all render functions, then all event handlers etc.) or by theme (all overlay functions, then all replace functions, chapter functions etc.)
 // can change mid chapter start time to be more than later chapter start time
 // ask for input on what chapters should do if start time of one chapter is after start time of next,
 // should they swap in place or should it just not be allowed and discard edit / display helptext
