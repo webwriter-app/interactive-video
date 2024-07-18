@@ -2,7 +2,6 @@ import { html, css, LitElement } from "lit"
 import { LitElementWw } from "@webwriter/lit"
 import { customElement, property, query } from "lit/decorators.js"
 
-/* In eigene Datei legen, editingConfig und export anpassen*/
 @customElement('webwriter-video-interaction')
 export class WwVideoInteraction extends LitElementWw {
 

@@ -20,7 +20,7 @@ import SlDetails from '@shoelace-style/shoelace/dist/components/details/details.
 import { SlTextarea } from "@shoelace-style/shoelace"
 
 import { videoData } from '../models/videoData'
-import {WwReplaceBauble} from './webwriter-replace-bauble'
+import {WwInteractiveBauble} from './webwriter-interactive-bauble'
 import { WwVideoInteraction } from './webwriter-video-interaction'
 import { style } from '../widgetStyle.css'
 
@@ -55,7 +55,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       'sl-dropdown': SlDropdown,
       'sl-menu': SlMenu,
       'sl-menu-item': SlMenuItem,
-      'webwriter-replace-bauble': WwReplaceBauble,
+      'webwriter-interactive-bauble': WwInteractiveBauble,
       'sl-checkbox': SlCheckbox,
       'sl-icon': SlIcon,
       'sl-color-picker': SlColorPicker,
@@ -131,11 +131,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property()
   lastTimeupdate : number = 0;
 
-  @property({type: Boolean})
+  @property({type: Boolean, attribute: true, reflect: true})
   showInteractions = false;
 
-  @property({type: Boolean})
+  @property({type: Boolean, attribute: true, reflect: true})
   showOverlay = true;
+
+  @property({type: Boolean, attribute: true, reflect: true}) 
+  keepInteractionOrder = true;
 
   @property({ type: String, attribute: true, reflect: true })
   interactionConfig: string = '[]';
@@ -201,6 +204,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property({type: HTMLVideoElement})
   video;
 
+
+
   
   handleAddClick = () => {
     if (!this.videoLoaded) return;
@@ -225,7 +230,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     if (e.detail.item.value == 1) { // replace
       this.showReplaceSettings();
       const interaction = document.createElement('webwriter-video-interaction') as WwVideoInteraction;
-      interaction.setAttribute("id", `${WwReplaceBauble.nextId++}`);
+      interaction.setAttribute("id", `${WwInteractiveBauble.nextId++}`);
       this.videoData.set(interaction.id, {
         isReplace: true, 
         startTime: this.video.currentTime});
@@ -236,7 +241,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     } else { // overlay
       this.showOverlaySettings();
       const interaction = document.createElement('webwriter-video-interaction') as WwVideoInteraction;
-      interaction.setAttribute("id", `${WwReplaceBauble.nextId++}`);
+      interaction.setAttribute("id", `${WwInteractiveBauble.nextId++}`);
       this.videoData.set(interaction.id, {
         isReplace: false,
         startTime: this.video.currentTime,
@@ -292,7 +297,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   
   handleBaubleClick(event: MouseEvent) {
-    const clickedElement = event.target as WwReplaceBauble;
+    const clickedElement = event.target as WwInteractiveBauble;
     if(event.ctrlKey) {
       this.video.currentTime = this.videoData.get(clickedElement.id).startTime;
       return;
@@ -379,7 +384,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           if (data) {
             if (input === this.overlayStartTimeInput) {
               data.startTime = newTime;
-              console.log('New time:', newTime, 'old end time:', data.endTime);
               if(newTime > data.endTime){
                 data.endTime = newTime + 5;
                 this.overlayEndTimeInput.value = this.formatTime(data.endTime);
@@ -406,10 +410,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   handleBaubleDragStart = (e:DragEvent) => {
-    console.log('drag start',e)
-    e.dataTransfer.setData('id', (e.target as WwReplaceBauble).id);
+    e.dataTransfer.setData('id', (e.target as WwInteractiveBauble).id);
     e.dataTransfer.setData('previousActive', `${this.activeElement}`);
-    this.changeActiveElement((e.target as WwReplaceBauble).id);
+    this.changeActiveElement((e.target as WwInteractiveBauble).id);
     this.changeAddToTrash();
   }
 
@@ -449,7 +452,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       <sl-checkbox @sl-change=${this.handleShowInteractionsChange} style='overflow: hidden'>Show Interactions</sl-checkbox>
       <sl-checkbox checked @sl-change=${this.handleShowOverlayChange} style='overflow: hidden'>Show Overlays</sl-checkbox>
       <sl-checkbox @sl-change=${this.handleHasChaptersChange} style='overflow: hidden'>Has Chapters</sl-checkbox>
-    </div>`
+    </div>
+    `
+  }
+
+  handleKeepInteractionOrderChange(e: CustomEvent) { 
+    const target = e.target as SlCheckbox;
+    this.keepInteractionOrder = target.checked;
   }
 
   handleHasChaptersChange = (e: CustomEvent) => {
@@ -468,7 +477,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   toggleChaptersDrawer() {
-    console.log('opening chapters drawer');
     this.chaptersDrawer.open = !this.chaptersDrawer.open;
   }
 
@@ -639,7 +647,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         </div>
         <!-- container for the controls -->
         <div id='controls'>
-          ${this.renderReplaceBaubles()}
+          ${this.renderInteractiveBaubles()}
           ${this.renderProgressBar()}
           ${this.renderLowerControls()}
         </div>
@@ -785,20 +793,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
   
   handleOverlayPositionChange(e: CustomEvent) {
-    console.log('handleOverlayPositionChange called');
     const input = e.target as SlInput;
     const value = parseFloat(input.value);
-    console.log(`Input label: ${input.label}, value: ${value}`);
     if (!isNaN(value)) {
       const data = this.videoData.get(this.activeElement);
-      console.log('Current data:', data);
       data.position = data.position || { x: 0, y: 0 };
       if (input.label.toLowerCase() === 'x position') {
         data.position.x = value;
       } else if (input.label.toLowerCase() === 'y position') {
         data.position.y = value;
       }
-      console.log('Updated data:', data);
       this.saveInteractionConfig();
       this.requestUpdate();
     }
@@ -822,14 +826,15 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   deleteElement() {
-    let activeId; 
+    let activeId;
     this.interactionSlot.assignedElements().forEach((element) => {
       if(element instanceof WwVideoInteraction && element.active) {
-         activeId = element.id;
+        activeId = element.id;
         element.remove();
       }
     });
     this.videoData.delete(activeId);
+    //this.recalculateIndexes(activeId);
     this.saveInteractionConfig();
     this.closeDrawer();
     this.updateBaublePositions();
@@ -842,7 +847,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     if(!this.upperControls) return;
     const children = this.upperControls.children;
     Array.from(children).forEach((child: Element) => {
-      if(child instanceof WwReplaceBauble) {
+      if(child instanceof WwInteractiveBauble) {
         const id = parseInt(child.id);
         const data = this.videoData.get(id);
         if(data) {
@@ -856,7 +861,37 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.requestUpdate();
   }
 
-    toggleInteractionView() {
+  // one most deletions, interactions change their id automatically, why is this??
+  // on some however, there is a gap. this gap bricks the program since it cannot match up with videodata anymore?
+  // planned fix is to recalculate videodata (this function already works), and subsequently recalculate interaction IDs, so they match up again.
+  // this should fix it regardless of wrong initial behavior but ideally obviously we wouldn't need that.
+  
+  /*recalculateIndexes(deletionID: number) {
+    this.recalculateBaubleIndexes(deletionID);
+    this.interactionSlot.assignedElements().forEach((element: WwVideoInteraction) => {
+      console.log('element with id',element.id, 'being compared to',this.videoData.size)
+      if(element.id > this.videoData.size) {
+        this.recalculateInteractionIndexes(deletionID);
+      }
+    });
+  }
+
+  recalculateInteractionIndexes(deletionID: number) {
+    console.log('i was invoked');
+    this.interactionSlot.assignedElements().forEach((element: WwVideoInteraction) => {
+      if(element.id > deletionID) element.setAttribute('id', `${element.id - 1}`);
+    });
+  }
+
+  recalculateBaubleIndexes(deletionID: number) {
+    const newData = Array.from(this.videoData.entries())
+    .sort((a, b) => a[0] - b[0])
+    .reduce((map, [_, value], index) => map.set(index + 1, value), new Map<number, videoData>());
+    this.videoData = newData;
+    WwInteractiveBauble.nextId = this.videoData.size +1 ;
+  }*/
+
+  toggleInteractionView() {
     if(this.interactionActive) {
       this.minimizeInteraction();
     } else {
@@ -984,7 +1019,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
   
   handleVolumeChange = (e: CustomEvent) => {
-    console.log('volume change',e)
     const volumeSlider = e.target as SlRange;
     this.video.volume = volumeSlider.value / 100;
     this.volumeButtonIconHelper();
@@ -1039,6 +1073,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
   
   handleVideoClick = (e: MouseEvent) => {
+    this.focus();
     if (!this.videoLoaded) return;
     e.stopPropagation();
     this.startStopVideo();
@@ -1074,7 +1109,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       .filter(([_, data]) => !data.isReplace)
       .map(([id, data]) => {
         if (this.video.currentTime >= data.startTime && this.video.currentTime <= data.endTime) {
-          console.log(`Rendering overlay for id ${id}, position:`, data.position);
           return html`
             <div class="overlay-interaction" 
                  id="overlay-${id}"
@@ -1229,8 +1263,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       }
   
       this.requestUpdate();
-  
-      console.log('Video can play through');
+
     }, 0);
   }
 
@@ -1258,14 +1291,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     <div id="file-input-area" 
     @dragover=${this.handleDragOverFileInputArea}
     @drop=${this.handleDropOnFileInputArea}>  
-      <textarea>http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</textarea>
       <input name="fileInput" id="fileInput" type="file" accept="video/*" @change=${this.handleFileInput} />
-      <p>Drag & drop a video file here, or click to select a file</p>
+      <p>Drag & drop a video file here or click to select a file</p>
+      <textarea>http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</textarea>
     </div>
     <sl-input id="url-input" placeholder="Enter video URL" @sl-change=${this.handleUrlInput}></sl-input>`
   }
 
-  renderReplaceBaubles() {
+  renderInteractiveBaubles() {
     return html`
     <div  id='drop-area' 
           @drop=${this.handleBaubleDroppedOnDropArea} 
@@ -1273,22 +1306,30 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           @dragleave=${this.handleBaubleLeaveDropArea}>
       <div id='controls-upper'>
         ${Array.from(this.videoData.entries()).map(([key, value]) => {
-          return html`
-          <webwriter-replace-bauble style='transform: translateY(-2px);'
+          return value.isReplace ? html`
+          <webwriter-interactive-bauble style='transform: translateY(-2px); border-radius: 50%;'
                                     offset=${this.calculateOffset(value.startTime)}
                                     @dragstart=${this.handleBaubleDragStart}
                                     @dragend=${this.handleBaubleDragEnd} 
-                                    draggable="true" 
+                                    draggable="true"
                                     @click=${this.handleBaubleClick} 
                                     id=${key}>
-          </webwriter-replace-bauble>`;
+          </webwriter-interactive-bauble>`
+          : html`
+          <webwriter-interactive-bauble style='transform: translateY(-2px);'
+                                    offset=${this.calculateOffset(value.startTime)}
+                                    @dragstart=${this.handleBaubleDragStart}
+                                    @dragend=${this.handleBaubleDragEnd} 
+                                    draggable="true"
+                                    @click=${this.handleBaubleClick} 
+                                    id=${key}>
+          </webwriter-interactive-bauble>`;
         })}
       </div>
     </div>`
   }
 
   handleBaubleDroppedOnDropArea(e: DragEvent) {
-    console.log(e);
     const rect = this.dropArea.getBoundingClientRect();
     const distanceFromLeft = e.clientX - rect.left;
     this.overlayStartTimeInput
@@ -1352,9 +1393,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 }  
 
 // TODOS:
-// sticky progressbar
+// ids of interactions and baubles are not the same
+// bauble id recalculaten on deletion
+// sticky controls in fullscreen mode
+// shift cards when starttime changes
+// chapter drawer under overlay - somehow not appearing anymore ?
+// render video if url is already known (create attribute to store dataurl)
 // sort functions by use (all render functions, then all event handlers etc.) or by theme (all overlay functions, then all replace functions, chapter functions etc.)
-// can change mid chapter start time to be more than later chapter start time
-// ask for input on what chapters should do if start time of one chapter is after start time of next,
-// should they swap in place or should it just not be allowed and discard edit / display helptext
 // choose which methods should only be applicable when content is editable

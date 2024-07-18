@@ -2,13 +2,12 @@ import { html, css, PropertyValueMap, LitElement } from "lit"
 import { LitElementWw } from "@webwriter/lit"
 import { customElement, property, query } from "lit/decorators.js"
 
-@customElement("webwriter-replace-bauble")
-export class WwReplaceBauble extends LitElementWw {
+@customElement("webwriter-interactive-bauble")
+export class WwInteractiveBauble extends LitElementWw {
     static styles = css`
         :host {
             width: 20px;
             height: 20px;
-            border-radius: 50%;
             background-color: white;
             display: flex;
             justify-content: center;
@@ -31,7 +30,7 @@ export class WwReplaceBauble extends LitElementWw {
     initialOffset;
 
     @property({ type: Number, attribute: true, reflect: true})
-    offset;
+    offset; 
 
     protected firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
         this.style.left = `${this.initialOffset}px`;
