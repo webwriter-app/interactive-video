@@ -66,10 +66,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   static styles = style;
   
 
-  @property({ type: Boolean })
+  @property({ type: Boolean, attribute: true, reflect: true })
   videoLoaded: boolean = false;
-
-
 
   @property({type: Boolean})
   interactionActive= false;
@@ -137,8 +135,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property({type: Boolean, attribute: true, reflect: true})
   showOverlay = true;
 
-  @property({type: Boolean, attribute: true, reflect: true}) 
-  keepInteractionOrder = true;
 
   @property({ type: String, attribute: true, reflect: true })
   interactionConfig: string = '[]';
@@ -367,6 +363,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     
     if (newTime !== null) {
       if (index !== undefined) {
+        console.log('updating chapter', index, 'to', newTime)
         this.updateChapterTime(index, newTime);
       } else {
         this.baubleTimeUpdateHelper(newTime, this.activeElement, input);
@@ -454,11 +451,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       <sl-checkbox @sl-change=${this.handleHasChaptersChange} style='overflow: hidden'>Has Chapters</sl-checkbox>
     </div>
     `
-  }
-
-  handleKeepInteractionOrderChange(e: CustomEvent) { 
-    const target = e.target as SlCheckbox;
-    this.keepInteractionOrder = target.checked;
   }
 
   handleHasChaptersChange = (e: CustomEvent) => {
@@ -550,14 +542,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   updateChapterTime(index: number, newTime: number) {
     if (index === 0) return;
     let chapters = JSON.parse(this.chapterConfig);
-    
+    /*
     if (index > 0 && newTime <= chapters[index - 1].startTime) {
       return;
     }
     if (index < chapters.length - 1 && newTime >= chapters[index + 1].startTime) {
       return;
     }
-    
+    */
     chapters[index].startTime = newTime;
     this.updateChapters(chapters);
   }
@@ -825,15 +817,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
-  deleteElement() {
-    let activeId;
+  deleteElement(deletionID?: number) {
+    if(!deletionID) {
+      this.deleteElement(this.activeElement);
+    }
     this.interactionSlot.assignedElements().forEach((element) => {
-      if(element instanceof WwVideoInteraction && element.active) {
-        activeId = element.id;
+      if(element instanceof WwVideoInteraction && element.id === deletionID) {
         element.remove();
       }
     });
-    this.videoData.delete(activeId);
+    this.videoData.delete(deletionID);
     //this.recalculateIndexes(activeId);
     this.saveInteractionConfig();
     this.closeDrawer();
@@ -861,11 +854,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.requestUpdate();
   }
 
+  // MARK: deletion bug
   // one most deletions, interactions change their id automatically, why is this??
   // on some however, there is a gap. this gap bricks the program since it cannot match up with videodata anymore?
   // planned fix is to recalculate videodata (this function already works), and subsequently recalculate interaction IDs, so they match up again.
   // this should fix it regardless of wrong initial behavior but ideally obviously we wouldn't need that.
-  
+
   /*recalculateIndexes(deletionID: number) {
     this.recalculateBaubleIndexes(deletionID);
     this.interactionSlot.assignedElements().forEach((element: WwVideoInteraction) => {
@@ -890,6 +884,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.videoData = newData;
     WwInteractiveBauble.nextId = this.videoData.size +1 ;
   }*/
+
 
   toggleInteractionView() {
     if(this.interactionActive) {
@@ -941,10 +936,34 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     if (document.fullscreenElement) {
       this.fullscreenButton.setAttribute('src',`${fullscreenEnter}`);
       document.exitFullscreen();
+      this.removeEventListener('resize', this.handleFullscreenResize);
     }
     else {
       this.fullscreenButton.setAttribute('src',`${fullscreenExit}`);
+      this.addEventListener('resize',this.handleFullscreenResize);
       this.requestFullscreen();
+      // MARK: todo
+      if(!this.checkControlsVisible()){
+        this.makeControlsSticky();
+      }
+    }
+  }
+
+  makeControlsSticky(){
+     
+  }
+
+  checkControlsVisible(): Boolean {
+    if(window.innerHeight < this.offsetHeight) {
+      console.log('controls not visible');
+      return false;
+    }
+     return true;
+  }
+
+  handleFullscreenResize() {
+    if(!this.checkControlsVisible) {
+      this.makeControlsSticky();
     }
   }
 
@@ -1073,7 +1092,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
   
   handleVideoClick = (e: MouseEvent) => {
-    this.focus();
     if (!this.videoLoaded) return;
     e.stopPropagation();
     this.startStopVideo();
@@ -1350,7 +1368,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   handleBaubleDroppedOnAdd(e: DragEvent) {
     this.dropArea.style.background =  'none';
-    this.deleteElement();
+    this.deleteElement(parseInt(e.dataTransfer.getData('id')));
     this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
     this.changeTrashToAdd();
   }
@@ -1393,11 +1411,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 }  
 
 // TODOS:
+
 // ids of interactions and baubles are not the same
 // bauble id recalculaten on deletion
+
 // sticky controls in fullscreen mode
-// shift cards when starttime changes
-// chapter drawer under overlay - somehow not appearing anymore ?
-// render video if url is already known (create attribute to store dataurl)
+
+// after shifting cards change focus to "old" element and put cursor there
+
 // sort functions by use (all render functions, then all event handlers etc.) or by theme (all overlay functions, then all replace functions, chapter functions etc.)
 // choose which methods should only be applicable when content is editable
