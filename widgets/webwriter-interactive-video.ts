@@ -817,16 +817,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
-  deleteElement(deletionID?: number) {
-    if(!deletionID) {
-      this.deleteElement(this.activeElement);
-    }
+  deleteElement() {
     this.interactionSlot.assignedElements().forEach((element) => {
-      if(element instanceof WwVideoInteraction && element.id === deletionID) {
+      if(element instanceof WwVideoInteraction && element.id === this.activeElement) {
         element.remove();
       }
     });
-    this.videoData.delete(deletionID);
+    this.videoData.delete(this.activeElement);
     //this.recalculateIndexes(activeId);
     this.saveInteractionConfig();
     this.closeDrawer();
@@ -1368,7 +1365,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   handleBaubleDroppedOnAdd(e: DragEvent) {
     this.dropArea.style.background =  'none';
-    this.deleteElement(parseInt(e.dataTransfer.getData('id')));
+    this.deleteElement();
     this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
     this.changeTrashToAdd();
   }
