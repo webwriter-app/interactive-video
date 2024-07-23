@@ -43,6 +43,10 @@ export class WwVideoInteraction extends LitElementWw {
       if (property == 'active') {
         this.style.display = this.active ? 'flex' : 'none';
       }
+      if( property == 'id') {
+        const err= new Error();
+        console.log('id', this.id, err.stack);
+      }
     });
   }
   

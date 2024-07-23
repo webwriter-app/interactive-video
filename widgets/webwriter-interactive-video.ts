@@ -78,6 +78,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property({ type: String, attribute: true, reflect: true,})
   videoBase64: string = '';
 
+  @property({ type: String, attribute: true, reflect: true })
+  videoURL : string = '';
+
   @query('#fileInput')
   fileInput: HTMLInputElement;
 
@@ -286,6 +289,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   firstUpdated() {
     if(this.videoBase64) {
       this.setupVideo(this.videoBase64);
+    } else if (this.videoURL) {
+      this.setupVideo(this.videoURL);
     }
     this.updateBaublePositions();
     this.requestUpdate();
@@ -432,11 +437,15 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.showOverlay = target.checked;
   }
 
+  hasVideo = () => {
+    return this.videoBase64 || this.videoURL;
+  }
+
   render() {
     return html`
       <!-- teacher options bugged, maybe its a focus issue idk im putting it here so i can access them -->
       ${this.renderTeacherOptions()}
-      ${this.videoLoaded ? this.widget() 
+      ${this.hasVideo() ? this.widget() 
         : this.renderFileInputArea()}
     `;
   }
@@ -625,6 +634,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     const input = e.target as SlInput;
     const url = input.value;
     if (url) {
+      this.videoURL = url;
       this.setupVideo(url);
     }
   }
@@ -993,6 +1003,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.lastTimeupdate = this.video.currentTime;
     this.progressBar.value = (this.video.currentTime / this.video.duration)*100;
     this.timeStamp.innerHTML = this.formatTime(this.lastTimeupdate) + '/' + this.videoDurationFormatted;
+
+    if(this.video.currentTime >= this.video.duration) {
+      this.playButton.setAttribute('src',`${play}`);
+    }
   }
 
   replaceInteractionHelper() {
@@ -1081,6 +1095,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   setupVideo(src: string) {
     this.video = document.createElement('video');
     this.video.src = src;
+    
     this.video.style.width = '100%';
     this.video.addEventListener('loadedmetadata', this.handleMetadataLoaded);
     this.video.addEventListener('canplaythrough', this.handleCanPlayThrough);
