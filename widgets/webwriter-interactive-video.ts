@@ -228,19 +228,27 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     if(!this.videoLoaded) return;
     if (e.detail.item.value == 1) { // replace
       this.showReplaceSettings();
+      
+      // create interaction and set videodata
       const interaction = document.createElement('webwriter-video-interaction') as WwVideoInteraction;
-      interaction.setAttribute("id", `${WwInteractiveBauble.nextId++}`);
+      const id = this.videoData.size+1;
+      interaction.setAttribute("id", `${id}`);
       this.videoData.set(interaction.id, {
         isReplace: true, 
         startTime: this.video.currentTime});
       interaction.slot = 'interaction-slot';
+
+      //append it to the dom
       this.appendChild(interaction);
       this.changeActiveElement(interaction.id);
       this.replaceTimestamp.value = this.formatTime(this.video.currentTime);
     } else { // overlay
       this.showOverlaySettings();
+
+      // create interaction and set videodata
       const interaction = document.createElement('webwriter-video-interaction') as WwVideoInteraction;
-      interaction.setAttribute("id", `${WwInteractiveBauble.nextId++}`);
+      const id = this.videoData.size+1;
+      interaction.setAttribute("id", `${id}`);
       this.videoData.set(interaction.id, {
         isReplace: false,
         startTime: this.video.currentTime,
@@ -250,6 +258,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         size: { width: 100, height: 100 }
       });
       interaction.slot = 'interaction-slot';
+
+      //append it to the dom
       this.appendChild(interaction);
       this.changeActiveElement(interaction.id);
       this.setOverlaySettingsContentFromVideoSetting();
@@ -315,7 +325,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       this.replaceTimestamp.value = this.formatTime(interactionData.startTime);
       this.showReplaceSettings();
     } else {
-      this.showOverlaySettings();
       // Update overlay settings inputs
       this.overlayStartTimeInput.value = this.formatTime(interactionData.startTime);
       this.overlayEndTimeInput.value  = this.formatTime(interactionData.endTime);
@@ -325,6 +334,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       this.overlayWidthInput.value = `${interactionData.size.width}`;
       this.overlayHeightInput.value = `${interactionData.size.height}`;
       this.colorPicker.setAttribute('value', interactionData.color);
+
+      this.showOverlaySettings();
     }
     
     if (!this.drawer.open) {
@@ -472,7 +483,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     return html`
       <sl-drawer contained label="Chapters" id="chapters-drawer">
         ${this.renderChaptersList()}
-        <sl-button @click=${this.addChapter}>Add Chapter</sl-button>
+        ${this.isContentEditable? html`<sl-button @click=${this.addChapter}>Add Chapter</sl-button>` : null}
       </sl-drawer>
     `;
   }
@@ -834,7 +845,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       }
     });
     this.videoData.delete(this.activeElement);
-    //this.recalculateIndexes(activeId);
+    //this.recalculateIndexes();
     this.saveInteractionConfig();
     this.closeDrawer();
     this.updateBaublePositions();
@@ -862,35 +873,37 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   // MARK: deletion bug
-  // one most deletions, interactions change their id automatically, why is this??
+  // on most deletions, interactions change their id automatically, why is this??
   // on some however, there is a gap. this gap bricks the program since it cannot match up with videodata anymore?
   // planned fix is to recalculate videodata (this function already works), and subsequently recalculate interaction IDs, so they match up again.
-  // this should fix it regardless of wrong initial behavior but ideally obviously we wouldn't need that.
+  // this should fix it regardless of wrong initial behavior
 
-  /*recalculateIndexes(deletionID: number) {
-    this.recalculateBaubleIndexes(deletionID);
+  recalculateIndexes() {
+    this.recalculateBaubleIndexes();
+    this.recalculateInteractionIndexes();
     this.interactionSlot.assignedElements().forEach((element: WwVideoInteraction) => {
-      console.log('element with id',element.id, 'being compared to',this.videoData.size)
-      if(element.id > this.videoData.size) {
-        this.recalculateInteractionIndexes(deletionID);
-      }
+      console.log(element.id);
     });
   }
-
-  recalculateInteractionIndexes(deletionID: number) {
-    console.log('i was invoked');
-    this.interactionSlot.assignedElements().forEach((element: WwVideoInteraction) => {
-      if(element.id > deletionID) element.setAttribute('id', `${element.id - 1}`);
+  
+  recalculateInteractionIndexes() {
+    (this.interactionSlot.assignedElements() as WwVideoInteraction[]).sort((a, b) => a.id - b.id).forEach((element, index) => {
+      console.log('changing interaction with id', element.id, 'to', index + 1);
+      element.setAttribute('id', `${index + 1}`);
+      console.log('new id is', element.id);
     });
   }
+  
 
-  recalculateBaubleIndexes(deletionID: number) {
+  recalculateBaubleIndexes() {
+    console.log(this.videoData.keys(), 'is current videoData');
     const newData = Array.from(this.videoData.entries())
     .sort((a, b) => a[0] - b[0])
     .reduce((map, [_, value], index) => map.set(index + 1, value), new Map<number, videoData>());
+    console.log(newData.keys(), 'is new videoData');
     this.videoData = newData;
-    WwInteractiveBauble.nextId = this.videoData.size +1 ;
-  }*/
+    this.saveInteractionConfig();
+  }
 
 
   toggleInteractionView() {
@@ -1362,12 +1375,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   handleBaubleDroppedOnDropArea(e: DragEvent) {
     const rect = this.dropArea.getBoundingClientRect();
     const distanceFromLeft = e.clientX - rect.left;
-    this.overlayStartTimeInput
-    this.replaceTimestamp
     this.baubleTimeUpdateHelper(Math.floor(this.video.duration * (distanceFromLeft/rect.width)), 
                                 parseInt(e.dataTransfer.getData('id')), 
                                 this.videoData.get(parseInt(e.dataTransfer.getData('id'))).isReplace? this.replaceTimestamp
                                 : this.overlayStartTimeInput);
+
     this.videoData.get(parseInt(e.dataTransfer.getData('id'))).startTime = Math.floor(this.video.duration * (distanceFromLeft/rect.width));
     this.saveInteractionConfig();
     this.updateBaublePositions();

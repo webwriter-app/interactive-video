@@ -20,9 +20,6 @@ export class WwInteractiveBauble extends LitElementWw {
             cursor: grabbing;
         }
     `;
-
-    static nextId = 1;
-
     @property({ type: Number , attribute: true, reflect: true})
     id;
 
