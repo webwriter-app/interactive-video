@@ -1,5 +1,5 @@
-import { html, css, _$LE, PropertyValueMap } from "lit"
-import {guard} from 'lit/directives/guard.js'
+
+import { html, css, _$LE, PropertyValueMap, TemplateResult } from "lit"
 import { LitElementWw } from "@webwriter/lit"
 import { LitElement } from "lit"
 import { customElement, property, query } from "lit/decorators.js"
@@ -40,9 +40,20 @@ import resize from "../assets/resize.svg"
 import chapter from "../assets/chapter.svg"
 
 
-
+/**
+ * Class containing the video player as well as all the logic for video playback, interactive elements, controls, file input, and more.
+ * This class extends the `LitElementWw` class.
+ */
 @customElement("webwriter-interactive-video")
 export class WebwriterInteractiveVideo extends LitElementWw {
+
+
+  /**
+   * Returns an object that maps custom element names to their corresponding classes.
+   * These custom elements can be used within the scope of the `webwriter-interactive-video` component.
+   * 
+   * @returns An object mapping custom element names to their corresponding classes.
+   */
   static get scopedElements() {
     return {
       'sl-textarea': SlTextarea,
@@ -63,167 +74,327 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+  /**
+   * The styles for the webwriter-interactive-video component.
+   */
   static styles = style;
-  
 
+  
+  // Video properties
+
+  /**
+   * Indicates whether the video is currently playing.
+   * This property is reflected as an attribute.
+   */
   @property({ type: Boolean, attribute: true, reflect: true })
   videoLoaded: boolean = false;
 
-  @property({type: Boolean})
-  interactionActive= false;
-
+  /**
+   * Video duration formatted as a string, initialized to 00:00 before the vidoe is loaded.
+   */
   @property({ type: String })
   videoDurationFormatted: string = '00:00';
 
+  /**
+   * Video file as a base64 string for offline storage.
+   */
   @property({ type: String, attribute: true, reflect: true,})
   videoBase64: string = '';
 
+  /**
+   * Video URL for online playback.
+   */
   @property({ type: String, attribute: true, reflect: true })
   videoURL : string = '';
 
-  @query('#fileInput')
-  fileInput: HTMLInputElement;
-
-  @query('#color-picker')
-  colorPicker: SlColorPicker;
-
-  @query('#chapters-drawer')
-  chaptersDrawer: SlDrawer;
-
-  @property({ attribute: false })
-  files: FileList;
-
-  @query('#progress-bar')
-  progressBar;
-
-  @query('#controls-upper')
-  upperControls: HTMLDivElement;
-
-  @query('#video')
-  videoElement: HTMLVideoElement;
-
-  @query('#interactions-drawer')
-  drawer: SlDrawer;
-
-  @query('#time-stamp')
-  timeStamp;
-
-  @query('#volume-slider')
-  volumeSlider;
-
-  @query('#interaction-container')
-  interactionContainer : HTMLDivElement;
-
-  @query('#interaction-slot')
-  interactionSlot : HTMLSlotElement;
-
-  @query('#replace-timestamp')
-  replaceTimestamp : SlInput;
-
-  @property()
-  activeElement : number;
-
-  @query('#drop-area')
-  dropArea;
-
-  @property()
-  videoData : Map<number, videoData> = new Map()
-
+  /**
+   * Last time when timeupdate event was fired.
+   */
   @property()
   lastTimeupdate : number = 0;
 
-  @property({type: Boolean, attribute: true, reflect: true})
-  showInteractions = false;
-
-  @property({type: Boolean, attribute: true, reflect: true})
-  showOverlay = true;
-
-
-  @property({ type: String, attribute: true, reflect: true })
-  interactionConfig: string = '[]';
-
-  @property({type: Number})
-  overlayZIndex = 50;
-
-  @property({type: Boolean})
-  isDragging = false;
-
-  @property({ type: Boolean, attribute: true, reflect: true })
-  hasChapters = false;
-
-  @property({ type: String, attribute: true, reflect: true })
-  chapterConfig: string = '[]';
-
-  @query('#overlay-start-time-input')
-  overlayStartTimeInput: SlInput;
-  
-  @query('#overlay-end-time-input')
-  overlayEndTimeInput: SlInput;
-
-  @query('#overlay-x-position-input')
-  OverlayXPositionInput: SlInput;
-
-  @query('#overlay-y-position-input')
-  OverlayYPositionInput: SlInput;
-
-  @query('#overlay-content-input')
-  overlayContentInput: SlInput;
-
-  @query('#overlay-width-input')
-  overlayWidthInput: SlInput;
-
-  @query('#overlay-height-input')
-  overlayHeightInput: SlInput;
-
-  @query('#replace-interaction-settings')
-  replaceInteractionSettings: HTMLElement;
-
-  @query('#overlay-interaction-settings')
-  overlayInteractionSettings: HTMLElement;
-
-
-
-  // Button queries
-
-  @query('#play')
-  playButton: SlButton;
-
-  @query('#mute-volume-button')
-  muteButton: SlButton;
-
-  @query('#fullscreen-button')
-  fullscreenButton: SlButton;
-
-  @query('#add-button')
-  addButton: SlButton;
-
-  @query('#settings-button')
-  settingsButton: SlButton;
-
+  /**
+   * The video element.
+   */
   @property({type: HTMLVideoElement})
   video;
 
 
 
+
+  // Video UI queries
+
+  /**
+   * Query for the video element.
+   */
+  @query('#video')
+  videoElement: HTMLVideoElement;
   
+  /**
+   * Query for the progress bar element.
+   */
+  @query('#progress-bar')
+  progressBar;
+
+  /**
+   * Query for the uppper controls container.
+   */
+  @query('#controls-upper')
+  upperControls: HTMLDivElement;
+
+  /**
+   * Query for the videos time stamp.
+   */
+  @query('#time-stamp')
+  timeStamp;
+
+  /**
+   * Query for the volume slider.
+   */
+  @query('#volume-slider')
+  volumeSlider;
+
+  /**
+   * Query for the play button
+   */
+  @query('#play')
+  playButton: SlButton;
+
+  /**
+   * Query for the drop area for repositioning baubles on the progress bar. 
+   */
+  @query('#drop-area')
+  dropArea;
+  
+  /**
+   * Query for the mute button.
+   */
+  @query('#mute-volume-button')
+  muteButton: SlButton;
+
+  /**
+   * Query for the fullscreen button.
+   */
+  @query('#fullscreen-button')
+  fullscreenButton: SlButton;
+
+  /**
+   * Query for the add interactions button.
+   */
+  @query('#add-button')
+  addButton: SlButton;
+
+  /**
+   * Query for the settings button.
+   */
+  @query('#settings-button')
+  settingsButton: SlButton;
+
+
+
+
+  // Interaction properties and queries
+
+  /**
+   * Map containing the video data for each interactive element.
+   */
+  @property()
+  videoData : Map<number, videoData> = new Map()
+
+  /**
+   * Query for the interactions drawer.
+   */
+  @query('#interactions-drawer')
+  drawer: SlDrawer;
+  
+  /**
+   * Query for the interaction settings container for replace interactions. This contains the interactive slot and the replace timestamp input, as well as a delete button.
+   */
+  @query('#replace-interaction-settings')
+  replaceInteractionSettings: HTMLElement;
+  
+  /**
+   * Query for the interaction settings container for overlay interactions. This contains all the overlay settings, as well as a delete button.
+   */
+  @query('#overlay-interaction-settings')
+  overlayInteractionSettings: HTMLElement;
+
+  /**
+   * Indicates whether the interaction view is active.
+   */
+  @property({type: Boolean})
+  interactionActive= false;
+
+  /**
+   * Query for the interaction container that is nested within the drawer.
+   */
+  @query('#interaction-container')
+  interactionContainer : HTMLDivElement;
+
+  /**
+   * Query for the interaction slot that contains the interactive elements
+   */
+  @query('#interaction-slot')
+  interactionSlot : HTMLSlotElement;
+
+  /**
+   * Indicates which element is currently active, by saving the id of the element.
+   */
+  @property()
+  activeElement : number;
+
+  /**
+   * Contains the current videoData as a JSON string.
+   */
+  @property({ type: String, attribute: true, reflect: true })
+  interactionConfig: string = '[]';
+
+  /**
+   * sets the z-index of the overlay
+   */
+  @property({type: Number})
+  overlayZIndex = 50;
+
+  /**
+   * Query for the start time input in the overlay settings.
+   */
+  @query('#overlay-start-time-input')
+  overlayStartTimeInput: SlInput;
+  
+  /**
+   * Query for the end time input in the overlay settings.
+   */
+  @query('#overlay-end-time-input')
+  overlayEndTimeInput: SlInput;
+
+  /**
+   * Query for the input of the x-position in the overlay settings.
+   */
+  @query('#overlay-x-position-input')
+  OverlayXPositionInput: SlInput;
+
+  /**
+   * Query for the input of the y-position in the overlay settings.
+   */
+  @query('#overlay-y-position-input')
+  OverlayYPositionInput: SlInput;
+
+  /**
+   * Query for the content input in the overlay settings.
+   */
+  @query('#overlay-content-input')
+  overlayContentInput: SlInput;
+
+  /**
+   * Query for the width input in the overlay settings.
+   */
+  @query('#overlay-width-input')
+  overlayWidthInput: SlInput;
+
+  /**
+   * Query for the height input in the overlay settings.
+   */
+  @query('#overlay-height-input')
+  overlayHeightInput: SlInput;
+
+  /**
+   * Query for the color picker in the overlay settings.
+   */
+  @query('#color-picker')
+  colorPicker: SlColorPicker;
+
+  /**
+   * Query for the replace timestamp input in the replace settings.
+   */
+  @query('#replace-timestamp')
+  replaceTimestamp : SlInput;
+
+
+  // File input properties and queries
+  
+  /**
+   * Query for the file input element-
+   */
+  @query('#fileInput')
+  fileInput: HTMLInputElement;
+
+  /**
+   * Represents the list of files (we will only be grabbing the first one).
+   */
+  @property({ attribute: false })
+  files: FileList;
+
+
+  // Chapter properties
+
+  /**
+   * Contains the current chapter configuration as a JSON string.
+   */
+  @property({ type: String, attribute: true, reflect: true })
+  chapterConfig: string = '[]';
+
+  /**
+   * Query for the drawer that holds the chapter configurations.
+   */
+  @query('#chapters-drawer')
+  chaptersDrawer: SlDrawer;
+  
+
+  // Teacher Options
+
+  /**
+   * Teacher options for showing interactions, initially set to false.
+   */
+  @property({type: Boolean, attribute: true, reflect: true})
+  showInteractions = false;
+
+  /**
+   * Teacher options for showing overlays, initially set to true.
+   */
+  @property({type: Boolean, attribute: true, reflect: true})
+  showOverlay = true;
+
+  /**
+   * Teacher options declaring whether the video has chapters, initially set to false.
+   */
+  @property({ type: Boolean, attribute: true, reflect: true })
+  hasChapters = false;
+
+  // Miscellaneous
+
+  /**
+   * Indicates whether a drag operation is currently happening.
+   */
+  @property({type: Boolean})
+  isDragging = false;
+
+
+  
+  /**
+   * Handles the click event for the add button.
+   */
   handleAddClick = () => {
     if (!this.videoLoaded) return;
     if (!this.drawer.open) {
       this.drawer.open = true;
-      this.overlayZIndex = 0;
     }
+    // set z-index of overlay to 0 so they don't cover the drawer.
+    this.overlayZIndex = 0;
+    // clears the drawer from previous settings
     this.hideDrawerContent();
   }
 
+  /**
+   * Options for configuring the shadow root of the component.
+   * Inherits the shadow root options from LitElement and adds the ability to delegate focus.
+   */
   static shadowRootOptions = {...LitElement.shadowRootOptions, delegatesFocus: true };
 
 
-  /*
-  * Handles the selection of the interaction type in the dropdown menu, and adds an interactive element into the container
-  *
-  * @param e - CustomEvent containing the selected item from the dropdown
-  * 
-  */
+  /**
+   * Handles the selection of the interaction type in the dropdown menu and adds an interactive element to the DOM in case of a replace interaction.
+   * @param e - CustomEvent containing the selected item from the dropdown
+   */
   handleInteractionTypeSelected = (e: CustomEvent) => {
     if(!this.videoLoaded) return;
     if (e.detail.item.value == 1) { // replace
@@ -240,7 +411,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
       //append it to the dom
       this.appendChild(interaction);
+
+      //this is now the active element (displays it in the drawer)
       this.changeActiveElement(interaction.id);
+      
+      //update replace settings UI and initialize timestamp to current time
       this.replaceTimestamp.value = this.formatTime(this.video.currentTime);
     } else { // overlay
       this.showOverlaySettings();
@@ -261,12 +436,20 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
       //append it to the dom
       this.appendChild(interaction);
+
+      //this is now the active element (displays it in the drawer)
       this.changeActiveElement(interaction.id);
+
+      //update overlay settings UI
       this.setOverlaySettingsContentFromVideoSetting();
     }
     this.saveInteractionConfig();
   }
 
+
+  /**
+   * Sets the overlay settings content from the video setting.
+   */
   setOverlaySettingsContentFromVideoSetting() {
     const data = this.videoData.get(this.activeElement);
     this.overlayStartTimeInput.value = this.formatTime(data.startTime);
@@ -278,16 +461,25 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.overlayHeightInput.value = `${data.size.height}`;
   }
 
+  /**
+   * Hides all drawer content for the interactive drawer.
+   */
   hideDrawerContent() {
     this.replaceInteractionSettings.hidden = true;
     this.overlayInteractionSettings.hidden = true;
   }
 
+  /**
+   * Shows the replace settings and hides the overlay settings.
+   */
   showReplaceSettings() {
     this.replaceInteractionSettings.hidden = false;
     this.overlayInteractionSettings.hidden = true;
   }
 
+  /**
+   * Shows the overlay settings and hides the replace settings.
+   */
   showOverlaySettings() {
     this.replaceInteractionSettings.hidden = true;
     this.overlayInteractionSettings.hidden = false;
@@ -303,10 +495,17 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       this.setupVideo(this.videoURL);
     }
     this.updateBaublePositions();
-    this.requestUpdate();
   }
 
   
+  /**
+   * Handles the click event on a bauble element.
+   * 
+   * @param event - The MouseEvent object representing the click event.
+   * @remarks
+   * This function is called when a bauble is clicked. It checks if the control key is pressed and if so, it sets the video time to the bauble's start time.
+   * Otherwise, it calls the clickEventHelper function to handle the click event.
+   */
   handleBaubleClick(event: MouseEvent) {
     const clickedElement = event.target as WwInteractiveBauble;
     if(event.ctrlKey) {
@@ -317,6 +516,15 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+
+  /**
+   * Helper function for handling click event of baubles.
+   * 
+   * @param id - The ID of the element that was clicked.
+   * @remarks
+   * This function is called when a bauble is clicked without the control button being held. 
+   * It changes the active element to the clicked element and updates the overlay settings with the corresponding data.
+   */
   clickEventHelper(id: number){
     this.changeActiveElement(id);
     const interactionData = this.videoData.get(id);
@@ -344,11 +552,21 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+
+  /**
+   * Saves the interaction configuration by converting the video data into a JSON string.
+   * The resulting JSON string is assigned to the interactionConfig property.
+   */
   saveInteractionConfig() {
     const config = Array.from(this.videoData.entries()).map(([id, data]) => ({id, ...data}));
     this.interactionConfig = JSON.stringify(config);
   }
   
+  /**
+   * Loads the interaction configuration from videoData Map.
+   * @remarks
+   * This function is called when the interactionConfig property is updated. It parses the JSON string and stores the resulting data in the videoData map.
+   */
   loadInteractionConfig() {
     if (this.interactionConfig) {
       const config = JSON.parse(this.interactionConfig);
@@ -361,6 +579,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+
+  /**
+   * Changes the active element to the specified index.
+   * @param newActive - The index of the new active element.
+   */
   changeActiveElement(newActive: number) {
     this.activeElement = newActive;
     this.interactionSlot.assignedElements().forEach((element: WwVideoInteraction) => {
@@ -373,25 +596,46 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
 
+  /**
+   * Handles the time input change event.
+   * 
+   * @param e - The custom event object.
+   * @param index - The optional index of the chapter.
+   * @remarks
+   * This function is called when the time input is changed. It parses the input value and updates the corresponding time value.
+   * If the index is provided, it updates the chapter time; otherwise, it updates the bauble time.
+   */
   handleTimeInputChange = (e: CustomEvent, index?: number) => {
     const input = e.target as SlInput;
     const newTime = this.parseTime(input.value);
     
     if (newTime !== null) {
+      // an index is only passed if the time input is for a chapter
       if (index !== undefined) {
-        console.log('updating chapter', index, 'to', newTime)
+        //update chapter time
         this.updateChapterTime(index, newTime);
       } else {
+        //update bauble time
         this.baubleTimeUpdateHelper(newTime, this.activeElement, input);
       }
       input.value = this.formatTime(newTime);
     } else {
       input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
     }
+    // change bauble positions to reflect new time and request an update
     this.updateBaublePositions();
-    this.requestUpdate();
   }
 
+  /**
+   * Updates video data with new time values when baubles are dropped on progress bar.
+   * 
+   * @param newTime - The new time value.
+   * @param index - The index of the bauble.
+   * @param input - The time input element of the corresponding interaction type/property.
+   * @remarks
+   * This function is called when a bauble is dropped on the progress bar. It updates the start time of the bauble and the corresponding input element.
+   * If the input element is the overlay start time, it also updates the end time to be 5 seconds after the start time.
+   */
   baubleTimeUpdateHelper(newTime: number, index: number,input: SlInput) {
           const data = this.videoData.get(index);
           if (data) {
@@ -411,17 +655,34 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           }
   }
 
-  calculateOffset(time: number) {
+  /**
+   * Calculates the offset based on the given time.
+   * 
+   * @param time - The time in seconds.
+   * @returns The calculated offset.
+   */
+  calculateOffset(time: number): number {
     if(!this.videoLoaded || !this.video) return;
     const rect = this.video.getBoundingClientRect();
     return (time / this.video.duration) * 0.95 * rect.width;
   }
 
+  /**
+   * Handles the change event when teacher options for showing interactions is triggered.
+   * 
+   * @param e - The custom event object.
+   */
   handleShowInteractionsChange = (e: CustomEvent) => {
     const target = e.target as SlCheckbox;
     this.showInteractions = target.checked;
   }
 
+
+  /**
+   * Handles the drag start event for a bauble.
+   * 
+   * @param e - The drag event.
+   */
   handleBaubleDragStart = (e:DragEvent) => {
     e.dataTransfer.setData('id', (e.target as WwInteractiveBauble).id);
     e.dataTransfer.setData('previousActive', `${this.activeElement}`);
@@ -429,57 +690,91 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.changeAddToTrash();
   }
 
+  /**
+   * Changes the add button to a trash button.
+   */
   changeAddToTrash() {
     this.addButton.setAttribute('src',`${trash}`)
     this.addButton.style.color = 'hsl(0 72.2% 50.6%)';
   }
 
+  /**
+   * Changes the trash button to an add button.
+   */
   changeTrashToAdd() {
     this.addButton.setAttribute('src',`${add}`)
     this.addButton.style.color = 'hsl(200.4 98% 39.4%)';
   }
   
-
-
-
-  
+  /**
+   * Handles the change event when teacher options for showing Overlays is triggered.
+   * 
+   * @param e - The custom event object.
+   */
   handleShowOverlayChange = (e: CustomEvent) => {
     const target = e.target as SlCheckbox;
     this.showOverlay = target.checked;
   }
 
-  hasVideo = () => {
-    return this.videoBase64 || this.videoURL;
+  /**
+   * Checks whether a video is already existing on load.
+   * @returns whether a video exists (either base64 or URL, used for deciding whether to show file input area or video element)
+   */
+  hasVideo = (): boolean => {
+    if(this.videoBase64 || this.videoURL) {
+      return true;
+    }
+    return false;
   }
 
+
+  /**
+   * Renders the component.
+   * 
+   * @returns either HTML for either the widget or the file input area, depending on whether a video has already been selected.
+   */
   render() {
     return html`
-      <!-- teacher options bugged, maybe its a focus issue idk im putting it here so i can access them -->
+      <!-- teacher options bugged, maybe its a focus issue idk im putting it here so i can access them. Manage focus better-->
       ${this.renderTeacherOptions()}
       ${this.hasVideo() ? this.widget() 
         : this.renderFileInputArea()}
     `;
   }
 
-  
-
-  renderTeacherOptions() {
+  /**
+   * Renders the teacher options for the interactive video widget.
+   * 
+   * @returns {TemplateResult} The rendered HTML for teacher options.
+   * @remarks the CSS class 'temporary-teacher-options' is only since the focus on the widget does not work properly and we need to display them somewhere, this at the very least makes them look nicer.
+   */
+  renderTeacherOptions(): TemplateResult {
     return html`
-    <div style='display:flex;'>
-      <sl-checkbox @sl-change=${this.handleShowInteractionsChange} style='overflow: hidden'>Show Interactions</sl-checkbox>
-      <sl-checkbox checked @sl-change=${this.handleShowOverlayChange} style='overflow: hidden'>Show Overlays</sl-checkbox>
-      <sl-checkbox @sl-change=${this.handleHasChaptersChange} style='overflow: hidden'>Has Chapters</sl-checkbox>
+    <div style='display:flex; margin-bottom:10px;' id='temporary-teacher-options-container'>
+      <sl-checkbox @sl-change=${this.handleShowInteractionsChange} class='temporary-teacher-options' style='overflow: hidden'>Show Interactions</sl-checkbox>
+      <sl-checkbox checked @sl-change=${this.handleShowOverlayChange} class='temporary-teacher-options' style='overflow: hidden'>Show Overlays</sl-checkbox>
+      <sl-checkbox @sl-change=${this.handleHasChaptersChange} class='temporary-teacher-options' style='overflow: hidden'>Has Chapters</sl-checkbox>
     </div>
     `
   }
 
+  /**
+   * Handles the change event when the "hasChapters" checkbox is toggled.
+   * @param e - The custom event object.
+   */
   handleHasChaptersChange = (e: CustomEvent) => {
     const target = e.target as SlCheckbox;
     this.hasChapters = target.checked;
     this.requestUpdate();
   }
 
-  renderChaptersDrawer() {
+
+  /**
+   * Renders the chapters drawer.
+   * 
+   * @returns {TemplateResult} the rendered HTML for the chapters drawer, filled with the chapters list and an add chapter button (if content is editable).
+   */
+  renderChaptersDrawer(): TemplateResult {
     return html`
       <sl-drawer contained label="Chapters" id="chapters-drawer">
         ${this.renderChaptersList()}
@@ -488,13 +783,19 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     `;
   }
 
+  /**
+   * Toggles the chapters drawer open or closed.
+   */
   toggleChaptersDrawer() {
     this.chaptersDrawer.open = !this.chaptersDrawer.open;
   }
 
+  /**
+   * Retrieves the current chapter based on the current time of the video.
+   * @returns The current chapter object containing the title and start time, or null if there are no chapters or the current time is before the start of any chapter.
+   */
   getCurrentChapter(): { title: string, startTime: number } | null {
     if (!this.hasChapters) return null;
-    
     const chapters = JSON.parse(this.chapterConfig);
     for (let i = chapters.length - 1; i >= 0; i--) {
       if (this.video.currentTime >= chapters[i].startTime) {
@@ -504,6 +805,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     return null;
   }
   
+  /**
+   * Renders the chapters list.
+   * 
+   * @returns {TemplateResult} The rendered Chapters list from the chapter config.
+   * @remarks
+   * This function maps over the chapters in the chapter config and renders a list of chapters.
+   * If the content is editable, it renders input fields for the chapter title and start time, as well as a delete button.
+   */
   renderChaptersList() {
     const chapters = JSON.parse(this.chapterConfig);
     return html`
@@ -512,13 +821,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           <li class="chapter-item">
             ${this.isContentEditable 
               ? html`
+                <!-- Render Chapter Title-->
                 <sl-input label="Title" 
                           value=${chapter.title} 
                           @sl-change=${(e) => this.updateChapterTitle(index, e.target.value)}>
                 </sl-input>
+                <!-- Only for the first chapter do not allow start time change -->
                 ${index === 0 
                   ? html`<p>Start Time: 00:00</p>`
                   : html`
+                    <!-- Render chapter card with an input field to change start time-->
                     <sl-input 
                       label="Start Time" 
                       value=${this.formatTime(chapter.startTime)} 
@@ -526,14 +838,17 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                     ></sl-input>
                   `
                 }
+                <!-- Delete button for all but the first chapter -->
                 ${index > 0 ? html`<sl-button variant="danger" @click=${() => this.deleteChapter(index)}>Delete</sl-button>` : ''}
               `
               : html`
+                <!-- If content is not editable, just display chapter information -->
                 <div class="chapter-info">
                   <strong>${chapter.title}</strong> - Start Time: ${this.formatTime(chapter.startTime)}
                 </div>
               `
             }
+            <!-- Jump to Chapter button -->
             <sl-button variant="primary" @click=${() => this.jumpToChapter(index)}>Jump to Chapter</sl-button>
           </li>
         `)}
@@ -541,6 +856,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     `;
   }
 
+  /**
+   * Jumps to a specific chapter in the interactive video.
+   * @param index - The index of the chapter to jump to.
+   */
   jumpToChapter(index: number) {
     const chapters = JSON.parse(this.chapterConfig);
     if (chapters[index]) {
@@ -548,6 +867,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+  /**
+   * Adds a new chapter to the interactive video.
+   * The new chapter is appended to the end of the chapter list.
+   */
   addChapter() {
     const chapters = JSON.parse(this.chapterConfig);
     const lastChapter = chapters[chapters.length - 1];
@@ -559,27 +882,38 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.updateChapters(chapters);
   }
 
+
+  /**
+   * Updates the start time of a chapter at the specified index.
+   * 
+   * @param index - The index of the chapter to update.
+   * @param newTime - The new start time for the chapter.
+   */
   updateChapterTime(index: number, newTime: number) {
     if (index === 0) return;
     let chapters = JSON.parse(this.chapterConfig);
-    /*
-    if (index > 0 && newTime <= chapters[index - 1].startTime) {
-      return;
-    }
-    if (index < chapters.length - 1 && newTime >= chapters[index + 1].startTime) {
-      return;
-    }
-    */
     chapters[index].startTime = newTime;
     this.updateChapters(chapters);
   }
 
+  /**
+   * Updates the title of a chapter at the specified index.
+   * 
+   * @param index - The index of the chapter to update.
+   * @param newTitle - The new title for the chapter.
+   */
   updateChapterTitle(index: number, newTitle: string) {
     const chapters = JSON.parse(this.chapterConfig);
     chapters[index].title = newTitle;
     this.updateChapters(chapters);
   }
 
+  /**
+   * Parses a time string and returns the equivalent number of seconds.
+   * 
+   * @param timeStr - The time string to parse.
+   * @returns The number of seconds represented by the time string, or null if the time string is invalid.
+   */
   parseTime(timeStr: string): number | null {
     const parts = timeStr.toString().split(':').map(Number);
     if (parts.length === 2) {
@@ -590,25 +924,42 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     return null;
   }
 
+  /**
+   * Updates the chapters of the interactive video, sorting them by start time.
+   * 
+   * @param chapters - An array of chapters to update.
+   */
   updateChapters(chapters: any[]) {
     chapters.sort((a, b) => a.startTime - b.startTime);
     this.chapterConfig = JSON.stringify(chapters);
     this.requestUpdate();
   }
 
+  /**
+   * Deletes a chapter from the chapter configuration.
+   * 
+   * @param index - The index of the chapter to delete.
+   */
   deleteChapter(index: number) {
     const chapters = JSON.parse(this.chapterConfig);
     chapters.splice(index, 1);
     this.updateChapters(chapters);
   }
 
-
-
+  /**
+   * Handles the drag over event for the file input area.
+   * @param e - The drag event.
+   */
   handleDragOverFileInputArea(e: DragEvent) {
     e.preventDefault();
     e.stopPropagation();
   }
 
+  /**
+   * Handles the drop event on the file input area.
+   * 
+   * @param e - The drag event.
+   */
   handleDropOnFileInputArea(e: DragEvent) {
     e.preventDefault();
     e.stopPropagation();
@@ -618,6 +969,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+  /**
+   * Handles the file input event.
+   * 
+   * @param e - The event object.
+   */
   handleFileInput(e: Event) {
     const fileInput = e.target as HTMLInputElement;
     const file = fileInput.files?.[0];
@@ -626,6 +982,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+  /**
+   * Handles the selected file and reads its contents as a data URL.
+   * @param file - The file to be handled.
+   */
   handleFile(file: File) {
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {
@@ -640,7 +1000,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     };
     reader.readAsDataURL(file);
   }
+  
 
+  /**
+   * Handles the input event for the URL input field.
+   * 
+   * @param e - The CustomEvent object representing the input event.
+   */
   handleUrlInput(e: CustomEvent) {
     const input = e.target as SlInput;
     const url = input.value;
@@ -650,7 +1016,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
-  widget() {
+  /**
+   * Renders the widget component.
+   * 
+   * @returns {TemplateResult} The rendered widget.
+   * @remarks
+   * This function renders the interactive video widget, which consists of a video element, interactive baubles, and control elements.
+   */
+  widget(): TemplateResult {
     return html`
       <div id='container-vertical'>
         <!-- container for the video element -->
@@ -669,7 +1042,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       </div>`;
   }
 
-  renderInteractionDrawer() {
+  /**
+   * Renders the interaction drawer.
+   * 
+   * @returns {TemplateResult} The HTML for the interaction drawer.
+   * @remarks
+   * This function renders the interaction drawer, which contains the settings for adding and configuring interactive elements.
+   */
+  renderInteractionDrawer(): TemplateResult {
     return html`
     <sl-drawer style="z-index: 100;"label='Add Interaction' contained id='interactions-drawer'>
       ${this.renderInteractionTypeSelector()}
@@ -680,19 +1060,37 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     </sl-drawer>`
   }
 
-  renderProgressBar() {
+  /**
+   * Renders the progress bar for the interactive video.
+   * @returns {TemplateResult} The Progress bar SlRange element within a container div.
+   */
+  renderProgressBar(): TemplateResult{
     return html`
     <div id='progress-bar-container'>
       <sl-range id='progress-bar' @sl-change=${this.handleProgressChange}></sl-range>
     </div>`
   }
 
-  renderCurrentChapter() {
+  /**
+   * Renders the current chapter of the interactive video.
+   * 
+   * @returns The HTML representation of the current chapter, or an empty string if there is no current chapter.
+   */
+  renderCurrentChapter(): TemplateResult {
     const currentChapter = this.getCurrentChapter();
     return currentChapter ? html`<div id="current-chapter">${currentChapter.title}</div>` : '';
   }
 
-  renderLowerControls() {
+  /**
+   * Renders the lower controls for the webwriter interactive video widget.
+   * 
+   * @returns {TemplateResult} The HTML for the lower controls.
+   * @remarks
+   * This function renders the lower controls for the interactive video widget, including the play button, time stamp, volume slider, and fullscreen button.
+   * If the video has chapters, it also renders a chapters button.
+   * If the content is editable, it renders an add button for adding interactive elements.
+   */
+  renderLowerControls(): TemplateResult {
     return html`
     <div id='controls-lower'>
       <div id='controls-lower-left'>
@@ -722,6 +1120,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     </div>`
   }
 
+  /**
+   * Renders the interaction type selector.
+   * 
+   * @returns {TemplateResult} The template for the dropdown menu in the interactions drawer.
+   */
   renderInteractionTypeSelector() {
     return html`
     <sl-dropdown label='Interaction Type' id='interaction-type-dropdown' @sl-select=${this.handleInteractionTypeSelected}>
@@ -733,6 +1136,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     </sl-dropdown>`
   }
 
+  /**
+   * Renders the video settings.
+   * 
+   * @returns {TemplateResult} The template for the settings menu accessible via the cog icon button.
+   */
   renderVideoSettings() {
     return html`
     <sl-dropdown placement='top-start' id='settings-menu' @sl-select=${this.settingSelectionHandler}>
@@ -752,6 +1160,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     </sl-dropdown>`
   }
 
+  /**
+   * Renders the settings for the replace interaction type.
+   * 
+   * @returns {TemplateResult} The template for the settings for replace interactions.
+   * @remarks
+   * This holds the interaction-slot for hosting webwriter-video-interaction elements.
+   * Also contains an input field for setting the starting time of a replace interaction.
+   */
   renderReplaceInteractionSettings() {
     return html`
     <div id='replace-interaction-settings' hidden>
@@ -768,6 +1184,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     </div>`
   }
 
+  /**
+   * Renders the interaction type selector.
+   * 
+   * @returns {TemplateResult} The template for the settings for overlay interactions.
+   * @remarks
+   * This includes inputs for the start and end time, content, color, position, and size of the overlay.
+   */
   renderOverlayInteractionSettings() {
     return html`
       <div id='overlay-interaction-settings' hidden>
@@ -805,6 +1228,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       </div>`
   }
   
+
+  /**
+   * Handles the change in overlay position.
+   * 
+   * @param e - The custom event containing the target element.
+   */
   handleOverlayPositionChange(e: CustomEvent) {
     const input = e.target as SlInput;
     const value = parseFloat(input.value);
@@ -821,12 +1250,26 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
   
+
+  /**
+   * Handles the change event for inputs in the content field of an overlay interaction.
+   * Updates the content of the active element in the videoData object
+   * and saves the interaction configuration.
+   * 
+   * @param e - The custom event object.
+   */
   handleOverlayContentChange(e: CustomEvent) {
     const textarea = e.target as SlTextarea;
     this.videoData.get(this.activeElement).content = textarea.value;
     this.saveInteractionConfig();
   }
   
+
+  /**
+   * Handles the change even when inputting a new overlay size.
+   * 
+   * @param e - The custom event containing the target element.
+   */
   handleOverlaySizeChange(e: CustomEvent) {
     const input = e.target as SlInput;
     const value = parseFloat(input.value);
@@ -838,6 +1281,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+
+  /**
+   * Deletes the currently active element and updates the necessary configurations.
+   * @remarks
+   * This is currently bugged. Ask for more information on this if needed.
+   * Somehow, when deleting an element, the id of the remaining elements changes automatically.
+   * I've tried to fix this by recalculating the indexes, but this also doesn't seem to work.
+   */
   deleteElement() {
     this.interactionSlot.assignedElements().forEach((element) => {
       if(element instanceof WwVideoInteraction && element.id === this.activeElement) {
@@ -849,11 +1300,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.saveInteractionConfig();
     this.closeDrawer();
     this.updateBaublePositions();
-    this.requestUpdate();
   }
 
 
 
+  /**
+   * Updates the positions of the baubles in the widget. 
+   */
   updateBaublePositions() {
     if(!this.upperControls) return;
     const children = this.upperControls.children;
@@ -872,12 +1325,15 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.requestUpdate();
   }
 
-  // MARK: deletion bug
-  // on most deletions, interactions change their id automatically, why is this??
-  // on some however, there is a gap. this gap bricks the program since it cannot match up with videodata anymore?
-  // planned fix is to recalculate videodata (this function already works), and subsequently recalculate interaction IDs, so they match up again.
-  // this should fix it regardless of wrong initial behavior
-
+  /* MARK: deletion bug
+   on most deletions, interactions change their id automatically, why is this??
+   on some however, there is a gap. this gap bricks the program since it cannot match up with videodata anymore?
+   planned fix is to recalculate videodata (this function already works), and subsequently recalculate interaction IDs, so they match up again.
+   this should fix it regardless of wrong initial behavior
+  */ 
+  /**
+   * Recalculates the indexes of the baubles and video interactions.
+   */
   recalculateIndexes() {
     this.recalculateBaubleIndexes();
     this.recalculateInteractionIndexes();
@@ -886,6 +1342,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     });
   }
   
+  /**
+   * helper function for recalculateIndexes, the entire thing is somehow bugged. Read documentation of updateBaublePositions and recalculateIndexes for more information.
+   * The idea was to recalculate the indexes of those video interactions affected by shifting (or rather, not shifting some times (its really weird)).
+   */
   recalculateInteractionIndexes() {
     (this.interactionSlot.assignedElements() as WwVideoInteraction[]).sort((a, b) => a.id - b.id).forEach((element, index) => {
       console.log('changing interaction with id', element.id, 'to', index + 1);
@@ -894,7 +1354,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     });
   }
   
-
+  /** helper function for recalculateIndexes, the entire thing is somehow bugged. This function works in its current state. Use at own risk.
+   *  
+   */ 
   recalculateBaubleIndexes() {
     console.log(this.videoData.keys(), 'is current videoData');
     const newData = Array.from(this.videoData.entries())
@@ -906,6 +1368,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
 
+  /**
+   * Toggles the replace interaction view to display the element across the whole screen
+   */
   toggleInteractionView() {
     if(this.interactionActive) {
       this.minimizeInteraction();
@@ -952,6 +1417,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.interactionActive = true;
   }
 
+  /**
+   * Handles the click event for the fullscreen button.
+   * If the document is currently in fullscreen mode, it exits fullscreen and updates the fullscreen button icon.
+   * If the document is not in fullscreen mode, it enters fullscreen, updates the fullscreen button icon,
+   * The controls should be sticky in fullscreen mode, i.e. stick to the lower part of the screen if the video is not fully in view. I didnt get around to doing this.
+   */
   handleFullscreenClick = () => {
     if (document.fullscreenElement) {
       this.fullscreenButton.setAttribute('src',`${fullscreenEnter}`);
@@ -969,10 +1440,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+  //TODO: implement
   makeControlsSticky(){
-     
+    const e = new Error('Not implemented');
+    console.log('i was called from',e.stack);
   }
 
+  /**
+   * Checks if the controls are visible based on the height of the window and the offset height of the element.
+   * @returns {boolean} Returns true if the controls are visible, false otherwise.
+   */
   checkControlsVisible(): Boolean {
     if(window.innerHeight < this.offsetHeight) {
       console.log('controls not visible');
@@ -981,12 +1458,23 @@ export class WebwriterInteractiveVideo extends LitElementWw {
      return true;
   }
 
+  /**
+   * Handles the resize event when the video player enters or exits fullscreen mode.
+   * If the controls are not visible, makes the controls sticky.
+   */
   handleFullscreenResize() {
     if(!this.checkControlsVisible) {
       this.makeControlsSticky();
     }
   }
 
+  /**
+   * Updates the volume button icon based on the current state of the video and volume slider.
+   * If the video is muted, no changes are made to the icon.
+   * If the volume slider value is 0, the mute button icon is set to `volumeOff`.
+   * If the volume slider value is less than 50, the mute button icon is set to `volumeDown`.
+   * If the volume slider value is 50 or greater, the mute button icon is set to `volumeUp`.
+   */
   volumeButtonIconHelper() {
     if(this.video.muted) return;
     if(this.volumeSlider.value === 0) this.muteButton.setAttribute('src',`${volumeOff}`);
@@ -996,19 +1484,30 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+  /**
+   * Event handler for selection of playback speeds from the setting menu.
+   * @param {CustomEvent} e - The custom event object.
+   */
   settingSelectionHandler = (e: CustomEvent) => {
     if (!this.videoLoaded) return;
     this.video.playbackRate = e.detail.item.value;
   }
 
+  /**
+   * Seeks the video to the specified time.
+   * @param value - The time value to seek by.
+   */
   seek(value: number) {
     if (!this.videoLoaded) return;
     this.video.currentTime += value;
   }
 
-  /*
-  * speichere den letzten wert und schau ob starttime übersprungen wurde
-  */
+  /**
+   * Handles the time update event of the video player and check whether there are interactions to be displayed by comparing current call time to last.
+   * This way we dont skip any interactions and dont fire twice since this is called inconsistently.
+   * 
+   * @param e - The custom event object.
+   */
   handleTimeUpdate = (e: CustomEvent) => {
     if(this.showInteractions || !this.isContentEditable) {
       this.replaceInteractionHelper();
@@ -1022,6 +1521,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+  /**
+   * Checks whether a replace interaction should be replaced currently.
+   * If the video time matches the start time of a replace interaction,
+   * the active element is changed, the video is paused, and the interaction is maximized.
+   */
   replaceInteractionHelper() {
     this.videoData.forEach((value, key) => {
       if(value.isReplace) {
@@ -1039,6 +1543,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     });
   }
 
+  /**
+   * Handles the progress change event and updates the video's progress bar and time stamp based on the current video time.
+   *
+   * @param e - The custom event object.
+   */
   handleProgressChange = (e: CustomEvent) => {
     const progressBar = e.target as SlRange;
     let currentTime = (progressBar.value / 100) * this.video.duration;
@@ -1046,6 +1555,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.timeStamp.value = this.formatTime(currentTime) + '/' + this.videoDurationFormatted;
   }
 
+  /**
+   * Called when the element is first connected to the document's DOM.
+   * @remarks
+   * Adds event listeners for fullscreen changes.
+   * Also builds the interaction configuration and renders the chapters list, if available.
+   */
   connectedCallback() {
     super.connectedCallback();
     this.videoLoaded = false;
@@ -1054,19 +1569,30 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.renderChaptersList();
   }
 
-  disconnectedCallback(): void {
-    super.disconnectedCallback();
-  }
-  handleFullscreenChange = (event: Event) => {
+  /**
+   * Handles the fullscreen change event by repositioning the baubles to fit the new video size.
+   */
+  handleFullscreenChange = () => {
     this.updateBaublePositions();
   }
   
+  /**
+   * Handles the change event for the volume slider and sets the video volume and button icon accordingly.
+   * 
+   * @param e - The custom event object.
+   */
   handleVolumeChange = (e: CustomEvent) => {
     const volumeSlider = e.target as SlRange;
     this.video.volume = volumeSlider.value / 100;
     this.volumeButtonIconHelper();
   }
 
+  /**
+   * Formats the given time in seconds into a string representation of hours, minutes, and seconds.
+   * 
+   * @param time - The time in seconds to format.
+   * @returns A string representation of the formatted time in 'hh:mm:ss' or 'mm:ss' format for videos under an hour.
+   */
   formatTime(time: number): string {
     const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
@@ -1079,6 +1605,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+  /**
+   * Converts the selected video file to base64 format and sets up the video.
+   * @param e - The event object triggered by the file input change.
+   */
   videoToBase64(e: Event) {
     const fileInput = e.target as HTMLInputElement;
     const file = fileInput.files?.[0];
@@ -1105,6 +1635,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     reader.readAsDataURL(file);
   }
   
+  /**
+   * Sets up the video element with the provided source and attaches event listeners to the video object.
+   * 
+   * @param src - The source URL of the video.
+   */
   setupVideo(src: string) {
     this.video = document.createElement('video');
     this.video.src = src;
@@ -1116,12 +1651,23 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.video.addEventListener('click', this.handleVideoClick);
   }
   
+  /**
+   * Handles the click event on the video element.
+   * 
+   * @param e - The MouseEvent object representing the click event.
+   */
   handleVideoClick = (e: MouseEvent) => {
     if (!this.videoLoaded) return;
     e.stopPropagation();
     this.startStopVideo();
   }
 
+  /**
+   * Toggles the playback of the video. If the video has ended, it resets the current time to 0.
+   * @remarks
+   * Also changes the play button icon to 'pause' if the video is playing, and 'play' if the video is paused.
+
+   */
   startStopVideo() {
     if (!this.videoLoaded) return;
     if (this.video.ended) {
@@ -1136,16 +1682,31 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+  /**
+   * Closes the drawer if the video is loaded.
+   */
   closeDrawer() {
     if (!this.videoLoaded) return;
     this.overlayZIndex = 50;
     this.drawer.open = false;
   }
 
+  /**
+   * Handles the click event when the play button is clicked.
+   * 
+   * @param e - The custom event object.
+   */
   handlePlayClick = (e: CustomEvent) => {
     this.startStopVideo()
   }
 
+  /**
+   * Renders the overlay elements for the video.
+   * 
+   * @returns {Array<TemplateResult>} of any overlay elements that need to be displayed at the current video time
+   * @remarks 
+   * this checks video time to see if an overlay should be displayed and renders those from the videoData map.
+   */
   renderOverlays() {
     if(!this.showOverlay && this.isContentEditable) return;
     return Array.from(this.videoData.entries())
@@ -1183,6 +1744,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       });
   }
 
+  /**
+   * Calculates the contrast color based on the given hex color.
+   * @param hexColor - The hex color value.
+   * @returns Either black or White depending on contrast with the given color.
+   */
   getContrastColor(hexColor: string): string {
     const r = parseInt(hexColor.slice(1, 3), 16);
     const g = parseInt(hexColor.slice(3, 5), 16);
@@ -1192,6 +1758,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     return luminance > 0.5 ? '#000000' : '#ffffff';
   }
 
+  /**
+   * Handles the click event on the overlay element by calling the clickEventHelper function with the id of the interaction.
+   * 
+   * @param event - The MouseEvent object representing the click event.
+   */
   handleOverlayClicked = (event: MouseEvent) => {
     event.stopPropagation();
     if(this.isDragging){
@@ -1201,6 +1772,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.clickEventHelper(parseInt((event.currentTarget as HTMLElement).id.split('-')[1]));
   }
 
+  /**
+   * Starts the dragging operation when the user clicks and drags the overlay element.
+   * 
+   * @param e - The MouseEvent object representing the click event.
+   */
   startDragging(e: MouseEvent) {
     if(this.drawer.open) return;
     const overlay = e.currentTarget as HTMLElement;
@@ -1238,6 +1814,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     document.addEventListener('mouseup', onMouseUp);
   }
   
+  /**
+   * Handles the start of the resizing process for the interactive video overlay.
+   * 
+   * @param e - The MouseEvent object representing the start of the resizing process.
+   */
   startResizing(e: MouseEvent) {
     if(this.drawer.open) return;
     if(!(e.target as HTMLElement).matches('sl-icon')) return;
@@ -1277,6 +1858,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     document.addEventListener('mouseup', onMouseUp);
   }
 
+  /**
+   * Handles the 'canplaythrough' event of the video element.
+   * 
+   * This function is called when the video can be played through without interruption.
+   * @remarks
+   * It performs various actions such as enabling/disabling the addButton, setting the progressBar value to 0,
+   * setting the video volume to 0.1, setting the volumeSlider value to 10, and initializing the chapterConfig
+   * if it is empty.
+   * The Timeout was necessary to ensure that the elements are rendered before the actions are performed.
+   */
   handleCanPlayThrough = () => {
     if (this.videoLoaded) return;
     this.videoLoaded = true;
@@ -1310,6 +1901,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }, 0);
   }
 
+  /**
+   * Handles the loaded metadata event of the video element.
+   * @remarks
+   * This function is called when the metadata of the video is loaded to set up things we dont have to wait for the video to load fully for.
+   */
   handleMetadataLoaded = () => {
     this.videoDurationFormatted = this.formatTime(this.video.duration);
     
@@ -1329,18 +1925,32 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }, 0);
   }
 
+
+  // MARK: todo css
+  /**
+   * Renders the file input area for selecting a video file or entering a video URL.
+   * 
+   * @returns {TemplateResult} The rendered HTML template for the file input area.
+   */
   renderFileInputArea() {
     return html`
     <div id="file-input-area" 
     @dragover=${this.handleDragOverFileInputArea}
     @drop=${this.handleDropOnFileInputArea}>  
-      <input name="fileInput" id="fileInput" type="file" accept="video/*" @change=${this.handleFileInput} />
-      <p>Drag & drop a video file here or click to select a file</p>
-      <textarea>http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</textarea>
+      <label for="fileInput" style="cursor: pointer;" id='file-input-label'>Click to Select Video File or enter URL below</label>
+      <input name="fileInput" id="fileInput" type="file" accept="video/*" @change=${this.handleFileInput} style='display:none;'/>
     </div>
     <sl-input id="url-input" placeholder="Enter video URL" @sl-change=${this.handleUrlInput}></sl-input>`
   }
 
+
+  /**
+   * Renders the interactive baubles for the webwriter-interactive-video component.
+   * 
+   * @returns {TemplateResult} The HTML Template for the upper controls, this contains all baubles and the drop area.
+   * @remarks
+   * This function maps over the videoData map and renders a webwriter-interactive-bauble element for each entry.
+   */
   renderInteractiveBaubles() {
     return html`
     <div  id='drop-area' 
@@ -1372,6 +1982,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     </div>`
   }
 
+  /**
+   * Handles the event when a bauble is dropped on the drop area.
+   * 
+   * @param e - The DragEvent object representing the drop event.
+   * @remarks
+   * Dropping a bauble on the drop area changes the corresponding interactions starttime to whatever the bauble was dropped at
+   */
   handleBaubleDroppedOnDropArea(e: DragEvent) {
     const rect = this.dropArea.getBoundingClientRect();
     const distanceFromLeft = e.clientX - rect.left;
@@ -1382,14 +1999,19 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
     this.videoData.get(parseInt(e.dataTransfer.getData('id'))).startTime = Math.floor(this.video.duration * (distanceFromLeft/rect.width));
     this.saveInteractionConfig();
-    this.updateBaublePositions();
     this.dropArea.style.background =  'none';
     this.changeTrashToAdd();
-    this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
-    this.requestUpdate();
+    this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));    
+    this.updateBaublePositions();
   }
   
 
+  /**
+   * Handles the event when a bauble is dropped on the "add" button.
+   * This deletes the object. When the drag event starts the add button turns into a trash can.
+   * @param e - The DragEvent object representing the drop event.
+   * 
+   */
   handleBaubleDroppedOnAdd(e: DragEvent) {
     this.dropArea.style.background =  'none';
     this.deleteElement();
@@ -1397,14 +2019,31 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.changeTrashToAdd();
   }
 
+  /**
+   * Handles the event when a bauble is dragged over the drop area.
+   * Changes the background color of the drop area to a semi-transparent gray.
+   * 
+   * @param e - The DragEvent object representing the drag event.
+   */
   handleBaubleDraggedOverDropArea(e: DragEvent) {
     this.dropArea.style.background = 'rgba(0.5,0.5,0.5,0.5)'
   }
 
+  /**
+   * Handles the event when a bauble is dragged out of the drop area.
+   * Resets the background of the drop area.
+   * 
+   * @param e - The DragEvent object representing the drag event.
+   */
   handleBaubleLeaveDropArea(e: DragEvent) {
     this.dropArea.style.background =  'none'
   }
 
+  /**
+   * Handles the drag end event for the bauble.
+   * 
+   * @param e - The drag event.
+   */
   handleBaubleDragEnd = (e:DragEvent) => {
     this.changeActiveElement(parseInt(e.dataTransfer.getData('previousActive')));
     this.dropArea.style.background =  'none'
@@ -1412,6 +2051,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.addButton.style.color = 'hsl(200.4 98% 39.4%)';
   }
 
+  /**
+   * Handles the click event for the mute button.
+   * 
+   * @param e - The custom event object.
+   */
   handleMuteClick = (e: CustomEvent) => {
     if (!this.videoLoaded) return;
     const t = e.target as SlButton;
@@ -1424,6 +2068,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     }
   }
 
+  /**
+   * Handles the change event when the overlay color is changed.
+   * 
+   * @param e - The custom event containing the color picker target.
+   */
   handleOverlayColorChange(e: CustomEvent) {
     const colorPicker = e.target as SlColorPicker;
     const data = this.videoData.get(this.activeElement);
@@ -1432,16 +2081,4 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       this.saveInteractionConfig();
     }
   }
-}  
-
-// TODOS:
-
-// ids of interactions and baubles are not the same
-// bauble id recalculaten on deletion
-
-// sticky controls in fullscreen mode
-
-// after shifting cards change focus to "old" element and put cursor there
-
-// sort functions by use (all render functions, then all event handlers etc.) or by theme (all overlay functions, then all replace functions, chapter functions etc.)
-// choose which methods should only be applicable when content is editable
+} 

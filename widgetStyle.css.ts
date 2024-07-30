@@ -54,6 +54,19 @@ export const style = css`
     gap: 2px;
   }
 
+  #file-input-label:hover {
+    color: blue;
+  }
+
+  #temporary-teacher-options-container {
+    padding: 4px;
+    border: 1px solid #ccc;
+  }
+
+  .temporary-teacher-options{
+    margin-right: 10px;
+  }
+  
   #time-stamp {
     color: white;
     user-select: none;  
