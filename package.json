@@ -1,6 +1,6 @@
 {
   "name": "@tarikvural/interactive-video",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "exports": {
     "./widgets/webwriter-interactive-video": "./widgets/webwriter-interactive-video.ts",
     "./widgets/webwriter-video-interaction": "./widgets/webwriter-video-interaction.ts",
