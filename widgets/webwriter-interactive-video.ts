@@ -1076,7 +1076,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * 
    * @returns The HTML representation of the current chapter, or an empty string if there is no current chapter.
    */
-  renderCurrentChapter(): TemplateResult {
+  renderCurrentChapter() {
     const currentChapter = this.getCurrentChapter();
     return currentChapter ? html`<div id="current-chapter">${currentChapter.title}</div>` : '';
   }
