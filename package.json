@@ -1,5 +1,5 @@
 {
-  "name": "@webwriter/interactive-video",
+  "name": "@tarikvural/interactive-video",
   "version": "0.0.1",
   "exports": {
     "./widgets/webwriter-interactive-video": "./widgets/webwriter-interactive-video.ts",
