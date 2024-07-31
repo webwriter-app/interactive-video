@@ -10,7 +10,12 @@
     "webwriter-widget"
   ],
   "editingConfig": {
+    "./widgets/webwriter-interactive-bauble": {
+      "unisertable" : true
+    }
+    ,
     "./widgets/webwriter-video-interaction": {
+      "uninsertable"  : true,
       "content": "(p|flow)+"
     },
     "./widgets/webwriter-interactive-video": {
