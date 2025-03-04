@@ -1,5 +1,5 @@
 {
-  "name": "@tarikvural/interactive-video",
+  "name": "@webwriter/interactive-video",
   "version": "0.0.3",
   "exports": {
     "./widgets/webwriter-interactive-video": "./widgets/webwriter-interactive-video.ts",
@@ -11,7 +11,7 @@
   ],
   "editingConfig": {
     "./widgets/webwriter-interactive-bauble": {
-      "unisertable": true
+      "uninsertable": true
     },
     "./widgets/webwriter-video-interaction": {
       "uninsertable": true,

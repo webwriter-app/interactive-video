@@ -17,7 +17,7 @@ import SlCheckbox from '@shoelace-style/shoelace/dist/components/checkbox/checkb
 import SlIcon from '@shoelace-style/shoelace/dist/components/icon/icon.component.js'
 import SlColorPicker from "@shoelace-style/shoelace/dist/components/color-picker/color-picker.component.js"
 import SlDetails from '@shoelace-style/shoelace/dist/components/details/details.component.js'
-import { SlTextarea } from "@shoelace-style/shoelace"
+import SlTextarea from "@shoelace-style/shoelace/dist/components/textarea/textarea.component.js"
 
 import { videoData } from '../models/videoData'
 import {WwInteractiveBauble} from './webwriter-interactive-bauble'
