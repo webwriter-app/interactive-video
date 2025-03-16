@@ -14,6 +14,8 @@ import { WwInteractiveBauble } from "../../widgets/webwriter-interactive-bauble/
 
 import { consume } from "@lit/context";
 
+import "@shoelace-style/shoelace/dist/themes/light.css";
+
 //CSS
 import styles from "./interactions-progress-bar.styles";
 

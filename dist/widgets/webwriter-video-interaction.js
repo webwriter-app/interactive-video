@@ -72,6 +72,14 @@ var n = class {
   }
 };
 var r = (t4) => new n("string" == typeof t4 ? t4 : t4 + "", void 0, s);
+var i = (t4, ...e6) => {
+  const o6 = 1 === t4.length ? t4[0] : e6.reduce((e7, s4, o7) => e7 + ((t5) => {
+    if (true === t5._$cssResult$) return t5.cssText;
+    if ("number" == typeof t5) return t5;
+    throw Error("Value passed to 'css' function must be a 'css' function result: " + t5 + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
+  })(s4) + t4[o7 + 1], t4[0]);
+  return new n(o6, t4, s);
+};
 var S = (s4, o6) => {
   if (e) s4.adoptedStyleSheets = o6.map((t4) => t4 instanceof CSSStyleSheet ? t4 : t4.styleSheet);
   else for (const e6 of o6) {
@@ -1366,6 +1374,23 @@ function n5(t4) {
   })(t4, e6, o6);
 }
 
+// widgets/webwriter-video-interaction/webwriter-video-interaction.styles.ts
+var webwriter_video_interaction_styles_default = i`
+  slot {
+    display: block;
+    height: 2em;
+    background-color: red;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  slot::slotted(p) {
+    width: 360px;
+    height: 100%;
+    display: block;
+  }
+`;
+
 // widgets/webwriter-video-interaction/webwriter-video-interaction.component.ts
 var _active_dec, _id_dec, _a2, _init2, _id, _active;
 var WwVideoInteraction = class extends (_a2 = LitElementWw, _id_dec = [n5({ type: Number, attribute: true, reflect: true })], _active_dec = [n5({ type: Boolean, attribute: true, reflect: true })], _a2) {
@@ -1407,6 +1432,10 @@ _active = new WeakMap();
 __decorateElement(_init2, 4, "id", _id_dec, WwVideoInteraction, _id);
 __decorateElement(_init2, 4, "active", _active_dec, WwVideoInteraction, _active);
 __decoratorMetadata(_init2, WwVideoInteraction);
+/**
+ * The styles for the webwriter-interactive-video component.
+ */
+__publicField(WwVideoInteraction, "styles", [webwriter_video_interaction_styles_default]);
 /**
  * Shadow DOM options for the component.
  * Enables focus delegation to the shadow DOM.

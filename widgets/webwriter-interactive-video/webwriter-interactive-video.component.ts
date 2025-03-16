@@ -3,6 +3,7 @@ import { LitElementWw } from "@webwriter/lit";
 
 import { customElement, property, query } from "lit/decorators.js";
 
+import "@shoelace-style/shoelace/dist/themes/light.css";
 import { SlButton, SlRange, SlIcon } from "@shoelace-style/shoelace";
 
 import { WwInteractiveBauble } from "../webwriter-interactive-bauble/webwriter-interactive-bauble.component";

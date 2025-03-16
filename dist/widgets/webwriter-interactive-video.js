@@ -24449,6 +24449,23 @@ __decoratorMetadata(_init5, VideoControlsBar);
 //import CSS
 __publicField(VideoControlsBar, "styles", [video_controls_bar_styles_default]);
 
+// widgets/webwriter-video-interaction/webwriter-video-interaction.styles.ts
+var webwriter_video_interaction_styles_default = i`
+  slot {
+    display: block;
+    height: 2em;
+    background-color: red;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  slot::slotted(p) {
+    width: 360px;
+    height: 100%;
+    display: block;
+  }
+`;
+
 // widgets/webwriter-video-interaction/webwriter-video-interaction.component.ts
 var _active_dec, _id_dec2, _a6, _init6, _id2, _active;
 var WwVideoInteraction = class extends (_a6 = LitElementWw, _id_dec2 = [n5({ type: Number, attribute: true, reflect: true })], _active_dec = [n5({ type: Boolean, attribute: true, reflect: true })], _a6) {
@@ -24490,6 +24507,10 @@ _active = new WeakMap();
 __decorateElement(_init6, 4, "id", _id_dec2, WwVideoInteraction, _id2);
 __decorateElement(_init6, 4, "active", _active_dec, WwVideoInteraction, _active);
 __decoratorMetadata(_init6, WwVideoInteraction);
+/**
+ * The styles for the webwriter-interactive-video component.
+ */
+__publicField(WwVideoInteraction, "styles", [webwriter_video_interaction_styles_default]);
 /**
  * Shadow DOM options for the component.
  * Enables focus delegation to the shadow DOM.

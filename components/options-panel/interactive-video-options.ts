@@ -4,6 +4,8 @@ import { LitElementWw } from "@webwriter/lit";
 import { customElement, property, query } from "lit/decorators.js";
 
 import { SlCheckbox } from "@shoelace-style/shoelace";
+import "@shoelace-style/shoelace/dist/themes/light.css";
+
 import {
   videoContext,
   InteractiveVideoContext,

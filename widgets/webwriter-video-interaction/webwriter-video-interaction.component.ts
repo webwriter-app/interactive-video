@@ -2,6 +2,7 @@ import { html, css, LitElement } from "lit";
 import { LitElementWw } from "@webwriter/lit";
 import { customElement, property, query } from "lit/decorators.js";
 
+import "@shoelace-style/shoelace/dist/themes/light.css";
 import styles from "./webwriter-video-interaction.styles";
 
 /**
@@ -10,6 +11,11 @@ import styles from "./webwriter-video-interaction.styles";
  */
 
 export class WwVideoInteraction extends LitElementWw {
+  /**
+   * The styles for the webwriter-interactive-video component.
+   */
+  static styles = [styles];
+
   @property({ type: Number, attribute: true, reflect: true })
   accessor id;
 

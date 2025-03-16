@@ -3,6 +3,7 @@ import { LitElementWw } from "@webwriter/lit";
 import { customElement, property, query } from "lit/decorators.js";
 
 import styles from "./webwriter-interactive-bauble.styles";
+import "@shoelace-style/shoelace/dist/themes/light.css";
 
 /**
  * `webwriter-interactive-bauble` is a custom element that represents a draggable bauble to display interactions on the progress bar.

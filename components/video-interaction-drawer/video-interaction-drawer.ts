@@ -14,6 +14,8 @@ import {
   SlDetails,
   SlTextarea,
 } from "@shoelace-style/shoelace";
+import "@shoelace-style/shoelace/dist/themes/light.css";
+
 import {
   videoContext,
   InteractiveVideoContext,
