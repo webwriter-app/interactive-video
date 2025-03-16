@@ -1384,7 +1384,7 @@ var webwriter_interactive_bauble_styles_default = i`
     justify-content: center;
     align-items: center;
     cursor: grab;
-    position: absolute;
+    position: relative;
   }
 
   :host(.dragging) {

@@ -23414,7 +23414,7 @@ var webwriter_interactive_bauble_styles_default = i`
     justify-content: center;
     align-items: center;
     cursor: grab;
-    position: absolute;
+    position: relative;
   }
 
   :host(.dragging) {
@@ -23479,13 +23479,20 @@ __publicField(WwInteractiveBauble, "styles", [webwriter_interactive_bauble_style
 
 // widgets/webwriter-interactive-video/webwriter-interactive-video.styles.ts
 var webwriter_interactive_video_styles_default = i`
+  :host * {
+    box-sizing: border-box;
+  }
+
   #container-vertical {
     display: flex;
     flex-direction: column;
   }
 
-  #container-vertical > * {
-    grid-area: stack;
+  #container-video {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
   }
 
   #video {
@@ -23494,14 +23501,31 @@ var webwriter_interactive_video_styles_default = i`
   }
 
   #controls {
-    position: relative;
-
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    align-items: center; /* Prevent stretching */
 
     width: 100%;
     background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+  }
+
+  #controls * {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  #progress-bar {
+    height: 6px !important; /* Force a consistent height */
+    min-height: 6px;
+    max-height: 6px;
+  }
+
+  #progress-bar::part(base) {
+    height: 6px !important; /* Force a consistent height */
+    min-height: 6px;
+    max-height: 6px;
+    display: flex;
+    align-items: center;
   }
 
   #progress-bar::part(input) {
@@ -25462,6 +25486,7 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
   /*
   
     */
+  //TODO: On resize, the offset of baubles need to be recalculated
   render() {
     return x`
       <div
@@ -25610,6 +25635,10 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
     if (!this.videoContext.videoLoaded) return;
     const videoElement = this.parentNode.parentNode.querySelector(
       "#video"
+    );
+    console.log(videoElement);
+    console.log(
+      time / videoElement.duration * 0.95 * videoElement.getBoundingClientRect().width
     );
     return time / videoElement.duration * 0.95 * videoElement.getBoundingClientRect().width;
   }
@@ -25816,7 +25845,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
    */
   render() {
     return x`
-      <div style="display:flex;">
+      <div>
         <!-- VIDEO INPUT -->
         ${!this.hasVideo() ? x`
               <video-input-overlay
@@ -25825,9 +25854,9 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
             ` : null}
         <div id="container-vertical">
           <!-- VIDEO ELEMENT -->
-          <div class="container-video" @click=${this.handleVideoClick}>
+          <div id="container-video" @click=${this.handleVideoClick}>
             <video id="video"></video>
-            ${this.videoContext.videoLoaded ? this.renderOverlays() : void 0}
+            ${this.videoContext.videoLoaded ? this.renderOverlays() : null}
           </div>
           <!-- CONTROLS -->
           <div id="controls">
@@ -25844,13 +25873,12 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
     )}
             ></interactions-progress-bar>
             <!-- Progress Bar -->
-            <div id="progress-bar-container">
-              <sl-range
-                id="progress-bar"
-                style="--thumb-size: 18px; overflow: visible;"
-                @sl-change=${this.handleProgressChange}
-              ></sl-range>
-            </div>
+            <sl-range
+              id="progress-bar"
+              style="--thumb-size: 18px; overflow: visible; "
+              @sl-change=${this.handleProgressChange}
+            ></sl-range>
+
             <!-- Video Controls Bar -->
             <video-controls-bar
               contenteditable=${this.isContentEditable}

@@ -48,6 +48,8 @@ export class InteractionsProgressBar extends LitElementWw {
 
   */
 
+  //TODO: On resize, the offset of baubles need to be recalculated
+
   render() {
     return html`
       <div
@@ -253,9 +255,18 @@ export class InteractionsProgressBar extends LitElementWw {
    */
   calculateOffset(time: number): number {
     if (!this.videoContext.videoLoaded) return;
+
     const videoElement = this.parentNode.parentNode.querySelector(
       "#video"
     ) as HTMLVideoElement;
+
+    console.log(videoElement);
+
+    console.log(
+      (time / videoElement.duration) *
+        0.95 *
+        videoElement.getBoundingClientRect().width
+    );
 
     return (
       (time / videoElement.duration) *

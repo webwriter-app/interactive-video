@@ -139,7 +139,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    */
   render() {
     return html`
-      <div style="display:flex;">
+      <div>
         <!-- VIDEO INPUT -->
         ${!this.hasVideo()
           ? html`
@@ -150,9 +150,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           : null}
         <div id="container-vertical">
           <!-- VIDEO ELEMENT -->
-          <div class="container-video" @click=${this.handleVideoClick}>
+          <div id="container-video" @click=${this.handleVideoClick}>
             <video id="video"></video>
-            ${this.videoContext.videoLoaded ? this.renderOverlays() : undefined}
+            ${this.videoContext.videoLoaded ? this.renderOverlays() : null}
           </div>
           <!-- CONTROLS -->
           <div id="controls">
@@ -171,13 +171,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                 )}
             ></interactions-progress-bar>
             <!-- Progress Bar -->
-            <div id="progress-bar-container">
-              <sl-range
-                id="progress-bar"
-                style="--thumb-size: 18px; overflow: visible;"
-                @sl-change=${this.handleProgressChange}
-              ></sl-range>
-            </div>
+            <sl-range
+              id="progress-bar"
+              style="--thumb-size: 18px; overflow: visible; "
+              @sl-change=${this.handleProgressChange}
+            ></sl-range>
+
             <!-- Video Controls Bar -->
             <video-controls-bar
               contenteditable=${this.isContentEditable}

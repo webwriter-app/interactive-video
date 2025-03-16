@@ -9,7 +9,7 @@ export default css`
     justify-content: center;
     align-items: center;
     cursor: grab;
-    position: absolute;
+    position: relative;
   }
 
   :host(.dragging) {
