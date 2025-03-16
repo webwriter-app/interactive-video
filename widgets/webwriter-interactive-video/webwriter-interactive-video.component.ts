@@ -139,7 +139,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    */
   render() {
     return html`
-      <div>
+      <div id="widget">
         <!-- VIDEO INPUT -->
         ${!this.hasVideo()
           ? html`
@@ -192,24 +192,24 @@ export class WebwriterInteractiveVideo extends LitElementWw {
             ></video-controls-bar>
           </div>
         </div>
+        <!-- DRAWERS -->
+        <!-- Video Chapter Drawer -->
+        <video-chapter-drawer
+          contenteditable=${this.isContentEditable}
+          @addChapter=${() =>
+            this.chaptersDrawer.addChapter(this.videoElement.duration)}
+          @updateContext=${() => this.updateContext()}
+          @jumpToChapter=${(e: CustomEvent) =>
+            this.jumpToChapter(e.detail.startTime)}
+        ></video-chapter-drawer>
+        <!-- Video Interaction Drawer -->
+        <video-interaction-drawer
+          contenteditable=${this.isContentEditable}
+          @updateContext=${() => this.updateContext()}
+          @getCurrentTime=${() => this.getCurrentTime()}
+          @updateBaublePositions=${() => this.updateBaublePositions()}
+        ></video-interaction-drawer>
       </div>
-      <!-- DRAWERS -->
-      <!-- Video Chapter Drawer -->
-      <video-chapter-drawer
-        contenteditable=${this.isContentEditable}
-        @addChapter=${() =>
-          this.chaptersDrawer.addChapter(this.videoElement.duration)}
-        @updateContext=${() => this.updateContext()}
-        @jumpToChapter=${(e: CustomEvent) =>
-          this.jumpToChapter(e.detail.startTime)}
-      ></video-chapter-drawer>
-      <!-- Video Interaction Drawer -->
-      <video-interaction-drawer
-        contenteditable=${this.isContentEditable}
-        @updateContext=${() => this.updateContext()}
-        @getCurrentTime=${() => this.getCurrentTime()}
-        @updateBaublePositions=${() => this.updateBaublePositions()}
-      ></video-interaction-drawer>
 
       <!-- OPTIONS PANEL -->
       <interactive-video-options

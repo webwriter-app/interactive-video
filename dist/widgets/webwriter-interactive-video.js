@@ -23483,9 +23483,19 @@ var webwriter_interactive_video_styles_default = i`
     box-sizing: border-box;
   }
 
+  #widget {
+    display: flex;
+    //flex-direction: column;
+    align-items: center;
+    position: relative;
+    border: 1px solid #e5e5e5;
+  }
+
   #container-vertical {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    position: relative;
   }
 
   #container-video {
@@ -23535,6 +23545,14 @@ var webwriter_interactive_video_styles_default = i`
   :host(:not([contenteditable="true"]):not([contenteditable=""])) .author-only {
     display: none;
   }
+
+  /* sl-drawer::part(base) {
+    position: absolute;
+  }
+
+  sl-drawer::part(panel) {
+    position: relative;
+  } */
 `;
 
 // node_modules/@tabler/icons/icons/filled/player-play.svg
@@ -25845,7 +25863,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
    */
   render() {
     return x`
-      <div>
+      <div id="widget">
         <!-- VIDEO INPUT -->
         ${!this.hasVideo() ? x`
               <video-input-overlay
@@ -25892,22 +25910,22 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
             ></video-controls-bar>
           </div>
         </div>
+        <!-- DRAWERS -->
+        <!-- Video Chapter Drawer -->
+        <video-chapter-drawer
+          contenteditable=${this.isContentEditable}
+          @addChapter=${() => this.chaptersDrawer.addChapter(this.videoElement.duration)}
+          @updateContext=${() => this.updateContext()}
+          @jumpToChapter=${(e15) => this.jumpToChapter(e15.detail.startTime)}
+        ></video-chapter-drawer>
+        <!-- Video Interaction Drawer -->
+        <video-interaction-drawer
+          contenteditable=${this.isContentEditable}
+          @updateContext=${() => this.updateContext()}
+          @getCurrentTime=${() => this.getCurrentTime()}
+          @updateBaublePositions=${() => this.updateBaublePositions()}
+        ></video-interaction-drawer>
       </div>
-      <!-- DRAWERS -->
-      <!-- Video Chapter Drawer -->
-      <video-chapter-drawer
-        contenteditable=${this.isContentEditable}
-        @addChapter=${() => this.chaptersDrawer.addChapter(this.videoElement.duration)}
-        @updateContext=${() => this.updateContext()}
-        @jumpToChapter=${(e15) => this.jumpToChapter(e15.detail.startTime)}
-      ></video-chapter-drawer>
-      <!-- Video Interaction Drawer -->
-      <video-interaction-drawer
-        contenteditable=${this.isContentEditable}
-        @updateContext=${() => this.updateContext()}
-        @getCurrentTime=${() => this.getCurrentTime()}
-        @updateBaublePositions=${() => this.updateBaublePositions()}
-      ></video-interaction-drawer>
 
       <!-- OPTIONS PANEL -->
       <interactive-video-options

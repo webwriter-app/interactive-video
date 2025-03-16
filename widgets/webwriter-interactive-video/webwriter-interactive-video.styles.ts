@@ -5,9 +5,19 @@ export default css`
     box-sizing: border-box;
   }
 
+  #widget {
+    display: flex;
+    //flex-direction: column;
+    align-items: center;
+    position: relative;
+    border: 1px solid #e5e5e5;
+  }
+
   #container-vertical {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    position: relative;
   }
 
   #container-video {
@@ -57,4 +67,12 @@ export default css`
   :host(:not([contenteditable="true"]):not([contenteditable=""])) .author-only {
     display: none;
   }
+
+  /* sl-drawer::part(base) {
+    position: absolute;
+  }
+
+  sl-drawer::part(panel) {
+    position: relative;
+  } */
 `;
