@@ -64,7 +64,7 @@ export class InteractionsProgressBar extends LitElementWw {
               return value.isReplace
                 ? html` <!--  -->
                     <webwriter-interactive-bauble
-                      style="transform: translateY(-2px); border-radius: 50%;"
+                      style="border-radius: 50%;"
                       offset=${this.calculateOffset(value.startTime)}
                       @dragstart=${this.handleBaubleDragStart}
                       @dragend=${this.handleBaubleDragEnd}
@@ -75,7 +75,7 @@ export class InteractionsProgressBar extends LitElementWw {
                     </webwriter-interactive-bauble>`
                 : html` <!--  -->
                     <webwriter-interactive-bauble
-                      style="transform: translateY(-2px);"
+                      style=""
                       offset=${this.calculateOffset(value.startTime)}
                       @dragstart=${this.handleBaubleDragStart}
                       @dragend=${this.handleBaubleDragEnd}

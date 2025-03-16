@@ -173,7 +173,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
             <!-- Progress Bar -->
             <sl-range
               id="progress-bar"
-              style="--thumb-size: 18px; overflow: visible; "
               @sl-change=${this.handleProgressChange}
             ></sl-range>
 
@@ -195,6 +194,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         <!-- DRAWERS -->
         <!-- Video Chapter Drawer -->
         <video-chapter-drawer
+          style="z-index: 51"
           contenteditable=${this.isContentEditable}
           @addChapter=${() =>
             this.chaptersDrawer.addChapter(this.videoElement.duration)}
@@ -204,6 +204,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         ></video-chapter-drawer>
         <!-- Video Interaction Drawer -->
         <video-interaction-drawer
+          style="z-index: 51"
           contenteditable=${this.isContentEditable}
           @updateContext=${() => this.updateContext()}
           @getCurrentTime=${() => this.getCurrentTime()}
@@ -253,7 +254,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                         border-radius: 8px;
                         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
                         padding: 10px;
-                        overflow: hidden;"
+                        overflow: hidden;
+                        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);"
             >
               <p
                 style="margin: 0; color: ${this.getContrastColor(
@@ -580,7 +582,7 @@ TODO: Make this property of parent and access it trough parent
     let currentTime = (progressBar.value / 100) * this.videoElement.duration;
     this.videoElement.currentTime = Math.floor(currentTime);
     this.videoControlsBar.timeStamp.value =
-      formatTime(currentTime) + "/" + this.videoDurationFormatted;
+      formatTime(currentTime) + " / " + this.videoDurationFormatted;
   };
 
   /**
@@ -837,7 +839,7 @@ TODO: Make this property of parent and access it trough parent
       }
 
       if (this.videoControlsBar.timeStamp) {
-        this.videoControlsBar.timeStamp.innerHTML = `00:00/${this.videoDurationFormatted}`;
+        this.videoControlsBar.timeStamp.innerHTML = `00:00 / ${this.videoDurationFormatted}`;
       }
 
       this.requestUpdate();

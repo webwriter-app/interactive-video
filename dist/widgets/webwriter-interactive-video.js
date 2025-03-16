@@ -23407,14 +23407,15 @@ SlAnimation.define("sl-animation");
 // widgets/webwriter-interactive-bauble/webwriter-interactive-bauble.styles.ts
 var webwriter_interactive_bauble_styles_default = i`
   :host {
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: grab;
     position: relative;
+    font-size: 15px;
   }
 
   :host(.dragging) {
@@ -23496,6 +23497,12 @@ var webwriter_interactive_video_styles_default = i`
     flex-direction: column;
     align-items: center;
     position: relative;
+    width: 100%;
+  }
+
+  #container-vertical:hover #controls {
+    opacity: 1;
+    visibility: visible;
   }
 
   #container-video {
@@ -23503,6 +23510,9 @@ var webwriter_interactive_video_styles_default = i`
     flex-direction: column;
     align-items: center;
     position: relative;
+    min-height: 250px;
+    background-color: black;
+    width: 100%;
   }
 
   #video {
@@ -23512,11 +23522,19 @@ var webwriter_interactive_video_styles_default = i`
 
   #controls {
     display: flex;
+    /* opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease; */
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
     flex-direction: column;
     align-items: center; /* Prevent stretching */
 
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
   }
 
   #controls * {
@@ -23528,6 +23546,10 @@ var webwriter_interactive_video_styles_default = i`
     height: 6px !important; /* Force a consistent height */
     min-height: 6px;
     max-height: 6px;
+    --thumb-size: 18px;
+    overflow: visible;
+    --track-color-active: #e9e9e9;
+    --track-color-inactive: #4d4d4d;
   }
 
   #progress-bar::part(base) {
@@ -23545,14 +23567,6 @@ var webwriter_interactive_video_styles_default = i`
   :host(:not([contenteditable="true"]):not([contenteditable=""])) .author-only {
     display: none;
   }
-
-  /* sl-drawer::part(base) {
-    position: absolute;
-  }
-
-  sl-drawer::part(panel) {
-    position: relative;
-  } */
 `;
 
 // node_modules/@tabler/icons/icons/filled/player-play.svg
@@ -24178,6 +24192,11 @@ var video_controls_bar_styles_default = i`
     color: white;
     font-size: 15px;
   }
+
+  #volume-slider {
+    --track-color-active: #e9e9e9;
+    --track-color-inactive: #4d4d4d;
+  }
 `;
 
 // components/video-controls-bar/video-controls-bar.ts
@@ -24327,7 +24346,7 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
             @click=${this.handlePlayClick}
             src="${player_play_default}"
           ></sl-icon-button>
-          <p id="time-stamp">00:00/00:00</p>
+          <p id="time-stamp">00:00 / 00:00</p>
           ${this.videoContext.hasChapters ? x`
                 <sl-icon-button
                   class="icon-button"
@@ -24467,7 +24486,7 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
     }
   }
   handleTimeUpdate(lastTimeupdate, videoDurationFormatted) {
-    this.timeStamp.innerHTML = formatTime(lastTimeupdate) + "/" + videoDurationFormatted;
+    this.timeStamp.innerHTML = formatTime(lastTimeupdate) + " / " + videoDurationFormatted;
   }
 };
 _init5 = __decoratorStart(_a5);
@@ -25446,6 +25465,8 @@ __publicField(VideoChapterDrawer, "styles", [video_chapter_drawer_styles_default
 var interactions_progress_bar_styles_default = i`
   #controls-upper {
     height: 20px;
+    display: flex;
+    align-items: center;
   }
 `;
 
@@ -25518,7 +25539,7 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
       ([key, value]) => {
         return value.isReplace ? x` <!--  -->
                     <webwriter-interactive-bauble
-                      style="transform: translateY(-2px); border-radius: 50%;"
+                      style="border-radius: 50%;"
                       offset=${this.calculateOffset(value.startTime)}
                       @dragstart=${this.handleBaubleDragStart}
                       @dragend=${this.handleBaubleDragEnd}
@@ -25528,7 +25549,7 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
                     >
                     </webwriter-interactive-bauble>` : x` <!--  -->
                     <webwriter-interactive-bauble
-                      style="transform: translateY(-2px);"
+                      style=""
                       offset=${this.calculateOffset(value.startTime)}
                       @dragstart=${this.handleBaubleDragStart}
                       @dragend=${this.handleBaubleDragEnd}
@@ -25734,7 +25755,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
       const progressBar = e15.target;
       let currentTime = progressBar.value / 100 * this.videoElement.duration;
       this.videoElement.currentTime = Math.floor(currentTime);
-      this.videoControlsBar.timeStamp.value = formatTime(currentTime) + "/" + this.videoDurationFormatted;
+      this.videoControlsBar.timeStamp.value = formatTime(currentTime) + " / " + this.videoDurationFormatted;
     });
     /**
      * Handles the fullscreen change event by repositioning the baubles to fit the new video size.
@@ -25808,7 +25829,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
           };
         }
         if (this.videoControlsBar.timeStamp) {
-          this.videoControlsBar.timeStamp.innerHTML = `00:00/${this.videoDurationFormatted}`;
+          this.videoControlsBar.timeStamp.innerHTML = `00:00 / ${this.videoDurationFormatted}`;
         }
         this.requestUpdate();
       }, 0);
@@ -25893,7 +25914,6 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
             <!-- Progress Bar -->
             <sl-range
               id="progress-bar"
-              style="--thumb-size: 18px; overflow: visible; "
               @sl-change=${this.handleProgressChange}
             ></sl-range>
 
@@ -25913,6 +25933,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
         <!-- DRAWERS -->
         <!-- Video Chapter Drawer -->
         <video-chapter-drawer
+          style="z-index: 51"
           contenteditable=${this.isContentEditable}
           @addChapter=${() => this.chaptersDrawer.addChapter(this.videoElement.duration)}
           @updateContext=${() => this.updateContext()}
@@ -25920,6 +25941,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
         ></video-chapter-drawer>
         <!-- Video Interaction Drawer -->
         <video-interaction-drawer
+          style="z-index: 51"
           contenteditable=${this.isContentEditable}
           @updateContext=${() => this.updateContext()}
           @getCurrentTime=${() => this.getCurrentTime()}
@@ -25963,7 +25985,8 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
                         border-radius: 8px;
                         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
                         padding: 10px;
-                        overflow: hidden;"
+                        overflow: hidden;
+                        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);"
             >
               <p
                 style="margin: 0; color: ${this.getContrastColor(

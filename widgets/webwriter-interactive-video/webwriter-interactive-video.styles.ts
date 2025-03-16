@@ -18,6 +18,12 @@ export default css`
     flex-direction: column;
     align-items: center;
     position: relative;
+    width: 100%;
+  }
+
+  #container-vertical:hover #controls {
+    opacity: 1;
+    visibility: visible;
   }
 
   #container-video {
@@ -25,6 +31,9 @@ export default css`
     flex-direction: column;
     align-items: center;
     position: relative;
+    min-height: 250px;
+    background-color: black;
+    width: 100%;
   }
 
   #video {
@@ -34,11 +43,19 @@ export default css`
 
   #controls {
     display: flex;
+    /* opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease; */
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
     flex-direction: column;
     align-items: center; /* Prevent stretching */
 
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
   }
 
   #controls * {
@@ -50,6 +67,10 @@ export default css`
     height: 6px !important; /* Force a consistent height */
     min-height: 6px;
     max-height: 6px;
+    --thumb-size: 18px;
+    overflow: visible;
+    --track-color-active: #e9e9e9;
+    --track-color-inactive: #4d4d4d;
   }
 
   #progress-bar::part(base) {
@@ -67,12 +88,4 @@ export default css`
   :host(:not([contenteditable="true"]):not([contenteditable=""])) .author-only {
     display: none;
   }
-
-  /* sl-drawer::part(base) {
-    position: absolute;
-  }
-
-  sl-drawer::part(panel) {
-    position: relative;
-  } */
 `;

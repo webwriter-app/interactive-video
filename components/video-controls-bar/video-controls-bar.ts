@@ -125,7 +125,7 @@ export class VideoControlsBar extends LitElementWw {
             @click=${this.handlePlayClick}
             src="${playerPlay}"
           ></sl-icon-button>
-          <p id="time-stamp">00:00/00:00</p>
+          <p id="time-stamp">00:00 / 00:00</p>
           ${this.videoContext.hasChapters
             ? html`
                 <sl-icon-button
@@ -395,6 +395,6 @@ export class VideoControlsBar extends LitElementWw {
 
   handleTimeUpdate(lastTimeupdate, videoDurationFormatted) {
     this.timeStamp.innerHTML =
-      formatTime(lastTimeupdate) + "/" + videoDurationFormatted;
+      formatTime(lastTimeupdate) + " / " + videoDurationFormatted;
   }
 }

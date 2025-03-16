@@ -39,4 +39,9 @@ export default css`
     color: white;
     font-size: 15px;
   }
+
+  #volume-slider {
+    --track-color-active: #e9e9e9;
+    --track-color-inactive: #4d4d4d;
+  }
 `;
