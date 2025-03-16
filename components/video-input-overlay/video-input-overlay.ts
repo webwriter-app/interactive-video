@@ -20,6 +20,8 @@ import { consume } from "@lit/context";
 import worldWWW from "@tabler/icons/outline/world-www.svg";
 import file from "@tabler/icons/outline/file.svg";
 
+import styles from "./video-input-overlay.styles";
+
 export class VideoInputOverlay extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })
   accessor videoContext: InteractiveVideoContext;
@@ -39,34 +41,12 @@ export class VideoInputOverlay extends LitElementWw {
     };
   }
 
+  //import CSS
+  static styles = [styles];
+
   /*
 
   */
-  static get styles() {
-    return css`
-      .overlay {
-        position: absolute; /* To overlay the .page div */
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(
-          0,
-          0,
-          0,
-          0.8
-        ); /* Black background with opacity */
-        display: flex; /* Flexbox for centering */
-        justify-content: center; /* Center horizontally */
-        align-items: center; /* Center vertically */
-        z-index: 100;
-      }
-
-      #file-input-label:hover {
-        color: blue;
-      }
-    `;
-  }
 
   firstUpdated() {}
 

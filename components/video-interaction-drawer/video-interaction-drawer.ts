@@ -27,6 +27,8 @@ import { consume } from "@lit/context";
 
 import { formatTime, parseTime } from "../../utils/timeFormatter";
 
+import styles from "./video-interaction-drawer.styles";
+
 export class VideoInteractionDrawer extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })
   accessor videoContext: InteractiveVideoContext;
@@ -140,20 +142,8 @@ export class VideoInteractionDrawer extends LitElementWw {
   /*
 
   */
-  static get styles() {
-    return css`
-      #replace-timestamp {
-        margin-top: 10px;
-        margin-bottom: 10px;
-      }
-
-      .interaction-button-group {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-      }
-    `;
-  }
+  //import CSS
+  static styles = [styles];
 
   /*
 

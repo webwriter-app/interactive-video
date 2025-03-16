@@ -11,6 +11,9 @@ import {
 
 import { consume } from "@lit/context";
 
+//CSS
+import styles from "./interactive-video-options.styles";
+
 export class InteractiveVideoOptions extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })
   @property({ attribute: false })
@@ -30,22 +33,8 @@ export class InteractiveVideoOptions extends LitElementWw {
   /*
 
   */
-  static get styles() {
-    return css`
-      #temporary-teacher-options-container {
-        padding: 4px;
-      }
-
-      .temporary-teacher-options {
-        margin-right: 10px;
-      }
-
-      :host(:not([contenteditable="true"]):not([contenteditable=""]))
-        .author-only {
-        display: none;
-      }
-    `;
-  }
+  //import CSS
+  static styles = [styles];
 
   /*
 

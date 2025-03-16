@@ -315,10 +315,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.videoElement.currentTime = time;
   }
 
+  //
+  //
+  //
   baubleClicked(id) {
     this.interactionDrawer.clickEventHelper(id);
   }
 
+  //
+  //
+  //
   changeInteractionTime(newTime, index, isReplace) {
     console.log(newTime, index, isReplace);
     this.interactionDrawer.baubleTimeUpdateHelper(
@@ -797,9 +803,6 @@ TODO: Make this property of parent and access it trough parent
     this.videoContext.videoLoaded = true;
     this.updateContext();
     setTimeout(() => {
-      if (this.videoControlsBar.addButton) {
-        this.videoControlsBar.addButton.disabled = !this.isContentEditable;
-      }
       if (this.progressBar) {
         this.progressBar.value = 0;
       }

@@ -4424,8 +4424,8 @@ function isTopLayer(element) {
 }
 function isContainingBlock(elementOrCss) {
   const webkit = isWebKit();
-  const css3 = isElement(elementOrCss) ? getComputedStyle2(elementOrCss) : elementOrCss;
-  return ["transform", "translate", "scale", "rotate", "perspective"].some((value) => css3[value] ? css3[value] !== "none" : false) || (css3.containerType ? css3.containerType !== "normal" : false) || !webkit && (css3.backdropFilter ? css3.backdropFilter !== "none" : false) || !webkit && (css3.filter ? css3.filter !== "none" : false) || ["transform", "translate", "scale", "rotate", "perspective", "filter"].some((value) => (css3.willChange || "").includes(value)) || ["paint", "layout", "strict", "content"].some((value) => (css3.contain || "").includes(value));
+  const css9 = isElement(elementOrCss) ? getComputedStyle2(elementOrCss) : elementOrCss;
+  return ["transform", "translate", "scale", "rotate", "perspective"].some((value) => css9[value] ? css9[value] !== "none" : false) || (css9.containerType ? css9.containerType !== "normal" : false) || !webkit && (css9.backdropFilter ? css9.backdropFilter !== "none" : false) || !webkit && (css9.filter ? css9.filter !== "none" : false) || ["transform", "translate", "scale", "rotate", "perspective", "filter"].some((value) => (css9.willChange || "").includes(value)) || ["paint", "layout", "strict", "content"].some((value) => (css9.contain || "").includes(value));
 }
 function getContainingBlock(element) {
   let currentNode = getParentNode(element);
@@ -4507,9 +4507,9 @@ function getFrameElement(win) {
 
 // node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs
 function getCssDimensions(element) {
-  const css3 = getComputedStyle2(element);
-  let width = parseFloat(css3.width) || 0;
-  let height = parseFloat(css3.height) || 0;
+  const css9 = getComputedStyle2(element);
+  let width = parseFloat(css9.width) || 0;
+  let height = parseFloat(css9.height) || 0;
   const hasOffset = isHTMLElement(element);
   const offsetWidth = hasOffset ? element.offsetWidth : width;
   const offsetHeight = hasOffset ? element.offsetHeight : height;
@@ -4603,9 +4603,9 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
     while (currentIFrame && offsetParent && offsetWin !== currentWin) {
       const iframeScale = getScale(currentIFrame);
       const iframeRect = currentIFrame.getBoundingClientRect();
-      const css3 = getComputedStyle2(currentIFrame);
-      const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css3.paddingLeft)) * iframeScale.x;
-      const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css3.paddingTop)) * iframeScale.y;
+      const css9 = getComputedStyle2(currentIFrame);
+      const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css9.paddingLeft)) * iframeScale.x;
+      const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css9.paddingTop)) * iframeScale.y;
       x3 *= iframeScale.x;
       y4 *= iframeScale.y;
       width *= iframeScale.x;
@@ -23730,6 +23730,21 @@ var InteractiveVideoContext = class {
   activeElement = -1;
 };
 
+// components/options-panel/interactive-video-options.styles.ts
+var interactive_video_options_styles_default = i`
+  #temporary-teacher-options-container {
+    padding: 4px;
+  }
+
+  .temporary-teacher-options {
+    margin-right: 10px;
+  }
+
+  :host(:not([contenteditable="true"]):not([contenteditable=""])) .author-only {
+    display: none;
+  }
+`;
+
 // components/options-panel/interactive-video-options.ts
 var _videoContext_dec, _a3, _init3, _videoContext;
 var InteractiveVideoOptions = class extends (_a3 = LitElementWw, _videoContext_dec = [c7({ context: videoContext, subscribe: true }), n5({ attribute: false })], _a3) {
@@ -23805,25 +23820,6 @@ var InteractiveVideoOptions = class extends (_a3 = LitElementWw, _videoContext_d
   /*
   
     */
-  static get styles() {
-    return i`
-      #temporary-teacher-options-container {
-        padding: 4px;
-      }
-
-      .temporary-teacher-options {
-        margin-right: 10px;
-      }
-
-      :host(:not([contenteditable="true"]):not([contenteditable=""]))
-        .author-only {
-        display: none;
-      }
-    `;
-  }
-  /*
-  
-    */
   firstUpdated() {
   }
   /*
@@ -23866,12 +23862,37 @@ _init3 = __decoratorStart(_a3);
 _videoContext = new WeakMap();
 __decorateElement(_init3, 4, "videoContext", _videoContext_dec, InteractiveVideoOptions, _videoContext);
 __decoratorMetadata(_init3, InteractiveVideoOptions);
+/*
+
+  */
+//import CSS
+__publicField(InteractiveVideoOptions, "styles", [interactive_video_options_styles_default]);
 
 // node_modules/@tabler/icons/icons/outline/world-www.svg
 var world_www_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-world-www"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M19.5 7a9 9 0 0 0 -7.5 -4a8.991 8.991 0 0 0 -7.484 4" />%0A  <path d="M11.5 3a16.989 16.989 0 0 0 -1.826 4" />%0A  <path d="M12.5 3a16.989 16.989 0 0 1 1.828 4" />%0A  <path d="M19.5 17a9 9 0 0 1 -7.5 4a8.991 8.991 0 0 1 -7.484 -4" />%0A  <path d="M11.5 21a16.989 16.989 0 0 1 -1.826 -4" />%0A  <path d="M12.5 21a16.989 16.989 0 0 0 1.828 -4" />%0A  <path d="M2 10l1 4l1.5 -4l1.5 4l1 -4" />%0A  <path d="M17 10l1 4l1.5 -4l1.5 4l1 -4" />%0A  <path d="M9.5 10l1 4l1.5 -4l1.5 4l1 -4" />%0A</svg>';
 
 // node_modules/@tabler/icons/icons/outline/file.svg
 var file_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-file"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M14 3v4a1 1 0 0 0 1 1h4" />%0A  <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />%0A</svg>';
+
+// components/video-input-overlay/video-input-overlay.styles.ts
+var video_input_overlay_styles_default = i`
+  .overlay {
+    position: absolute; /* To overlay the .page div */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+    display: flex; /* Flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    z-index: 100;
+  }
+
+  #file-input-label:hover {
+    color: blue;
+  }
+`;
 
 // components/video-input-overlay/video-input-overlay.ts
 var _videoContext_dec2, _a4, _init4, _videoContext2;
@@ -23897,31 +23918,6 @@ var VideoInputOverlay = class extends (_a4 = LitElementWw, _videoContext_dec2 = 
   /*
   
     */
-  static get styles() {
-    return i`
-      .overlay {
-        position: absolute; /* To overlay the .page div */
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(
-          0,
-          0,
-          0,
-          0.8
-        ); /* Black background with opacity */
-        display: flex; /* Flexbox for centering */
-        justify-content: center; /* Center horizontally */
-        align-items: center; /* Center vertically */
-        z-index: 100;
-      }
-
-      #file-input-label:hover {
-        color: blue;
-      }
-    `;
-  }
   firstUpdated() {
   }
   render() {
@@ -24052,6 +24048,8 @@ _init4 = __decoratorStart(_a4);
 _videoContext2 = new WeakMap();
 __decorateElement(_init4, 4, "videoContext", _videoContext_dec2, VideoInputOverlay, _videoContext2);
 __decoratorMetadata(_init4, VideoInputOverlay);
+//import CSS
+__publicField(VideoInputOverlay, "styles", [video_input_overlay_styles_default]);
 
 // node_modules/@tabler/icons/icons/outline/list.svg
 var list_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-list"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M9 6l11 0" />%0A  <path d="M9 12l11 0" />%0A  <path d="M9 18l11 0" />%0A  <path d="M5 6l0 .01" />%0A  <path d="M5 12l0 .01" />%0A  <path d="M5 18l0 .01" />%0A</svg>';
@@ -24097,6 +24095,48 @@ function parseTime(timeStr) {
   }
   return null;
 }
+
+// components/video-controls-bar/video-controls-bar.styles.ts
+var video_controls_bar_styles_default = i`
+  #controls-lower {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+  }
+
+  #controls-lower-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  #controls-lower-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: auto;
+    gap: 2px;
+  }
+
+  .icon-button {
+    text-align: center;
+    color: white;
+    font-size: 1.3rem;
+  }
+
+  #time-stamp {
+    color: white;
+    user-select: none;
+    font-size: 15px;
+  }
+
+  #current-chapter {
+    color: white;
+    font-size: 15px;
+  }
+`;
 
 // components/video-controls-bar/video-controls-bar.ts
 var _addButton_dec, _timeStamp_dec, _playButton_dec, _fullscreenButton_dec, _volumeSlider_dec, _muteButton_dec, _currentChapter_dec, _videoContext_dec3, _a5, _init5, _videoContext3, _currentChapter, _muteButton, _volumeSlider, _fullscreenButton, _playButton, _timeStamp, _addButton;
@@ -24223,50 +24263,9 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
   }
   /*
   
-    */
-  static get styles() {
-    return i`
-      #controls-lower {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        height: auto;
-      }
-
-      #controls-lower-right {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 10px;
-      }
-
-      #controls-lower-left {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-right: auto;
-        gap: 2px;
-      }
-
-      .icon-button {
-        text-align: center;
-        color: white;
-        font-size: 1.3rem;
-      }
-
-      #time-stamp {
-        color: white;
-        user-select: none;
-        font-size: 15px;
-      }
-
-      #current-chapter {
-        color: white;
-        font-size: 15px;
-      }
-    `;
-  }
+   */
   firstUpdated() {
+    console.log(this.isContentEditable);
   }
   /**
    * Renders the lower controls for the webwriter interactive video widget.
@@ -24317,7 +24316,7 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
             id="add-button"
             @click=${this.handleAddClick}
             @drop=${this.handleBaubleDroppedOnAdd}
-            enabled=${this.isContentEditable}
+            ?disabled=${!this.isContentEditable}
           >
           </sl-icon-button>
           <sl-dropdown
@@ -24447,6 +24446,8 @@ __decorateElement(_init5, 4, "playButton", _playButton_dec, VideoControlsBar, _p
 __decorateElement(_init5, 4, "timeStamp", _timeStamp_dec, VideoControlsBar, _timeStamp);
 __decorateElement(_init5, 4, "addButton", _addButton_dec, VideoControlsBar, _addButton);
 __decoratorMetadata(_init5, VideoControlsBar);
+//import CSS
+__publicField(VideoControlsBar, "styles", [video_controls_bar_styles_default]);
 
 // widgets/webwriter-video-interaction/webwriter-video-interaction.component.ts
 var _active_dec, _id_dec2, _a6, _init6, _id2, _active;
@@ -24497,6 +24498,20 @@ __publicField(WwVideoInteraction, "shadowRootOptions", {
   ...r4.shadowRootOptions,
   delegatesFocus: true
 });
+
+// components/video-interaction-drawer/video-interaction-drawer.styles.ts
+var video_interaction_drawer_styles_default = i`
+  #replace-timestamp {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .interaction-button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+`;
 
 // components/video-interaction-drawer/video-interaction-drawer.ts
 var _currentTime_dec, _drawer_dec, _interactionContainer_dec, _colorPicker_dec, _overlayHeightInput_dec, _overlayWidthInput_dec, _overlayContentInput_dec, _OverlayYPositionInput_dec, _OverlayXPositionInput_dec, _overlayEndTimeInput_dec, _overlayStartTimeInput_dec, _overlayInteractionSettings_dec, _replaceInteractionSettings_dec, _replaceTimestamp_dec, _interactionSlot_dec, _videoContext_dec4, _a7, _init7, _videoContext4, _interactionSlot, _replaceTimestamp, _replaceInteractionSettings, _overlayInteractionSettings, _overlayStartTimeInput, _overlayEndTimeInput, _OverlayXPositionInput, _OverlayYPositionInput, _overlayContentInput, _overlayWidthInput, _overlayHeightInput, _colorPicker, _interactionContainer, _drawer, _currentTime;
@@ -24644,23 +24659,6 @@ var VideoInteractionDrawer = class extends (_a7 = LitElementWw, _videoContext_de
       "sl-details": details_default,
       "sl-color-picker": color_picker_default
     };
-  }
-  /*
-  
-    */
-  static get styles() {
-    return i`
-      #replace-timestamp {
-        margin-top: 10px;
-        margin-bottom: 10px;
-      }
-
-      .interaction-button-group {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-      }
-    `;
   }
   /*
   
@@ -25140,6 +25138,42 @@ __decorateElement(_init7, 4, "interactionContainer", _interactionContainer_dec, 
 __decorateElement(_init7, 4, "drawer", _drawer_dec, VideoInteractionDrawer, _drawer);
 __decorateElement(_init7, 4, "currentTime", _currentTime_dec, VideoInteractionDrawer, _currentTime);
 __decoratorMetadata(_init7, VideoInteractionDrawer);
+/*
+
+  */
+//import CSS
+__publicField(VideoInteractionDrawer, "styles", [video_interaction_drawer_styles_default]);
+
+// components/video-chapter-drawer/video-chapter-drawer.styles.ts
+var video_chapter_drawer_styles_default = i`
+  .chapter-list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .chapter-item {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .chapter-item sl-input {
+    margin-bottom: 0.5rem;
+  }
+
+  .chapter-item sl-button {
+    margin-right: 0.5rem;
+  }
+
+  .chapter-info {
+    margin-bottom: 0.5rem;
+  }
+
+  :host(:not([contenteditable="true"]):not([contenteditable=""])) .author-only {
+    display: none;
+  }
+`;
 
 // components/video-chapter-drawer/video-chapter-drawer.ts
 var _drawer_dec2, _videoContext_dec5, _a8, _init8, _videoContext5, _drawer2;
@@ -25183,38 +25217,6 @@ var VideoChapterDrawer = class extends (_a8 = LitElementWw, _videoContext_dec5 =
   /*
   
     */
-  static get styles() {
-    return i`
-      .chapter-list {
-        list-style-type: none;
-        padding: 0;
-      }
-
-      .chapter-item {
-        margin-bottom: 1rem;
-        padding: 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-
-      .chapter-item sl-input {
-        margin-bottom: 0.5rem;
-      }
-
-      .chapter-item sl-button {
-        margin-right: 0.5rem;
-      }
-
-      .chapter-info {
-        margin-bottom: 0.5rem;
-      }
-
-      :host(:not([contenteditable="true"]):not([contenteditable=""]))
-        .author-only {
-        display: none;
-      }
-    `;
-  }
   /*
   
     */
@@ -25374,6 +25376,15 @@ _drawer2 = new WeakMap();
 __decorateElement(_init8, 4, "videoContext", _videoContext_dec5, VideoChapterDrawer, _videoContext5);
 __decorateElement(_init8, 4, "drawer", _drawer_dec2, VideoChapterDrawer, _drawer2);
 __decoratorMetadata(_init8, VideoChapterDrawer);
+//import CSS
+__publicField(VideoChapterDrawer, "styles", [video_chapter_drawer_styles_default]);
+
+// components/interactions-progress-bar/interactions-progress-bar.styles.ts
+var interactions_progress_bar_styles_default = i`
+  #controls-upper {
+    height: 20px;
+  }
+`;
 
 // components/interactions-progress-bar/interactions-progress-bar.ts
 var _upperControls_dec, _dropArea_dec, _videoContext_dec6, _a9, _init9, _videoContext6, _dropArea, _upperControls;
@@ -25430,13 +25441,6 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
   /*
   
     */
-  static get styles() {
-    return i`
-      #controls-upper {
-        height: 20px;
-      }
-    `;
-  }
   render() {
     return x`
       <div
@@ -25597,6 +25601,8 @@ __decorateElement(_init9, 4, "videoContext", _videoContext_dec6, InteractionsPro
 __decorateElement(_init9, 4, "dropArea", _dropArea_dec, InteractionsProgressBar, _dropArea);
 __decorateElement(_init9, 4, "upperControls", _upperControls_dec, InteractionsProgressBar, _upperControls);
 __decoratorMetadata(_init9, InteractionsProgressBar);
+//import CSS
+__publicField(InteractionsProgressBar, "styles", [interactions_progress_bar_styles_default]);
 
 // widgets/webwriter-interactive-video/webwriter-interactive-video.component.ts
 var _chaptersDrawer_dec, _interactionDrawer_dec, _progressBar_dec, _videoControlsBar_dec, _videoElement_dec, _isDragging_dec, _lastTimeupdate_dec, _videoDurationFormatted_dec, _tabIndex_dec, _videoContext_dec7, _a10, _init10, _videoContext7, _tabIndex, _videoDurationFormatted, _lastTimeupdate, _isDragging, _videoElement, _videoControlsBar, _progressBar, _interactionDrawer, _chaptersDrawer;
@@ -25704,9 +25710,6 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
       this.videoContext.videoLoaded = true;
       this.updateContext();
       setTimeout(() => {
-        if (this.videoControlsBar.addButton) {
-          this.videoControlsBar.addButton.disabled = !this.isContentEditable;
-        }
         if (this.progressBar) {
           this.progressBar.value = 0;
         }
@@ -25947,9 +25950,15 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
   jumpToChapter(time) {
     this.videoElement.currentTime = time;
   }
+  //
+  //
+  //
   baubleClicked(id3) {
     this.interactionDrawer.clickEventHelper(id3);
   }
+  //
+  //
+  //
   changeInteractionTime(newTime, index, isReplace) {
     console.log(newTime, index, isReplace);
     this.interactionDrawer.baubleTimeUpdateHelper(

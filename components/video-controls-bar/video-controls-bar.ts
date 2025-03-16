@@ -35,6 +35,8 @@ import brandSpeedtest from "@tabler/icons/outline/brand-speedtest.svg";
 
 import { formatTime, parseTime } from "../../utils/timeFormatter";
 
+import styles from "./video-controls-bar.styles";
+
 export class VideoControlsBar extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })
   accessor videoContext: InteractiveVideoContext;
@@ -92,53 +94,16 @@ export class VideoControlsBar extends LitElementWw {
     };
   }
 
+  //import CSS
+  static styles = [styles];
+
   /*
 
-  */
-  static get styles() {
-    return css`
-      #controls-lower {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        height: auto;
-      }
+ */
 
-      #controls-lower-right {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 10px;
-      }
-
-      #controls-lower-left {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-right: auto;
-        gap: 2px;
-      }
-
-      .icon-button {
-        text-align: center;
-        color: white;
-        font-size: 1.3rem;
-      }
-
-      #time-stamp {
-        color: white;
-        user-select: none;
-        font-size: 15px;
-      }
-
-      #current-chapter {
-        color: white;
-        font-size: 15px;
-      }
-    `;
+  firstUpdated() {
+    console.log(this.isContentEditable);
   }
-
-  firstUpdated() {}
 
   /**
    * Renders the lower controls for the webwriter interactive video widget.
@@ -191,7 +156,7 @@ export class VideoControlsBar extends LitElementWw {
             id="add-button"
             @click=${this.handleAddClick}
             @drop=${this.handleBaubleDroppedOnAdd}
-            enabled=${this.isContentEditable}
+            ?disabled=${!this.isContentEditable}
           >
           </sl-icon-button>
           <sl-dropdown

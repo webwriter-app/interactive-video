@@ -14,6 +14,9 @@ import { WwInteractiveBauble } from "../../widgets/webwriter-interactive-bauble/
 
 import { consume } from "@lit/context";
 
+//CSS
+import styles from "./interactions-progress-bar.styles";
+
 export class InteractionsProgressBar extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })
   accessor videoContext: InteractiveVideoContext;
@@ -36,16 +39,12 @@ export class InteractionsProgressBar extends LitElementWw {
     };
   }
 
+  //import CSS
+  static styles = [styles];
+
   /*
 
   */
-  static get styles() {
-    return css`
-      #controls-upper {
-        height: 20px;
-      }
-    `;
-  }
 
   render() {
     return html`
