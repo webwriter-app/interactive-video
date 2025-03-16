@@ -3,7 +3,7 @@ import { html, css, LitElement, PropertyValues } from "lit";
 import { LitElementWw } from "@webwriter/lit";
 import { customElement, property, query } from "lit/decorators.js";
 
-import { SlCheckbox } from "@shoelace-style/shoelace";
+import { SlSwitch, SlIcon } from "@shoelace-style/shoelace";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 
 import {
@@ -15,6 +15,8 @@ import { consume } from "@lit/context";
 
 //CSS
 import styles from "./interactive-video-options.styles";
+
+import movie from "@tabler/icons/outline/movie.svg";
 
 export class InteractiveVideoOptions extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })
@@ -28,7 +30,8 @@ export class InteractiveVideoOptions extends LitElementWw {
    */
   static get scopedElements() {
     return {
-      "sl-checkbox": SlCheckbox,
+      "sl-switch": SlSwitch,
+      "sl-icon": SlIcon,
     };
   }
 
@@ -52,61 +55,20 @@ export class InteractiveVideoOptions extends LitElementWw {
         id="temporary-teacher-options-container"
         class="author-only"
       >
-        <sl-checkbox
-          @sl-change=${this.handleShowInteractionsChange}
-          class="temporary-teacher-options"
-          style="overflow: hidden"
-          ?checked=${this.videoContext.showInteractions}
-          >Show Interactions</sl-checkbox
-        >
-        <sl-checkbox
+        <div class="header">
+          <sl-icon src=${movie}></sl-icon>
+          <p>Options</p>
+        </div>
+        <sl-switch
           checked
           @sl-change=${this.handleShowOverlayChange}
           class="temporary-teacher-options"
-          style="overflow: hidden"
           ?checked=${this.videoContext.showOverlay}
-          >Show Overlays</sl-checkbox
-        >
-        <sl-checkbox
-          @sl-change=${this.handleHasChaptersChange}
-          class="temporary-teacher-options"
-          style="overflow: hidden"
-          ?checked=${this.videoContext.hasChapters}
-          >Has Chapters</sl-checkbox
+          >Show Interactions</sl-switch
         >
       </div>
     `;
   }
-
-  /**
-   * Handles the change event when the "hasChapters" checkbox is toggled.
-   * @param e - The custom event object.
-   */
-  handleHasChaptersChange = (e: CustomEvent) => {
-    const target = e.target as SlCheckbox;
-    this.videoContext.hasChapters = target.checked;
-
-    if (
-      this.videoContext.hasChapters &&
-      JSON.parse(this.videoContext.chapterConfig).length === 0
-    ) {
-      this.videoContext.chapterConfig = JSON.stringify([
-        {
-          title: "Chapter 1",
-          startTime: 0,
-        },
-      ]);
-    } else if (!this.videoContext.hasChapters) {
-      this.videoContext.chapterConfig = JSON.stringify([{}]);
-    }
-
-    this.dispatchEvent(
-      new CustomEvent("updateContext", {
-        bubbles: true,
-        composed: true,
-      })
-    );
-  };
 
   /**
    * Handles the change event when teacher options for showing Overlays is triggered.
@@ -114,25 +76,8 @@ export class InteractiveVideoOptions extends LitElementWw {
    * @param e - The custom event object.
    */
   handleShowOverlayChange = (e: CustomEvent) => {
-    const target = e.target as SlCheckbox;
+    const target = e.target as SlSwitch;
     this.videoContext.showOverlay = target.checked;
-
-    this.dispatchEvent(
-      new CustomEvent("updateContext", {
-        bubbles: true,
-        composed: true,
-      })
-    );
-  };
-
-  /**
-   * Handles the change event when teacher options for showing interactions is triggered.
-   *
-   * @param e - The custom event object.
-   */
-  handleShowInteractionsChange = (e: CustomEvent) => {
-    const target = e.target as SlCheckbox;
-    this.videoContext.showInteractions = target.checked;
 
     this.dispatchEvent(
       new CustomEvent("updateContext", {

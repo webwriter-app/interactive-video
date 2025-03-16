@@ -8,13 +8,24 @@ import {
   InteractiveVideoContext,
 } from "../../utils/interactive-video-context";
 
+import {
+  SlIconButton,
+  SlRange,
+  SlDropdown,
+  SlMenu,
+  SlMenuItem,
+  SlButton,
+  SlIcon,
+} from "@shoelace-style/shoelace";
+import "@shoelace-style/shoelace/dist/themes/light.css";
+
 import { videoData } from "../../types/videoData";
 
 import { WwInteractiveBauble } from "../../widgets/webwriter-interactive-bauble/webwriter-interactive-bauble.component";
 
 import { consume } from "@lit/context";
 
-import "@shoelace-style/shoelace/dist/themes/light.css";
+import add from "@tabler/icons/outline/timeline-event-plus.svg";
 
 //CSS
 import styles from "./interactions-progress-bar.styles";
@@ -30,6 +41,12 @@ export class InteractionsProgressBar extends LitElementWw {
   accessor upperControls: HTMLDivElement;
 
   /**
+   * Query for the add interactions button.
+   */
+  @query("#add-button")
+  accessor addButton: SlIconButton;
+
+  /**
    * Returns an object that maps custom element names to their corresponding classes.
    * These custom elements can be used within the scope of the `webwriter-interactive-video` component.
    *
@@ -38,6 +55,13 @@ export class InteractionsProgressBar extends LitElementWw {
   static get scopedElements() {
     return {
       "webwriter-interactive-bauble": WwInteractiveBauble,
+      "sl-icon-button": SlIconButton,
+      "sl-range": SlRange,
+      "sl-dropdown": SlDropdown,
+      "sl-menu": SlMenu,
+      "sl-menu-item": SlMenuItem,
+      "sl-button": SlButton,
+      "sl-icon": SlIcon,
     };
   }
 
@@ -52,40 +76,58 @@ export class InteractionsProgressBar extends LitElementWw {
 
   render() {
     return html`
-      <div
-        id="drop-area"
-        @drop=${this.handleBaubleDroppedOnDropArea}
-        @dragover=${this.handleBaubleDraggedOverDropArea}
-        @dragleave=${this.handleBaubleLeaveDropArea}
-      >
-        <div id="controls-upper">
-          ${Array.from(this.videoContext.videoInteractionData.entries()).map(
-            ([key, value]) => {
-              return value.isReplace
-                ? html` <!--  -->
-                    <webwriter-interactive-bauble
-                      style="border-radius: 50%;"
-                      offset=${this.calculateOffset(value.startTime)}
-                      @dragstart=${this.handleBaubleDragStart}
-                      @dragend=${this.handleBaubleDragEnd}
-                      draggable="true"
-                      @click=${this.handleBaubleClick}
-                      id=${key}
-                    >
-                    </webwriter-interactive-bauble>`
-                : html` <!--  -->
-                    <webwriter-interactive-bauble
-                      style=""
-                      offset=${this.calculateOffset(value.startTime)}
-                      @dragstart=${this.handleBaubleDragStart}
-                      @dragend=${this.handleBaubleDragEnd}
-                      draggable="true"
-                      @click=${this.handleBaubleClick}
-                      id=${key}
-                    >
-                    </webwriter-interactive-bauble>`;
-            }
-          )}
+      <div class="interactions-progress-bar">
+        <sl-button
+          variant="default"
+          size="small"
+          id="add-button"
+          @click=${this.handleAddClick}
+          @drop=${this.handleBaubleDroppedOnAdd}
+          ?disabled=${!this.isContentEditable}
+        >
+          <sl-icon
+            slot="prefix"
+            src=${add}
+            style="height: 20px; width: 20px;"
+          ></sl-icon>
+          Add Interaction
+        </sl-button>
+
+        <div
+          id="drop-area"
+          @drop=${this.handleBaubleDroppedOnDropArea}
+          @dragover=${this.handleBaubleDraggedOverDropArea}
+          @dragleave=${this.handleBaubleLeaveDropArea}
+        >
+          <div id="controls-upper">
+            ${Array.from(this.videoContext.videoInteractionData.entries()).map(
+              ([key, value]) => {
+                return value.isReplace
+                  ? html` <!--  -->
+                      <webwriter-interactive-bauble
+                        style="border-radius: 50%;"
+                        offset=${this.calculateOffset(value.startTime)}
+                        @dragstart=${this.handleBaubleDragStart}
+                        @dragend=${this.handleBaubleDragEnd}
+                        draggable="true"
+                        @click=${this.handleBaubleClick}
+                        id=${key}
+                      >
+                      </webwriter-interactive-bauble>`
+                  : html` <!--  -->
+                      <webwriter-interactive-bauble
+                        style=""
+                        offset=${this.calculateOffset(value.startTime)}
+                        @dragstart=${this.handleBaubleDragStart}
+                        @dragend=${this.handleBaubleDragEnd}
+                        draggable="true"
+                        @click=${this.handleBaubleClick}
+                        id=${key}
+                      >
+                      </webwriter-interactive-bauble>`;
+              }
+            )}
+          </div>
         </div>
       </div>
     `;
@@ -273,5 +315,35 @@ export class InteractionsProgressBar extends LitElementWw {
       0.95 *
       videoElement.getBoundingClientRect().width
     );
+  }
+
+  /**
+   * Handles the click event for the add button.
+   */
+  handleAddClick = () => {
+    if (!this.videoContext.videoLoaded) return;
+
+    this.dispatchEvent(
+      new CustomEvent("toggleInteractionsDrawer", {
+        bubbles: true,
+        composed: true,
+      })
+    );
+  };
+
+  /**
+   * Handles the event when a bauble is dropped on the "add" button.
+   * This deletes the object. When the drag event starts the add button turns into a trash can.
+   * @param e - The DragEvent object representing the drop event.
+   *
+   */
+  handleBaubleDroppedOnAdd(e: DragEvent) {
+    // this.dropArea.style.background = "none";
+    // this.deleteElement();
+    // this.changeActiveElement(
+    //   parseInt(e.dataTransfer.getData("previousActive"))
+    // );
+    // this.changeTrashToAdd();
+    //TODO:
   }
 }

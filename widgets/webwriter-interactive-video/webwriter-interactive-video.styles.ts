@@ -43,9 +43,9 @@ export default css`
 
   #controls {
     display: flex;
-    /* opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease; */
+    /*opacity: 0;
+     visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease; */
 
     position: absolute;
     left: 0;
@@ -55,7 +55,6 @@ export default css`
     align-items: center; /* Prevent stretching */
 
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
   }
 
   #controls * {

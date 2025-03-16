@@ -9,6 +9,8 @@ import {
   SlDropdown,
   SlMenu,
   SlMenuItem,
+  SlButton,
+  SlIcon,
 } from "@shoelace-style/shoelace";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 
@@ -28,7 +30,7 @@ import volumeUp from "@tabler/icons/outline/volume.svg";
 import volumeMute from "@tabler/icons/outline/volume-3.svg";
 import volumeOff from "@tabler/icons/outline/volume-off.svg";
 
-import add from "@tabler/icons/filled/square-rounded-plus.svg";
+import add from "@tabler/icons/outline/timeline-event-plus.svg";
 
 import fullscreenEnter from "@tabler/icons/outline/arrows-maximize.svg";
 import fullscreenExit from "@tabler/icons/outline/arrows-minimize.svg";
@@ -75,12 +77,6 @@ export class VideoControlsBar extends LitElementWw {
   accessor timeStamp;
 
   /**
-   * Query for the add interactions button.
-   */
-  @query("#add-button")
-  accessor addButton: SlIconButton;
-
-  /**
    * Returns an object that maps custom element names to their corresponding classes.
    * These custom elements can be used within the scope of the `webwriter-interactive-video` component.
    *
@@ -93,6 +89,8 @@ export class VideoControlsBar extends LitElementWw {
       "sl-dropdown": SlDropdown,
       "sl-menu": SlMenu,
       "sl-menu-item": SlMenuItem,
+      "sl-button": SlButton,
+      "sl-icon": SlIcon,
     };
   }
 
@@ -126,41 +124,51 @@ export class VideoControlsBar extends LitElementWw {
             src="${playerPlay}"
           ></sl-icon-button>
           <p id="time-stamp">00:00 / 00:00</p>
-          ${this.videoContext.hasChapters
-            ? html`
-                <sl-icon-button
-                  class="icon-button"
-                  id="chapters-button"
-                  @click=${this.toggleChaptersDrawer}
-                  src="${list}"
-                ></sl-icon-button>
-              `
-            : ""}
-          ${this.renderCurrentChapter()}
+          ${this.isContentEditable
+            ? html` <sl-button
+                id="chapters-button"
+                @click=${this.toggleChaptersDrawer}
+              >
+                <sl-icon
+                  style="height: 20px; width: 20px;"
+                  slot="prefix"
+                  src=${list}
+                ></sl-icon>
+                ${this.renderCurrentChapter()}
+              </sl-button>`
+            : this.videoContext.hasChapters
+            ? html` <sl-icon-button
+                id="chapters-button"
+                @click=${this.toggleChaptersDrawer}
+              >
+                <sl-icon
+                  style="height: 20px; width: 20px;"
+                  slot="prefix"
+                  src=${list}
+                ></sl-icon>
+                ${this.renderCurrentChapter()}
+              </sl-icon-button>`
+            : null}
         </div>
         <!-- contains the volume slider and other controls -->
         <div id="controls-lower-right">
-          <sl-icon-button
-            class="icon-button"
-            id="mute-volume-button"
-            @click=${this.handleMuteClick}
-            src="${volumeDown}"
+          <div
+            style="display: flex; flex-direction: row; gap: 6px; align-items: center; justify-content: center;"
           >
-          </sl-icon-button>
-          <sl-range
-            id="volume-slider"
-            style="--thumb-size: 15px; --track-height: 5px;"
-            @sl-change=${this.handleVolumeChange}
-          ></sl-range>
-          <sl-icon-button
-            class="icon-button"
-            src="${add}"
-            id="add-button"
-            @click=${this.handleAddClick}
-            @drop=${this.handleBaubleDroppedOnAdd}
-            ?disabled=${!this.isContentEditable}
-          >
-          </sl-icon-button>
+            <sl-icon-button
+              class="volume-button"
+              id="mute-volume-button"
+              @click=${this.handleMuteClick}
+              src="${volumeDown}"
+            >
+            </sl-icon-button>
+            <sl-range
+              id="volume-slider"
+              style="--thumb-size: 15px; --track-height: 5px;"
+              @sl-change=${this.handleVolumeChange}
+            ></sl-range>
+          </div>
+
           <sl-dropdown
             placement="top-start"
             id="settings-menu"
@@ -293,7 +301,9 @@ export class VideoControlsBar extends LitElementWw {
     );
 
     return this.currentChapter
-      ? html`<div id="current-chapter">${this.currentChapter.title}</div>`
+      ? html`<p style="margin: 0px; padding: 0px;">
+          ${this.currentChapter.title}
+        </p>`
       : "";
   }
 
@@ -318,36 +328,6 @@ export class VideoControlsBar extends LitElementWw {
       }
     }
   };
-
-  /**
-   * Handles the click event for the add button.
-   */
-  handleAddClick = () => {
-    if (!this.videoContext.videoLoaded) return;
-
-    this.dispatchEvent(
-      new CustomEvent("toggleInteractionsDrawer", {
-        bubbles: true,
-        composed: true,
-      })
-    );
-  };
-
-  /**
-   * Handles the event when a bauble is dropped on the "add" button.
-   * This deletes the object. When the drag event starts the add button turns into a trash can.
-   * @param e - The DragEvent object representing the drop event.
-   *
-   */
-  handleBaubleDroppedOnAdd(e: DragEvent) {
-    // this.dropArea.style.background = "none";
-    // this.deleteElement();
-    // this.changeActiveElement(
-    //   parseInt(e.dataTransfer.getData("previousActive"))
-    // );
-    // this.changeTrashToAdd();
-    //TODO:
-  }
 
   /**
    * Event handler for selection of playback speeds from the setting menu.

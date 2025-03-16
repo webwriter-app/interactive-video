@@ -71,6 +71,6 @@ export class WwInteractiveBauble extends LitElementWw {
    * @returns The HTML template for the component.
    */
   render() {
-    return html` <p style="pointer-events: none;">${this.id}</p> `;
+    return html` <div id="bauble"><p>${this.id}</p></div> `;
   }
 }

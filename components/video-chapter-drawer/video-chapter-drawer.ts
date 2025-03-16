@@ -3,7 +3,14 @@ import { html, css, LitElement, PropertyValues } from "lit";
 import { LitElementWw } from "@webwriter/lit";
 import { customElement, property, query } from "lit/decorators.js";
 
-import { SlDrawer, SlInput, SlButton } from "@shoelace-style/shoelace";
+import {
+  SlDrawer,
+  SlInput,
+  SlButton,
+  SlIcon,
+  SlIconButton,
+  SlSwitch,
+} from "@shoelace-style/shoelace";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 
 import {
@@ -16,6 +23,11 @@ import { formatTime, parseTime } from "../../utils/timeFormatter";
 import { consume } from "@lit/context";
 
 import styles from "./video-chapter-drawer.styles";
+
+import bookmarks from "@tabler/icons/outline/plus.svg";
+import jumpTo from "@tabler/icons/filled/player-track-next.svg";
+
+import trash from "@tabler/icons/outline/trash.svg";
 
 //Tabler
 
@@ -33,6 +45,9 @@ export class VideoChapterDrawer extends LitElementWw {
       "sl-drawer": SlDrawer,
       "sl-input": SlInput,
       "sl-button": SlButton,
+      "sl-icon": SlIcon,
+      "sl-icon-button": SlIconButton,
+      "sl-switch": SlSwitch,
     };
   }
 
@@ -60,6 +75,33 @@ export class VideoChapterDrawer extends LitElementWw {
 
     return html`
       <sl-drawer contained label="Chapters" id="chapters-drawer">
+        <!-- class="author-only" -->
+        ${this.isContentEditable
+          ? html`
+              <div
+                style="display: flex; flex-direction: row; align-items: center; "
+              >
+                <sl-switch
+                  ?checked=${this.videoContext.hasChapters}
+                  @sl-change=${this.handleHasChaptersChange}
+                  >Chapters</sl-switch
+                >
+                <sl-button
+                  style="margin-left: auto"
+                  @click=${() =>
+                    this.dispatchEvent(
+                      new CustomEvent("addChapter", {
+                        bubbles: true,
+                        composed: true,
+                      })
+                    )}
+                >
+                  <sl-icon slot="prefix" src=${bookmarks}></sl-icon>
+                  Add</sl-button
+                >
+              </div>
+            `
+          : null}
         <ul class="chapter-list">
           ${chapters.map(
             (chapter, index) => html`
@@ -68,64 +110,72 @@ export class VideoChapterDrawer extends LitElementWw {
                   ? html`
                       <!-- Render Chapter Title-->
                       <sl-input
+                        size="small"
                         label="Title"
                         value=${chapter.title}
                         @sl-change=${(e) =>
                           this.updateChapterTitle(index, e.target.value)}
                       >
                       </sl-input>
-                      <!-- Only for the first chapter do not allow start time change -->
-                      ${index === 0
-                        ? html`<p>Start Time: 00:00</p>`
-                        : html`
-                            <!-- Render chapter card with an input field to change start time-->
-                            <sl-input
-                              label="Start Time"
-                              value=${formatTime(chapter.startTime)}
-                              @sl-change=${(e) =>
-                                this.handleTimeInputChange(e, index)}
-                            ></sl-input>
-                          `}
+
+                      <!-- Render chapter card with an input field to change start time-->
+                      <sl-input
+                        pill
+                        class="timeInput"
+                        size="small"
+                        label="Start"
+                        style="width: 65px"
+                        value=${formatTime(chapter.startTime)}
+                        @sl-change=${(e) =>
+                          this.handleTimeInputChange(e, index)}
+                        ?disabled=${index === 0 ? true : false}
+                      ></sl-input>
+
                       <!-- Delete button for all but the first chapter -->
                       ${index > 0
-                        ? html`<sl-button
-                            variant="danger"
-                            @click=${() => this.deleteChapter(index)}
-                            >Delete</sl-button
-                          >`
-                        : ""}
+                        ? html` <div
+                            style="display: flex; flex-direction: row; align-items: center;"
+                          >
+                            <sl-button
+                              variant="text"
+                              style="margin-right: auto"
+                              @click=${() => this.jumpToChapter(index)}
+                              >Skip to Chapter
+                              <sl-icon slot="prefix" src=${jumpTo}></sl-icon>
+                            </sl-button>
+                            <sl-icon-button
+                              src=${trash}
+                              @click=${() => this.deleteChapter(index)}
+                            ></sl-icon-button>
+                          </div>`
+                        : html`<sl-button
+                            variant="text"
+                            @click=${() => this.jumpToChapter(index)}
+                            >Skip to Chapter
+                            <sl-icon slot="prefix" src=${jumpTo}></sl-icon>
+                          </sl-button>`}
                     `
                   : html`
                       <!-- If content is not editable, just display chapter information -->
                       <div class="chapter-info">
-                        <strong>${chapter.title}</strong> - Start Time:
-                        ${formatTime(chapter.startTime)}
+                        <p><strong>${chapter.title}</strong></p>
+                        <div
+                          style="display: flex; flex-direction: row; align-items: center; "
+                        >
+                          <p>${formatTime(chapter.startTime)}</p>
+                          <sl-button
+                            variant="text"
+                            @click=${() => this.jumpToChapter(index)}
+                            >Skip to Chapter
+                            <sl-icon slot="prefix" src=${jumpTo}></sl-icon>
+                          </sl-button>
+                        </div>
                       </div>
                     `}
-                <!-- Jump to Chapter button -->
-                <sl-button
-                  variant="primary"
-                  @click=${() => this.jumpToChapter(index)}
-                  >Jump to Chapter</sl-button
-                >
               </li>
             `
           )}
         </ul>
-
-        <!-- class="author-only" -->
-        ${this.isContentEditable
-          ? html`<sl-button
-              @click=${() =>
-                this.dispatchEvent(
-                  new CustomEvent("addChapter", {
-                    bubbles: true,
-                    composed: true,
-                  })
-                )}
-              >Add Chapter</sl-button
-            >`
-          : null}
       </sl-drawer>
     `;
   }
@@ -245,4 +295,36 @@ export class VideoChapterDrawer extends LitElementWw {
     chapters[index].startTime = newTime;
     this.updateChapters(chapters);
   }
+
+  /**
+   * Handles the change event when the "hasChapters" checkbox is toggled.
+   * @param e - The custom event object.
+   */
+  handleHasChaptersChange = (e: CustomEvent) => {
+    const target = e.target as SlSwitch;
+    this.videoContext.hasChapters = target.checked;
+
+    if (
+      this.videoContext.hasChapters &&
+      JSON.parse(this.videoContext.chapterConfig).length === 0
+    ) {
+      this.videoContext.chapterConfig = JSON.stringify([
+        {
+          title: "Chapter 1",
+          startTime: 0,
+        },
+      ]);
+    }
+    //
+    else if (!this.videoContext.hasChapters) {
+      //this.videoContext.chapterConfig = JSON.stringify([{}]);
+    }
+
+    this.dispatchEvent(
+      new CustomEvent("updateContext", {
+        bubbles: true,
+        composed: true,
+      })
+    );
+  };
 }

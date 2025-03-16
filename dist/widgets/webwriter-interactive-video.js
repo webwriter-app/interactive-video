@@ -8834,6 +8834,7 @@ __decorateClass([
 ], SlSwitch.prototype, "handleDisabledChange", 1);
 
 // node_modules/@shoelace-style/shoelace/dist/chunks/chunk.IADS735N.js
+var switch_default = SlSwitch;
 SlSwitch.define("sl-switch");
 
 // node_modules/@shoelace-style/shoelace/dist/chunks/chunk.6DXN2DJK.js
@@ -23407,15 +23408,30 @@ SlAnimation.define("sl-animation");
 // widgets/webwriter-interactive-bauble/webwriter-interactive-bauble.styles.ts
 var webwriter_interactive_bauble_styles_default = i`
   :host {
-    width: 15px;
-    height: 15px;
-    background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: grab;
+
     position: relative;
-    font-size: 15px;
+
+    cursor: grab;
+  }
+
+  #bauble {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 8px;
+    border-radius: 15px;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+  }
+
+  #bauble:hover {
+    background-color: #0084c6;
+    color: white;
   }
 
   :host(.dragging) {
@@ -23461,7 +23477,7 @@ var WwInteractiveBauble = class extends (_a2 = LitElementWw, _id_dec = [n5({ typ
    * @returns The HTML template for the component.
    */
   render() {
-    return x` <p style="pointer-events: none;">${this.id}</p> `;
+    return x` <div id="bauble"><p>${this.id}</p></div> `;
   }
 };
 _init2 = __decoratorStart(_a2);
@@ -23522,9 +23538,9 @@ var webwriter_interactive_video_styles_default = i`
 
   #controls {
     display: flex;
-    /* opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease; */
+    /*opacity: 0;
+     visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease; */
 
     position: absolute;
     left: 0;
@@ -23534,7 +23550,6 @@ var webwriter_interactive_video_styles_default = i`
     align-items: center; /* Prevent stretching */
 
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
   }
 
   #controls * {
@@ -23577,12 +23592,6 @@ var player_pause_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org
 
 // node_modules/@tabler/icons/icons/outline/radius-bottom-right.svg
 var radius_bottom_right_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-radius-bottom-right"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M19 5v6a8 8 0 0 1 -8 8h-6" />%0A</svg>';
-
-// node_modules/@tabler/icons/icons/filled/trash-x.svg
-var trash_x_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="currentColor"%0A  class="icon icon-tabler icons-tabler-filled icon-tabler-trash-x"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M20 6a1 1 0 0 1 .117 1.993l-.117 .007h-.081l-.919 11a3 3 0 0 1 -2.824 2.995l-.176 .005h-8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-.005 -.167l-.923 -11.083h-.08a1 1 0 0 1 -.117 -1.993l.117 -.007h16zm-9.489 5.14a1 1 0 0 0 -1.218 1.567l1.292 1.293l-1.292 1.293l-.083 .094a1 1 0 0 0 1.497 1.32l1.293 -1.292l1.293 1.292l.094 .083a1 1 0 0 0 1.32 -1.497l-1.292 -1.293l1.292 -1.293l.083 -.094a1 1 0 0 0 -1.497 -1.32l-1.293 1.292l-1.293 -1.292l-.094 -.083z" />%0A  <path d="M14 2a2 2 0 0 1 2 2a1 1 0 0 1 -1.993 .117l-.007 -.117h-4l-.007 .117a1 1 0 0 1 -1.993 -.117a2 2 0 0 1 1.85 -1.995l.15 -.005h4z" />%0A</svg>';
-
-// node_modules/@tabler/icons/icons/filled/square-rounded-plus.svg
-var square_rounded_plus_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="currentColor"%0A  class="icon icon-tabler icons-tabler-filled icon-tabler-square-rounded-plus"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M12 2l.324 .001l.318 .004l.616 .017l.299 .013l.579 .034l.553 .046c4.785 .464 6.732 2.411 7.196 7.196l.046 .553l.034 .579c.005 .098 .01 .198 .013 .299l.017 .616l.005 .642l-.005 .642l-.017 .616l-.013 .299l-.034 .579l-.046 .553c-.464 4.785 -2.411 6.732 -7.196 7.196l-.553 .046l-.579 .034c-.098 .005 -.198 .01 -.299 .013l-.616 .017l-.642 .005l-.642 -.005l-.616 -.017l-.299 -.013l-.579 -.034l-.553 -.046c-4.785 -.464 -6.732 -2.411 -7.196 -7.196l-.046 -.553l-.034 -.579a28.058 28.058 0 0 1 -.013 -.299l-.017 -.616c-.003 -.21 -.005 -.424 -.005 -.642l.001 -.324l.004 -.318l.017 -.616l.013 -.299l.034 -.579l.046 -.553c.464 -4.785 2.411 -6.732 7.196 -7.196l.553 -.046l.579 -.034c.098 -.005 .198 -.01 .299 -.013l.616 -.017c.21 -.003 .424 -.005 .642 -.005zm0 6a1 1 0 0 0 -1 1v2h-2l-.117 .007a1 1 0 0 0 .117 1.993h2v2l.007 .117a1 1 0 0 0 1.993 -.117v-2h2l.117 -.007a1 1 0 0 0 -.117 -1.993h-2v-2l-.007 -.117a1 1 0 0 0 -.993 -.883z" fill="currentColor" stroke-width="0" />%0A</svg>';
 
 // node_modules/@lit/context/lib/context-request-event.js
 var s5 = class extends Event {
@@ -23740,10 +23749,6 @@ var InteractiveVideoContext = class {
    * Teacher options declaring whether the video has chapters, initially set to false.
    */
   hasChapters = true;
-  /**
-   * Teacher options for showing interactions, initially set to false.
-   */
-  showInteractions = true;
   // ******* VIDEO PROPERTIES *******
   /**
    * Video file as a base64 string for offline storage.
@@ -23790,6 +23795,7 @@ var InteractiveVideoContext = class {
 var interactive_video_options_styles_default = i`
   #temporary-teacher-options-container {
     padding: 4px;
+    overflow: visible;
   }
 
   .temporary-teacher-options {
@@ -23799,7 +23805,28 @@ var interactive_video_options_styles_default = i`
   :host(:not([contenteditable="true"]):not([contenteditable=""])) .author-only {
     display: none;
   }
+
+  .author-only .header p {
+    margin: 0px;
+    font-weight: 500;
+    font-size: 15px;
+    box-sizing: border-box;
+    color: #52525b;
+  }
+
+  .author-only .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    border-bottom: 2px solid #52525b;
+    gap: 7px;
+    padding-bottom: 10px;
+  }
 `;
+
+// node_modules/@tabler/icons/icons/outline/movie.svg
+var movie_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-movie"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />%0A  <path d="M8 4l0 16" />%0A  <path d="M16 4l0 16" />%0A  <path d="M4 8l4 0" />%0A  <path d="M4 16l4 0" />%0A  <path d="M4 12l16 0" />%0A  <path d="M16 8l4 0" />%0A  <path d="M16 16l4 0" />%0A</svg>';
 
 // components/options-panel/interactive-video-options.ts
 var _videoContext_dec, _a3, _init3, _videoContext;
@@ -23808,30 +23835,6 @@ var InteractiveVideoOptions = class extends (_a3 = LitElementWw, _videoContext_d
     super(...arguments);
     __privateAdd(this, _videoContext, __runInitializers(_init3, 8, this)), __runInitializers(_init3, 11, this);
     /**
-     * Handles the change event when the "hasChapters" checkbox is toggled.
-     * @param e - The custom event object.
-     */
-    __publicField(this, "handleHasChaptersChange", (e15) => {
-      const target = e15.target;
-      this.videoContext.hasChapters = target.checked;
-      if (this.videoContext.hasChapters && JSON.parse(this.videoContext.chapterConfig).length === 0) {
-        this.videoContext.chapterConfig = JSON.stringify([
-          {
-            title: "Chapter 1",
-            startTime: 0
-          }
-        ]);
-      } else if (!this.videoContext.hasChapters) {
-        this.videoContext.chapterConfig = JSON.stringify([{}]);
-      }
-      this.dispatchEvent(
-        new CustomEvent("updateContext", {
-          bubbles: true,
-          composed: true
-        })
-      );
-    });
-    /**
      * Handles the change event when teacher options for showing Overlays is triggered.
      *
      * @param e - The custom event object.
@@ -23839,21 +23842,6 @@ var InteractiveVideoOptions = class extends (_a3 = LitElementWw, _videoContext_d
     __publicField(this, "handleShowOverlayChange", (e15) => {
       const target = e15.target;
       this.videoContext.showOverlay = target.checked;
-      this.dispatchEvent(
-        new CustomEvent("updateContext", {
-          bubbles: true,
-          composed: true
-        })
-      );
-    });
-    /**
-     * Handles the change event when teacher options for showing interactions is triggered.
-     *
-     * @param e - The custom event object.
-     */
-    __publicField(this, "handleShowInteractionsChange", (e15) => {
-      const target = e15.target;
-      this.videoContext.showInteractions = target.checked;
       this.dispatchEvent(
         new CustomEvent("updateContext", {
           bubbles: true,
@@ -23870,7 +23858,8 @@ var InteractiveVideoOptions = class extends (_a3 = LitElementWw, _videoContext_d
    */
   static get scopedElements() {
     return {
-      "sl-checkbox": checkbox_default
+      "sl-switch": switch_default,
+      "sl-icon": icon_default
     };
   }
   /*
@@ -23888,27 +23877,16 @@ var InteractiveVideoOptions = class extends (_a3 = LitElementWw, _videoContext_d
         id="temporary-teacher-options-container"
         class="author-only"
       >
-        <sl-checkbox
-          @sl-change=${this.handleShowInteractionsChange}
-          class="temporary-teacher-options"
-          style="overflow: hidden"
-          ?checked=${this.videoContext.showInteractions}
-          >Show Interactions</sl-checkbox
-        >
-        <sl-checkbox
+        <div class="header">
+          <sl-icon src=${movie_default}></sl-icon>
+          <p>Options</p>
+        </div>
+        <sl-switch
           checked
           @sl-change=${this.handleShowOverlayChange}
           class="temporary-teacher-options"
-          style="overflow: hidden"
           ?checked=${this.videoContext.showOverlay}
-          >Show Overlays</sl-checkbox
-        >
-        <sl-checkbox
-          @sl-change=${this.handleHasChaptersChange}
-          class="temporary-teacher-options"
-          style="overflow: hidden"
-          ?checked=${this.videoContext.hasChapters}
-          >Has Chapters</sl-checkbox
+          >Show Interactions</sl-switch
         >
       </div>
     `;
@@ -24159,6 +24137,7 @@ var video_controls_bar_styles_default = i`
     flex-direction: row;
     width: 100%;
     height: auto;
+    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
   }
 
   #controls-lower-right {
@@ -24166,13 +24145,16 @@ var video_controls_bar_styles_default = i`
     align-items: center;
     justify-content: flex-end;
     gap: 10px;
+    margin-right: 5px;
   }
 
   #controls-lower-left {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     margin-right: auto;
+    margin-left: 5px;
     gap: 2px;
   }
 
@@ -24182,26 +24164,74 @@ var video_controls_bar_styles_default = i`
     font-size: 1.3rem;
   }
 
+  .volume-button {
+    text-align: center;
+    color: white;
+    font-size: 1.3rem;
+  }
+
+  .volume-button::part(base) {
+    padding: 0px;
+  }
+
+  #volume-slider {
+    --track-color-active: #e9e9e9;
+    --track-color-inactive: #4d4d4d;
+    width: 80px;
+  }
+
+  #volume-slider {
+    height: 6px !important; /* Force a consistent height */
+    min-height: 6px;
+    max-height: 6px;
+    --thumb-size: 18px;
+    overflow: visible;
+    --track-color-active: #e9e9e9;
+    --track-color-inactive: #4d4d4d;
+  }
+
+  #volume-slider::part(base) {
+    height: 6px !important; /* Force a consistent height */
+    min-height: 6px;
+    max-height: 6px;
+    display: flex;
+    align-items: center;
+  }
+
   #time-stamp {
     color: white;
     user-select: none;
     font-size: 15px;
   }
 
-  #current-chapter {
+  #chapters-button::part(base) {
+    /* Set design tokens for height and border width */
+
+    border: 1px solid transparent;
+
+    border-radius: 8px;
+    background-color: transparent;
     color: white;
-    font-size: 15px;
+    font-size: 14px;
   }
 
-  #volume-slider {
-    --track-color-active: #e9e9e9;
-    --track-color-inactive: #4d4d4d;
+  #chapters-button::part(base):hover {
+    color: #0084c6;
+  }
+
+  .scale-animation {
+    transform: scale(1.3);
+    transition: transform 0.3s ease; /* Adjust duration and timing as needed */
+  }
+
+  .scale-animation:hover {
+    transform: scale(1.3);
   }
 `;
 
 // components/video-controls-bar/video-controls-bar.ts
-var _addButton_dec, _timeStamp_dec, _playButton_dec, _fullscreenButton_dec, _volumeSlider_dec, _muteButton_dec, _currentChapter_dec, _videoContext_dec3, _a5, _init5, _videoContext3, _currentChapter, _muteButton, _volumeSlider, _fullscreenButton, _playButton, _timeStamp, _addButton;
-var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [c7({ context: videoContext, subscribe: true })], _currentChapter_dec = [n5({ type: Object })], _muteButton_dec = [e6("#mute-volume-button")], _volumeSlider_dec = [e6("#volume-slider")], _fullscreenButton_dec = [e6("#fullscreen-button")], _playButton_dec = [e6("#play")], _timeStamp_dec = [e6("#time-stamp")], _addButton_dec = [e6("#add-button")], _a5) {
+var _timeStamp_dec, _playButton_dec, _fullscreenButton_dec, _volumeSlider_dec, _muteButton_dec, _currentChapter_dec, _videoContext_dec3, _a5, _init5, _videoContext3, _currentChapter, _muteButton, _volumeSlider, _fullscreenButton, _playButton, _timeStamp;
+var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [c7({ context: videoContext, subscribe: true })], _currentChapter_dec = [n5({ type: Object })], _muteButton_dec = [e6("#mute-volume-button")], _volumeSlider_dec = [e6("#volume-slider")], _fullscreenButton_dec = [e6("#fullscreen-button")], _playButton_dec = [e6("#play")], _timeStamp_dec = [e6("#time-stamp")], _a5) {
   constructor() {
     super(...arguments);
     __privateAdd(this, _videoContext3, __runInitializers(_init5, 8, this)), __runInitializers(_init5, 11, this);
@@ -24211,7 +24241,6 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
     __privateAdd(this, _fullscreenButton, __runInitializers(_init5, 24, this)), __runInitializers(_init5, 27, this);
     __privateAdd(this, _playButton, __runInitializers(_init5, 28, this)), __runInitializers(_init5, 31, this);
     __privateAdd(this, _timeStamp, __runInitializers(_init5, 32, this)), __runInitializers(_init5, 35, this);
-    __privateAdd(this, _addButton, __runInitializers(_init5, 36, this)), __runInitializers(_init5, 39, this);
     /**
      * Handles the click event when the play button is clicked.
      *
@@ -24281,18 +24310,6 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
       }
     });
     /**
-     * Handles the click event for the add button.
-     */
-    __publicField(this, "handleAddClick", () => {
-      if (!this.videoContext.videoLoaded) return;
-      this.dispatchEvent(
-        new CustomEvent("toggleInteractionsDrawer", {
-          bubbles: true,
-          composed: true
-        })
-      );
-    });
-    /**
      * Event handler for selection of playback speeds from the setting menu.
      * @param {CustomEvent} e - The custom event object.
      */
@@ -24319,7 +24336,9 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
       "sl-range": range_default,
       "sl-dropdown": dropdown_default,
       "sl-menu": menu_default,
-      "sl-menu-item": menu_item_default
+      "sl-menu-item": menu_item_default,
+      "sl-button": button_default,
+      "sl-icon": icon_default
     };
   }
   /*
@@ -24347,39 +24366,47 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
             src="${player_play_default}"
           ></sl-icon-button>
           <p id="time-stamp">00:00 / 00:00</p>
-          ${this.videoContext.hasChapters ? x`
-                <sl-icon-button
-                  class="icon-button"
-                  id="chapters-button"
-                  @click=${this.toggleChaptersDrawer}
-                  src="${list_default}"
-                ></sl-icon-button>
-              ` : ""}
-          ${this.renderCurrentChapter()}
+          ${this.isContentEditable ? x` <sl-button
+                id="chapters-button"
+                @click=${this.toggleChaptersDrawer}
+              >
+                <sl-icon
+                  style="height: 20px; width: 20px;"
+                  slot="prefix"
+                  src=${list_default}
+                ></sl-icon>
+                ${this.renderCurrentChapter()}
+              </sl-button>` : this.videoContext.hasChapters ? x` <sl-icon-button
+                id="chapters-button"
+                @click=${this.toggleChaptersDrawer}
+              >
+                <sl-icon
+                  style="height: 20px; width: 20px;"
+                  slot="prefix"
+                  src=${list_default}
+                ></sl-icon>
+                ${this.renderCurrentChapter()}
+              </sl-icon-button>` : null}
         </div>
         <!-- contains the volume slider and other controls -->
         <div id="controls-lower-right">
-          <sl-icon-button
-            class="icon-button"
-            id="mute-volume-button"
-            @click=${this.handleMuteClick}
-            src="${volume_2_default}"
+          <div
+            style="display: flex; flex-direction: row; gap: 6px; align-items: center; justify-content: center;"
           >
-          </sl-icon-button>
-          <sl-range
-            id="volume-slider"
-            style="--thumb-size: 15px; --track-height: 5px;"
-            @sl-change=${this.handleVolumeChange}
-          ></sl-range>
-          <sl-icon-button
-            class="icon-button"
-            src="${square_rounded_plus_default}"
-            id="add-button"
-            @click=${this.handleAddClick}
-            @drop=${this.handleBaubleDroppedOnAdd}
-            ?disabled=${!this.isContentEditable}
-          >
-          </sl-icon-button>
+            <sl-icon-button
+              class="volume-button"
+              id="mute-volume-button"
+              @click=${this.handleMuteClick}
+              src="${volume_2_default}"
+            >
+            </sl-icon-button>
+            <sl-range
+              id="volume-slider"
+              style="--thumb-size: 15px; --track-height: 5px;"
+              @sl-change=${this.handleVolumeChange}
+            ></sl-range>
+          </div>
+
           <sl-dropdown
             placement="top-start"
             id="settings-menu"
@@ -24450,15 +24477,9 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
         composed: true
       })
     );
-    return this.currentChapter ? x`<div id="current-chapter">${this.currentChapter.title}</div>` : "";
-  }
-  /**
-   * Handles the event when a bauble is dropped on the "add" button.
-   * This deletes the object. When the drag event starts the add button turns into a trash can.
-   * @param e - The DragEvent object representing the drop event.
-   *
-   */
-  handleBaubleDroppedOnAdd(e15) {
+    return this.currentChapter ? x`<p style="margin: 0px; padding: 0px;">
+          ${this.currentChapter.title}
+        </p>` : "";
   }
   //TODO: implement
   makeControlsSticky() {
@@ -24497,7 +24518,6 @@ _volumeSlider = new WeakMap();
 _fullscreenButton = new WeakMap();
 _playButton = new WeakMap();
 _timeStamp = new WeakMap();
-_addButton = new WeakMap();
 __decorateElement(_init5, 4, "videoContext", _videoContext_dec3, VideoControlsBar, _videoContext3);
 __decorateElement(_init5, 4, "currentChapter", _currentChapter_dec, VideoControlsBar, _currentChapter);
 __decorateElement(_init5, 4, "muteButton", _muteButton_dec, VideoControlsBar, _muteButton);
@@ -24505,7 +24525,6 @@ __decorateElement(_init5, 4, "volumeSlider", _volumeSlider_dec, VideoControlsBar
 __decorateElement(_init5, 4, "fullscreenButton", _fullscreenButton_dec, VideoControlsBar, _fullscreenButton);
 __decorateElement(_init5, 4, "playButton", _playButton_dec, VideoControlsBar, _playButton);
 __decorateElement(_init5, 4, "timeStamp", _timeStamp_dec, VideoControlsBar, _timeStamp);
-__decorateElement(_init5, 4, "addButton", _addButton_dec, VideoControlsBar, _addButton);
 __decoratorMetadata(_init5, VideoControlsBar);
 //import CSS
 __publicField(VideoControlsBar, "styles", [video_controls_bar_styles_default]);
@@ -25228,6 +25247,12 @@ __publicField(VideoInteractionDrawer, "styles", [video_interaction_drawer_styles
 
 // components/video-chapter-drawer/video-chapter-drawer.styles.ts
 var video_chapter_drawer_styles_default = i`
+  #chapters-drawer::part(panel) {
+    /* background-color: rgba(0, 0, 0, 0.8); // Black background with opacity 
+    color: white; */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
   .chapter-list {
     list-style-type: none;
     padding: 0;
@@ -25236,8 +25261,7 @@ var video_chapter_drawer_styles_default = i`
   .chapter-item {
     margin-bottom: 1rem;
     padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border-bottom: 1px solid #ccc;
   }
 
   .chapter-item sl-input {
@@ -25250,12 +25274,30 @@ var video_chapter_drawer_styles_default = i`
 
   .chapter-info {
     margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chapter-info p {
+    padding: 0px;
+    margin: 0px;
+    font-size: 15px;
+    margin-right: auto;
   }
 
   :host(:not([contenteditable="true"]):not([contenteditable=""])) .author-only {
     display: none;
   }
 `;
+
+// node_modules/@tabler/icons/icons/outline/plus.svg
+var plus_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-plus"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M12 5l0 14" />%0A  <path d="M5 12l14 0" />%0A</svg>';
+
+// node_modules/@tabler/icons/icons/filled/player-track-next.svg
+var player_track_next_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="currentColor"%0A  class="icon icon-tabler icons-tabler-filled icon-tabler-player-track-next"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M2 5v14c0 .86 1.012 1.318 1.659 .753l8 -7a1 1 0 0 0 0 -1.506l-8 -7c-.647 -.565 -1.659 -.106 -1.659 .753z" />%0A  <path d="M13 5v14c0 .86 1.012 1.318 1.659 .753l8 -7a1 1 0 0 0 0 -1.506l-8 -7c-.647 -.565 -1.659 -.106 -1.659 .753z" />%0A</svg>';
+
+// node_modules/@tabler/icons/icons/outline/trash.svg
+var trash_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M4 7l16 0" />%0A  <path d="M10 11l0 6" />%0A  <path d="M14 11l0 6" />%0A  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />%0A  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />%0A</svg>';
 
 // components/video-chapter-drawer/video-chapter-drawer.ts
 var _drawer_dec2, _videoContext_dec5, _a8, _init8, _videoContext5, _drawer2;
@@ -25285,6 +25327,29 @@ var VideoChapterDrawer = class extends (_a8 = LitElementWw, _videoContext_dec5 =
         input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
       }
     });
+    /**
+     * Handles the change event when the "hasChapters" checkbox is toggled.
+     * @param e - The custom event object.
+     */
+    __publicField(this, "handleHasChaptersChange", (e15) => {
+      const target = e15.target;
+      this.videoContext.hasChapters = target.checked;
+      if (this.videoContext.hasChapters && JSON.parse(this.videoContext.chapterConfig).length === 0) {
+        this.videoContext.chapterConfig = JSON.stringify([
+          {
+            title: "Chapter 1",
+            startTime: 0
+          }
+        ]);
+      } else if (!this.videoContext.hasChapters) {
+      }
+      this.dispatchEvent(
+        new CustomEvent("updateContext", {
+          bubbles: true,
+          composed: true
+        })
+      );
+    });
   }
   /*
   
@@ -25293,7 +25358,10 @@ var VideoChapterDrawer = class extends (_a8 = LitElementWw, _videoContext_dec5 =
     return {
       "sl-drawer": drawer_default,
       "sl-input": input_default,
-      "sl-button": button_default
+      "sl-button": button_default,
+      "sl-icon": icon_default,
+      "sl-icon-button": icon_button_default,
+      "sl-switch": switch_default
     };
   }
   /*
@@ -25314,6 +25382,30 @@ var VideoChapterDrawer = class extends (_a8 = LitElementWw, _videoContext_dec5 =
     const chapters = JSON.parse(this.videoContext.chapterConfig);
     return x`
       <sl-drawer contained label="Chapters" id="chapters-drawer">
+        <!-- class="author-only" -->
+        ${this.isContentEditable ? x`
+              <div
+                style="display: flex; flex-direction: row; align-items: center; "
+              >
+                <sl-switch
+                  ?checked=${this.videoContext.hasChapters}
+                  @sl-change=${this.handleHasChaptersChange}
+                  >Chapters</sl-switch
+                >
+                <sl-button
+                  style="margin-left: auto"
+                  @click=${() => this.dispatchEvent(
+      new CustomEvent("addChapter", {
+        bubbles: true,
+        composed: true
+      })
+    )}
+                >
+                  <sl-icon slot="prefix" src=${plus_default}></sl-icon>
+                  Add</sl-button
+                >
+              </div>
+            ` : null}
         <ul class="chapter-list">
           ${chapters.map(
       (chapter, index) => x`
@@ -25321,54 +25413,67 @@ var VideoChapterDrawer = class extends (_a8 = LitElementWw, _videoContext_dec5 =
                 ${this.isContentEditable ? x`
                       <!-- Render Chapter Title-->
                       <sl-input
+                        size="small"
                         label="Title"
                         value=${chapter.title}
                         @sl-change=${(e15) => this.updateChapterTitle(index, e15.target.value)}
                       >
                       </sl-input>
-                      <!-- Only for the first chapter do not allow start time change -->
-                      ${index === 0 ? x`<p>Start Time: 00:00</p>` : x`
-                            <!-- Render chapter card with an input field to change start time-->
-                            <sl-input
-                              label="Start Time"
-                              value=${formatTime(chapter.startTime)}
-                              @sl-change=${(e15) => this.handleTimeInputChange(e15, index)}
-                            ></sl-input>
-                          `}
+
+                      <!-- Render chapter card with an input field to change start time-->
+                      <sl-input
+                        pill
+                        class="timeInput"
+                        size="small"
+                        label="Start"
+                        style="width: 65px"
+                        value=${formatTime(chapter.startTime)}
+                        @sl-change=${(e15) => this.handleTimeInputChange(e15, index)}
+                        ?disabled=${index === 0 ? true : false}
+                      ></sl-input>
+
                       <!-- Delete button for all but the first chapter -->
-                      ${index > 0 ? x`<sl-button
-                            variant="danger"
-                            @click=${() => this.deleteChapter(index)}
-                            >Delete</sl-button
-                          >` : ""}
+                      ${index > 0 ? x` <div
+                            style="display: flex; flex-direction: row; align-items: center;"
+                          >
+                            <sl-button
+                              variant="text"
+                              style="margin-right: auto"
+                              @click=${() => this.jumpToChapter(index)}
+                              >Skip to Chapter
+                              <sl-icon slot="prefix" src=${player_track_next_default}></sl-icon>
+                            </sl-button>
+                            <sl-icon-button
+                              src=${trash_default}
+                              @click=${() => this.deleteChapter(index)}
+                            ></sl-icon-button>
+                          </div>` : x`<sl-button
+                            variant="text"
+                            @click=${() => this.jumpToChapter(index)}
+                            >Skip to Chapter
+                            <sl-icon slot="prefix" src=${player_track_next_default}></sl-icon>
+                          </sl-button>`}
                     ` : x`
                       <!-- If content is not editable, just display chapter information -->
                       <div class="chapter-info">
-                        <strong>${chapter.title}</strong> - Start Time:
-                        ${formatTime(chapter.startTime)}
+                        <p><strong>${chapter.title}</strong></p>
+                        <div
+                          style="display: flex; flex-direction: row; align-items: center; "
+                        >
+                          <p>${formatTime(chapter.startTime)}</p>
+                          <sl-button
+                            variant="text"
+                            @click=${() => this.jumpToChapter(index)}
+                            >Skip to Chapter
+                            <sl-icon slot="prefix" src=${player_track_next_default}></sl-icon>
+                          </sl-button>
+                        </div>
                       </div>
                     `}
-                <!-- Jump to Chapter button -->
-                <sl-button
-                  variant="primary"
-                  @click=${() => this.jumpToChapter(index)}
-                  >Jump to Chapter</sl-button
-                >
               </li>
             `
     )}
         </ul>
-
-        <!-- class="author-only" -->
-        ${this.isContentEditable ? x`<sl-button
-              @click=${() => this.dispatchEvent(
-      new CustomEvent("addChapter", {
-        bubbles: true,
-        composed: true
-      })
-    )}
-              >Add Chapter</sl-button
-            >` : null}
       </sl-drawer>
     `;
   }
@@ -25461,23 +25566,66 @@ __decoratorMetadata(_init8, VideoChapterDrawer);
 //import CSS
 __publicField(VideoChapterDrawer, "styles", [video_chapter_drawer_styles_default]);
 
+// node_modules/@tabler/icons/icons/outline/timeline-event-plus.svg
+var timeline_event_plus_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-timeline-event-plus"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M12 20m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />%0A  <path d="M10 20h-6" />%0A  <path d="M14 20h6" />%0A  <path d="M12 15l-2 -2h-3a1 1 0 0 1 -1 -1v-8a1 1 0 0 1 1 -1h10a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-3l-2 2z" />%0A  <path d="M10 8h4" />%0A  <path d="M12 6v4" />%0A</svg>';
+
 // components/interactions-progress-bar/interactions-progress-bar.styles.ts
 var interactions_progress_bar_styles_default = i`
+  .interactions-progress-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-items: center;
+
+    width: 100%;
+  }
+
+  #add-button {
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+
+  :host(:not([contenteditable="true"]):not([contenteditable=""])) #add-button {
+    display: none;
+  }
+
+  #add-button::part(base) {
+    /* Set design tokens for height and border width */
+    --sl-input-height-medium: 48px;
+    border: none;
+
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+    color: white;
+    font-size: 12px;
+  }
+
+  #add-button::part(base):hover {
+    color: #0084c6;
+  }
+
   #controls-upper {
     height: 20px;
     display: flex;
     align-items: center;
+    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+    width: 100%;
+  }
+
+  #drop-area {
+    width: 100%;
   }
 `;
 
 // components/interactions-progress-bar/interactions-progress-bar.ts
-var _upperControls_dec, _dropArea_dec, _videoContext_dec6, _a9, _init9, _videoContext6, _dropArea, _upperControls;
-var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_dec6 = [c7({ context: videoContext, subscribe: true })], _dropArea_dec = [e6("#drop-area")], _upperControls_dec = [e6("#controls-upper")], _a9) {
+var _addButton_dec, _upperControls_dec, _dropArea_dec, _videoContext_dec6, _a9, _init9, _videoContext6, _dropArea, _upperControls, _addButton;
+var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_dec6 = [c7({ context: videoContext, subscribe: true })], _dropArea_dec = [e6("#drop-area")], _upperControls_dec = [e6("#controls-upper")], _addButton_dec = [e6("#add-button")], _a9) {
   constructor() {
     super(...arguments);
     __privateAdd(this, _videoContext6, __runInitializers(_init9, 8, this)), __runInitializers(_init9, 11, this);
     __privateAdd(this, _dropArea, __runInitializers(_init9, 12, this)), __runInitializers(_init9, 15, this);
     __privateAdd(this, _upperControls, __runInitializers(_init9, 16, this)), __runInitializers(_init9, 19, this);
+    __privateAdd(this, _addButton, __runInitializers(_init9, 20, this)), __runInitializers(_init9, 23, this);
     /**
      * Handles the drag start event for a bauble.
      *
@@ -25510,6 +25658,18 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
       );
       this.dropArea.style.background = "none";
     });
+    /**
+     * Handles the click event for the add button.
+     */
+    __publicField(this, "handleAddClick", () => {
+      if (!this.videoContext.videoLoaded) return;
+      this.dispatchEvent(
+        new CustomEvent("toggleInteractionsDrawer", {
+          bubbles: true,
+          composed: true
+        })
+      );
+    });
   }
   /**
    * Returns an object that maps custom element names to their corresponding classes.
@@ -25519,7 +25679,14 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
    */
   static get scopedElements() {
     return {
-      "webwriter-interactive-bauble": WwInteractiveBauble
+      "webwriter-interactive-bauble": WwInteractiveBauble,
+      "sl-icon-button": icon_button_default,
+      "sl-range": range_default,
+      "sl-dropdown": dropdown_default,
+      "sl-menu": menu_default,
+      "sl-menu-item": menu_item_default,
+      "sl-button": button_default,
+      "sl-icon": icon_default
     };
   }
   /*
@@ -25528,38 +25695,56 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
   //TODO: On resize, the offset of baubles need to be recalculated
   render() {
     return x`
-      <div
-        id="drop-area"
-        @drop=${this.handleBaubleDroppedOnDropArea}
-        @dragover=${this.handleBaubleDraggedOverDropArea}
-        @dragleave=${this.handleBaubleLeaveDropArea}
-      >
-        <div id="controls-upper">
-          ${Array.from(this.videoContext.videoInteractionData.entries()).map(
+      <div class="interactions-progress-bar">
+        <sl-button
+          variant="default"
+          size="small"
+          id="add-button"
+          @click=${this.handleAddClick}
+          @drop=${this.handleBaubleDroppedOnAdd}
+          ?disabled=${!this.isContentEditable}
+        >
+          <sl-icon
+            slot="prefix"
+            src=${timeline_event_plus_default}
+            style="height: 20px; width: 20px;"
+          ></sl-icon>
+          Add Interaction
+        </sl-button>
+
+        <div
+          id="drop-area"
+          @drop=${this.handleBaubleDroppedOnDropArea}
+          @dragover=${this.handleBaubleDraggedOverDropArea}
+          @dragleave=${this.handleBaubleLeaveDropArea}
+        >
+          <div id="controls-upper">
+            ${Array.from(this.videoContext.videoInteractionData.entries()).map(
       ([key, value]) => {
         return value.isReplace ? x` <!--  -->
-                    <webwriter-interactive-bauble
-                      style="border-radius: 50%;"
-                      offset=${this.calculateOffset(value.startTime)}
-                      @dragstart=${this.handleBaubleDragStart}
-                      @dragend=${this.handleBaubleDragEnd}
-                      draggable="true"
-                      @click=${this.handleBaubleClick}
-                      id=${key}
-                    >
-                    </webwriter-interactive-bauble>` : x` <!--  -->
-                    <webwriter-interactive-bauble
-                      style=""
-                      offset=${this.calculateOffset(value.startTime)}
-                      @dragstart=${this.handleBaubleDragStart}
-                      @dragend=${this.handleBaubleDragEnd}
-                      draggable="true"
-                      @click=${this.handleBaubleClick}
-                      id=${key}
-                    >
-                    </webwriter-interactive-bauble>`;
+                      <webwriter-interactive-bauble
+                        style="border-radius: 50%;"
+                        offset=${this.calculateOffset(value.startTime)}
+                        @dragstart=${this.handleBaubleDragStart}
+                        @dragend=${this.handleBaubleDragEnd}
+                        draggable="true"
+                        @click=${this.handleBaubleClick}
+                        id=${key}
+                      >
+                      </webwriter-interactive-bauble>` : x` <!--  -->
+                      <webwriter-interactive-bauble
+                        style=""
+                        offset=${this.calculateOffset(value.startTime)}
+                        @dragstart=${this.handleBaubleDragStart}
+                        @dragend=${this.handleBaubleDragEnd}
+                        draggable="true"
+                        @click=${this.handleBaubleClick}
+                        id=${key}
+                      >
+                      </webwriter-interactive-bauble>`;
       }
     )}
+          </div>
         </div>
       </div>
     `;
@@ -25681,27 +25866,37 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
     );
     return time / videoElement.duration * 0.95 * videoElement.getBoundingClientRect().width;
   }
+  /**
+   * Handles the event when a bauble is dropped on the "add" button.
+   * This deletes the object. When the drag event starts the add button turns into a trash can.
+   * @param e - The DragEvent object representing the drop event.
+   *
+   */
+  handleBaubleDroppedOnAdd(e15) {
+  }
 };
 _init9 = __decoratorStart(_a9);
 _videoContext6 = new WeakMap();
 _dropArea = new WeakMap();
 _upperControls = new WeakMap();
+_addButton = new WeakMap();
 __decorateElement(_init9, 4, "videoContext", _videoContext_dec6, InteractionsProgressBar, _videoContext6);
 __decorateElement(_init9, 4, "dropArea", _dropArea_dec, InteractionsProgressBar, _dropArea);
 __decorateElement(_init9, 4, "upperControls", _upperControls_dec, InteractionsProgressBar, _upperControls);
+__decorateElement(_init9, 4, "addButton", _addButton_dec, InteractionsProgressBar, _addButton);
 __decoratorMetadata(_init9, InteractionsProgressBar);
 //import CSS
 __publicField(InteractionsProgressBar, "styles", [interactions_progress_bar_styles_default]);
 
 // widgets/webwriter-interactive-video/webwriter-interactive-video.component.ts
-var _chaptersDrawer_dec, _interactionDrawer_dec, _progressBar_dec, _videoControlsBar_dec, _videoElement_dec, _isDragging_dec, _lastTimeupdate_dec, _videoDurationFormatted_dec, _tabIndex_dec, _videoContext_dec7, _a10, _init10, _videoContext7, _tabIndex, _videoDurationFormatted, _lastTimeupdate, _isDragging, _videoElement, _videoControlsBar, _progressBar, _interactionDrawer, _chaptersDrawer;
+var _chaptersDrawer_dec, _interactionDrawer_dec, _progressBar_dec, _interactionsProgressBar_dec, _videoControlsBar_dec, _videoElement_dec, _isDragging_dec, _lastTimeupdate_dec, _videoDurationFormatted_dec, _tabIndex_dec, _videoContext_dec7, _a10, _init10, _videoContext7, _tabIndex, _videoDurationFormatted, _lastTimeupdate, _isDragging, _videoElement, _videoControlsBar, _interactionsProgressBar, _progressBar, _interactionDrawer, _chaptersDrawer;
 var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContext_dec7 = [e14({
   context: videoContext
 }), n5({
   type: Object,
   attribute: true,
   reflect: true
-})], _tabIndex_dec = [n5({ type: Number, attribute: true, reflect: true })], _videoDurationFormatted_dec = [n5({ type: String })], _lastTimeupdate_dec = [n5({ type: Number })], _isDragging_dec = [n5({ type: Boolean })], _videoElement_dec = [e6("#video")], _videoControlsBar_dec = [e6("video-controls-bar")], _progressBar_dec = [e6("#progress-bar")], _interactionDrawer_dec = [e6("video-interaction-drawer")], _chaptersDrawer_dec = [e6("video-chapter-drawer")], _a10) {
+})], _tabIndex_dec = [n5({ type: Number, attribute: true, reflect: true })], _videoDurationFormatted_dec = [n5({ type: String })], _lastTimeupdate_dec = [n5({ type: Number })], _isDragging_dec = [n5({ type: Boolean })], _videoElement_dec = [e6("#video")], _videoControlsBar_dec = [e6("video-controls-bar")], _interactionsProgressBar_dec = [e6("interactions-progress-bar")], _progressBar_dec = [e6("#progress-bar")], _interactionDrawer_dec = [e6("video-interaction-drawer")], _chaptersDrawer_dec = [e6("video-chapter-drawer")], _a10) {
   constructor() {
     super(...arguments);
     __privateAdd(this, _videoContext7, __runInitializers(_init10, 8, this, new InteractiveVideoContext())), __runInitializers(_init10, 11, this);
@@ -25711,9 +25906,10 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
     __privateAdd(this, _isDragging, __runInitializers(_init10, 24, this, false)), __runInitializers(_init10, 27, this);
     __privateAdd(this, _videoElement, __runInitializers(_init10, 28, this)), __runInitializers(_init10, 31, this);
     __privateAdd(this, _videoControlsBar, __runInitializers(_init10, 32, this)), __runInitializers(_init10, 35, this);
-    __privateAdd(this, _progressBar, __runInitializers(_init10, 36, this)), __runInitializers(_init10, 39, this);
-    __privateAdd(this, _interactionDrawer, __runInitializers(_init10, 40, this)), __runInitializers(_init10, 43, this);
-    __privateAdd(this, _chaptersDrawer, __runInitializers(_init10, 44, this)), __runInitializers(_init10, 47, this);
+    __privateAdd(this, _interactionsProgressBar, __runInitializers(_init10, 36, this)), __runInitializers(_init10, 39, this);
+    __privateAdd(this, _progressBar, __runInitializers(_init10, 40, this)), __runInitializers(_init10, 43, this);
+    __privateAdd(this, _interactionDrawer, __runInitializers(_init10, 44, this)), __runInitializers(_init10, 47, this);
+    __privateAdd(this, _chaptersDrawer, __runInitializers(_init10, 48, this)), __runInitializers(_init10, 51, this);
     /**
      * Checks whether a video is already existing on load.
      * @returns whether a video exists (either base64 or URL, used for deciding whether to show file input area or video element)
@@ -25732,9 +25928,6 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
      */
     __publicField(this, "handleTimeUpdate", (e15) => {
       console.log("timeUpdate");
-      if (this.videoContext.showInteractions || !this.isContentEditable) {
-        this.replaceInteractionHelper();
-      }
       this.lastTimeupdate = this.videoElement.currentTime;
       this.progressBar.value = this.videoElement.currentTime / this.videoElement.duration * 100;
       this.videoControlsBar.handleTimeUpdate(
@@ -25902,6 +26095,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
             <!-- Baubles // Bubbles on Progress Bar -->
             <interactions-progress-bar
               contenteditable=${this.isContentEditable}
+              @toggleInteractionsDrawer=${() => this.toggleInteractionsDrawer()}
               @interactionBaubleClicked=${(e15) => this.baubleClicked(e15.detail.id)}
               @changeAddToTrash=${() => this.changeAddToTrash()}
               @changeTrashToAdd=${() => this.changeTrashToAdd()}
@@ -25924,7 +26118,6 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
               @toggleMute=${() => this.toggleMute()}
               @startstopVideo=${() => this.startStopVideo()}
               @toggleChaptersDrawer=${() => this.toggleChaptersDrawer()}
-              @toggleInteractionsDrawer=${() => this.toggleInteractionsDrawer()}
               @playbackRateChange=${(e15) => this.changePlaybackRate(e15.detail.value)}
               @getCurrentChapter=${() => this.getCurrentChapter()}
             ></video-controls-bar>
@@ -25983,7 +26176,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
                         z-index: ${this.videoContext.overlayZIndex};
                         background-color: ${data.color || "#ffffff"};
                         border-radius: 8px;
-                        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                  
                         padding: 10px;
                         overflow: hidden;
                         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);"
@@ -26097,15 +26290,11 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
    * Changes the add button to a trash button.
    */
   changeAddToTrash() {
-    this.videoControlsBar.addButton.setAttribute("src", `${trash_x_default}`);
-    this.videoControlsBar.addButton.style.color = "hsl(0 72.2% 50.6%)";
   }
   /**
    * Changes the trash button to an add button.
    */
   changeTrashToAdd() {
-    this.videoControlsBar.addButton.setAttribute("src", `${square_rounded_plus_default}`);
-    this.videoControlsBar.addButton.style.color = "hsl(200.4 98% 39.4%)";
   }
   //
   //
@@ -26179,30 +26368,6 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
   recalculateBaubleIndexes() {
   }
   /**
-   * Checks whether a replace interaction should be replaced currently.
-   * If the video time matches the start time of a replace interaction,
-   * the active element is changed, the video is paused, and the interaction is maximized.
-   */
-  replaceInteractionHelper() {
-    this.videoContext.videoInteractionData.forEach((value, key) => {
-      if (value.isReplace) {
-        if (this.lastTimeupdate <= value.startTime && this.videoElement.currentTime >= value.startTime) {
-          if (this.videoContext.activeElement != key) {
-            this.interactionDrawer.changeActiveElement(key);
-          }
-          if (!this.videoElement.paused) {
-            this.videoElement.pause();
-            this.videoControlsBar.playButton.setAttribute(
-              "src",
-              `${player_play_default}`
-            );
-          }
-          this.interactionDrawer.maximizeInteraction();
-        }
-      }
-    });
-  }
-  /**
    * Sets up the video element with the provided source and attaches event listeners to the video object.
    *
    * @param src - The source URL of the video.
@@ -26229,7 +26394,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
   
      */
   startStopVideo() {
-    console.log("tset");
+    console.log("test");
     if (!this.videoContext.videoLoaded) return;
     console.log("test");
     if (this.videoElement.ended) {
@@ -26238,9 +26403,17 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
     if (this.videoElement.paused) {
       this.videoElement.play();
       this.videoControlsBar.playButton.setAttribute("src", `${player_pause_default}`);
+      this.videoControlsBar.playButton.classList.add("scale-animation");
+      setTimeout(() => {
+        this.videoControlsBar.playButton.classList.remove("scale-animation");
+      }, 300);
     } else {
       this.videoElement.pause();
       this.videoControlsBar.playButton.setAttribute("src", `${player_play_default}`);
+      this.videoControlsBar.playButton.classList.add("scale-animation");
+      setTimeout(() => {
+        this.videoControlsBar.playButton.classList.remove("scale-animation");
+      }, 300);
     }
   }
   /**
@@ -26363,6 +26536,7 @@ _lastTimeupdate = new WeakMap();
 _isDragging = new WeakMap();
 _videoElement = new WeakMap();
 _videoControlsBar = new WeakMap();
+_interactionsProgressBar = new WeakMap();
 _progressBar = new WeakMap();
 _interactionDrawer = new WeakMap();
 _chaptersDrawer = new WeakMap();
@@ -26373,6 +26547,7 @@ __decorateElement(_init10, 4, "lastTimeupdate", _lastTimeupdate_dec, WebwriterIn
 __decorateElement(_init10, 4, "isDragging", _isDragging_dec, WebwriterInteractiveVideo, _isDragging);
 __decorateElement(_init10, 4, "videoElement", _videoElement_dec, WebwriterInteractiveVideo, _videoElement);
 __decorateElement(_init10, 4, "videoControlsBar", _videoControlsBar_dec, WebwriterInteractiveVideo, _videoControlsBar);
+__decorateElement(_init10, 4, "interactionsProgressBar", _interactionsProgressBar_dec, WebwriterInteractiveVideo, _interactionsProgressBar);
 __decorateElement(_init10, 4, "progressBar", _progressBar_dec, WebwriterInteractiveVideo, _progressBar);
 __decorateElement(_init10, 4, "interactionDrawer", _interactionDrawer_dec, WebwriterInteractiveVideo, _interactionDrawer);
 __decorateElement(_init10, 4, "chaptersDrawer", _chaptersDrawer_dec, WebwriterInteractiveVideo, _chaptersDrawer);

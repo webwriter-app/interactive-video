@@ -15,8 +15,6 @@ import playerPlay from "@tabler/icons/filled/player-play.svg";
 import playerPause from "@tabler/icons/filled/player-pause.svg";
 
 import radiusBottomRight from "@tabler/icons/outline/radius-bottom-right.svg";
-import trash from "@tabler/icons/filled/trash-x.svg";
-import add from "@tabler/icons/filled/square-rounded-plus.svg";
 
 import { provide } from "@lit/context";
 import {
@@ -96,6 +94,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @query("video-controls-bar")
   accessor videoControlsBar: VideoControlsBar;
 
+  @query("interactions-progress-bar")
+  accessor interactionsProgressBar: InteractionsProgressBar;
+
   @query("#progress-bar")
   accessor progressBar;
 
@@ -159,6 +160,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
             <!-- Baubles // Bubbles on Progress Bar -->
             <interactions-progress-bar
               contenteditable=${this.isContentEditable}
+              @toggleInteractionsDrawer=${() => this.toggleInteractionsDrawer()}
               @interactionBaubleClicked=${(e: CustomEvent) =>
                 this.baubleClicked(e.detail.id)}
               @changeAddToTrash=${() => this.changeAddToTrash()}
@@ -184,7 +186,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
               @toggleMute=${() => this.toggleMute()}
               @startstopVideo=${() => this.startStopVideo()}
               @toggleChaptersDrawer=${() => this.toggleChaptersDrawer()}
-              @toggleInteractionsDrawer=${() => this.toggleInteractionsDrawer()}
               @playbackRateChange=${(e: CustomEvent) =>
                 this.changePlaybackRate(e.detail.value)}
               @getCurrentChapter=${() => this.getCurrentChapter()}
@@ -252,7 +253,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                         z-index: ${this.videoContext.overlayZIndex};
                         background-color: ${data.color || "#ffffff"};
                         border-radius: 8px;
-                        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                  
                         padding: 10px;
                         overflow: hidden;
                         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);"
@@ -382,16 +383,22 @@ TODO: Make this property of parent and access it trough parent
    * Changes the add button to a trash button.
    */
   changeAddToTrash() {
-    this.videoControlsBar.addButton.setAttribute("src", `${trash}`);
-    this.videoControlsBar.addButton.style.color = "hsl(0 72.2% 50.6%)";
+    // //
+    // // Access the shadow root of the addButton
+    // const slIcon =
+    //   this.interactionsProgressBar.addButton.querySelector("sl-icon");
+    // slIcon.setAttribute("src", `${trash}`);
+    // slIcon.style.color = "hsl(0 72.2% 50.6%)"; // Example of changing the icon color
+    // const p = this.interactionsProgressBar.addButton.querySelector("p");
+    // p.textContent = "Drop to Delete";
   }
 
   /**
    * Changes the trash button to an add button.
    */
   changeTrashToAdd() {
-    this.videoControlsBar.addButton.setAttribute("src", `${add}`);
-    this.videoControlsBar.addButton.style.color = "hsl(200.4 98% 39.4%)";
+    // this.interactionsProgressBar.addButton.setAttribute("src", `${add}`);
+    // this.interactionsProgressBar.addButton.style.color = "hsl(200.4 98% 39.4%)";
   }
 
   /**
@@ -525,9 +532,7 @@ TODO: Make this property of parent and access it trough parent
    */
   handleTimeUpdate = (e: CustomEvent) => {
     console.log("timeUpdate");
-    if (this.videoContext.showInteractions || !this.isContentEditable) {
-      this.replaceInteractionHelper();
-    }
+
     this.lastTimeupdate = this.videoElement.currentTime;
     this.progressBar.value =
       (this.videoElement.currentTime / this.videoElement.duration) * 100;
@@ -543,34 +548,6 @@ TODO: Make this property of parent and access it trough parent
       this.videoControlsBar.playButton.setAttribute("src", `${playerPlay}`);
     }
   };
-
-  /**
-   * Checks whether a replace interaction should be replaced currently.
-   * If the video time matches the start time of a replace interaction,
-   * the active element is changed, the video is paused, and the interaction is maximized.
-   */
-  replaceInteractionHelper() {
-    this.videoContext.videoInteractionData.forEach((value, key) => {
-      if (value.isReplace) {
-        if (
-          this.lastTimeupdate <= value.startTime &&
-          this.videoElement.currentTime >= value.startTime
-        ) {
-          if (this.videoContext.activeElement != key) {
-            this.interactionDrawer.changeActiveElement(key);
-          }
-          if (!this.videoElement.paused) {
-            this.videoElement.pause();
-            this.videoControlsBar.playButton.setAttribute(
-              "src",
-              `${playerPlay}`
-            );
-          }
-          this.interactionDrawer.maximizeInteraction();
-        }
-      }
-    });
-  }
 
   /**
    * Handles the progress change event and updates the video's progress bar and time stamp based on the current video time.
@@ -633,7 +610,7 @@ TODO: Make this property of parent and access it trough parent
 
    */
   startStopVideo() {
-    console.log("tset");
+    console.log("test");
     if (!this.videoContext.videoLoaded) return;
 
     console.log("test");
@@ -643,9 +620,25 @@ TODO: Make this property of parent and access it trough parent
     if (this.videoElement.paused) {
       this.videoElement.play();
       this.videoControlsBar.playButton.setAttribute("src", `${playerPause}`);
+
+      // Add the scaling animation class to the button
+      this.videoControlsBar.playButton.classList.add("scale-animation");
+
+      // Remove the animation class after it's done
+      setTimeout(() => {
+        this.videoControlsBar.playButton.classList.remove("scale-animation");
+      }, 300); // Adjust timing to match animation duration
     } else {
       this.videoElement.pause();
       this.videoControlsBar.playButton.setAttribute("src", `${playerPlay}`);
+
+      // Add the scaling animation class to the button
+      this.videoControlsBar.playButton.classList.add("scale-animation");
+
+      // Remove the animation class after it's done
+      setTimeout(() => {
+        this.videoControlsBar.playButton.classList.remove("scale-animation");
+      }, 300); // Adjust timing to match animation duration
     }
   }
 

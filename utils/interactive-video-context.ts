@@ -16,11 +16,6 @@ export class InteractiveVideoContext {
    */
   hasChapters: boolean = true;
 
-  /**
-   * Teacher options for showing interactions, initially set to false.
-   */
-  showInteractions: boolean = true;
-
   // ******* VIDEO PROPERTIES *******
 
   /**

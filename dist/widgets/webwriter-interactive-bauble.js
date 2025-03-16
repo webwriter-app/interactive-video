@@ -1377,15 +1377,30 @@ function n5(t4) {
 // widgets/webwriter-interactive-bauble/webwriter-interactive-bauble.styles.ts
 var webwriter_interactive_bauble_styles_default = i`
   :host {
-    width: 15px;
-    height: 15px;
-    background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: grab;
+
     position: relative;
-    font-size: 15px;
+
+    cursor: grab;
+  }
+
+  #bauble {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 8px;
+    border-radius: 15px;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+  }
+
+  #bauble:hover {
+    background-color: #0084c6;
+    color: white;
   }
 
   :host(.dragging) {
@@ -1431,7 +1446,7 @@ var WwInteractiveBauble = class extends (_a2 = LitElementWw, _id_dec = [n5({ typ
    * @returns The HTML template for the component.
    */
   render() {
-    return x` <p style="pointer-events: none;">${this.id}</p> `;
+    return x` <div id="bauble"><p>${this.id}</p></div> `;
   }
 };
 _init2 = __decoratorStart(_a2);
