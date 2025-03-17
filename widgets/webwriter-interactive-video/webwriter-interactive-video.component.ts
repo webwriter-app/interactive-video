@@ -1,12 +1,10 @@
 import { html, _$LE } from "lit";
 import { LitElementWw } from "@webwriter/lit";
 
-import { customElement, property, query } from "lit/decorators.js";
+import { property, query, queryAssignedElements } from "lit/decorators.js";
 
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import { SlButton, SlRange, SlIcon } from "@shoelace-style/shoelace";
-
-import { WwInteractiveBauble } from "../webwriter-interactive-bauble/webwriter-interactive-bauble.component";
 
 import styles from "./webwriter-interactive-video.styles";
 
@@ -14,21 +12,18 @@ import styles from "./webwriter-interactive-video.styles";
 import playerPlay from "@tabler/icons/filled/player-play.svg";
 import playerPause from "@tabler/icons/filled/player-pause.svg";
 
-import radiusBottomRight from "@tabler/icons/outline/radius-bottom-right.svg";
-
 import { provide } from "@lit/context";
 import {
   InteractiveVideoContext,
   videoContext,
 } from "../../utils/interactive-video-context";
 
-import { videoData } from "../../types/videoData";
 import { InteractiveVideoOptions } from "../../components/options-panel/interactive-video-options";
 import { VideoInputOverlay } from "../../components/video-input-overlay/video-input-overlay";
 import { VideoControlsBar } from "../../components/video-controls-bar/video-controls-bar";
-import { VideoInteractionDrawer } from "../../components/video-interaction-drawer/video-interaction-drawer";
 import { VideoChapterDrawer } from "../../components/video-chapter-drawer/video-chapter-drawer";
 import { InteractionsProgressBar } from "../../components/interactions-progress-bar/interactions-progress-bar";
+import { WwVideoInteraction } from "../webwriter-video-interaction/webwriter-video-interaction.component";
 
 import { formatTime } from "../../utils/timeFormatter";
 /**
@@ -47,13 +42,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     return {
       "sl-range": SlRange,
       "sl-icon": SlIcon,
-      "webwriter-interactive-bauble": WwInteractiveBauble,
+
       "interactive-video-options": InteractiveVideoOptions,
       "video-input-overlay": VideoInputOverlay,
       "video-controls-bar": VideoControlsBar,
-      "video-interaction-drawer": VideoInteractionDrawer,
       "video-chapter-drawer": VideoChapterDrawer,
       "interactions-progress-bar": InteractionsProgressBar,
+      "webwriter-video-interaction": WwVideoInteraction,
     };
   }
 
@@ -75,6 +70,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   })
   accessor videoContext: InteractiveVideoContext =
     new InteractiveVideoContext();
+
+  @queryAssignedElements({
+    flatten: true,
+    selector: "webwriter-video-interaction",
+  })
+  accessor videoInteractions;
 
   @property({ type: Number, attribute: true, reflect: true })
   accessor tabIndex = -1;
@@ -99,9 +100,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   @query("#progress-bar")
   accessor progressBar;
-
-  @query("video-interaction-drawer")
-  accessor interactionDrawer: VideoInteractionDrawer;
 
   @query("video-chapter-drawer")
   accessor chaptersDrawer: VideoChapterDrawer;
@@ -130,7 +128,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     } else if (this.videoContext.videoURL) {
       this.setupVideo(this.videoContext.videoURL);
     }
-    //this.updateBaublePositions();
+    this.updateBaublePositions();
   }
 
   /**
@@ -151,25 +149,31 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           : null}
         <div id="container-vertical">
           <!-- VIDEO ELEMENT -->
-          <div id="container-video" @click=${this.handleVideoClick}>
+          <div
+            id="container-video"
+            @interactionClicked=${(e: CustomEvent) => {
+              this.interactionClicked(e.detail.id);
+            }}
+            @click=${this.handleVideoClick}
+            @updateContext=${() => this.updateContext()}
+          >
             <video id="video"></video>
-            ${this.videoContext.videoLoaded ? this.renderOverlays() : null}
+            ${this.videoContext.videoLoaded ? this.showPopups() : null}
+            <slot></slot>
           </div>
           <!-- CONTROLS -->
           <div id="controls">
             <!-- Baubles // Bubbles on Progress Bar -->
             <interactions-progress-bar
               contenteditable=${this.isContentEditable}
-              @toggleInteractionsDrawer=${() => this.toggleInteractionsDrawer()}
+              @addInteraction=${() =>
+                this.addVideoInteraction(this.videoInteractions.length)}
               @interactionBaubleClicked=${(e: CustomEvent) =>
                 this.baubleClicked(e.detail.id)}
-              @changeAddToTrash=${() => this.changeAddToTrash()}
-              @changeTrashToAdd=${() => this.changeTrashToAdd()}
-              @changeInteractionTime=${(e: CustomEvent) =>
-                this.changeInteractionTime(
+              @changeInteractionStartTime=${(e: CustomEvent) =>
+                this.changeInteractionStartTime(
                   e.detail.newTime,
-                  e.detail.index,
-                  e.detail.isReplace
+                  e.detail.index
                 )}
             ></interactions-progress-bar>
             <!-- Progress Bar -->
@@ -184,7 +188,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
               @volumeChange=${(e: CustomEvent) =>
                 this.handleVolumeChange(e.detail.value)}
               @toggleMute=${() => this.toggleMute()}
-              @startstopVideo=${() => this.startStopVideo()}
+              @startstopVideo=${() => this.togglePlayVideo()}
               @toggleChaptersDrawer=${() => this.toggleChaptersDrawer()}
               @playbackRateChange=${(e: CustomEvent) =>
                 this.changePlaybackRate(e.detail.value)}
@@ -203,14 +207,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           @jumpToChapter=${(e: CustomEvent) =>
             this.jumpToChapter(e.detail.startTime)}
         ></video-chapter-drawer>
-        <!-- Video Interaction Drawer -->
-        <video-interaction-drawer
-          style="z-index: 51"
-          contenteditable=${this.isContentEditable}
-          @updateContext=${() => this.updateContext()}
-          @getCurrentTime=${() => this.getCurrentTime()}
-          @updateBaublePositions=${() => this.updateBaublePositions()}
-        ></video-interaction-drawer>
       </div>
 
       <!-- OPTIONS PANEL -->
@@ -219,6 +215,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         part="options"
         class="author-only"
         @updateContext=${() => this.updateContext()}
+        @updateBaublePositions=${() => this.updateBaublePositions()}
       ></interactive-video-options>
     `;
   }
@@ -230,57 +227,31 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * @remarks
    * this checks video time to see if an overlay should be displayed and renders those from the videoData map.
    */
-  renderOverlays() {
+  showPopups() {
     if (!this.videoContext.showOverlay && this.isContentEditable) return;
-    return Array.from(this.videoContext.videoInteractionData.entries())
-      .filter(([_, data]) => !data.isReplace)
-      .map(([id, data]) => {
-        if (
-          this.videoElement.currentTime >= data.startTime &&
-          this.videoElement.currentTime <= data.endTime
-        ) {
-          return html`
-            <div
-              class="overlay-interaction"
-              id="overlay-${id}"
-              @mousedown="${this.startDragging}"
-              @click="${this.handleOverlayClicked}"
-              style="position: absolute;
-                        left: ${data.position?.x || 0}px;
-                        top: ${data.position?.y || 0}px;
-                        width: ${data.size?.width || 100}px;
-                        height: ${data.size?.height || 100}px;
-                        z-index: ${this.videoContext.overlayZIndex};
-                        background-color: ${data.color || "#ffffff"};
-                        border-radius: 8px;
-                  
-                        padding: 10px;
-                        overflow: hidden;
-                        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);"
-            >
-              <p
-                style="margin: 0; color: ${this.getContrastColor(
-                  data.color || "#ffffff"
-                )};"
-              >
-                ${data.content || ""}
-              </p>
-              <sl-icon
-                style="position: absolute;
-                              bottom: 5px;
-                              right: 5px;
-                              color: ${this.getContrastColor(
-                  data.color || "#ffffff"
-                )};"
-                @mousedown="${this.startResizing}"
-                src=${radiusBottomRight}
-              >
-              </sl-icon>
-            </div>
-          `;
+
+    Array.from(this.videoInteractions).map((interaction) => {
+      if (
+        this.videoElement.currentTime >=
+          (interaction as WwVideoInteraction).startTime &&
+        this.videoElement.currentTime <=
+          (interaction as WwVideoInteraction).endTime
+      ) {
+        (interaction as HTMLElement).style.display = "block";
+
+        if ((interaction as WwVideoInteraction).initialPause === "false") {
+          this.pauseVideo();
+          (interaction as WwVideoInteraction).initialPause = "true";
+          (interaction as HTMLElement).setAttribute("initialPause", "true");
         }
-        return null;
-      });
+      } else {
+        (interaction as HTMLElement).style.display = "none";
+        if ((interaction as WwVideoInteraction).initialPause) {
+          (interaction as WwVideoInteraction).initialPause = "false";
+          (interaction as HTMLElement).setAttribute("initialPause", "false");
+        }
+      }
+    });
   }
 
   /*
@@ -289,26 +260,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   */
   updateContext() {
     this.setAttribute("videoContext", JSON.stringify(this.videoContext));
-
-    if (this.videoContext.videoInteractionDataString) {
-      console.log("updateContext parse incoming");
-      const config = JSON.parse(this.videoContext.videoInteractionDataString);
-      //turn back into map from object after being JSON.stringified
-      this.videoContext.videoInteractionData = new Map(
-        Object.entries(this.videoContext.videoInteractionData).map(
-          ([key, value]) => [Number(key), value]
-        )
-      );
-      (
-        this.videoContext.videoInteractionData as Map<number, videoData>
-      ).clear();
-      config.forEach((item) => {
-        const { id, ...data } = item;
-        this.videoContext.videoInteractionData.set(id, data);
-      });
-      //console.log("parse result", this.videoContext.videoInteractionData);
-      this.requestUpdate();
-    }
+    this.requestUpdate();
   }
 
   /*
@@ -321,22 +273,45 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   //
   //
   //
-  baubleClicked(id) {
-    this.interactionDrawer.clickEventHelper(id);
+  interactionClicked(id) {
+    this.videoContext.selectedInteractionID = id;
+    this.updateContext();
   }
 
   //
   //
   //
-  changeInteractionTime(newTime, index, isReplace) {
-    console.log(newTime, index, isReplace);
-    this.interactionDrawer.baubleTimeUpdateHelper(
-      newTime,
-      index,
-      isReplace
-        ? this.interactionDrawer.replaceTimestamp
-        : this.interactionDrawer.overlayStartTimeInput
-    );
+  baubleClicked(id) {
+    this.pauseVideo();
+
+    const slottedInteraction = this.videoInteractions.filter(
+      (interaction) => Number(interaction.id) === Number(id)
+    )[0] as WwVideoInteraction;
+
+    this.videoElement.currentTime = slottedInteraction.startTime;
+
+    this.interactionClicked(id);
+
+    slottedInteraction.focus();
+  }
+
+  //
+  //
+  //
+  changeInteractionStartTime(newTime, index) {
+    const slottedInteraction = this.videoInteractions.filter(
+      (interaction) => Number(interaction.id) === Number(index)
+    )[0] as WwVideoInteraction;
+
+    slottedInteraction.startTime = newTime;
+    slottedInteraction.setAttribute("starTime", newTime);
+
+    slottedInteraction.endTime = newTime + 5;
+    slottedInteraction.setAttribute("endTime", String(newTime + 5));
+
+    this.videoElement.currentTime = slottedInteraction.startTime;
+
+    this.updateContext();
   }
 
   /**
@@ -360,13 +335,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     return;
   }
 
-  /*
-TODO: Make this property of parent and access it trough parent
-  */
-  getCurrentTime() {
-    this.interactionDrawer.currentTime = this.videoElement.currentTime;
-  }
-
   /**
    * Calculates the offset based on the given time.
    *
@@ -377,28 +345,6 @@ TODO: Make this property of parent and access it trough parent
     if (!this.videoContext.videoLoaded || !this.videoElement) return;
     const rect = this.videoElement.getBoundingClientRect();
     return (time / this.videoElement.duration) * 0.95 * rect.width;
-  }
-
-  /**
-   * Changes the add button to a trash button.
-   */
-  changeAddToTrash() {
-    // //
-    // // Access the shadow root of the addButton
-    // const slIcon =
-    //   this.interactionsProgressBar.addButton.querySelector("sl-icon");
-    // slIcon.setAttribute("src", `${trash}`);
-    // slIcon.style.color = "hsl(0 72.2% 50.6%)"; // Example of changing the icon color
-    // const p = this.interactionsProgressBar.addButton.querySelector("p");
-    // p.textContent = "Drop to Delete";
-  }
-
-  /**
-   * Changes the trash button to an add button.
-   */
-  changeTrashToAdd() {
-    // this.interactionsProgressBar.addButton.setAttribute("src", `${add}`);
-    // this.interactionsProgressBar.addButton.style.color = "hsl(200.4 98% 39.4%)";
   }
 
   /**
@@ -415,17 +361,49 @@ TODO: Make this property of parent and access it trough parent
   //
   //
   //
-  toggleInteractionsDrawer() {
-    if (!this.interactionDrawer.drawer.open) {
-      this.interactionDrawer.drawer.open = true;
-    }
-    // set z-index of overlay to 0 so they don't cover the drawer.
-    this.videoContext.overlayZIndex = 0;
+  addVideoInteraction(id) {
+    // Case: User selected "Replace Interaction" from the dropdown
+    // create interaction and set videodata
 
-    // clears the drawer from previous settings
-    this.interactionDrawer.replaceInteractionSettings.hidden = true;
-    this.interactionDrawer.overlayInteractionSettings.hidden = true;
+    const interaction = document.createElement(
+      "webwriter-video-interaction"
+    ) as WwVideoInteraction;
+
+    interaction.style.position = "absolute";
+    interaction.style.top = "0";
+    interaction.style.left = "0";
+
+    this.appendChild(interaction);
+    interaction.setAttribute("id", `${id}`);
+    interaction.setAttribute("startTime", `${this.videoElement.currentTime}`);
+    interaction.setAttribute("endTime", `${this.videoElement.currentTime + 5}`);
+    interaction.setAttribute("color", `#ffffff`);
+
+    //to force re-rendering such that bauble is displayed
+    this.updateContext();
   }
+
+  /**
+   * Handles the click event on the video element.
+   *
+   * @param e - The MouseEvent object representing the click event.
+   */
+  handleVideoClick = (e: MouseEvent) => {
+    const clickedElement = e.target as HTMLElement;
+
+    // Check if the clicked element is inside the slot or is an interaction element
+    if (clickedElement.closest("webwriter-video-interaction")) {
+      // Prevent further action if it's a specific interaction element
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      return;
+    }
+
+    if (!this.videoContext.videoLoaded) return;
+    e.stopPropagation();
+    this.videoContext.selectedInteractionID = -1;
+    this.updateContext();
+  };
 
   /**
    * Toggles the chapters drawer open or closed.
@@ -467,61 +445,8 @@ TODO: Make this property of parent and access it trough parent
    * Updates the positions of the baubles in the widget.
    */
   updateBaublePositions() {
-    console.log("update Bauble Position");
-  }
-
-  /* MARK: deletion bug
-   on most deletions, interactions change their id automatically, why is this??
-   on some however, there is a gap. this gap bricks the program since it cannot match up with videodata anymore?
-   planned fix is to recalculate videodata (this function already works), and subsequently recalculate interaction IDs, so they match up again.
-   this should fix it regardless of wrong initial behavior
-  */
-  /**
-   * Recalculates the indexes of the baubles and video interactions.
-   */
-  recalculateIndexes() {
-    // this.recalculateBaubleIndexes();
-    // this.recalculateInteractionIndexes();
-    // this.interactionSlot
-    //   .assignedElements()
-    //   .forEach((element: WwVideoInteraction) => {
-    //     console.log(element.id);
-    //   });
-  }
-
-  /**
-   * helper function for recalculateIndexes, the entire thing is somehow bugged. Read documentation of updateBaublePositions and recalculateIndexes for more information.
-   * The idea was to recalculate the indexes of those video interactions affected by shifting (or rather, not shifting some times (its really weird)).
-   */
-  recalculateInteractionIndexes() {
-    // (this.interactionSlot.assignedElements() as WwVideoInteraction[])
-    //   .sort((a, b) => a.id - b.id)
-    //   .forEach((element, index) => {
-    //     console.log(
-    //       "changing interaction with id",
-    //       element.id,
-    //       "to",
-    //       index + 1
-    //     );
-    //     element.setAttribute("id", `${index + 1}`);
-    //     console.log("new id is", element.id);
-    //   });
-  }
-
-  /** helper function for recalculateIndexes, the entire thing is somehow bugged. This function works in its current state. Use at own risk.
-   *
-   */
-  recalculateBaubleIndexes() {
-    // console.log(this.videoContext.videoInteractionData.keys(), "is current videoData");
-    // const newData = Array.from(this.videoContext.videoInteractionData.entries())
-    //   .sort((a, b) => a[0] - b[0])
-    //   .reduce(
-    //     (map, [_, value], index) => map.set(index + 1, value),
-    //     new Map<number, videoData>()
-    //   );
-    // console.log(newData.keys(), "is new videoData");
-    // this.videoData = newData;
-    // this.saveInteractionConfig();
+    this.interactionsProgressBar.updateBaublePositions();
+    this.updateContext();
   }
 
   /**
@@ -531,8 +456,6 @@ TODO: Make this property of parent and access it trough parent
    * @param e - The custom event object.
    */
   handleTimeUpdate = (e: CustomEvent) => {
-    console.log("timeUpdate");
-
     this.lastTimeupdate = this.videoElement.currentTime;
     this.progressBar.value =
       (this.videoElement.currentTime / this.videoElement.duration) * 100;
@@ -555,6 +478,7 @@ TODO: Make this property of parent and access it trough parent
    * @param e - The custom event object.
    */
   handleProgressChange = (e: CustomEvent) => {
+    this.showPopups();
     const progressBar = e.target as SlRange;
     let currentTime = (progressBar.value / 100) * this.videoElement.duration;
     this.videoElement.currentTime = Math.floor(currentTime);
@@ -589,19 +513,7 @@ TODO: Make this property of parent and access it trough parent
       this.handleCanPlayThrough
     );
     this.videoElement.addEventListener("timeupdate", this.handleTimeUpdate);
-    this.videoElement.addEventListener("click", this.handleVideoClick);
   }
-
-  /**
-   * Handles the click event on the video element.
-   *
-   * @param e - The MouseEvent object representing the click event.
-   */
-  handleVideoClick = (e: MouseEvent) => {
-    if (!this.videoContext.videoLoaded) return;
-    e.stopPropagation();
-    this.startStopVideo();
-  };
 
   /**
    * Toggles the playback of the video. If the video has ended, it resets the current time to 0.
@@ -609,37 +521,49 @@ TODO: Make this property of parent and access it trough parent
    * Also changes the play button icon to 'pause' if the video is playing, and 'play' if the video is paused.
 
    */
-  startStopVideo() {
-    console.log("test");
+  togglePlayVideo() {
     if (!this.videoContext.videoLoaded) return;
 
-    console.log("test");
     if (this.videoElement.ended) {
       this.videoElement.currentTime = 0;
     }
     if (this.videoElement.paused) {
-      this.videoElement.play();
-      this.videoControlsBar.playButton.setAttribute("src", `${playerPause}`);
-
-      // Add the scaling animation class to the button
-      this.videoControlsBar.playButton.classList.add("scale-animation");
-
-      // Remove the animation class after it's done
-      setTimeout(() => {
-        this.videoControlsBar.playButton.classList.remove("scale-animation");
-      }, 300); // Adjust timing to match animation duration
+      this.playVideo();
     } else {
-      this.videoElement.pause();
-      this.videoControlsBar.playButton.setAttribute("src", `${playerPlay}`);
-
-      // Add the scaling animation class to the button
-      this.videoControlsBar.playButton.classList.add("scale-animation");
-
-      // Remove the animation class after it's done
-      setTimeout(() => {
-        this.videoControlsBar.playButton.classList.remove("scale-animation");
-      }, 300); // Adjust timing to match animation duration
+      this.pauseVideo();
     }
+  }
+
+  //
+  //
+  //
+  playVideo() {
+    this.videoElement.play();
+    this.videoControlsBar.playButton.setAttribute("src", `${playerPause}`);
+
+    // Add the scaling animation class to the button
+    this.videoControlsBar.playButton.classList.add("scale-animation");
+
+    // Remove the animation class after it's done
+    setTimeout(() => {
+      this.videoControlsBar.playButton.classList.remove("scale-animation");
+    }, 300); // Adjust timing to match animation duration
+  }
+
+  //
+  //
+  //
+  pauseVideo() {
+    this.videoElement.pause();
+    this.videoControlsBar.playButton.setAttribute("src", `${playerPlay}`);
+
+    // Add the scaling animation class to the button
+    this.videoControlsBar.playButton.classList.add("scale-animation");
+
+    // Remove the animation class after it's done
+    setTimeout(() => {
+      this.videoControlsBar.playButton.classList.remove("scale-animation");
+    }, 300); // Adjust timing to match animation duration
   }
 
   /**
@@ -672,116 +596,6 @@ TODO: Make this property of parent and access it trough parent
     //   parseInt((event.currentTarget as HTMLElement).id.split("-")[1])
     // );
   };
-
-  /**
-   * Starts the dragging operation when the user clicks and drags the overlay element.
-   *
-   * @param e - The MouseEvent object representing the click event.
-   */
-  startDragging(e: MouseEvent) {
-    if (this.interactionDrawer.drawer.open) return;
-    const overlay = e.currentTarget as HTMLElement;
-    const startX = e.clientX - overlay.offsetLeft;
-    const startY = e.clientY - overlay.offsetTop;
-    const onMouseMove = (e: MouseEvent) => {
-      this.isDragging = true;
-      let newX = e.clientX - startX;
-      let newY = e.clientY - startY;
-      // Constrain to video boundaries
-      const videoRect = this.videoElement.getBoundingClientRect();
-      newX = Math.max(0, Math.min(newX, videoRect.width - overlay.offsetWidth));
-      newY = Math.max(
-        0,
-        Math.min(newY, videoRect.height - overlay.offsetHeight)
-      );
-      overlay.style.left = `${newX}px`;
-      overlay.style.top = `${newY}px`;
-      // Update videoData
-      const id = parseInt(overlay.id.split("-")[1]);
-      this.videoContext.videoInteractionData.get(id).position = {
-        x: newX,
-        y: newY,
-      };
-    };
-    const onMouseUp = (e: MouseEvent) => {
-      e.stopPropagation();
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-      const config = Array.from(
-        this.videoContext.videoInteractionData.entries()
-      ).map(([id, data]) => ({
-        id,
-        ...data,
-      }));
-
-      this.videoContext.videoInteractionDataString = JSON.stringify(config);
-
-      this.dispatchEvent(
-        new CustomEvent("updateContext", {
-          bubbles: true,
-          composed: true,
-        })
-      );
-    };
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
-  }
-
-  /**
-   * Handles the start of the resizing process for the interactive video overlay.
-   *
-   * @param e - The MouseEvent object representing the start of the resizing process.
-   */
-  startResizing(e: MouseEvent) {
-    if (this.interactionDrawer.drawer.open) return;
-    if (!(e.target as HTMLElement).matches("sl-icon")) return;
-    e.stopPropagation();
-    const overlay = (e.currentTarget as HTMLElement)
-      .parentElement as HTMLElement;
-    const startX = e.clientX;
-    const startY = e.clientY;
-    const startWidth = overlay.offsetWidth;
-    const startHeight = overlay.offsetHeight;
-    const onMouseMove = (e: MouseEvent) => {
-      this.isDragging = true;
-      let newWidth = startWidth + e.clientX - startX;
-      let newHeight = startHeight + e.clientY - startY;
-      // Constrain to video boundaries
-      const videoRect = this.videoElement.getBoundingClientRect();
-      newWidth = Math.min(newWidth, videoRect.width - overlay.offsetLeft);
-      newHeight = Math.min(newHeight, videoRect.height - overlay.offsetTop);
-      overlay.style.width = `${newWidth}px`;
-      overlay.style.height = `${newHeight}px`;
-      // Update videoData
-      const id = parseInt(overlay.id.split("-")[1]);
-      this.videoContext.videoInteractionData.get(id).size = {
-        width: newWidth,
-        height: newHeight,
-      };
-    };
-    const onMouseUp = (e: MouseEvent) => {
-      e.stopPropagation();
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-      const config = Array.from(
-        this.videoContext.videoInteractionData.entries()
-      ).map(([id, data]) => ({
-        id,
-        ...data,
-      }));
-
-      this.videoContext.videoInteractionDataString = JSON.stringify(config);
-
-      this.dispatchEvent(
-        new CustomEvent("updateContext", {
-          bubbles: true,
-          composed: true,
-        })
-      );
-    };
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
-  }
 
   /**
    * Handles the 'canplaythrough' event of the video element.

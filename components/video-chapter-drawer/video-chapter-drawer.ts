@@ -61,9 +61,7 @@ export class VideoChapterDrawer extends LitElementWw {
   /*
 
   */
-  firstUpdated() {
-    console.log("chapterConfig", this.videoContext.chapterConfig);
-  }
+  firstUpdated() {}
 
   /**
    * Renders the chapters drawer.
@@ -314,10 +312,6 @@ export class VideoChapterDrawer extends LitElementWw {
           startTime: 0,
         },
       ]);
-    }
-    //
-    else if (!this.videoContext.hasChapters) {
-      //this.videoContext.chapterConfig = JSON.stringify([{}]);
     }
 
     this.dispatchEvent(

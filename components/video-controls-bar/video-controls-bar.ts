@@ -30,8 +30,6 @@ import volumeUp from "@tabler/icons/outline/volume.svg";
 import volumeMute from "@tabler/icons/outline/volume-3.svg";
 import volumeOff from "@tabler/icons/outline/volume-off.svg";
 
-import add from "@tabler/icons/outline/timeline-event-plus.svg";
-
 import fullscreenEnter from "@tabler/icons/outline/arrows-maximize.svg";
 import fullscreenExit from "@tabler/icons/outline/arrows-minimize.svg";
 
@@ -101,9 +99,7 @@ export class VideoControlsBar extends LitElementWw {
 
  */
 
-  firstUpdated() {
-    console.log(this.isContentEditable);
-  }
+  firstUpdated() {}
 
   /**
    * Renders the lower controls for the webwriter interactive video widget.
@@ -137,7 +133,7 @@ export class VideoControlsBar extends LitElementWw {
                 ${this.renderCurrentChapter()}
               </sl-button>`
             : this.videoContext.hasChapters
-            ? html` <sl-icon-button
+            ? html` <sl-button
                 id="chapters-button"
                 @click=${this.toggleChaptersDrawer}
               >
@@ -147,7 +143,7 @@ export class VideoControlsBar extends LitElementWw {
                   src=${list}
                 ></sl-icon>
                 ${this.renderCurrentChapter()}
-              </sl-icon-button>`
+              </sl-button>`
             : null}
         </div>
         <!-- contains the volume slider and other controls -->
@@ -348,7 +344,6 @@ export class VideoControlsBar extends LitElementWw {
   //TODO: implement
   makeControlsSticky() {
     const e = new Error("Not implemented");
-    console.log("i was called from", e.stack);
   }
 
   /**
@@ -357,7 +352,6 @@ export class VideoControlsBar extends LitElementWw {
    */
   checkControlsVisible(): Boolean {
     if (window.innerHeight < this.offsetHeight) {
-      console.log("controls not visible");
       return false;
     }
     return true;

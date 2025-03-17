@@ -1,17 +1,24 @@
 import { css } from "lit";
 
 export default css`
-  slot {
-    display: block;
-    height: 2em;
-    background-color: red;
-    margin-bottom: 10px;
-    width: 100%;
+  :host {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
   }
 
-  slot::slotted(p) {
-    width: 360px;
-    height: 100%;
-    display: block;
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Adjust the value to your desired spacing */
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    max-height: 100%;
+    height: 100px;
+  }
+
+  :host(:not([contenteditable="true"]):not([contenteditable=""])) .author-only {
+    display: none;
   }
 `;

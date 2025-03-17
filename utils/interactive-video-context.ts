@@ -44,16 +44,6 @@ export class InteractiveVideoContext {
   // ******* INTERACTION PROPERTIES *******
 
   /**
-   * Map containing the video data for each interactive element.
-   */
-  videoInteractionData: Map<number, videoData> = new Map();
-
-  /**
-   * Contains the current videoData as a JSON string.
-   */
-  videoInteractionDataString: string = "[]";
-
-  /**
    * sets the z-index of the overlay
    */
   overlayZIndex: Number = 50;
@@ -61,10 +51,5 @@ export class InteractiveVideoContext {
   /**
    * Indicates whether the interaction view is active.
    */
-  interactionActive: boolean = false;
-
-  /**
-   * Indicates which element is currently active, by saving the id of the element.
-   */
-  activeElement: number = -1;
+  selectedInteractionID: Number = -1;
 }

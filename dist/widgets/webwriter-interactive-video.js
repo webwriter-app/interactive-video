@@ -58,8 +58,8 @@ var e = t.ShadowRoot && (void 0 === t.ShadyCSS || t.ShadyCSS.nativeShadow) && "a
 var s = Symbol();
 var o = /* @__PURE__ */ new WeakMap();
 var n = class {
-  constructor(t8, e15, o14) {
-    if (this._$cssResult$ = true, o14 !== s) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
+  constructor(t8, e15, o15) {
+    if (this._$cssResult$ = true, o15 !== s) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
     this.cssText = t8, this.t = e15;
   }
   get styleSheet() {
@@ -77,18 +77,18 @@ var n = class {
 };
 var r = (t8) => new n("string" == typeof t8 ? t8 : t8 + "", void 0, s);
 var i = (t8, ...e15) => {
-  const o14 = 1 === t8.length ? t8[0] : e15.reduce((e16, s8, o15) => e16 + ((t9) => {
+  const o15 = 1 === t8.length ? t8[0] : e15.reduce((e16, s8, o16) => e16 + ((t9) => {
     if (true === t9._$cssResult$) return t9.cssText;
     if ("number" == typeof t9) return t9;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + t9 + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
-  })(s8) + t8[o15 + 1], t8[0]);
-  return new n(o14, t8, s);
+  })(s8) + t8[o16 + 1], t8[0]);
+  return new n(o15, t8, s);
 };
-var S = (s8, o14) => {
-  if (e) s8.adoptedStyleSheets = o14.map((t8) => t8 instanceof CSSStyleSheet ? t8 : t8.styleSheet);
-  else for (const e15 of o14) {
-    const o15 = document.createElement("style"), n12 = t.litNonce;
-    void 0 !== n12 && o15.setAttribute("nonce", n12), o15.textContent = e15.cssText, s8.appendChild(o15);
+var S = (s8, o15) => {
+  if (e) s8.adoptedStyleSheets = o15.map((t8) => t8 instanceof CSSStyleSheet ? t8 : t8.styleSheet);
+  else for (const e15 of o15) {
+    const o16 = document.createElement("style"), n12 = t.litNonce;
+    void 0 !== n12 && o16.setAttribute("nonce", n12), o16.textContent = e15.cssText, s8.appendChild(o16);
   }
 };
 var c = e ? (t8) => t8 : (t8) => t8 instanceof CSSStyleSheet ? ((t9) => {
@@ -350,16 +350,16 @@ function P(t8, i10) {
   return void 0 !== s2 ? s2.createHTML(i10) : i10;
 }
 var V = (t8, i10) => {
-  const s8 = t8.length - 1, o14 = [];
+  const s8 = t8.length - 1, o15 = [];
   let r11, l6 = 2 === i10 ? "<svg>" : 3 === i10 ? "<math>" : "", c8 = f2;
   for (let i11 = 0; i11 < s8; i11++) {
     const s9 = t8[i11];
     let a5, u6, d4 = -1, y4 = 0;
     for (; y4 < s9.length && (c8.lastIndex = y4, u6 = c8.exec(s9), null !== u6); ) y4 = c8.lastIndex, c8 === f2 ? "!--" === u6[1] ? c8 = v : void 0 !== u6[1] ? c8 = _ : void 0 !== u6[2] ? ($.test(u6[2]) && (r11 = RegExp("</" + u6[2], "g")), c8 = m) : void 0 !== u6[3] && (c8 = m) : c8 === m ? ">" === u6[0] ? (c8 = r11 ?? f2, d4 = -1) : void 0 === u6[1] ? d4 = -2 : (d4 = c8.lastIndex - u6[2].length, a5 = u6[1], c8 = void 0 === u6[3] ? m : '"' === u6[3] ? g : p2) : c8 === g || c8 === p2 ? c8 = m : c8 === v || c8 === _ ? c8 = f2 : (c8 = m, r11 = void 0);
     const x3 = c8 === m && t8[i11 + 1].startsWith("/>") ? " " : "";
-    l6 += c8 === f2 ? s9 + n3 : d4 >= 0 ? (o14.push(a5), s9.slice(0, d4) + e3 + s9.slice(d4) + h2 + x3) : s9 + h2 + (-2 === d4 ? i11 : x3);
+    l6 += c8 === f2 ? s9 + n3 : d4 >= 0 ? (o15.push(a5), s9.slice(0, d4) + e3 + s9.slice(d4) + h2 + x3) : s9 + h2 + (-2 === d4 ? i11 : x3);
   }
-  return [P(t8, l6 + (t8[s8] || "<?>") + (2 === i10 ? "</svg>" : 3 === i10 ? "</math>" : "")), o14];
+  return [P(t8, l6 + (t8[s8] || "<?>") + (2 === i10 ? "</svg>" : 3 === i10 ? "</math>" : "")), o15];
 };
 var N = class _N {
   constructor({ strings: t8, _$litType$: s8 }, n12) {
@@ -401,8 +401,8 @@ var N = class _N {
 function S2(t8, i10, s8 = t8, e15) {
   if (i10 === T) return i10;
   let h6 = void 0 !== e15 ? s8._$Co?.[e15] : s8._$Cl;
-  const o14 = c3(i10) ? void 0 : i10._$litDirective$;
-  return h6?.constructor !== o14 && (h6?._$AO?.(false), void 0 === o14 ? h6 = void 0 : (h6 = new o14(t8), h6._$AT(t8, s8, e15)), void 0 !== e15 ? (s8._$Co ??= [])[e15] = h6 : s8._$Cl = h6), void 0 !== h6 && (i10 = S2(t8, h6._$AS(t8, i10.values), h6, e15)), i10;
+  const o15 = c3(i10) ? void 0 : i10._$litDirective$;
+  return h6?.constructor !== o15 && (h6?._$AO?.(false), void 0 === o15 ? h6 = void 0 : (h6 = new o15(t8), h6._$AT(t8, s8, e15)), void 0 !== e15 ? (s8._$Co ??= [])[e15] = h6 : s8._$Cl = h6), void 0 !== h6 && (i10 = S2(t8, h6._$AS(t8, i10.values), h6, e15)), i10;
 }
 var M = class {
   constructor(t8, i10) {
@@ -417,13 +417,13 @@ var M = class {
   u(t8) {
     const { el: { content: i10 }, parts: s8 } = this._$AD, e15 = (t8?.creationScope ?? r3).importNode(i10, true);
     C.currentNode = e15;
-    let h6 = C.nextNode(), o14 = 0, n12 = 0, l6 = s8[0];
+    let h6 = C.nextNode(), o15 = 0, n12 = 0, l6 = s8[0];
     for (; void 0 !== l6; ) {
-      if (o14 === l6.index) {
+      if (o15 === l6.index) {
         let i11;
         2 === l6.type ? i11 = new R(h6, h6.nextSibling, this, t8) : 1 === l6.type ? i11 = new l6.ctor(h6, l6.name, l6.strings, this, t8) : 6 === l6.type && (i11 = new z(h6, this, t8)), this._$AV.push(i11), l6 = s8[++n12];
       }
-      o14 !== l6?.index && (h6 = C.nextNode(), o14++);
+      o15 !== l6?.index && (h6 = C.nextNode(), o15++);
     }
     return C.currentNode = r3, e15;
   }
@@ -503,14 +503,14 @@ var k = class {
   }
   _$AI(t8, i10 = this, s8, e15) {
     const h6 = this.strings;
-    let o14 = false;
-    if (void 0 === h6) t8 = S2(this, t8, i10, 0), o14 = !c3(t8) || t8 !== this._$AH && t8 !== T, o14 && (this._$AH = t8);
+    let o15 = false;
+    if (void 0 === h6) t8 = S2(this, t8, i10, 0), o15 = !c3(t8) || t8 !== this._$AH && t8 !== T, o15 && (this._$AH = t8);
     else {
       const e16 = t8;
       let n12, r11;
-      for (t8 = h6[0], n12 = 0; n12 < h6.length - 1; n12++) r11 = S2(this, e16[s8 + n12], i10, n12), r11 === T && (r11 = this._$AH[n12]), o14 ||= !c3(r11) || r11 !== this._$AH[n12], r11 === E ? t8 = E : t8 !== E && (t8 += (r11 ?? "") + h6[n12 + 1]), this._$AH[n12] = r11;
+      for (t8 = h6[0], n12 = 0; n12 < h6.length - 1; n12++) r11 = S2(this, e16[s8 + n12], i10, n12), r11 === T && (r11 = this._$AH[n12]), o15 ||= !c3(r11) || r11 !== this._$AH[n12], r11 === E ? t8 = E : t8 !== E && (t8 += (r11 ?? "") + h6[n12 + 1]), this._$AH[n12] = r11;
     }
-    o14 && !e15 && this.j(t8);
+    o15 && !e15 && this.j(t8);
   }
   j(t8) {
     t8 === E ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t8 ?? "");
@@ -1355,28 +1355,28 @@ var r6 = (t8 = o5, e15, r11) => {
   const { kind: n12, metadata: i10 } = r11;
   let s8 = globalThis.litPropertyMetadata.get(i10);
   if (void 0 === s8 && globalThis.litPropertyMetadata.set(i10, s8 = /* @__PURE__ */ new Map()), s8.set(r11.name, t8), "accessor" === n12) {
-    const { name: o14 } = r11;
+    const { name: o15 } = r11;
     return { set(r12) {
       const n13 = e15.get.call(this);
-      e15.set.call(this, r12), this.requestUpdate(o14, n13, t8);
+      e15.set.call(this, r12), this.requestUpdate(o15, n13, t8);
     }, init(e16) {
-      return void 0 !== e16 && this.P(o14, void 0, t8), e16;
+      return void 0 !== e16 && this.P(o15, void 0, t8), e16;
     } };
   }
   if ("setter" === n12) {
-    const { name: o14 } = r11;
+    const { name: o15 } = r11;
     return function(r12) {
-      const n13 = this[o14];
-      e15.call(this, r12), this.requestUpdate(o14, n13, t8);
+      const n13 = this[o15];
+      e15.call(this, r12), this.requestUpdate(o15, n13, t8);
     };
   }
   throw Error("Unsupported decorator location: " + n12);
 };
 function n5(t8) {
-  return (e15, o14) => "object" == typeof o14 ? r6(t8, e15, o14) : ((t9, e16, o15) => {
-    const r11 = e16.hasOwnProperty(o15);
-    return e16.constructor.createProperty(o15, r11 ? { ...t9, wrapped: true } : t9), r11 ? Object.getOwnPropertyDescriptor(e16, o15) : void 0;
-  })(t8, e15, o14);
+  return (e15, o15) => "object" == typeof o15 ? r6(t8, e15, o15) : ((t9, e16, o16) => {
+    const r11 = e16.hasOwnProperty(o16);
+    return e16.constructor.createProperty(o16, r11 ? { ...t9, wrapped: true } : t9), r11 ? Object.getOwnPropertyDescriptor(e16, o16) : void 0;
+  })(t8, e15, o15);
 }
 
 // node_modules/@lit/reactive-element/decorators/state.js
@@ -1386,8 +1386,8 @@ function r7(r11) {
 
 // node_modules/@lit/reactive-element/decorators/event-options.js
 function t4(t8) {
-  return (n12, o14) => {
-    const c8 = "function" == typeof n12 ? n12 : n12[o14];
+  return (n12, o15) => {
+    const c8 = "function" == typeof n12 ? n12 : n12[o15];
     Object.assign(c8, t8);
   };
 }
@@ -1398,7 +1398,7 @@ var e5 = (e15, t8, c8) => (c8.configurable = true, c8.enumerable = true, Reflect
 // node_modules/@lit/reactive-element/decorators/query.js
 function e6(e15, r11) {
   return (n12, s8, i10) => {
-    const o14 = (t8) => t8.renderRoot?.querySelector(e15) ?? null;
+    const o15 = (t8) => t8.renderRoot?.querySelector(e15) ?? null;
     if (r11) {
       const { get: e16, set: r12 } = "object" == typeof s8 ? n12 : i10 ?? (() => {
         const t8 = Symbol();
@@ -1410,11 +1410,11 @@ function e6(e15, r11) {
       })();
       return e5(n12, s8, { get() {
         let t8 = e16.call(this);
-        return void 0 === t8 && (t8 = o14(this), (null !== t8 || this.hasUpdated) && r12.call(this, t8)), t8;
+        return void 0 === t8 && (t8 = o15(this), (null !== t8 || this.hasUpdated) && r12.call(this, t8)), t8;
       } });
     }
     return e5(n12, s8, { get() {
-      return o14(this);
+      return o15(this);
     } });
   };
 }
@@ -1424,6 +1424,17 @@ function r8(r11) {
   return (n12, e15) => e5(n12, e15, { async get() {
     return await this.updateComplete, this.renderRoot?.querySelector(r11) ?? null;
   } });
+}
+
+// node_modules/@lit/reactive-element/decorators/query-assigned-elements.js
+function o6(o15) {
+  return (e15, n12) => {
+    const { slot: r11, selector: s8 } = o15 ?? {}, c8 = "slot" + (r11 ? `[name=${r11}]` : ":not([name])");
+    return e5(e15, n12, { get() {
+      const t8 = this.renderRoot?.querySelector(c8), e16 = t8?.assignedElements(o15) ?? [];
+      return void 0 === s8 ? e16 : e16.filter((t9) => t9.matches(s8));
+    } });
+  };
 }
 
 // node_modules/@shoelace-style/shoelace/dist/chunks/chunk.KAW7D32O.js
@@ -1520,11 +1531,11 @@ var FormControlController = class {
       }
     };
     this.handleFormSubmit = (event) => {
-      var _a11;
+      var _a10;
       const disabled = this.options.disabled(this.host);
       const reportValidity = this.options.reportValidity;
       if (this.form && !this.form.noValidate) {
-        (_a11 = formCollections.get(this.form)) == null ? void 0 : _a11.forEach((control) => {
+        (_a10 = formCollections.get(this.form)) == null ? void 0 : _a10.forEach((control) => {
           this.setUserInteracted(control, true);
         });
       }
@@ -1590,8 +1601,8 @@ var FormControlController = class {
       value: (input) => input.value,
       defaultValue: (input) => input.defaultValue,
       disabled: (input) => {
-        var _a11;
-        return (_a11 = input.disabled) != null ? _a11 : false;
+        var _a10;
+        return (_a10 = input.disabled) != null ? _a10 : false;
       },
       reportValidity: (input) => typeof input.reportValidity === "function" ? input.reportValidity() : true,
       checkValidity: (input) => typeof input.checkValidity === "function" ? input.checkValidity() : true,
@@ -1708,8 +1719,8 @@ var FormControlController = class {
   }
   /** Returns the associated `<form>` element, if one exists. */
   getForm() {
-    var _a11;
-    return (_a11 = this.form) != null ? _a11 : null;
+    var _a10;
+    return (_a10 = this.form) != null ? _a10 : null;
   }
   /** Resets the form, restoring all the control to their default value */
   reset(submitter) {
@@ -2067,12 +2078,12 @@ var defaultValue = (propertyName = "value") => (proto, key) => {
   const ctor = proto.constructor;
   const attributeChangedCallback = ctor.prototype.attributeChangedCallback;
   ctor.prototype.attributeChangedCallback = function(name, old, value) {
-    var _a11;
+    var _a10;
     const options = ctor.getPropertyOptions(propertyName);
     const attributeName = typeof options.attribute === "string" ? options.attribute : propertyName;
     if (name === attributeName) {
       const converter = options.converter || u;
-      const fromAttribute = typeof converter === "function" ? converter : (_a11 = converter == null ? void 0 : converter.fromAttribute) != null ? _a11 : u.fromAttribute;
+      const fromAttribute = typeof converter === "function" ? converter : (_a10 = converter == null ? void 0 : converter.fromAttribute) != null ? _a10 : u.fromAttribute;
       const newValue = fromAttribute(value, options.type);
       if (this[propertyName] !== newValue) {
         this[key] = newValue;
@@ -2509,10 +2520,10 @@ __decorateClass([
 
 // node_modules/lit-html/directive-helpers.js
 var { I: t5 } = Z;
-var e7 = (o14, t8) => void 0 === t8 ? void 0 !== o14?._$litType$ : o14?._$litType$ === t8;
-var f4 = (o14) => void 0 === o14.strings;
+var e7 = (o15, t8) => void 0 === t8 ? void 0 !== o15?._$litType$ : o15?._$litType$ === t8;
+var f4 = (o15) => void 0 === o15.strings;
 var u4 = {};
-var m3 = (o14, t8 = u4) => o14._$AH = t8;
+var m3 = (o15, t8 = u4) => o15._$AH = t8;
 
 // node_modules/@shoelace-style/shoelace/dist/chunks/chunk.YHLNUJ7P.js
 var CACHEABLE_ERROR = Symbol();
@@ -2529,7 +2540,7 @@ var SlIcon = class extends ShoelaceElement {
   }
   /** Given a URL, this function returns the resulting SVG element or an appropriate error symbol. */
   async resolveIcon(url, library2) {
-    var _a11;
+    var _a10;
     let fileData;
     if (library2 == null ? void 0 : library2.spriteSheet) {
       this.svg = x`<svg part="svg">
@@ -2547,7 +2558,7 @@ var SlIcon = class extends ShoelaceElement {
       const div = document.createElement("div");
       div.innerHTML = await fileData.text();
       const svg = div.firstElementChild;
-      if (((_a11 = svg == null ? void 0 : svg.tagName) == null ? void 0 : _a11.toLowerCase()) !== "svg") return CACHEABLE_ERROR;
+      if (((_a10 = svg == null ? void 0 : svg.tagName) == null ? void 0 : _a10.toLowerCase()) !== "svg") return CACHEABLE_ERROR;
       if (!parser) parser = new DOMParser();
       const doc = parser.parseFromString(svg.outerHTML, "text/html");
       const svgEl = doc.body.querySelector("svg");
@@ -2596,7 +2607,7 @@ var SlIcon = class extends ShoelaceElement {
     }
   }
   async setIcon() {
-    var _a11;
+    var _a10;
     const { url, fromLibrary } = this.getIconSource();
     const library2 = fromLibrary ? getIconLibrary(this.library) : void 0;
     if (!url) {
@@ -2637,7 +2648,7 @@ var SlIcon = class extends ShoelaceElement {
         break;
       default:
         this.svg = svg.cloneNode(true);
-        (_a11 = library2 == null ? void 0 : library2.mutator) == null ? void 0 : _a11.call(library2, this.svg);
+        (_a10 = library2 == null ? void 0 : library2.mutator) == null ? void 0 : _a10.call(library2, this.svg);
         this.emit("sl-load");
     }
   }
@@ -2713,7 +2724,7 @@ var e9 = e8(class extends i5 {
 });
 
 // node_modules/lit-html/directives/if-defined.js
-var o6 = (o14) => o14 ?? E;
+var o7 = (o15) => o15 ?? E;
 
 // node_modules/lit-html/directives/live.js
 var l4 = e8(class extends i5 {
@@ -2726,12 +2737,12 @@ var l4 = e8(class extends i5 {
   }
   update(i10, [t8]) {
     if (t8 === T || t8 === E) return t8;
-    const o14 = i10.element, l6 = i10.name;
+    const o15 = i10.element, l6 = i10.name;
     if (i10.type === t6.PROPERTY) {
-      if (t8 === o14[l6]) return T;
+      if (t8 === o15[l6]) return T;
     } else if (i10.type === t6.BOOLEAN_ATTRIBUTE) {
-      if (!!t8 === o14.hasAttribute(l6)) return T;
-    } else if (i10.type === t6.ATTRIBUTE && o14.getAttribute(l6) === t8 + "") return T;
+      if (!!t8 === o15.hasAttribute(l6)) return T;
+    } else if (i10.type === t6.ATTRIBUTE && o15.getAttribute(l6) === t8 + "") return T;
     return m3(i10), t8;
   }
 });
@@ -2860,7 +2871,7 @@ var SlCheckbox = class extends ShoelaceElement {
             type="checkbox"
             title=${this.title}
             name=${this.name}
-            value=${o6(this.value)}
+            value=${o7(this.value)}
             .indeterminate=${l4(this.indeterminate)}
             .checked=${l4(this.checked)}
             .disabled=${this.disabled}
@@ -3075,17 +3086,17 @@ var LocalizeController = class {
     return `${this.host.lang || documentLanguage}`.toLowerCase();
   }
   getTranslationData(lang) {
-    var _a11, _b;
+    var _a10, _b;
     const locale = new Intl.Locale(lang.replace(/_/g, "-"));
     const language = locale === null || locale === void 0 ? void 0 : locale.language.toLowerCase();
-    const region = (_b = (_a11 = locale === null || locale === void 0 ? void 0 : locale.region) === null || _a11 === void 0 ? void 0 : _a11.toLowerCase()) !== null && _b !== void 0 ? _b : "";
+    const region = (_b = (_a10 = locale === null || locale === void 0 ? void 0 : locale.region) === null || _a10 === void 0 ? void 0 : _a10.toLowerCase()) !== null && _b !== void 0 ? _b : "";
     const primary = translations.get(`${language}-${region}`);
     const secondary = translations.get(language);
     return { locale, language, region, primary, secondary };
   }
   exists(key, options) {
-    var _a11;
-    const { primary, secondary } = this.getTranslationData((_a11 = options.lang) !== null && _a11 !== void 0 ? _a11 : this.lang());
+    var _a10;
+    const { primary, secondary } = this.getTranslationData((_a10 = options.lang) !== null && _a10 !== void 0 ? _a10 : this.lang());
     options = Object.assign({ includeFallback: false }, options);
     if (primary && primary[key] || secondary && secondary[key] || options.includeFallback && fallback && fallback[key]) {
       return true;
@@ -3237,8 +3248,8 @@ function parseDuration(delay) {
   return parseFloat(delay);
 }
 function prefersReducedMotion() {
-  const query4 = window.matchMedia("(prefers-reduced-motion: reduce)");
-  return query4.matches;
+  const query3 = window.matchMedia("(prefers-reduced-motion: reduce)");
+  return query3.matches;
 }
 function stopAnimations(el) {
   return Promise.all(
@@ -4424,8 +4435,8 @@ function isTopLayer(element) {
 }
 function isContainingBlock(elementOrCss) {
   const webkit = isWebKit();
-  const css9 = isElement(elementOrCss) ? getComputedStyle2(elementOrCss) : elementOrCss;
-  return ["transform", "translate", "scale", "rotate", "perspective"].some((value) => css9[value] ? css9[value] !== "none" : false) || (css9.containerType ? css9.containerType !== "normal" : false) || !webkit && (css9.backdropFilter ? css9.backdropFilter !== "none" : false) || !webkit && (css9.filter ? css9.filter !== "none" : false) || ["transform", "translate", "scale", "rotate", "perspective", "filter"].some((value) => (css9.willChange || "").includes(value)) || ["paint", "layout", "strict", "content"].some((value) => (css9.contain || "").includes(value));
+  const css8 = isElement(elementOrCss) ? getComputedStyle2(elementOrCss) : elementOrCss;
+  return ["transform", "translate", "scale", "rotate", "perspective"].some((value) => css8[value] ? css8[value] !== "none" : false) || (css8.containerType ? css8.containerType !== "normal" : false) || !webkit && (css8.backdropFilter ? css8.backdropFilter !== "none" : false) || !webkit && (css8.filter ? css8.filter !== "none" : false) || ["transform", "translate", "scale", "rotate", "perspective", "filter"].some((value) => (css8.willChange || "").includes(value)) || ["paint", "layout", "strict", "content"].some((value) => (css8.contain || "").includes(value));
 }
 function getContainingBlock(element) {
   let currentNode = getParentNode(element);
@@ -4507,9 +4518,9 @@ function getFrameElement(win) {
 
 // node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs
 function getCssDimensions(element) {
-  const css9 = getComputedStyle2(element);
-  let width = parseFloat(css9.width) || 0;
-  let height = parseFloat(css9.height) || 0;
+  const css8 = getComputedStyle2(element);
+  let width = parseFloat(css8.width) || 0;
+  let height = parseFloat(css8.height) || 0;
   const hasOffset = isHTMLElement(element);
   const offsetWidth = hasOffset ? element.offsetWidth : width;
   const offsetHeight = hasOffset ? element.offsetHeight : height;
@@ -4603,9 +4614,9 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
     while (currentIFrame && offsetParent && offsetWin !== currentWin) {
       const iframeScale = getScale(currentIFrame);
       const iframeRect = currentIFrame.getBoundingClientRect();
-      const css9 = getComputedStyle2(currentIFrame);
-      const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css9.paddingLeft)) * iframeScale.x;
-      const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css9.paddingTop)) * iframeScale.y;
+      const css8 = getComputedStyle2(currentIFrame);
+      const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css8.paddingLeft)) * iframeScale.x;
+      const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css8.paddingTop)) * iframeScale.y;
       x3 *= iframeScale.x;
       y4 *= iframeScale.y;
       width *= iframeScale.x;
@@ -5582,9 +5593,9 @@ var SlTooltip = class extends ShoelaceElement {
     this.addEventListener("mouseout", this.handleMouseOut);
   }
   disconnectedCallback() {
-    var _a11;
+    var _a10;
     super.disconnectedCallback();
-    (_a11 = this.closeWatcher) == null ? void 0 : _a11.destroy();
+    (_a10 = this.closeWatcher) == null ? void 0 : _a10.destroy();
     document.removeEventListener("keydown", this.handleDocumentKeyDown);
   }
   firstUpdated() {
@@ -5599,14 +5610,14 @@ var SlTooltip = class extends ShoelaceElement {
     return triggers.includes(triggerType);
   }
   async handleOpenChange() {
-    var _a11, _b;
+    var _a10, _b;
     if (this.open) {
       if (this.disabled) {
         return;
       }
       this.emit("sl-show");
       if ("CloseWatcher" in window) {
-        (_a11 = this.closeWatcher) == null ? void 0 : _a11.destroy();
+        (_a10 = this.closeWatcher) == null ? void 0 : _a10.destroy();
         this.closeWatcher = new CloseWatcher();
         this.closeWatcher.onclose = () => {
           this.hide();
@@ -5888,9 +5899,9 @@ var SlTree = class extends ShoelaceElement {
     this.mutationObserver.observe(this, { childList: true, subtree: true });
   }
   disconnectedCallback() {
-    var _a11;
+    var _a10;
     super.disconnectedCallback();
-    (_a11 = this.mutationObserver) == null ? void 0 : _a11.disconnect();
+    (_a10 = this.mutationObserver) == null ? void 0 : _a10.disconnect();
   }
   // Generates a clone of the expand icon element to use for each tree item
   getExpandButtonIcon(status) {
@@ -5939,8 +5950,8 @@ var SlTree = class extends ShoelaceElement {
       return;
     }
     if (event.composedPath().some((el) => {
-      var _a11;
-      return ["input", "textarea"].includes((_a11 = el == null ? void 0 : el.tagName) == null ? void 0 : _a11.toLowerCase());
+      var _a10;
+      return ["input", "textarea"].includes((_a10 = el == null ? void 0 : el.tagName) == null ? void 0 : _a10.toLowerCase());
     })) {
       return;
     }
@@ -5989,8 +6000,8 @@ var SlTree = class extends ShoelaceElement {
     const target = event.target;
     const treeItem = target.closest("sl-tree-item");
     const isExpandButton = event.composedPath().some((el) => {
-      var _a11;
-      return (_a11 = el == null ? void 0 : el.classList) == null ? void 0 : _a11.contains("tree-item__expand-button");
+      var _a10;
+      return (_a10 = el == null ? void 0 : el.classList) == null ? void 0 : _a10.contains("tree-item__expand-button");
     });
     if (!treeItem || treeItem.disabled || target !== this.clickTarget) {
       return;
@@ -6033,9 +6044,9 @@ var SlTree = class extends ShoelaceElement {
     const items = this.getAllTreeItems();
     const collapsedItems = /* @__PURE__ */ new Set();
     return items.filter((item) => {
-      var _a11;
+      var _a10;
       if (item.disabled) return false;
-      const parent = (_a11 = item.parentElement) == null ? void 0 : _a11.closest("[role=treeitem]");
+      const parent = (_a10 = item.parentElement) == null ? void 0 : _a10.closest("[role=treeitem]");
       if (parent && (!parent.expanded || parent.loading || collapsedItems.has(parent))) {
         collapsedItems.add(item);
       }
@@ -6334,7 +6345,7 @@ var icon_button_styles_default = i`
 
 // node_modules/lit-html/static.js
 var a4 = Symbol.for("");
-var o7 = (t8) => {
+var o8 = (t8) => {
   if (t8?.r === a4) return t8?._$litStatic$;
 };
 var i7 = (t8, ...r11) => ({ _$litStatic$: r11.reduce((r12, e15, a5) => r12 + ((t9) => {
@@ -6349,7 +6360,7 @@ var n7 = (t8) => (r11, ...e15) => {
   const n12 = [], u6 = [];
   let c8, $4 = 0, f6 = false;
   for (; $4 < a5; ) {
-    for (c8 = r11[$4]; $4 < a5 && void 0 !== (i10 = e15[$4], s8 = o7(i10)); ) c8 += s8 + r11[++$4], f6 = true;
+    for (c8 = r11[$4]; $4 < a5 && void 0 !== (i10 = e15[$4], s8 = o8(i10)); ) c8 += s8 + r11[++$4], f6 = true;
     $4 !== a5 && u6.push(i10), n12.push(c8), $4++;
   }
   if ($4 === a5 && n12.push(r11[a5]), f6) {
@@ -6407,13 +6418,13 @@ var SlIconButton = class extends ShoelaceElement {
       "icon-button--disabled": !isLink && this.disabled,
       "icon-button--focused": this.hasFocus
     })}
-        ?disabled=${o6(isLink ? void 0 : this.disabled)}
-        type=${o6(isLink ? void 0 : "button")}
-        href=${o6(isLink ? this.href : void 0)}
-        target=${o6(isLink ? this.target : void 0)}
-        download=${o6(isLink ? this.download : void 0)}
-        rel=${o6(isLink && this.target ? "noreferrer noopener" : void 0)}
-        role=${o6(isLink ? void 0 : "button")}
+        ?disabled=${o7(isLink ? void 0 : this.disabled)}
+        type=${o7(isLink ? void 0 : "button")}
+        href=${o7(isLink ? this.href : void 0)}
+        target=${o7(isLink ? this.target : void 0)}
+        download=${o7(isLink ? this.download : void 0)}
+        rel=${o7(isLink && this.target ? "noreferrer noopener" : void 0)}
+        role=${o7(isLink ? void 0 : "button")}
         aria-disabled=${this.disabled ? "true" : "false"}
         aria-label="${this.label}"
         tabindex=${this.disabled ? "-1" : "0"}
@@ -6423,9 +6434,9 @@ var SlIconButton = class extends ShoelaceElement {
       >
         <sl-icon
           class="icon-button__icon"
-          name=${o6(this.name)}
-          library=${o6(this.library)}
-          src=${o6(this.src)}
+          name=${o7(this.name)}
+          library=${o7(this.library)}
+          src=${o7(this.src)}
           aria-hidden="true"
         ></sl-icon>
       </${tag}>
@@ -6760,10 +6771,10 @@ var SlTextarea = class extends ShoelaceElement {
     this.formControlController.updateValidity();
   }
   disconnectedCallback() {
-    var _a11;
+    var _a10;
     super.disconnectedCallback();
     if (this.input) {
-      (_a11 = this.resizeObserver) == null ? void 0 : _a11.unobserve(this.input);
+      (_a10 = this.resizeObserver) == null ? void 0 : _a10.unobserve(this.input);
     }
   }
   handleBlur() {
@@ -6911,21 +6922,21 @@ var SlTextarea = class extends ShoelaceElement {
               id="input"
               class="textarea__control"
               title=${this.title}
-              name=${o6(this.name)}
+              name=${o7(this.name)}
               .value=${l4(this.value)}
               ?disabled=${this.disabled}
               ?readonly=${this.readonly}
               ?required=${this.required}
-              placeholder=${o6(this.placeholder)}
-              rows=${o6(this.rows)}
-              minlength=${o6(this.minlength)}
-              maxlength=${o6(this.maxlength)}
-              autocapitalize=${o6(this.autocapitalize)}
-              autocorrect=${o6(this.autocorrect)}
+              placeholder=${o7(this.placeholder)}
+              rows=${o7(this.rows)}
+              minlength=${o7(this.minlength)}
+              maxlength=${o7(this.maxlength)}
+              autocapitalize=${o7(this.autocapitalize)}
+              autocorrect=${o7(this.autocorrect)}
               ?autofocus=${this.autofocus}
-              spellcheck=${o6(this.spellcheck)}
-              enterkeyhint=${o6(this.enterkeyhint)}
-              inputmode=${o6(this.inputmode)}
+              spellcheck=${o7(this.spellcheck)}
+              enterkeyhint=${o7(this.enterkeyhint)}
+              inputmode=${o7(this.inputmode)}
               aria-describedby="help-text"
               @change=${this.handleChange}
               @input=${this.handleInput}
@@ -7050,7 +7061,6 @@ __decorateClass([
 ], SlTextarea.prototype, "handleValueChange", 1);
 
 // node_modules/@shoelace-style/shoelace/dist/chunks/chunk.WMS2VUJ6.js
-var textarea_default = SlTextarea;
 SlTextarea.define("sl-textarea");
 
 // node_modules/@shoelace-style/shoelace/dist/chunks/chunk.CNMNUZLG.js
@@ -7643,10 +7653,10 @@ var SlTabGroup = class extends ShoelaceElement {
       this.resizeObserver.observe(this.nav);
       whenAllDefined.then(() => {
         const intersectionObserver = new IntersectionObserver((entries, observer) => {
-          var _a11;
+          var _a10;
           if (entries[0].intersectionRatio > 0) {
             this.setAriaLabels();
-            this.setActiveTab((_a11 = this.getActiveTab()) != null ? _a11 : this.tabs[0], { emitEvents: false });
+            this.setActiveTab((_a10 = this.getActiveTab()) != null ? _a10 : this.tabs[0], { emitEvents: false });
             observer.unobserve(entries[0].target);
           }
         });
@@ -7655,9 +7665,9 @@ var SlTabGroup = class extends ShoelaceElement {
     });
   }
   disconnectedCallback() {
-    var _a11, _b;
+    var _a10, _b;
     super.disconnectedCallback();
-    (_a11 = this.mutationObserver) == null ? void 0 : _a11.disconnect();
+    (_a10 = this.mutationObserver) == null ? void 0 : _a10.disconnect();
     if (this.nav) {
       (_b = this.resizeObserver) == null ? void 0 : _b.unobserve(this.nav);
     }
@@ -7756,8 +7766,8 @@ var SlTabGroup = class extends ShoelaceElement {
         el.tabIndex = el === this.activeTab ? 0 : -1;
       });
       this.panels.forEach((el) => {
-        var _a11;
-        return el.active = el.name === ((_a11 = this.activeTab) == null ? void 0 : _a11.panel);
+        var _a10;
+        return el.active = el.name === ((_a10 = this.activeTab) == null ? void 0 : _a10.panel);
       });
       this.syncIndicator();
       if (["top", "bottom"].includes(this.placement)) {
@@ -8261,9 +8271,9 @@ var SlSplitPanel = class extends ShoelaceElement {
     this.cachedPositionInPixels = this.percentageToPixels(this.position);
   }
   disconnectedCallback() {
-    var _a11;
+    var _a10;
     super.disconnectedCallback();
-    (_a11 = this.resizeObserver) == null ? void 0 : _a11.unobserve(this);
+    (_a10 = this.resizeObserver) == null ? void 0 : _a10.unobserve(this);
   }
   detectSize() {
     const { width, height } = this.getBoundingClientRect();
@@ -8285,18 +8295,18 @@ var SlSplitPanel = class extends ShoelaceElement {
     }
     drag(this, {
       onMove: (x3, y4) => {
-        var _a11;
+        var _a10;
         let newPositionInPixels = this.vertical ? y4 : x3;
         if (this.primary === "end") {
           newPositionInPixels = this.size - newPositionInPixels;
         }
-        newPositionInPixels = (_a11 = this.snapFunction({
+        newPositionInPixels = (_a10 = this.snapFunction({
           pos: newPositionInPixels,
           size: this.size,
           snapThreshold: this.snapThreshold,
           isRtl,
           vertical: this.vertical
-        })) != null ? _a11 : newPositionInPixels;
+        })) != null ? _a10 : newPositionInPixels;
         this.position = clamp2(this.pixelsToPercentage(newPositionInPixels), 0, 100);
       },
       initialEvent: event
@@ -8399,7 +8409,7 @@ var SlSplitPanel = class extends ShoelaceElement {
       <div
         part="divider"
         class="divider"
-        tabindex=${o6(this.disabled ? void 0 : "0")}
+        tabindex=${o7(this.disabled ? void 0 : "0")}
         role="separator"
         aria-valuenow=${this.position}
         aria-valuemin="0"
@@ -8753,7 +8763,7 @@ var SlSwitch = class extends ShoelaceElement {
             type="checkbox"
             title=${this.title}
             name=${this.name}
-            value=${o6(this.value)}
+            value=${o7(this.value)}
             .checked=${l4(this.checked)}
             .disabled=${this.disabled}
             .required=${this.required}
@@ -9201,7 +9211,7 @@ var e11 = class extends i5 {
   }
 };
 e11.directiveName = "unsafeHTML", e11.resultType = 1;
-var o8 = e8(e11);
+var o9 = e8(e11);
 
 // node_modules/@shoelace-style/shoelace/dist/chunks/chunk.AILU2HNL.js
 var SlSelect = class extends ShoelaceElement {
@@ -9389,7 +9399,7 @@ var SlSelect = class extends ShoelaceElement {
     this.open = false;
   }
   addOpenListeners() {
-    var _a11;
+    var _a10;
     document.addEventListener("focusin", this.handleDocumentFocusIn);
     document.addEventListener("keydown", this.handleDocumentKeyDown);
     document.addEventListener("mousedown", this.handleDocumentMouseDown);
@@ -9397,7 +9407,7 @@ var SlSelect = class extends ShoelaceElement {
       this.getRootNode().addEventListener("focusin", this.handleDocumentFocusIn);
     }
     if ("CloseWatcher" in window) {
-      (_a11 = this.closeWatcher) == null ? void 0 : _a11.destroy();
+      (_a10 = this.closeWatcher) == null ? void 0 : _a10.destroy();
       this.closeWatcher = new CloseWatcher();
       this.closeWatcher.onclose = () => {
         if (this.open) {
@@ -9408,14 +9418,14 @@ var SlSelect = class extends ShoelaceElement {
     }
   }
   removeOpenListeners() {
-    var _a11;
+    var _a10;
     document.removeEventListener("focusin", this.handleDocumentFocusIn);
     document.removeEventListener("keydown", this.handleDocumentKeyDown);
     document.removeEventListener("mousedown", this.handleDocumentMouseDown);
     if (this.getRootNode() !== document) {
       this.getRootNode().removeEventListener("focusin", this.handleDocumentFocusIn);
     }
-    (_a11 = this.closeWatcher) == null ? void 0 : _a11.destroy();
+    (_a10 = this.closeWatcher) == null ? void 0 : _a10.destroy();
   }
   handleFocus() {
     this.hasFocus = true;
@@ -9555,7 +9565,7 @@ var SlSelect = class extends ShoelaceElement {
   // This method must be called whenever the selection changes. It will update the selected options cache, the current
   // value, and the display value
   selectionChanged() {
-    var _a11, _b, _c;
+    var _a10, _b, _c;
     const options = this.getAllOptions();
     this.selectedOptions = options.filter((el) => el.selected);
     const cachedValueHasChanged = this.valueHasChanged;
@@ -9568,7 +9578,7 @@ var SlSelect = class extends ShoelaceElement {
       }
     } else {
       const selectedOption = this.selectedOptions[0];
-      this.value = (_a11 = selectedOption == null ? void 0 : selectedOption.value) != null ? _a11 : "";
+      this.value = (_a10 = selectedOption == null ? void 0 : selectedOption.value) != null ? _a10 : "";
       this.displayLabel = (_c = (_b = selectedOption == null ? void 0 : selectedOption.getTextLabel) == null ? void 0 : _b.call(selectedOption)) != null ? _c : "";
     }
     this.valueHasChanged = cachedValueHasChanged;
@@ -9581,7 +9591,7 @@ var SlSelect = class extends ShoelaceElement {
       if (index < this.maxOptionsVisible || this.maxOptionsVisible <= 0) {
         const tag = this.getTag(option, index);
         return x`<div @sl-remove=${(e15) => this.handleTagRemove(e15, option)}>
-          ${typeof tag === "string" ? o8(tag) : tag}
+          ${typeof tag === "string" ? o9(tag) : tag}
         </div>`;
       } else if (index === this.maxOptionsVisible) {
         return x`<sl-tag size=${this.size}>+${this.selectedOptions.length - index}</sl-tag>`;
@@ -10239,9 +10249,9 @@ var SlRange = class extends ShoelaceElement {
     });
   }
   disconnectedCallback() {
-    var _a11;
+    var _a10;
     super.disconnectedCallback();
-    (_a11 = this.resizeObserver) == null ? void 0 : _a11.unobserve(this.input);
+    (_a10 = this.resizeObserver) == null ? void 0 : _a10.unobserve(this.input);
   }
   handleChange() {
     this.emit("sl-change");
@@ -10393,11 +10403,11 @@ var SlRange = class extends ShoelaceElement {
               class="range__control"
               title=${this.title}
               type="range"
-              name=${o6(this.name)}
+              name=${o7(this.name)}
               ?disabled=${this.disabled}
-              min=${o6(this.min)}
-              max=${o6(this.max)}
-              step=${o6(this.step)}
+              min=${o7(this.min)}
+              max=${o7(this.max)}
+              step=${o7(this.step)}
               .value=${l4(this.value.toString())}
               aria-describedby="help-text"
               @change=${this.handleChange}
@@ -10589,7 +10599,7 @@ var rating_styles_default = i`
 // node_modules/lit-html/directives/style-map.js
 var n8 = "important";
 var i8 = " !" + n8;
-var o9 = e8(class extends i5 {
+var o10 = e8(class extends i5 {
   constructor(t8) {
     if (super(t8), t8.type !== t6.ATTRIBUTE || "style" !== t8.name || t8.strings?.length > 2) throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.");
   }
@@ -10785,19 +10795,19 @@ var SlRating = class extends ShoelaceElement {
                   role="presentation"
                 >
                   <div
-                    style=${o9({
+                    style=${o10({
           clipPath: isRtl ? `inset(0 ${(displayValue - index) * 100}% 0 0)` : `inset(0 0 0 ${(displayValue - index) * 100}%)`
         })}
                   >
-                    ${o8(this.getSymbol(index + 1))}
+                    ${o9(this.getSymbol(index + 1))}
                   </div>
                   <div
                     class="rating__partial--filled"
-                    style=${o9({
+                    style=${o10({
           clipPath: isRtl ? `inset(0 0 0 ${100 - (displayValue - index) * 100}%)` : `inset(0 ${100 - (displayValue - index) * 100}% 0 0)`
         })}
                   >
-                    ${o8(this.getSymbol(index + 1))}
+                    ${o9(this.getSymbol(index + 1))}
                   </div>
                 </span>
               `;
@@ -10811,7 +10821,7 @@ var SlRating = class extends ShoelaceElement {
       })}
                 role="presentation"
               >
-                ${o8(this.getSymbol(index + 1))}
+                ${o9(this.getSymbol(index + 1))}
               </span>
             `;
     })}
@@ -11642,7 +11652,7 @@ var SlRadioButton = class extends ShoelaceElement {
     })}
           aria-disabled=${this.disabled}
           type="button"
-          value=${o6(this.value)}
+          value=${o7(this.value)}
           @blur=${this.handleBlur}
           @focus=${this.handleFocus}
           @click=${this.handleClick}
@@ -11802,9 +11812,9 @@ __decorateClass([
   n5()
 ], SlButtonGroup.prototype, "label", 2);
 function findButton(el) {
-  var _a11;
+  var _a10;
   const selector = "sl-button, sl-radio-button";
-  return (_a11 = el.closest(selector)) != null ? _a11 : el.querySelector(selector);
+  return (_a10 = el.closest(selector)) != null ? _a10 : el.querySelector(selector);
 }
 
 // node_modules/@shoelace-style/shoelace/dist/chunks/chunk.ZJNIZFRS.js
@@ -11872,12 +11882,12 @@ var SlRadioGroup = class extends ShoelaceElement {
     }
   }
   handleKeyDown(event) {
-    var _a11;
+    var _a10;
     if (!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(event.key)) {
       return;
     }
     const radios = this.getAllRadios().filter((radio) => !radio.disabled);
-    const checkedRadio = (_a11 = radios.find((radio) => radio.checked)) != null ? _a11 : radios[0];
+    const checkedRadio = (_a10 = radios.find((radio) => radio.checked)) != null ? _a10 : radios[0];
     const incr = event.key === " " ? 0 : ["ArrowUp", "ArrowLeft"].includes(event.key) ? -1 : 1;
     const oldValue = this.value;
     let index = radios.indexOf(checkedRadio) + incr;
@@ -11915,7 +11925,7 @@ var SlRadioGroup = class extends ShoelaceElement {
     this.formControlController.emitInvalidEvent(event);
   }
   async syncRadioElements() {
-    var _a11, _b;
+    var _a10, _b;
     const radios = this.getAllRadios();
     await Promise.all(
       // Sync the checked state and size
@@ -11928,7 +11938,7 @@ var SlRadioGroup = class extends ShoelaceElement {
     this.hasButtonGroup = radios.some((radio) => radio.tagName.toLowerCase() === "sl-radio-button");
     if (radios.length > 0 && !radios.some((radio) => radio.checked)) {
       if (this.hasButtonGroup) {
-        const buttonRadio = (_a11 = radios[0].shadowRoot) == null ? void 0 : _a11.querySelector("button");
+        const buttonRadio = (_a10 = radios[0].shadowRoot) == null ? void 0 : _a10.querySelector("button");
         if (buttonRadio) {
           buttonRadio.setAttribute("tabindex", "0");
         }
@@ -12919,14 +12929,14 @@ var SlQrCode = class extends ShoelaceElement {
     );
   }
   render() {
-    var _a11;
+    var _a10;
     return x`
       <canvas
         part="base"
         class="qr-code"
         role="img"
-        aria-label=${((_a11 = this.label) == null ? void 0 : _a11.length) > 0 ? this.label : this.value}
-        style=${o9({
+        aria-label=${((_a10 = this.label) == null ? void 0 : _a10.length) > 0 ? this.label : this.value}
+        style=${o10({
       width: `${this.size}px`,
       height: `${this.size}px`
     })}
@@ -13487,13 +13497,13 @@ var SlProgressBar = class extends ShoelaceElement {
       "progress-bar--rtl": this.localize.dir() === "rtl"
     })}
         role="progressbar"
-        title=${o6(this.title)}
+        title=${o7(this.title)}
         aria-label=${this.label.length > 0 ? this.label : this.localize.term("progress")}
         aria-valuemin="0"
         aria-valuemax="100"
         aria-valuenow=${this.indeterminate ? 0 : this.value}
       >
-        <div part="indicator" class="progress-bar__indicator" style=${o9({ width: `${this.value}%` })}>
+        <div part="indicator" class="progress-bar__indicator" style=${o10({ width: `${this.value}%` })}>
           ${!this.indeterminate ? x` <slot part="label" class="progress-bar__label"></slot> ` : ""}
         </div>
       </div>
@@ -13975,10 +13985,10 @@ var SlInput = class extends ShoelaceElement {
    * Gets or sets the current value as a `Date` object. Returns `null` if the value can't be converted. This will use the native `<input type="{{type}}">` implementation and may result in an error.
    */
   get valueAsDate() {
-    var _a11;
+    var _a10;
     this.__dateInput.type = this.type;
     this.__dateInput.value = this.value;
-    return ((_a11 = this.input) == null ? void 0 : _a11.valueAsDate) || this.__dateInput.valueAsDate;
+    return ((_a10 = this.input) == null ? void 0 : _a10.valueAsDate) || this.__dateInput.valueAsDate;
   }
   set valueAsDate(newValue) {
     this.__dateInput.type = this.type;
@@ -13987,9 +13997,9 @@ var SlInput = class extends ShoelaceElement {
   }
   /** Gets or sets the current value as a number. Returns `NaN` if the value can't be converted. */
   get valueAsNumber() {
-    var _a11;
+    var _a10;
     this.__numberInput.value = this.value;
-    return ((_a11 = this.input) == null ? void 0 : _a11.valueAsNumber) || this.__numberInput.valueAsNumber;
+    return ((_a10 = this.input) == null ? void 0 : _a10.valueAsNumber) || this.__numberInput.valueAsNumber;
   }
   set valueAsNumber(newValue) {
     this.__numberInput.valueAsNumber = newValue;
@@ -14180,25 +14190,25 @@ var SlInput = class extends ShoelaceElement {
               class="input__control"
               type=${this.type === "password" && this.passwordVisible ? "text" : this.type}
               title=${this.title}
-              name=${o6(this.name)}
+              name=${o7(this.name)}
               ?disabled=${this.disabled}
               ?readonly=${this.readonly}
               ?required=${this.required}
-              placeholder=${o6(this.placeholder)}
-              minlength=${o6(this.minlength)}
-              maxlength=${o6(this.maxlength)}
-              min=${o6(this.min)}
-              max=${o6(this.max)}
-              step=${o6(this.step)}
+              placeholder=${o7(this.placeholder)}
+              minlength=${o7(this.minlength)}
+              maxlength=${o7(this.maxlength)}
+              min=${o7(this.min)}
+              max=${o7(this.max)}
+              step=${o7(this.step)}
               .value=${l4(this.value)}
-              autocapitalize=${o6(this.autocapitalize)}
-              autocomplete=${o6(this.autocomplete)}
-              autocorrect=${o6(this.autocorrect)}
+              autocapitalize=${o7(this.autocapitalize)}
+              autocomplete=${o7(this.autocomplete)}
+              autocorrect=${o7(this.autocorrect)}
               ?autofocus=${this.autofocus}
               spellcheck=${this.spellcheck}
-              pattern=${o6(this.pattern)}
-              enterkeyhint=${o6(this.enterkeyhint)}
-              inputmode=${o6(this.inputmode)}
+              pattern=${o7(this.pattern)}
+              enterkeyhint=${o7(this.enterkeyhint)}
+              inputmode=${o7(this.inputmode)}
               aria-describedby="help-text"
               @change=${this.handleChange}
               @input=${this.handleInput}
@@ -14414,13 +14424,13 @@ var SlMenu = class extends ShoelaceElement {
     const menuItemTypes = ["menuitem", "menuitemcheckbox"];
     const composedPath = event.composedPath();
     const target = composedPath.find((el) => {
-      var _a11;
-      return menuItemTypes.includes(((_a11 = el == null ? void 0 : el.getAttribute) == null ? void 0 : _a11.call(el, "role")) || "");
+      var _a10;
+      return menuItemTypes.includes(((_a10 = el == null ? void 0 : el.getAttribute) == null ? void 0 : _a10.call(el, "role")) || "");
     });
     if (!target) return;
     const closestMenu = composedPath.find((el) => {
-      var _a11;
-      return ((_a11 = el == null ? void 0 : el.getAttribute) == null ? void 0 : _a11.call(el, "role")) === "menu";
+      var _a10;
+      return ((_a10 = el == null ? void 0 : el.getAttribute) == null ? void 0 : _a10.call(el, "role")) === "menu";
     });
     const clickHasSubmenu = closestMenu !== this;
     if (clickHasSubmenu) return;
@@ -14476,8 +14486,8 @@ var SlMenu = class extends ShoelaceElement {
     }
   }
   isMenuItem(item) {
-    var _a11;
-    return item.tagName.toLowerCase() === "sl-menu-item" || ["menuitem", "menuitemcheckbox", "menuitemradio"].includes((_a11 = item.getAttribute("role")) != null ? _a11 : "");
+    var _a10;
+    return item.tagName.toLowerCase() === "sl-menu-item" || ["menuitem", "menuitemcheckbox", "menuitemradio"].includes((_a10 = item.getAttribute("role")) != null ? _a10 : "");
   }
   /** @internal Gets all slotted menu items, ignoring dividers, headers, and other elements. */
   getAllItems() {
@@ -14687,7 +14697,7 @@ var s4 = (i10, t8) => {
   for (const i11 of e15) i11._$AO?.(t8, false), s4(i11, t8);
   return true;
 };
-var o10 = (i10) => {
+var o11 = (i10) => {
   let t8, e15;
   do {
     if (void 0 === (t8 = i10._$AM)) break;
@@ -14703,12 +14713,12 @@ var r10 = (i10) => {
   }
 };
 function h4(i10) {
-  void 0 !== this._$AN ? (o10(this), this._$AM = i10, r10(this)) : this._$AM = i10;
+  void 0 !== this._$AN ? (o11(this), this._$AM = i10, r10(this)) : this._$AM = i10;
 }
 function n9(i10, t8 = false, e15 = 0) {
   const r11 = this._$AH, h6 = this._$AN;
-  if (void 0 !== h6 && 0 !== h6.size) if (t8) if (Array.isArray(r11)) for (let i11 = e15; i11 < r11.length; i11++) s4(r11[i11], false), o10(r11[i11]);
-  else null != r11 && (s4(r11, false), o10(r11));
+  if (void 0 !== h6 && 0 !== h6.size) if (t8) if (Array.isArray(r11)) for (let i11 = e15; i11 < r11.length; i11++) s4(r11[i11], false), o11(r11[i11]);
+  else null != r11 && (s4(r11, false), o11(r11));
   else s4(this, i10);
 }
 var c6 = (i10) => {
@@ -14722,7 +14732,7 @@ var f5 = class extends i5 {
     super._$AT(i10, t8, e15), r10(this), this.isConnected = i10._$AU;
   }
   _$AO(i10, t8 = true) {
-    i10 !== this.isConnected && (this.isConnected = i10, i10 ? this.reconnected?.() : this.disconnected?.()), t8 && (s4(this, i10), o10(this));
+    i10 !== this.isConnected && (this.isConnected = i10, i10 ? this.reconnected?.() : this.disconnected?.()), t8 && (s4(this, i10), o11(this));
   }
   setValue(t8) {
     if (f4(this._$Ct)) this._$Ct._$AI(t8, this);
@@ -14741,7 +14751,7 @@ var f5 = class extends i5 {
 var e12 = () => new h5();
 var h5 = class {
 };
-var o11 = /* @__PURE__ */ new WeakMap();
+var o12 = /* @__PURE__ */ new WeakMap();
 var n10 = e8(class extends f5 {
   render(i10) {
     return E;
@@ -14753,12 +14763,12 @@ var n10 = e8(class extends f5 {
   rt(t8) {
     if (this.isConnected || (t8 = void 0), "function" == typeof this.Y) {
       const i10 = this.ht ?? globalThis;
-      let s8 = o11.get(i10);
-      void 0 === s8 && (s8 = /* @__PURE__ */ new WeakMap(), o11.set(i10, s8)), void 0 !== s8.get(this.Y) && this.Y.call(this.ht, void 0), s8.set(this.Y, t8), void 0 !== t8 && this.Y.call(this.ht, t8);
+      let s8 = o12.get(i10);
+      void 0 === s8 && (s8 = /* @__PURE__ */ new WeakMap(), o12.set(i10, s8)), void 0 !== s8.get(this.Y) && this.Y.call(this.ht, void 0), s8.set(this.Y, t8), void 0 !== t8 && this.Y.call(this.ht, t8);
     } else this.Y.value = t8;
   }
   get lt() {
-    return "function" == typeof this.Y ? o11.get(this.ht ?? globalThis)?.get(this.Y) : this.Y?.value;
+    return "function" == typeof this.Y ? o12.get(this.ht ?? globalThis)?.get(this.Y) : this.Y?.value;
   }
   disconnected() {
     this.lt === this.ct && this.rt(void 0);
@@ -14810,11 +14820,11 @@ var SubmenuController = class {
       }
     };
     this.handleClick = (event) => {
-      var _a11;
+      var _a10;
       if (event.target === this.host) {
         event.preventDefault();
         event.stopPropagation();
-      } else if (event.target instanceof Element && (event.target.tagName === "sl-menu-item" || ((_a11 = event.target.role) == null ? void 0 : _a11.startsWith("menuitem")))) {
+      } else if (event.target instanceof Element && (event.target.tagName === "sl-menu-item" || ((_a10 = event.target.role) == null ? void 0 : _a10.startsWith("menuitem")))) {
         this.disableSubmenu();
       }
     };
@@ -14957,8 +14967,8 @@ var SubmenuController = class {
   }
   // Calculate the space the top of a menu takes-up, for aligning the popup menu-item with the activating element.
   updateSkidding() {
-    var _a11;
-    if (!((_a11 = this.host.parentElement) == null ? void 0 : _a11.computedStyleMap)) {
+    var _a10;
+    if (!((_a10 = this.host.parentElement) == null ? void 0 : _a10.computedStyleMap)) {
       return;
     }
     const styleMap = this.host.parentElement.computedStyleMap();
@@ -15292,7 +15302,7 @@ var SlImageComparer = class extends ShoelaceElement {
           <div
             part="after"
             class="image-comparer__after"
-            style=${o9({
+            style=${o10({
       clipPath: isRtl ? `inset(0 0 0 ${100 - this.position}%)` : `inset(0 ${100 - this.position}% 0 0)`
     })}
           >
@@ -15303,7 +15313,7 @@ var SlImageComparer = class extends ShoelaceElement {
         <div
           part="divider"
           class="image-comparer__divider"
-          style=${o9({
+          style=${o10({
       left: isRtl ? `${100 - this.position}%` : `${this.position}%`
     })}
           @mousedown=${this.handleDrag}
@@ -15910,15 +15920,15 @@ function isTabbable(el) {
   return isOverflowingAndTabbable(el);
 }
 function getTabbableBoundary(root) {
-  var _a11, _b;
+  var _a10, _b;
   const tabbableElements = getTabbableElements(root);
-  const start = (_a11 = tabbableElements[0]) != null ? _a11 : null;
+  const start = (_a10 = tabbableElements[0]) != null ? _a10 : null;
   const end = (_b = tabbableElements[tabbableElements.length - 1]) != null ? _b : null;
   return { start, end };
 }
 function getSlottedChildrenOutsideRootElement(slotElement, root) {
-  var _a11;
-  return ((_a11 = slotElement.getRootNode({ composed: true })) == null ? void 0 : _a11.host) !== root;
+  var _a10;
+  return ((_a10 = slotElement.getRootNode({ composed: true })) == null ? void 0 : _a10.host) !== root;
 }
 function getTabbableElements(root) {
   const walkedEls = /* @__PURE__ */ new WeakMap();
@@ -15966,7 +15976,7 @@ var Modal = class {
       this.checkFocus();
     };
     this.handleKeyDown = (event) => {
-      var _a11;
+      var _a10;
       if (event.key !== "Tab" || this.isExternalActivated) return;
       if (!this.isActive()) return;
       const currentActiveElement = getDeepestActiveElement();
@@ -16006,7 +16016,7 @@ var Modal = class {
         }
         event.preventDefault();
         this.currentFocus = nextFocus;
-        (_a11 = this.currentFocus) == null ? void 0 : _a11.focus({ preventScroll: false });
+        (_a10 = this.currentFocus) == null ? void 0 : _a10.focus({ preventScroll: false });
         const allActiveElements = [...activeElements()];
         if (allActiveElements.includes(this.currentFocus) || !allActiveElements.includes(this.previousFocus)) {
           break;
@@ -16068,10 +16078,10 @@ var Modal = class {
 
 // node_modules/@shoelace-style/shoelace/dist/chunks/chunk.LD4M4QGE.js
 var blurActiveElement = (elm) => {
-  var _a11;
+  var _a10;
   const { activeElement } = document;
   if (activeElement && elm.contains(activeElement)) {
-    (_a11 = document.activeElement) == null ? void 0 : _a11.blur();
+    (_a10 = document.activeElement) == null ? void 0 : _a10.blur();
   }
 };
 
@@ -16128,9 +16138,9 @@ var SlDrawer = class extends ShoelaceElement {
     this.hide();
   }
   addOpenListeners() {
-    var _a11;
+    var _a10;
     if ("CloseWatcher" in window) {
-      (_a11 = this.closeWatcher) == null ? void 0 : _a11.destroy();
+      (_a10 = this.closeWatcher) == null ? void 0 : _a10.destroy();
       if (!this.contained) {
         this.closeWatcher = new CloseWatcher();
         this.closeWatcher.onclose = () => this.requestClose("keyboard");
@@ -16140,9 +16150,9 @@ var SlDrawer = class extends ShoelaceElement {
     }
   }
   removeOpenListeners() {
-    var _a11;
+    var _a10;
     document.removeEventListener("keydown", this.handleDocumentKeyDown);
-    (_a11 = this.closeWatcher) == null ? void 0 : _a11.destroy();
+    (_a10 = this.closeWatcher) == null ? void 0 : _a10.destroy();
   }
   async handleOpenChange() {
     if (this.open) {
@@ -16263,8 +16273,8 @@ var SlDrawer = class extends ShoelaceElement {
           role="dialog"
           aria-modal="true"
           aria-hidden=${this.open ? "false" : "true"}
-          aria-label=${o6(this.noHeader ? this.label : void 0)}
-          aria-labelledby=${o6(!this.noHeader ? "title" : void 0)}
+          aria-label=${o7(this.noHeader ? this.label : void 0)}
+          aria-labelledby=${o7(!this.noHeader ? "title" : void 0)}
           tabindex="0"
         >
           ${!this.noHeader ? x`
@@ -16491,7 +16501,7 @@ var SlDropdown = class extends ShoelaceElement {
       }
     };
     this.handleDocumentKeyDown = (event) => {
-      var _a11;
+      var _a10;
       if (event.key === "Escape" && this.open && !this.closeWatcher) {
         event.stopPropagation();
         this.focusOnTrigger();
@@ -16499,7 +16509,7 @@ var SlDropdown = class extends ShoelaceElement {
         return;
       }
       if (event.key === "Tab") {
-        if (this.open && ((_a11 = document.activeElement) == null ? void 0 : _a11.tagName.toLowerCase()) === "sl-menu-item") {
+        if (this.open && ((_a10 = document.activeElement) == null ? void 0 : _a10.tagName.toLowerCase()) === "sl-menu-item") {
           event.preventDefault();
           this.hide();
           this.focusOnTrigger();
@@ -16665,10 +16675,10 @@ var SlDropdown = class extends ShoelaceElement {
     this.popup.reposition();
   }
   addOpenListeners() {
-    var _a11;
+    var _a10;
     this.panel.addEventListener("sl-select", this.handlePanelSelect);
     if ("CloseWatcher" in window) {
-      (_a11 = this.closeWatcher) == null ? void 0 : _a11.destroy();
+      (_a10 = this.closeWatcher) == null ? void 0 : _a10.destroy();
       this.closeWatcher = new CloseWatcher();
       this.closeWatcher.onclose = () => {
         this.hide();
@@ -16681,14 +16691,14 @@ var SlDropdown = class extends ShoelaceElement {
     document.addEventListener("mousedown", this.handleDocumentMouseDown);
   }
   removeOpenListeners() {
-    var _a11;
+    var _a10;
     if (this.panel) {
       this.panel.removeEventListener("sl-select", this.handlePanelSelect);
       this.panel.removeEventListener("keydown", this.handleKeyDown);
     }
     document.removeEventListener("keydown", this.handleDocumentKeyDown);
     document.removeEventListener("mousedown", this.handleDocumentMouseDown);
-    (_a11 = this.closeWatcher) == null ? void 0 : _a11.destroy();
+    (_a10 = this.closeWatcher) == null ? void 0 : _a10.destroy();
   }
   async handleOpenChange() {
     if (this.disabled) {
@@ -16730,7 +16740,7 @@ var SlDropdown = class extends ShoelaceElement {
         shift
         auto-size="vertical"
         auto-size-padding="10"
-        sync=${o6(this.sync ? this.sync : void 0)}
+        sync=${o7(this.sync ? this.sync : void 0)}
         class=${e9({
       dropdown: true,
       "dropdown--open": this.open
@@ -17170,9 +17180,9 @@ var SlDetails = class extends ShoelaceElement {
     this.detailsObserver.observe(this.details, { attributes: true });
   }
   disconnectedCallback() {
-    var _a11;
+    var _a10;
     super.disconnectedCallback();
-    (_a11 = this.detailsObserver) == null ? void 0 : _a11.disconnect();
+    (_a10 = this.detailsObserver) == null ? void 0 : _a10.disconnect();
   }
   handleSummaryClick(event) {
     event.preventDefault();
@@ -17502,9 +17512,9 @@ var SlDialog = class extends ShoelaceElement {
     this.hide();
   }
   addOpenListeners() {
-    var _a11;
+    var _a10;
     if ("CloseWatcher" in window) {
-      (_a11 = this.closeWatcher) == null ? void 0 : _a11.destroy();
+      (_a10 = this.closeWatcher) == null ? void 0 : _a10.destroy();
       this.closeWatcher = new CloseWatcher();
       this.closeWatcher.onclose = () => this.requestClose("keyboard");
     } else {
@@ -17512,8 +17522,8 @@ var SlDialog = class extends ShoelaceElement {
     }
   }
   removeOpenListeners() {
-    var _a11;
-    (_a11 = this.closeWatcher) == null ? void 0 : _a11.destroy();
+    var _a10;
+    (_a10 = this.closeWatcher) == null ? void 0 : _a10.destroy();
     document.removeEventListener("keydown", this.handleDocumentKeyDown);
   }
   async handleOpenChange() {
@@ -17610,8 +17620,8 @@ var SlDialog = class extends ShoelaceElement {
           role="dialog"
           aria-modal="true"
           aria-hidden=${this.open ? "false" : "true"}
-          aria-label=${o6(this.noHeader ? this.label : void 0)}
-          aria-labelledby=${o6(!this.noHeader ? "title" : void 0)}
+          aria-label=${o7(this.noHeader ? this.label : void 0)}
+          aria-labelledby=${o7(!this.noHeader ? "title" : void 0)}
           tabindex="-1"
         >
           ${!this.noHeader ? x`
@@ -18185,16 +18195,16 @@ var SlButton = class extends ShoelaceElement {
       "button--has-prefix": this.hasSlotController.test("prefix"),
       "button--has-suffix": this.hasSlotController.test("suffix")
     })}
-        ?disabled=${o6(isLink ? void 0 : this.disabled)}
-        type=${o6(isLink ? void 0 : this.type)}
+        ?disabled=${o7(isLink ? void 0 : this.disabled)}
+        type=${o7(isLink ? void 0 : this.type)}
         title=${this.title}
-        name=${o6(isLink ? void 0 : this.name)}
-        value=${o6(isLink ? void 0 : this.value)}
-        href=${o6(isLink && !this.disabled ? this.href : void 0)}
-        target=${o6(isLink ? this.target : void 0)}
-        download=${o6(isLink ? this.download : void 0)}
-        rel=${o6(isLink ? this.rel : void 0)}
-        role=${o6(isLink ? void 0 : "button")}
+        name=${o7(isLink ? void 0 : this.name)}
+        value=${o7(isLink ? void 0 : this.value)}
+        href=${o7(isLink && !this.disabled ? this.href : void 0)}
+        target=${o7(isLink ? this.target : void 0)}
+        download=${o7(isLink ? this.download : void 0)}
+        rel=${o7(isLink ? this.rel : void 0)}
+        role=${o7(isLink ? void 0 : "button")}
         aria-disabled=${this.disabled ? "true" : "false"}
         tabindex=${this.disabled ? "-1" : "0"}
         @blur=${this.handleBlur}
@@ -19794,13 +19804,13 @@ var SlColorPicker = class extends ShoelaceElement {
   }
   /** Removes focus from the color picker. */
   blur() {
-    var _a11;
+    var _a10;
     const elementToBlur = this.inline ? this.base : this.trigger;
     if (this.hasFocus) {
       elementToBlur.focus({ preventScroll: true });
       elementToBlur.blur();
     }
-    if ((_a11 = this.dropdown) == null ? void 0 : _a11.open) {
+    if ((_a10 = this.dropdown) == null ? void 0 : _a10.open) {
       this.dropdown.hide();
     }
   }
@@ -19884,7 +19894,7 @@ var SlColorPicker = class extends ShoelaceElement {
         <div
           part="grid"
           class="color-picker__grid"
-          style=${o9({ backgroundColor: this.getHexString(this.hue, 100, 100) })}
+          style=${o10({ backgroundColor: this.getHexString(this.hue, 100, 100) })}
           @pointerdown=${this.handleGridDrag}
           @touchmove=${this.handleTouchMove}
         >
@@ -19894,14 +19904,14 @@ var SlColorPicker = class extends ShoelaceElement {
       "color-picker__grid-handle": true,
       "color-picker__grid-handle--dragging": this.isDraggingGridHandle
     })}
-            style=${o9({
+            style=${o10({
       top: `${gridHandleY}%`,
       left: `${gridHandleX}%`,
       backgroundColor: this.getHexString(this.hue, this.saturation, this.brightness, this.alpha)
     })}
             role="application"
             aria-label="HSV"
-            tabindex=${o6(this.disabled ? void 0 : "0")}
+            tabindex=${o7(this.disabled ? void 0 : "0")}
             @keydown=${this.handleGridKeyDown}
           ></span>
         </div>
@@ -19917,7 +19927,7 @@ var SlColorPicker = class extends ShoelaceElement {
               <span
                 part="slider-handle hue-slider-handle"
                 class="color-picker__slider-handle"
-                style=${o9({
+                style=${o10({
       left: `${this.hue === 0 ? 0 : 100 / (360 / this.hue)}%`
     })}
                 role="slider"
@@ -19926,7 +19936,7 @@ var SlColorPicker = class extends ShoelaceElement {
                 aria-valuemin="0"
                 aria-valuemax="360"
                 aria-valuenow=${`${Math.round(this.hue)}`}
-                tabindex=${o6(this.disabled ? void 0 : "0")}
+                tabindex=${o7(this.disabled ? void 0 : "0")}
                 @keydown=${this.handleHueKeyDown}
               ></span>
             </div>
@@ -19940,7 +19950,7 @@ var SlColorPicker = class extends ShoelaceElement {
                   >
                     <div
                       class="color-picker__alpha-gradient"
-                      style=${o9({
+                      style=${o10({
       backgroundImage: `linear-gradient(
                           to right,
                           ${this.getHexString(this.hue, this.saturation, this.brightness, 0)} 0%,
@@ -19951,7 +19961,7 @@ var SlColorPicker = class extends ShoelaceElement {
                     <span
                       part="slider-handle opacity-slider-handle"
                       class="color-picker__slider-handle"
-                      style=${o9({
+                      style=${o10({
       left: `${this.alpha}%`
     })}
                       role="slider"
@@ -19960,7 +19970,7 @@ var SlColorPicker = class extends ShoelaceElement {
                       aria-valuemin="0"
                       aria-valuemax="100"
                       aria-valuenow=${Math.round(this.alpha)}
-                      tabindex=${o6(this.disabled ? void 0 : "0")}
+                      tabindex=${o7(this.disabled ? void 0 : "0")}
                       @keydown=${this.handleAlphaKeyDown}
                     ></span>
                   </div>
@@ -19972,7 +19982,7 @@ var SlColorPicker = class extends ShoelaceElement {
             part="preview"
             class="color-picker__preview color-picker__transparent-bg"
             aria-label=${this.localize.term("copy")}
-            style=${o9({
+            style=${o10({
       "--preview-color": this.getHexString(this.hue, this.saturation, this.brightness, this.alpha)
     })}
             @click=${this.handleCopy}
@@ -20055,7 +20065,7 @@ var SlColorPicker = class extends ShoelaceElement {
                     <div
                       part="swatch"
                       class="color-picker__swatch color-picker__transparent-bg"
-                      tabindex=${o6(this.disabled ? void 0 : "0")}
+                      tabindex=${o7(this.disabled ? void 0 : "0")}
                       role="button"
                       aria-label=${swatch}
                       @click=${() => this.selectSwatch(swatch)}
@@ -20063,7 +20073,7 @@ var SlColorPicker = class extends ShoelaceElement {
                     >
                       <div
                         class="color-picker__swatch-color"
-                        style=${o9({ backgroundColor: parsedColor.hexa })}
+                        style=${o10({ backgroundColor: parsedColor.hexa })}
                       ></div>
                     </div>
                   `;
@@ -20097,7 +20107,7 @@ var SlColorPicker = class extends ShoelaceElement {
       "color-dropdown__trigger--focused": this.hasFocus,
       "color-picker__transparent-bg": true
     })}
-          style=${o9({
+          style=${o10({
       color: this.getHexString(this.hue, this.saturation, this.brightness, this.alpha)
     })}
           type="button"
@@ -20531,18 +20541,18 @@ var carousel_styles_default = i`
 `;
 
 // node_modules/lit-html/directives/map.js
-function* o12(o14, f6) {
-  if (void 0 !== o14) {
+function* o13(o15, f6) {
+  if (void 0 !== o15) {
     let i10 = 0;
-    for (const t8 of o14) yield f6(t8, i10++);
+    for (const t8 of o15) yield f6(t8, i10++);
   }
 }
 
 // node_modules/lit-html/directives/range.js
-function* o13(o14, t8, e15 = 1) {
-  const i10 = void 0 === t8 ? 0 : o14;
-  t8 ??= o14;
-  for (let o15 = i10; e15 > 0 ? o15 < t8 : t8 < o15; o15 += e15) yield o15;
+function* o14(o15, t8, e15 = 1) {
+  const i10 = void 0 === t8 ? 0 : o15;
+  t8 ??= o15;
+  for (let o16 = i10; e15 > 0 ? o16 < t8 : t8 < o16; o16 += e15) yield o16;
 }
 
 // node_modules/@shoelace-style/shoelace/dist/chunks/chunk.AADUHVTJ.js
@@ -20622,9 +20632,9 @@ var SlCarousel = class extends ShoelaceElement {
     this.setAttribute("aria-label", this.localize.term("carousel"));
   }
   disconnectedCallback() {
-    var _a11;
+    var _a10;
     super.disconnectedCallback();
-    (_a11 = this.mutationObserver) == null ? void 0 : _a11.disconnect();
+    (_a10 = this.mutationObserver) == null ? void 0 : _a10.disconnect();
   }
   firstUpdated() {
     this.initializeSlides();
@@ -20692,8 +20702,8 @@ var SlCarousel = class extends ShoelaceElement {
       }
       if (isFocusInPagination) {
         this.updateComplete.then(() => {
-          var _a11;
-          const activePaginationItem = (_a11 = this.shadowRoot) == null ? void 0 : _a11.querySelector(
+          var _a10;
+          const activePaginationItem = (_a10 = this.shadowRoot) == null ? void 0 : _a10.querySelector(
             '[part~="pagination-item--active"]'
           );
           if (activePaginationItem) {
@@ -20966,7 +20976,7 @@ var SlCarousel = class extends ShoelaceElement {
             ` : ""}
         ${this.pagination ? x`
               <div part="pagination" role="tablist" class="carousel__pagination">
-                ${o12(o13(pagesCount), (index) => {
+                ${o13(o14(pagesCount), (index) => {
       const isActive = index === currentPage;
       return x`
                     <button
@@ -21284,8 +21294,8 @@ var SlBreadcrumbItem = class extends ShoelaceElement {
                 part="label"
                 class="breadcrumb-item__label breadcrumb-item__label--link"
                 href="${this.href}"
-                target="${o6(this.target ? this.target : void 0)}"
-                rel=${o6(this.target ? this.rel : void 0)}
+                target="${o7(this.target ? this.target : void 0)}"
+                rel=${o7(this.target ? this.rel : void 0)}
               >
                 <slot @slotchange=${this.handleSlotChange}></slot>
               </a>
@@ -22036,19 +22046,19 @@ var _SlAlert = class _SlAlert2 extends ShoelaceElement {
     }
   }
   pauseAutoHide() {
-    var _a11;
-    (_a11 = this.countdownAnimation) == null ? void 0 : _a11.pause();
+    var _a10;
+    (_a10 = this.countdownAnimation) == null ? void 0 : _a10.pause();
     clearTimeout(this.autoHideTimeout);
     clearInterval(this.remainingTimeInterval);
   }
   resumeAutoHide() {
-    var _a11;
+    var _a10;
     if (this.duration < Infinity) {
       this.autoHideTimeout = window.setTimeout(() => this.hide(), this.remainingTime);
       this.remainingTimeInterval = window.setInterval(() => {
         this.remainingTime -= 100;
       }, 100);
-      (_a11 = this.countdownAnimation) == null ? void 0 : _a11.play();
+      (_a10 = this.countdownAnimation) == null ? void 0 : _a10.play();
     }
   }
   handleCountdownChange() {
@@ -23242,8 +23252,8 @@ var SlAnimation = class extends ShoelaceElement {
   }
   /** Gets and sets the current animation time. */
   get currentTime() {
-    var _a11, _b;
-    return (_b = (_a11 = this.animation) == null ? void 0 : _a11.currentTime) != null ? _b : 0;
+    var _a10, _b;
+    return (_b = (_a10 = this.animation) == null ? void 0 : _a10.currentTime) != null ? _b : 0;
   }
   set currentTime(time) {
     if (this.animation) {
@@ -23263,8 +23273,8 @@ var SlAnimation = class extends ShoelaceElement {
     this.createAnimation();
   }
   async createAnimation() {
-    var _a11, _b;
-    const easing = (_a11 = dist_exports.easings[this.easing]) != null ? _a11 : this.easing;
+    var _a10, _b;
+    const easing = (_a10 = dist_exports.easings[this.easing]) != null ? _a10 : this.easing;
     const keyframes = (_b = this.keyframes) != null ? _b : dist_exports[this.name];
     const slot = await this.defaultSlot;
     const element = slot.assignedElements()[0];
@@ -23329,13 +23339,13 @@ var SlAnimation = class extends ShoelaceElement {
   }
   /** Clears all keyframe effects caused by this animation and aborts its playback. */
   cancel() {
-    var _a11;
-    (_a11 = this.animation) == null ? void 0 : _a11.cancel();
+    var _a10;
+    (_a10 = this.animation) == null ? void 0 : _a10.cancel();
   }
   /** Sets the playback time to the end of the animation corresponding to the current playback direction. */
   finish() {
-    var _a11;
-    (_a11 = this.animation) == null ? void 0 : _a11.finish();
+    var _a10;
+    (_a10 = this.animation) == null ? void 0 : _a10.finish();
   }
   render() {
     return x` <slot @slotchange=${this.handleSlotChange}></slot> `;
@@ -23404,95 +23414,6 @@ __decorateClass([
 
 // node_modules/@shoelace-style/shoelace/dist/chunks/chunk.JQBT7BOV.js
 SlAnimation.define("sl-animation");
-
-// widgets/webwriter-interactive-bauble/webwriter-interactive-bauble.styles.ts
-var webwriter_interactive_bauble_styles_default = i`
-  :host {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    position: relative;
-
-    cursor: grab;
-  }
-
-  #bauble {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    font-size: 8px;
-    border-radius: 15px;
-    width: 10px;
-    height: 10px;
-    background-color: white;
-  }
-
-  #bauble:hover {
-    background-color: #0084c6;
-    color: white;
-  }
-
-  :host(.dragging) {
-    cursor: grabbing;
-  }
-`;
-
-// widgets/webwriter-interactive-bauble/webwriter-interactive-bauble.component.ts
-var _offset_dec, _initialOffset_dec, _id_dec, _a2, _init2, _id, _initialOffset, _offset;
-var WwInteractiveBauble = class extends (_a2 = LitElementWw, _id_dec = [n5({ type: Number, attribute: true, reflect: true })], _initialOffset_dec = [n5({ type: Number, attribute: true, reflect: true })], _offset_dec = [n5({ type: Number, attribute: true, reflect: true })], _a2) {
-  constructor() {
-    super(...arguments);
-    __privateAdd(this, _id, __runInitializers(_init2, 8, this)), __runInitializers(_init2, 11, this);
-    __privateAdd(this, _initialOffset, __runInitializers(_init2, 12, this)), __runInitializers(_init2, 15, this);
-    __privateAdd(this, _offset, __runInitializers(_init2, 16, this)), __runInitializers(_init2, 19, this);
-  }
-  /**
-   * Lifecycle method called after the component's first update.
-   * Sets the initial position of the bauble based on the `initialOffset` property.
-   *
-   * @param _changedProperties - Map of changed properties with their previous values.
-   */
-  firstUpdated(_changedProperties) {
-    this.style.left = `${this.initialOffset}px`;
-  }
-  /**
-   * Lifecycle method called when the component is updated.
-   * Updates the position of the bauble based on the `offset` property.
-   *
-   * @param changedProperties - Map of changed properties with their previous values.
-   */
-  updated(changedProperties) {
-    changedProperties.forEach((_oldValue, property3) => {
-      if (property3 == "offset") {
-        this.style.left = `${this.offset}px`;
-      }
-    });
-  }
-  /**
-   * Renders the component's template.
-   * Displays the bauble's ID inside a paragraph element.
-   *
-   * @returns The HTML template for the component.
-   */
-  render() {
-    return x` <div id="bauble"><p>${this.id}</p></div> `;
-  }
-};
-_init2 = __decoratorStart(_a2);
-_id = new WeakMap();
-_initialOffset = new WeakMap();
-_offset = new WeakMap();
-__decorateElement(_init2, 4, "id", _id_dec, WwInteractiveBauble, _id);
-__decorateElement(_init2, 4, "initialOffset", _initialOffset_dec, WwInteractiveBauble, _initialOffset);
-__decorateElement(_init2, 4, "offset", _offset_dec, WwInteractiveBauble, _offset);
-__decoratorMetadata(_init2, WwInteractiveBauble);
-/**
- * CSS styles for the component.
- * Defines the appearance of the bauble.
- */
-__publicField(WwInteractiveBauble, "styles", [webwriter_interactive_bauble_styles_default]);
 
 // widgets/webwriter-interactive-video/webwriter-interactive-video.styles.ts
 var webwriter_interactive_video_styles_default = i`
@@ -23590,13 +23511,10 @@ var player_play_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/
 // node_modules/@tabler/icons/icons/filled/player-pause.svg
 var player_pause_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="currentColor"%0A  class="icon icon-tabler icons-tabler-filled icon-tabler-player-pause"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M9 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" />%0A  <path d="M17 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" />%0A</svg>';
 
-// node_modules/@tabler/icons/icons/outline/radius-bottom-right.svg
-var radius_bottom_right_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-radius-bottom-right"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M19 5v6a8 8 0 0 1 -8 8h-6" />%0A</svg>';
-
 // node_modules/@lit/context/lib/context-request-event.js
 var s5 = class extends Event {
-  constructor(s8, t8, e15, o14) {
-    super("context-request", { bubbles: true, composed: true }), this.context = s8, this.contextTarget = t8, this.callback = e15, this.subscribe = o14 ?? false;
+  constructor(s8, t8, e15, o15) {
+    super("context-request", { bubbles: true, composed: true }), this.context = s8, this.contextTarget = t8, this.callback = e15, this.subscribe = o15 ?? false;
   }
 };
 
@@ -23702,9 +23620,9 @@ function e14({ context: e15 }) {
       n12.constructor.addInitializer((n13) => {
         i10.set(n13, new i9(n13, { context: e15 }));
       });
-      const o14 = Object.getOwnPropertyDescriptor(n12, r11);
+      const o15 = Object.getOwnPropertyDescriptor(n12, r11);
       let s8;
-      if (void 0 === o14) {
+      if (void 0 === o15) {
         const t8 = /* @__PURE__ */ new WeakMap();
         s8 = { get() {
           return t8.get(this);
@@ -23712,8 +23630,8 @@ function e14({ context: e15 }) {
           i10.get(this).setValue(e16), t8.set(this, e16);
         }, configurable: true, enumerable: true };
       } else {
-        const t8 = o14.set;
-        s8 = { ...o14, set(e16) {
+        const t8 = o15.set;
+        s8 = { ...o15, set(e16) {
           i10.get(this).setValue(e16), t8?.call(this, e16);
         } };
       }
@@ -23724,14 +23642,14 @@ function e14({ context: e15 }) {
 
 // node_modules/@lit/context/lib/decorators/consume.js
 function c7({ context: c8, subscribe: e15 }) {
-  return (o14, n12) => {
+  return (o15, n12) => {
     "object" == typeof n12 ? n12.addInitializer(function() {
       new s6(this, { context: c8, callback: (t8) => {
-        o14.set.call(this, t8);
+        o15.set.call(this, t8);
       }, subscribe: e15 });
-    }) : o14.constructor.addInitializer((o15) => {
-      new s6(o15, { context: c8, callback: (t8) => {
-        o15[n12] = t8;
+    }) : o15.constructor.addInitializer((o16) => {
+      new s6(o16, { context: c8, callback: (t8) => {
+        o16[n12] = t8;
       }, subscribe: e15 });
     });
   };
@@ -23770,31 +23688,18 @@ var InteractiveVideoContext = class {
   chapterConfig = '[{"title":"Chapter 1","startTime":0}]';
   // ******* INTERACTION PROPERTIES *******
   /**
-   * Map containing the video data for each interactive element.
-   */
-  videoInteractionData = /* @__PURE__ */ new Map();
-  /**
-   * Contains the current videoData as a JSON string.
-   */
-  videoInteractionDataString = "[]";
-  /**
    * sets the z-index of the overlay
    */
   overlayZIndex = 50;
   /**
    * Indicates whether the interaction view is active.
    */
-  interactionActive = false;
-  /**
-   * Indicates which element is currently active, by saving the id of the element.
-   */
-  activeElement = -1;
+  selectedInteractionID = -1;
 };
 
 // components/options-panel/interactive-video-options.styles.ts
 var interactive_video_options_styles_default = i`
   #temporary-teacher-options-container {
-    padding: 4px;
     overflow: visible;
   }
 
@@ -23823,17 +23728,292 @@ var interactive_video_options_styles_default = i`
     gap: 7px;
     padding-bottom: 10px;
   }
+
+  .interaction-button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  #overlay-interaction-settings {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+
+    gap: 20px;
+  }
+
+  sl-details {
+    font-size: 14px;
+  }
 `;
 
 // node_modules/@tabler/icons/icons/outline/movie.svg
 var movie_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-movie"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />%0A  <path d="M8 4l0 16" />%0A  <path d="M16 4l0 16" />%0A  <path d="M4 8l4 0" />%0A  <path d="M4 16l4 0" />%0A  <path d="M4 12l16 0" />%0A  <path d="M16 8l4 0" />%0A  <path d="M16 16l4 0" />%0A</svg>';
 
+// node_modules/@tabler/icons/icons/outline/timeline-event.svg
+var timeline_event_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-timeline-event"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M12 20m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />%0A  <path d="M10 20h-6" />%0A  <path d="M14 20h6" />%0A  <path d="M12 15l-2 -2h-3a1 1 0 0 1 -1 -1v-8a1 1 0 0 1 1 -1h10a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-3l-2 2z" />%0A</svg>';
+
+// node_modules/@tabler/icons/icons/outline/trash.svg
+var trash_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M4 7l16 0" />%0A  <path d="M10 11l0 6" />%0A  <path d="M14 11l0 6" />%0A  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />%0A  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />%0A</svg>';
+
+// utils/timeFormatter.ts
+function formatTime(time) {
+  const hours = Math.floor(time / 3600);
+  const minutes = Math.floor(time % 3600 / 60);
+  const seconds = Math.floor(time % 60);
+  if (hours > 0) {
+    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  } else {
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  }
+}
+function parseTime(timeStr) {
+  const parts = timeStr.toString().split(":").map(Number);
+  if (parts.length === 2) {
+    return parts[0] * 60 + parts[1];
+  } else if (parts.length === 3) {
+    return parts[0] * 3600 + parts[1] * 60 + parts[2];
+  }
+  return null;
+}
+
+// widgets/webwriter-video-interaction/webwriter-video-interaction.styles.ts
+var webwriter_video_interaction_styles_default = i`
+  :host {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
+  }
+
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Adjust the value to your desired spacing */
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    max-height: 100%;
+    height: 100px;
+  }
+
+  :host(:not([contenteditable="true"]):not([contenteditable=""])) .author-only {
+    display: none;
+  }
+`;
+
+// node_modules/@tabler/icons/icons/outline/radius-bottom-right.svg
+var radius_bottom_right_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-radius-bottom-right"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M19 5v6a8 8 0 0 1 -8 8h-6" />%0A</svg>';
+
+// node_modules/@tabler/icons/icons/outline/grip-horizontal.svg
+var grip_horizontal_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-grip-horizontal"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M5 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />%0A  <path d="M5 15m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />%0A  <path d="M12 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />%0A  <path d="M12 15m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />%0A  <path d="M19 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />%0A  <path d="M19 15m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />%0A</svg>';
+
+// widgets/webwriter-video-interaction/webwriter-video-interaction.component.ts
+var _dragIcon_dec, _bottomRight_dec, _initialPause_dec, _endTime_dec, _startTime_dec, _id_dec, _tabIndex_dec, _a2, _init2, _tabIndex, _id, _startTime, _endTime, _initialPause, _bottomRight, _dragIcon;
+var WwVideoInteraction = class extends (_a2 = LitElementWw, _tabIndex_dec = [n5({ type: Number, attribute: true, reflect: true })], _id_dec = [n5({ type: Number, attribute: true, reflect: true })], _startTime_dec = [n5({ type: Number, attribute: true, reflect: true })], _endTime_dec = [n5({ type: Number, attribute: true, reflect: true })], _initialPause_dec = [n5({ type: String, attribute: true, reflect: true })], _bottomRight_dec = [e6("#bottomRight")], _dragIcon_dec = [e6("#dragIcon")], _a2) {
+  /* 
+  
+  
+  */
+  constructor() {
+    super();
+    __privateAdd(this, _tabIndex, __runInitializers(_init2, 8, this, -1)), __runInitializers(_init2, 11, this);
+    __privateAdd(this, _id, __runInitializers(_init2, 12, this)), __runInitializers(_init2, 15, this);
+    __privateAdd(this, _startTime, __runInitializers(_init2, 16, this)), __runInitializers(_init2, 19, this);
+    __privateAdd(this, _endTime, __runInitializers(_init2, 20, this)), __runInitializers(_init2, 23, this);
+    __privateAdd(this, _initialPause, __runInitializers(_init2, 24, this, "false")), __runInitializers(_init2, 27, this);
+    __privateAdd(this, _bottomRight, __runInitializers(_init2, 28, this)), __runInitializers(_init2, 31, this);
+    __privateAdd(this, _dragIcon, __runInitializers(_init2, 32, this)), __runInitializers(_init2, 35, this);
+    // Create an observer instance linked to the callback function
+    __publicField(this, "mutationObserver");
+    //
+    //
+    //
+    __publicField(this, "mutationCallback", (mutationList) => {
+      mutationList.forEach(
+        ({ type, removedNodes, addedNodes, attributeName, target }) => {
+          if (type === "childList") {
+            const paragraphs = this.querySelectorAll("p");
+            if (paragraphs.length === 0) {
+              const par = document.createElement("p");
+              par.textContent = "Modify...";
+              this.appendChild(par);
+            }
+          }
+        }
+      );
+    });
+    this.mutationObserver = new MutationObserver(this.mutationCallback);
+  }
+  //
+  //
+  //
+  static get scopedElements() {
+    return {
+      "sl-icon": icon_default,
+      "interactive-video-options": InteractiveVideoOptions
+    };
+  }
+  /* 
+  
+  */
+  firstUpdated(_changedProperties) {
+    const config = {
+      attributes: true,
+      childList: true,
+      subtree: true,
+      characterData: true
+    };
+    this.mutationObserver.observe(this, config);
+    const slot = this.shadowRoot.querySelector("slot");
+    const assignedElements = slot.assignedElements();
+    if (assignedElements.length == 0) {
+      const par = document.createElement("p");
+      par.textContent = "Modify";
+      this.appendChild(par);
+    }
+  }
+  /**
+   * Renders the component's template.
+   * Provides a slot for inserting custom content.
+   *
+   * @returns The HTML template for the component.
+   */
+  render() {
+    return x`
+      <div
+        id="popup"
+        style="overflow: scroll; height: 100%; display: flex; flex-direction: column; align-items: center; justify-items: center; "
+        @click=${() => this.dispatchEvent(
+      new CustomEvent("interactionClicked", {
+        detail: { id: this.id },
+        bubbles: true,
+        composed: true
+      })
+    )}
+      >
+        <sl-icon
+          id="dragIcon"
+          style="position: sticky; top: 0; /* Keeps it at the top */"
+          src=${grip_horizontal_default}
+          @pointerdown="${this.startDragging}"
+        >
+        </sl-icon>
+        <slot class="page"></slot>
+        <sl-icon
+          id="bottomRight"
+          style="position: absolute; bottom: 5px; right: 5px; "
+          src=${radius_bottom_right_default}
+          @pointerdown=${this.startResizing}
+        >
+        </sl-icon>
+      </div>
+
+      <interactive-video-options
+        contenteditable=${this.isContentEditable}
+        part="options"
+        class="author-only"
+      ></interactive-video-options>
+    `;
+  }
+  //
+  //
+  //
+  startResizing(e15) {
+    e15.preventDefault();
+    e15.stopPropagation();
+    const startX = e15.clientX;
+    const startY = e15.clientY;
+    const startWidth = this.offsetWidth;
+    const startHeight = this.offsetHeight;
+    const parent = this.parentElement?.shadowRoot?.querySelector("#video");
+    if (!parent) return;
+    const parentRect = parent.getBoundingClientRect();
+    const rect = this.getBoundingClientRect();
+    this.bottomRight.setPointerCapture(e15.pointerId);
+    const onPointerMove = (moveEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const deltaY = moveEvent.clientY - startY;
+      const maxWidth = parentRect.width - (rect.left - parentRect.left);
+      const maxHeight = parentRect.height - (rect.top - parentRect.top);
+      const newWidth = Math.max(50, Math.min(startWidth + deltaX, maxWidth));
+      const newHeight = Math.max(50, Math.min(startHeight + deltaY, maxHeight));
+      this.style.width = `${newWidth}px`;
+      this.style.height = `${newHeight}px`;
+    };
+    const onPointerUp = () => {
+      this.bottomRight.releasePointerCapture(e15.pointerId);
+      this.bottomRight.removeEventListener("pointermove", onPointerMove);
+      this.bottomRight.removeEventListener("pointerup", onPointerUp);
+    };
+    this.bottomRight.addEventListener("pointermove", onPointerMove);
+    this.bottomRight.addEventListener("pointerup", onPointerUp);
+  }
+  //
+  //
+  //
+  startDragging(e15) {
+    if (e15.target === this.bottomRight || e15.target !== this.dragIcon) return;
+    e15.preventDefault();
+    const startX = e15.clientX;
+    const startY = e15.clientY;
+    const rect = this.getBoundingClientRect();
+    const parent = this.parentElement?.shadowRoot?.querySelector("#video");
+    if (!parent) return;
+    const parentRect = parent.getBoundingClientRect();
+    const offsetX = rect.left - parentRect.left;
+    const offsetY = rect.top - parentRect.top;
+    this.dragIcon.setPointerCapture(e15.pointerId);
+    const onPointerMove = (moveEvent) => {
+      const newX = offsetX + (moveEvent.clientX - startX);
+      const newY = offsetY + (moveEvent.clientY - startY);
+      const maxX = parentRect.width - rect.width;
+      const maxY = parentRect.height - rect.height;
+      const clampedX = Math.max(0, Math.min(newX, maxX));
+      const clampedY = Math.max(0, Math.min(newY, maxY));
+      this.style.position = "absolute";
+      this.style.left = `${clampedX}px`;
+      this.style.top = `${clampedY}px`;
+    };
+    const onPointerUp = () => {
+      this.dragIcon.releasePointerCapture(e15.pointerId);
+      this.dragIcon.removeEventListener("pointermove", onPointerMove);
+      this.dragIcon.removeEventListener("pointerup", onPointerUp);
+    };
+    this.dragIcon.addEventListener("pointermove", onPointerMove);
+    this.dragIcon.addEventListener("pointerup", onPointerUp);
+  }
+};
+_init2 = __decoratorStart(_a2);
+_tabIndex = new WeakMap();
+_id = new WeakMap();
+_startTime = new WeakMap();
+_endTime = new WeakMap();
+_initialPause = new WeakMap();
+_bottomRight = new WeakMap();
+_dragIcon = new WeakMap();
+__decorateElement(_init2, 4, "tabIndex", _tabIndex_dec, WwVideoInteraction, _tabIndex);
+__decorateElement(_init2, 4, "id", _id_dec, WwVideoInteraction, _id);
+__decorateElement(_init2, 4, "startTime", _startTime_dec, WwVideoInteraction, _startTime);
+__decorateElement(_init2, 4, "endTime", _endTime_dec, WwVideoInteraction, _endTime);
+__decorateElement(_init2, 4, "initialPause", _initialPause_dec, WwVideoInteraction, _initialPause);
+__decorateElement(_init2, 4, "bottomRight", _bottomRight_dec, WwVideoInteraction, _bottomRight);
+__decorateElement(_init2, 4, "dragIcon", _dragIcon_dec, WwVideoInteraction, _dragIcon);
+__decoratorMetadata(_init2, WwVideoInteraction);
+/**
+ * The styles for the webwriter-interactive-video component.
+ */
+__publicField(WwVideoInteraction, "styles", [webwriter_video_interaction_styles_default]);
+
 // components/options-panel/interactive-video-options.ts
-var _videoContext_dec, _a3, _init3, _videoContext;
-var InteractiveVideoOptions = class extends (_a3 = LitElementWw, _videoContext_dec = [c7({ context: videoContext, subscribe: true }), n5({ attribute: false })], _a3) {
+var _tabIndex_dec2, _selectedInteraction_dec, _videoContext_dec, _a3, _init3, _videoContext, _selectedInteraction, _tabIndex2;
+var InteractiveVideoOptions = class extends (_a3 = LitElementWw, _videoContext_dec = [c7({ context: videoContext, subscribe: true }), n5({ attribute: false })], _selectedInteraction_dec = [n5({ type: Object, attribute: false, reflect: false })], _tabIndex_dec2 = [n5({ type: Number, attribute: true, reflect: true })], _a3) {
   constructor() {
     super(...arguments);
     __privateAdd(this, _videoContext, __runInitializers(_init3, 8, this)), __runInitializers(_init3, 11, this);
+    __privateAdd(this, _selectedInteraction, __runInitializers(_init3, 12, this)), __runInitializers(_init3, 15, this);
+    __privateAdd(this, _tabIndex2, __runInitializers(_init3, 16, this, -1)), __runInitializers(_init3, 19, this);
     /**
      * Handles the change event when teacher options for showing Overlays is triggered.
      *
@@ -23849,6 +24029,39 @@ var InteractiveVideoOptions = class extends (_a3 = LitElementWw, _videoContext_d
         })
       );
     });
+    /*
+    
+    
+      */
+    __publicField(this, "handleStartTimeInputChange", (e15, index) => {
+      const input = e15.target;
+      const newTime = parseTime(input.value);
+      if (newTime !== null) {
+        this.selectedInteraction.startTime = newTime;
+        this.selectedInteraction.setAttribute("startTime", String(newTime));
+        input.value = formatTime(newTime);
+      } else {
+        input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
+      }
+      this.selectedInteraction.parentNode.updateBaublePositions();
+      this.selectedInteraction.parentNode.videoElement.currentTime = this.selectedInteraction.startTime;
+    });
+    /*
+    
+    
+      */
+    __publicField(this, "handleEndTimeInputChange", (e15, index) => {
+      const input = e15.target;
+      const newTime = parseTime(input.value);
+      if (newTime !== null) {
+        this.selectedInteraction.endTime = newTime;
+        this.selectedInteraction.setAttribute("endTime", String(newTime));
+        input.value = formatTime(newTime);
+      } else {
+        input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
+      }
+      this.selectedInteraction.parentNode.updateBaublePositions();
+    });
   }
   /**
    * Returns an object that maps custom element names to their corresponding classes.
@@ -23859,7 +24072,11 @@ var InteractiveVideoOptions = class extends (_a3 = LitElementWw, _videoContext_d
   static get scopedElements() {
     return {
       "sl-switch": switch_default,
-      "sl-icon": icon_default
+      "sl-icon": icon_default,
+      "sl-input": input_default,
+      "sl-details": details_default,
+      "sl-color-picker": color_picker_default,
+      "sl-button": button_default
     };
   }
   /*
@@ -23871,30 +24088,216 @@ var InteractiveVideoOptions = class extends (_a3 = LitElementWw, _videoContext_d
   
     */
   render() {
+    const parent = this.parentNode;
+    const root = parent.getRootNode();
+    if (root instanceof ShadowRoot) {
+      const slot = root.querySelector("slot");
+      if (slot) {
+        const assignedElements = slot.assignedElements();
+        const hasVideoInteraction = assignedElements.some(
+          (el) => el.tagName.toLowerCase() === "webwriter-video-interaction"
+        );
+        if (hasVideoInteraction) {
+          this.selectedInteraction = assignedElements.filter(
+            (interaction) => interaction.id === String(this.videoContext?.selectedInteractionID)
+          )[0];
+        } else {
+          const parentComponent = root.host;
+          if (parentComponent instanceof WwVideoInteraction) {
+            this.selectedInteraction = parentComponent;
+          }
+        }
+      }
+    }
     return x`
       <div
-        style="display:flex; flex-direction: column; gap: 10px; "
+        style="display:flex; flex-direction: column; gap: 30px; "
         id="temporary-teacher-options-container"
         class="author-only"
       >
-        <div class="header">
-          <sl-icon src=${movie_default}></sl-icon>
-          <p>Options</p>
-        </div>
-        <sl-switch
-          checked
-          @sl-change=${this.handleShowOverlayChange}
-          class="temporary-teacher-options"
-          ?checked=${this.videoContext.showOverlay}
-          >Show Interactions</sl-switch
-        >
+        ${this.selectedInteraction !== void 0 ? x`${this.videoContext?.videoLoaded ? x` <!--  -->
+                  <div
+                    style="display:flex; flex-direction: column; gap: 10px; "
+                  >
+                    <div class="header">
+                      <sl-icon src=${movie_default}></sl-icon>
+                      <p>Video</p>
+                    </div>
+                    <sl-switch
+                      @sl-change=${this.handleShowOverlayChange}
+                      class="temporary-teacher-options"
+                      ?checked=${this.videoContext?.showOverlay}
+                      ?disabled=${this.videoContext === void 0}
+                      >Show Popups</sl-switch
+                    >
+                  </div>
+
+                  <!--  -->
+                  <div
+                    style="display:flex; flex-direction: column; gap: 10px; "
+                  >
+                    ${this.selectedInteraction !== void 0 ? x` <!--  -->
+                          <div class="header">
+                            <sl-icon src=${timeline_event_default}></sl-icon>
+                            <p>Interaction</p>
+                            <p style="margin-left: auto">
+                              ID: ${this.selectedInteraction?.id}
+                            </p>
+                          </div>
+                          <div id="overlay-interaction-settings">
+                            <sl-input
+                              id="overlay-start-time-input"
+                              label="Start Time"
+                              size="small"
+                              value=${formatTime(
+      this.selectedInteraction?.startTime
+    )}
+                              @sl-change=${this.handleStartTimeInputChange}
+                            ></sl-input>
+                            <sl-input
+                              id="overlay-end-time-input"
+                              label="End Time"
+                              size="small"
+                              value=${formatTime(
+      this.selectedInteraction?.endTime
+    )}
+                              @sl-change=${this.handleEndTimeInputChange}
+                            ></sl-input>
+                            <div>
+                              <p
+                                style="font-size: 17px; margin: 0px; padding: 0px; margin-bottom: 5px; font-size: 14px;"
+                              >
+                                Background Color
+                              </p>
+                              <sl-color-picker
+                                label="Overlay Color"
+                                id="color-picker"
+                                size="small"
+                                value=${getComputedStyle(
+      this.selectedInteraction
+    ).backgroundColor}
+                                @sl-change=${this.handleOverlayColorChange}
+                              ></sl-color-picker>
+                            </div>
+                            <sl-details summary="Advanced Options">
+                              <div
+                                style="display: flex; flex-direction: column; gap: 10px;"
+                              >
+                                <sl-input
+                                  label="X Position"
+                                  id="overlay-x-position-input"
+                                  type="number"
+                                  value=${parseInt(
+      getComputedStyle(this.selectedInteraction).left,
+      10
+    ) || 0}
+                                  size="small"
+                                >
+                                </sl-input>
+                                <sl-input
+                                  label="Y Position"
+                                  id="overlay-y-position-input"
+                                  type="number"
+                                  value=${parseInt(
+      getComputedStyle(this.selectedInteraction).top,
+      10
+    ) || 0}
+                                  size="small"
+                                >
+                                </sl-input>
+                                <sl-input
+                                  label="Width"
+                                  id="overlay-width-input"
+                                  type="number"
+                                  size="small"
+                                  value=${parseInt(
+      getComputedStyle(this.selectedInteraction).width,
+      10
+    ) || 0}
+                                >
+                                </sl-input>
+                                <sl-input
+                                  label="Height"
+                                  id="overlay-height-input"
+                                  type="number"
+                                  size="small"
+                                  value=${parseInt(
+      getComputedStyle(this.selectedInteraction).height,
+      10
+    ) || 0}
+                                >
+                                </sl-input>
+                              </div>
+                            </sl-details>
+                            <sl-button
+                              slot="footer"
+                              style="margin-left: auto; width: 100px"
+                              variant="danger"
+                              outline
+                              @click=${this.deleteElement}
+                            >
+                              <sl-icon slot="prefix" src=${trash_default}></sl-icon>
+                              Delete
+                            </sl-button>
+                          </div>` : x` <!--  -->
+                          <div class="header">
+                            <sl-icon src=${timeline_event_default}></sl-icon>
+                            <p>Interaction</p>
+                          </div>
+                          <p
+                            style="padding: 0px; margin: 0px; font-size: 14px;"
+                          >
+                            Select an interaction to view details
+                          </p>`}
+                  </div>` : null}` : null}
       </div>
     `;
+  }
+  //
+  //
+  //
+  deleteElement() {
+    if (this.selectedInteraction) {
+      this.dispatchEvent(
+        new CustomEvent("updateContext", {
+          bubbles: true,
+          composed: true
+        })
+      );
+      this.selectedInteraction.parentNode.removeChild(this.selectedInteraction);
+    }
+  }
+  /**
+   * Handles the change event when the overlay color is changed.
+   *
+   * @param e - The custom event containing the color picker target.
+   */
+  handleOverlayColorChange(e15) {
+    const colorPicker = e15.target;
+    this.selectedInteraction.style.backgroundColor = String(colorPicker.value);
+  }
+  /**
+   * Handles the change in overlay position.
+   *
+   * @param e - The custom event containing the target element.
+   */
+  handleOverlayPositionChange(e15) {
+  }
+  /**
+   * Handles the change even when inputting a new overlay size.
+   *
+   * @param e - The custom event containing the target element.
+   */
+  handleOverlaySizeChange(e15) {
   }
 };
 _init3 = __decoratorStart(_a3);
 _videoContext = new WeakMap();
+_selectedInteraction = new WeakMap();
+_tabIndex2 = new WeakMap();
 __decorateElement(_init3, 4, "videoContext", _videoContext_dec, InteractiveVideoOptions, _videoContext);
+__decorateElement(_init3, 4, "selectedInteraction", _selectedInteraction_dec, InteractiveVideoOptions, _selectedInteraction);
+__decorateElement(_init3, 4, "tabIndex", _tabIndex_dec2, InteractiveVideoOptions, _tabIndex2);
 __decoratorMetadata(_init3, InteractiveVideoOptions);
 /*
 
@@ -23962,13 +24365,13 @@ var VideoInputOverlay = class extends (_a4 = LitElementWw, _videoContext_dec2 = 
     >
       <sl-button
         variant="default"
-        style="width: 80%"
+        style="width: 20%"
         @click=${this.triggerFileInput}
         @dragover=${this.handleDragOverFileInputArea}
         @drop=${this.handleDropOnFileInputArea}
       >
         <sl-icon slot="prefix" src=${file_default}></sl-icon>
-        Click to Select or Drop a Video File
+        Select Video
         <input
           name="fileInput"
           id="fileInput"
@@ -23979,7 +24382,7 @@ var VideoInputOverlay = class extends (_a4 = LitElementWw, _videoContext_dec2 = 
         />
       </sl-button>
 
-      <p style="color: gray">OR</p>
+      <!-- <p style="color: gray">OR</p>
       <sl-input
         id="url-input"
         placeholder="Enter video URL"
@@ -23987,7 +24390,7 @@ var VideoInputOverlay = class extends (_a4 = LitElementWw, _videoContext_dec2 = 
         style="width: 80%"
       >
         <sl-icon slot="prefix" src=${world_www_default}></sl-icon>
-      </sl-input>
+      </sl-input> -->
     </div>`;
   }
   triggerFileInput() {
@@ -24108,27 +24511,6 @@ var arrows_minimize_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.
 
 // node_modules/@tabler/icons/icons/outline/brand-speedtest.svg
 var brand_speedtest_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-speedtest"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M5.636 19.364a9 9 0 1 1 12.728 0" />%0A  <path d="M16 9l-4 4" />%0A</svg>';
-
-// utils/timeFormatter.ts
-function formatTime(time) {
-  const hours = Math.floor(time / 3600);
-  const minutes = Math.floor(time % 3600 / 60);
-  const seconds = Math.floor(time % 60);
-  if (hours > 0) {
-    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  } else {
-    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  }
-}
-function parseTime(timeStr) {
-  const parts = timeStr.toString().split(":").map(Number);
-  if (parts.length === 2) {
-    return parts[0] * 60 + parts[1];
-  } else if (parts.length === 3) {
-    return parts[0] * 3600 + parts[1] * 60 + parts[2];
-  }
-  return null;
-}
 
 // components/video-controls-bar/video-controls-bar.styles.ts
 var video_controls_bar_styles_default = i`
@@ -24345,7 +24727,6 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
   
    */
   firstUpdated() {
-    console.log(this.isContentEditable);
   }
   /**
    * Renders the lower controls for the webwriter interactive video widget.
@@ -24376,7 +24757,7 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
                   src=${list_default}
                 ></sl-icon>
                 ${this.renderCurrentChapter()}
-              </sl-button>` : this.videoContext.hasChapters ? x` <sl-icon-button
+              </sl-button>` : this.videoContext.hasChapters ? x` <sl-button
                 id="chapters-button"
                 @click=${this.toggleChaptersDrawer}
               >
@@ -24386,7 +24767,7 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
                   src=${list_default}
                 ></sl-icon>
                 ${this.renderCurrentChapter()}
-              </sl-icon-button>` : null}
+              </sl-button>` : null}
         </div>
         <!-- contains the volume slider and other controls -->
         <div id="controls-lower-right">
@@ -24484,7 +24865,6 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
   //TODO: implement
   makeControlsSticky() {
     const e15 = new Error("Not implemented");
-    console.log("i was called from", e15.stack);
   }
   /**
    * Checks if the controls are visible based on the height of the window and the offset height of the element.
@@ -24492,7 +24872,6 @@ var VideoControlsBar = class extends (_a5 = LitElementWw, _videoContext_dec3 = [
    */
   checkControlsVisible() {
     if (window.innerHeight < this.offsetHeight) {
-      console.log("controls not visible");
       return false;
     }
     return true;
@@ -24528,722 +24907,6 @@ __decorateElement(_init5, 4, "timeStamp", _timeStamp_dec, VideoControlsBar, _tim
 __decoratorMetadata(_init5, VideoControlsBar);
 //import CSS
 __publicField(VideoControlsBar, "styles", [video_controls_bar_styles_default]);
-
-// widgets/webwriter-video-interaction/webwriter-video-interaction.styles.ts
-var webwriter_video_interaction_styles_default = i`
-  slot {
-    display: block;
-    height: 2em;
-    background-color: red;
-    margin-bottom: 10px;
-    width: 100%;
-  }
-
-  slot::slotted(p) {
-    width: 360px;
-    height: 100%;
-    display: block;
-  }
-`;
-
-// widgets/webwriter-video-interaction/webwriter-video-interaction.component.ts
-var _active_dec, _id_dec2, _a6, _init6, _id2, _active;
-var WwVideoInteraction = class extends (_a6 = LitElementWw, _id_dec2 = [n5({ type: Number, attribute: true, reflect: true })], _active_dec = [n5({ type: Boolean, attribute: true, reflect: true })], _a6) {
-  constructor() {
-    super();
-    __privateAdd(this, _id2, __runInitializers(_init6, 8, this)), __runInitializers(_init6, 11, this);
-    __privateAdd(this, _active, __runInitializers(_init6, 12, this, true)), __runInitializers(_init6, 15, this);
-  }
-  /**
-   * Lifecycle method called when the component is updated.
-   * Toggles the display style based on the `active` property.
-   *
-   * @param changedProperties - Map of changed properties with their previous values.
-   */
-  updated(changedProperties) {
-    changedProperties.forEach((_oldValue, property3) => {
-      if (property3 == "active") {
-        this.style.display = this.active ? "flex" : "none";
-      }
-    });
-  }
-  /**
-   * Renders the component's template.
-   * Provides a slot for inserting custom content.
-   *
-   * @returns The HTML template for the component.
-   */
-  render() {
-    return x`
-      <div id="interaction">
-        <slot> </slot>
-      </div>
-    `;
-  }
-};
-_init6 = __decoratorStart(_a6);
-_id2 = new WeakMap();
-_active = new WeakMap();
-__decorateElement(_init6, 4, "id", _id_dec2, WwVideoInteraction, _id2);
-__decorateElement(_init6, 4, "active", _active_dec, WwVideoInteraction, _active);
-__decoratorMetadata(_init6, WwVideoInteraction);
-/**
- * The styles for the webwriter-interactive-video component.
- */
-__publicField(WwVideoInteraction, "styles", [webwriter_video_interaction_styles_default]);
-/**
- * Shadow DOM options for the component.
- * Enables focus delegation to the shadow DOM.
- */
-__publicField(WwVideoInteraction, "shadowRootOptions", {
-  ...r4.shadowRootOptions,
-  delegatesFocus: true
-});
-
-// components/video-interaction-drawer/video-interaction-drawer.styles.ts
-var video_interaction_drawer_styles_default = i`
-  #replace-timestamp {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-
-  .interaction-button-group {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-`;
-
-// components/video-interaction-drawer/video-interaction-drawer.ts
-var _currentTime_dec, _drawer_dec, _interactionContainer_dec, _colorPicker_dec, _overlayHeightInput_dec, _overlayWidthInput_dec, _overlayContentInput_dec, _OverlayYPositionInput_dec, _OverlayXPositionInput_dec, _overlayEndTimeInput_dec, _overlayStartTimeInput_dec, _overlayInteractionSettings_dec, _replaceInteractionSettings_dec, _replaceTimestamp_dec, _interactionSlot_dec, _videoContext_dec4, _a7, _init7, _videoContext4, _interactionSlot, _replaceTimestamp, _replaceInteractionSettings, _overlayInteractionSettings, _overlayStartTimeInput, _overlayEndTimeInput, _OverlayXPositionInput, _OverlayYPositionInput, _overlayContentInput, _overlayWidthInput, _overlayHeightInput, _colorPicker, _interactionContainer, _drawer, _currentTime;
-var VideoInteractionDrawer = class extends (_a7 = LitElementWw, _videoContext_dec4 = [c7({ context: videoContext, subscribe: true })], _interactionSlot_dec = [e6("#interaction-slot")], _replaceTimestamp_dec = [e6("#replace-timestamp")], _replaceInteractionSettings_dec = [e6("#replace-interaction-settings")], _overlayInteractionSettings_dec = [e6("#overlay-interaction-settings")], _overlayStartTimeInput_dec = [e6("#overlay-start-time-input")], _overlayEndTimeInput_dec = [e6("#overlay-end-time-input")], _OverlayXPositionInput_dec = [e6("#overlay-x-position-input")], _OverlayYPositionInput_dec = [e6("#overlay-y-position-input")], _overlayContentInput_dec = [e6("#overlay-content-input")], _overlayWidthInput_dec = [e6("#overlay-width-input")], _overlayHeightInput_dec = [e6("#overlay-height-input")], _colorPicker_dec = [e6("#color-picker")], _interactionContainer_dec = [e6("#interaction-container")], _drawer_dec = [e6("#interactions-drawer")], _currentTime_dec = [n5({ type: Number })], _a7) {
-  constructor() {
-    super(...arguments);
-    __privateAdd(this, _videoContext4, __runInitializers(_init7, 8, this)), __runInitializers(_init7, 11, this);
-    __privateAdd(this, _interactionSlot, __runInitializers(_init7, 12, this)), __runInitializers(_init7, 15, this);
-    __privateAdd(this, _replaceTimestamp, __runInitializers(_init7, 16, this)), __runInitializers(_init7, 19, this);
-    __privateAdd(this, _replaceInteractionSettings, __runInitializers(_init7, 20, this)), __runInitializers(_init7, 23, this);
-    __privateAdd(this, _overlayInteractionSettings, __runInitializers(_init7, 24, this)), __runInitializers(_init7, 27, this);
-    __privateAdd(this, _overlayStartTimeInput, __runInitializers(_init7, 28, this)), __runInitializers(_init7, 31, this);
-    __privateAdd(this, _overlayEndTimeInput, __runInitializers(_init7, 32, this)), __runInitializers(_init7, 35, this);
-    __privateAdd(this, _OverlayXPositionInput, __runInitializers(_init7, 36, this)), __runInitializers(_init7, 39, this);
-    __privateAdd(this, _OverlayYPositionInput, __runInitializers(_init7, 40, this)), __runInitializers(_init7, 43, this);
-    __privateAdd(this, _overlayContentInput, __runInitializers(_init7, 44, this)), __runInitializers(_init7, 47, this);
-    __privateAdd(this, _overlayWidthInput, __runInitializers(_init7, 48, this)), __runInitializers(_init7, 51, this);
-    __privateAdd(this, _overlayHeightInput, __runInitializers(_init7, 52, this)), __runInitializers(_init7, 55, this);
-    __privateAdd(this, _colorPicker, __runInitializers(_init7, 56, this)), __runInitializers(_init7, 59, this);
-    __privateAdd(this, _interactionContainer, __runInitializers(_init7, 60, this)), __runInitializers(_init7, 63, this);
-    __privateAdd(this, _drawer, __runInitializers(_init7, 64, this)), __runInitializers(_init7, 67, this);
-    __privateAdd(this, _currentTime, __runInitializers(_init7, 68, this, 0)), __runInitializers(_init7, 71, this);
-    /**
-     * Handles the selection of the interaction type in the dropdown menu and adds an interactive element to the DOM in case of a replace interaction.
-     * @param e - CustomEvent containing the selected item from the dropdown
-     */
-    __publicField(this, "handleInteractionTypeSelected", (e15) => {
-      this.dispatchEvent(
-        new CustomEvent("getCurrentTime", {
-          bubbles: true,
-          composed: true
-        })
-      );
-      if (!this.videoContext.videoLoaded) return;
-      const id3 = this.videoContext.videoInteractionData.size + 1;
-      if (e15.detail.item.value == 1) {
-        this.videoContext.videoInteractionData = new Map(
-          Object.entries(this.videoContext.videoInteractionData).map(
-            ([key, value]) => [Number(key), value]
-          )
-        );
-        this.replaceInteractionSettings.hidden = false;
-        this.overlayInteractionSettings.hidden = true;
-        this.videoContext.videoInteractionData = new Map([
-          ...this.videoContext.videoInteractionData.entries(),
-          [id3, { isReplace: true, startTime: this.currentTime }]
-        ]);
-        this.replaceTimestamp.value = formatTime(this.currentTime);
-        this.saveInteractionConfig();
-        this.changeActiveElement(id3);
-      } else {
-        this.showOverlaySettings();
-        this.videoContext.videoInteractionData = new Map([
-          ...this.videoContext.videoInteractionData.entries(),
-          [
-            id3,
-            {
-              isReplace: false,
-              startTime: this.currentTime,
-              endTime: this.currentTime + 5,
-              // Default 5 seconds duration
-              position: { x: 0, y: 0 },
-              content: "Hello, World",
-              size: { width: 100, height: 100 }
-            }
-          ]
-        ]);
-        this.saveInteractionConfig();
-        this.changeActiveElement(id3);
-        this.setOverlaySettingsContentFromVideoSetting();
-      }
-    });
-    /**
-     * Maximizes the interaction container and displays it on the screen.
-     */
-    __publicField(this, "maximizeInteraction", () => {
-      this.drawer.open = true;
-      this.videoContext.overlayZIndex = 0;
-      this.dispatchEvent(
-        new CustomEvent("updateContext", {
-          bubbles: true,
-          composed: true
-        })
-      );
-      const rect = this.parentElement.getBoundingClientRect();
-      this.interactionContainer.style.position = "fixed";
-      this.interactionContainer.style.zIndex = "1000";
-      this.interactionContainer.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-      this.interactionContainer.style.display = "block";
-      this.interactionContainer.style.color = "white";
-      this.interactionContainer.style.fontSize = "2em";
-      for (const key in rect) {
-        this.interactionContainer.style[key] = `${rect[key]}px`;
-      }
-      this.videoContext.interactionActive = true;
-      this.dispatchEvent(
-        new CustomEvent("updateContext", {
-          bubbles: true,
-          composed: true
-        })
-      );
-    });
-    /**
-     * Handles the time input change event.
-     *
-     * @param e - The custom event object.
-     * @param index - The optional index of the chapter.
-     * @remarks
-     * This function is called when the time input is changed. It parses the input value and updates the corresponding time value.
-     * If the index is provided, it updates the chapter time; otherwise, it updates the bauble time.
-     */
-    __publicField(this, "handleTimeInputChange", (e15, index) => {
-      console.log("handleTimeInputChange");
-      const input = e15.target;
-      const newTime = parseTime(input.value);
-      if (newTime !== null) {
-        console.log("bauble");
-        this.baubleTimeUpdateHelper(
-          newTime,
-          this.videoContext.activeElement,
-          input
-        );
-        input.value = formatTime(newTime);
-      } else {
-        input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
-      }
-      this.updateBaublePositions();
-    });
-  }
-  /**
-   * Returns an object that maps custom element names to their corresponding classes.
-   * These custom elements can be used within the scope of the `webwriter-interactive-video` component.
-   *
-   * @returns An object mapping custom element names to their corresponding classes.
-   */
-  static get scopedElements() {
-    return {
-      "sl-drawer": drawer_default,
-      "sl-dropdown": dropdown_default,
-      "sl-button": button_default,
-      "sl-menu": menu_default,
-      "sl-menu-item": menu_item_default,
-      "sl-input": input_default,
-      "sl-textarea": textarea_default,
-      "sl-details": details_default,
-      "sl-color-picker": color_picker_default
-    };
-  }
-  /*
-  
-    */
-  firstUpdated() {
-  }
-  /**
-   * Renders the interaction drawer.
-   *
-   * @returns {TemplateResult} The HTML for the interaction drawer.
-   * @remarks
-   * This function renders the interaction drawer, which contains the settings for adding and configuring interactive elements.
-   */
-  render() {
-    return x` <!--  -->
-      <sl-drawer
-        style="z-index: 100;"
-        label="Add Interaction"
-        contained
-        id="interactions-drawer"
-      >
-        <!-- SELECT AN INTERACTION TYPE -->
-        <sl-dropdown
-          label="Interaction Type"
-          id="interaction-type-dropdown"
-          @sl-select=${this.handleInteractionTypeSelected}
-        >
-          <sl-button slot="trigger" id="interaction-type-button" caret
-            >Interaction Type</sl-button
-          >
-          <sl-menu>
-            <sl-menu-item value="1">Replace</sl-menu-item>
-            <sl-menu-item value="2">Overlay</sl-menu-item>
-          </sl-menu>
-        </sl-dropdown>
-
-        <div id="interaction-settings-container">
-          <!-- REPLACE (INTERACTION TYPE) SETTINGS -->
-          <div id="replace-interaction-settings" hidden>
-            <sl-input
-              id="replace-timestamp"
-              label="Timestamp"
-              @sl-change=${this.handleTimeInputChange}
-            ></sl-input>
-            <!-- container for the interactive elements -->
-            <div id="interaction-container">
-              ${this.isContentEditable ? x` <!--  -->
-                    <slot name="interaction-slot" id="interaction-slot">
-                    </slot>` : null}
-              <div class="interaction-button-group">
-                <sl-button @click=${this.toggleInteractionView}>
-                  ${this.videoContext.interactionActive ? "Return to Video" : "View Interaction"}
-                </sl-button>
-                ${this.videoContext.interactionActive ? x`` : x`<sl-button
-                      variant="danger"
-                      @click=${this.deleteElement}
-                    >
-                      Delete
-                    </sl-button>`}
-              </div>
-              <sl-button
-                slot="footer"
-                style="margin-top: 10px"
-                variant="primary"
-                @click=${this.closeDrawer}
-                >Close</sl-button
-              >
-            </div>
-          </div>
-
-          <!-- OVERLAY (INTERACTION TYPE) SETTINGS -->
-          <div id="overlay-interaction-settings" hidden>
-            <sl-input
-              id="overlay-start-time-input"
-              label="Start Time"
-              @sl-change=${this.handleTimeInputChange}
-            ></sl-input>
-            <sl-input
-              id="overlay-end-time-input"
-              label="End Time"
-              @sl-change=${this.handleTimeInputChange}
-            ></sl-input>
-            <sl-textarea
-              label="Content"
-              id="overlay-content-input"
-              @sl-change=${this.handleOverlayContentChange}
-            ></sl-textarea>
-            <p>Color</p>
-            <sl-color-picker
-              label="Overlay Color"
-              id="color-picker"
-              @sl-change=${this.handleOverlayColorChange}
-            ></sl-color-picker>
-            <sl-details style="margin-top:10px;" summary="Advanced Options">
-              <sl-input
-                label="X Position"
-                id="overlay-x-position-input"
-                type="number"
-                @sl-change=${this.handleOverlayPositionChange}
-              >
-              </sl-input>
-              <sl-input
-                label="Y Position"
-                id="overlay-y-position-input"
-                type="number"
-                @sl-change=${this.handleOverlayPositionChange}
-              >
-              </sl-input>
-              <sl-input
-                label="Width"
-                id="overlay-width-input"
-                type="number"
-                @sl-change=${this.handleOverlaySizeChange}
-              >
-              </sl-input>
-              <sl-input
-                label="Height"
-                id="overlay-height-input"
-                type="number"
-                @sl-change=${this.handleOverlaySizeChange}
-              >
-              </sl-input>
-            </sl-details>
-            <div class="interaction-button-group" slot="footer">
-              <sl-button
-                style="margin-top: 10px"
-                variant="primary"
-                @click=${this.closeDrawer}
-                >Close</sl-button
-              >
-              ${this.videoContext.interactionActive ? null : x`<sl-button
-                    style="margin-top: 10px"
-                    variant="danger"
-                    @click=${this.deleteElement}
-                  >
-                    Delete
-                  </sl-button>`}
-            </div>
-          </div>
-        </div>
-      </sl-drawer>`;
-  }
-  /**
-   * Deletes the currently active element and updates the necessary configurations.
-   * @remarks
-   * This is currently bugged. Ask for more information on this if needed.
-   * Somehow, when deleting an element, the id of the remaining elements changes automatically.
-   * I've tried to fix this by recalculating the indexes, but this also doesn't seem to work.
-   */
-  deleteElement() {
-    this.interactionSlot.assignedElements().forEach((element) => {
-      if (element instanceof WwVideoInteraction && element.id === this.videoContext.activeElement) {
-        element.remove();
-      }
-    });
-    this.videoContext.videoInteractionData.delete(
-      this.videoContext.activeElement
-    );
-    this.saveInteractionConfig();
-    this.closeDrawer();
-    this.updateBaublePositions();
-  }
-  /**
-   * Closes the drawer if the video is loaded.
-   */
-  closeDrawer() {
-    if (!this.videoContext.videoLoaded) return;
-    this.videoContext.overlayZIndex = 50;
-    this.drawer.open = false;
-    this.dispatchEvent(
-      new CustomEvent("updateContext", {
-        bubbles: true,
-        composed: true
-      })
-    );
-  }
-  /**
-   * Toggles the replace interaction view to display the element across the whole screen
-   */
-  toggleInteractionView() {
-    if (this.videoContext.interactionActive) {
-      console.log("minimize");
-      this.minimizeInteraction();
-    } else {
-      console.log("maximize");
-      this.maximizeInteraction();
-    }
-  }
-  /**
-   *
-   * Minimizes the interaction container.
-   */
-  minimizeInteraction() {
-    this.drawer.hide();
-    this.interactionContainer.style.position = "initial";
-    this.interactionContainer.style.zIndex = "0";
-    this.interactionContainer.style.backgroundColor = "transparent";
-    this.interactionContainer.style.left = "0";
-    this.interactionContainer.style.width = "100%";
-    this.interactionContainer.style.height = "30%";
-    this.interactionContainer.style.color = "black";
-    this.interactionContainer.style.fontSize = "1em";
-    this.videoContext.interactionActive = false;
-    this.dispatchEvent(
-      new CustomEvent("updateContext", {
-        bubbles: true,
-        composed: true
-      })
-    );
-  }
-  /**
-   * Handles the change event for inputs in the content field of an overlay interaction.
-   * Updates the content of the active element in the videoData object
-   * and saves the interaction configuration.
-   *
-   * @param e - The custom event object.
-   */
-  handleOverlayContentChange(e15) {
-    const textarea = e15.target;
-    this.videoContext.videoInteractionData.get(
-      this.videoContext.activeElement
-    ).content = textarea.value;
-    this.saveInteractionConfig();
-  }
-  /**
-   * Handles the change event when the overlay color is changed.
-   *
-   * @param e - The custom event containing the color picker target.
-   */
-  handleOverlayColorChange(e15) {
-    const colorPicker = e15.target;
-    const data = this.videoContext.videoInteractionData.get(
-      this.videoContext.activeElement
-    );
-    if (data) {
-      data.color = colorPicker.value;
-      this.saveInteractionConfig();
-    }
-  }
-  /**
-   * Handles the change in overlay position.
-   *
-   * @param e - The custom event containing the target element.
-   */
-  handleOverlayPositionChange(e15) {
-    const input = e15.target;
-    const value = parseFloat(input.value);
-    if (!isNaN(value)) {
-      const data = this.videoContext.videoInteractionData.get(
-        this.videoContext.activeElement
-      );
-      data.position = data.position || { x: 0, y: 0 };
-      if (input.label.toLowerCase() === "x position") {
-        data.position.x = value;
-      } else if (input.label.toLowerCase() === "y position") {
-        data.position.y = value;
-      }
-      this.saveInteractionConfig();
-      this.requestUpdate();
-    }
-  }
-  /**
-   * Handles the change even when inputting a new overlay size.
-   *
-   * @param e - The custom event containing the target element.
-   */
-  handleOverlaySizeChange(e15) {
-    const input = e15.target;
-    const value = parseFloat(input.value);
-    if (!isNaN(value) && value > 0) {
-      const data = this.videoContext.videoInteractionData.get(
-        this.videoContext.activeElement
-      );
-      data.size = data.size || { width: 100, height: 100 };
-      data.size[input.label.toLowerCase()] = value;
-      this.saveInteractionConfig();
-    }
-  }
-  /**
-   * Shows the overlay settings and hides the replace settings.
-   */
-  showOverlaySettings() {
-    this.replaceInteractionSettings.hidden = true;
-    this.overlayInteractionSettings.hidden = false;
-  }
-  /**
-   * Sets the overlay settings content from the video setting.
-   */
-  setOverlaySettingsContentFromVideoSetting() {
-    if (this.videoContext.videoInteractionDataString) {
-      console.log("updateContext parse incoming");
-      const config = JSON.parse(this.videoContext.videoInteractionDataString);
-      this.videoContext.videoInteractionData = new Map(
-        Object.entries(this.videoContext.videoInteractionData).map(
-          ([key, value]) => [Number(key), value]
-        )
-      );
-      this.videoContext.videoInteractionData.clear();
-      config.forEach((item) => {
-        const { id: id3, ...data2 } = item;
-        this.videoContext.videoInteractionData.set(id3, data2);
-      });
-      this.requestUpdate();
-    }
-    console.log("overlay settings", this.videoContext.videoInteractionData);
-    const data = this.videoContext.videoInteractionData.get(
-      this.videoContext.activeElement
-    );
-    console.log("activeElement", this.videoContext.activeElement);
-    console.log(data);
-    this.overlayStartTimeInput.value = formatTime(data.startTime);
-    this.overlayEndTimeInput.value = formatTime(data.endTime);
-    this.OverlayXPositionInput.value = `${data.position.x}`;
-    this.OverlayYPositionInput.value = `${data.position.y}`;
-    this.overlayContentInput.value = `${data.content}`;
-    this.overlayWidthInput.value = `${data.size.width}`;
-    this.overlayHeightInput.value = `${data.size.height}`;
-  }
-  /**
-   * Saves the interaction configuration by converting the video data into a JSON string.
-   * The resulting JSON string is assigned to the interactionConfig property.
-   */
-  saveInteractionConfig() {
-    const config = Array.from(
-      this.videoContext.videoInteractionData.entries()
-    ).map(([id3, data]) => ({
-      id: id3,
-      ...data
-    }));
-    this.videoContext.videoInteractionDataString = JSON.stringify(config);
-    this.dispatchEvent(
-      new CustomEvent("updateContext", {
-        bubbles: true,
-        composed: true
-      })
-    );
-  }
-  /**
-   * Updates the positions of the baubles in the widget.
-   */
-  updateBaublePositions() {
-    this.dispatchEvent(
-      new CustomEvent("updateBaublePositions", {
-        bubbles: true,
-        composed: true
-      })
-    );
-    this.requestUpdate();
-  }
-  /**
-   * Updates video data with new time values when baubles are dropped on progress bar.
-   *
-   * @param newTime - The new time value.
-   * @param index - The index of the bauble.
-   * @param input - The time input element of the corresponding interaction type/property.
-   * @remarks
-   * This function is called when a bauble is dropped on the progress bar. It updates the start time of the bauble and the corresponding input element.
-   * If the input element is the overlay start time, it also updates the end time to be 5 seconds after the start time.
-   */
-  baubleTimeUpdateHelper(newTime, index, input) {
-    if (this.videoContext.videoInteractionDataString) {
-      console.log("updateContext parse incoming");
-      const config = JSON.parse(this.videoContext.videoInteractionDataString);
-      this.videoContext.videoInteractionData = new Map(
-        Object.entries(this.videoContext.videoInteractionData).map(
-          ([key, value]) => [Number(key), value]
-        )
-      );
-      this.videoContext.videoInteractionData.clear();
-      config.forEach((item) => {
-        const { id: id3, ...data2 } = item;
-        this.videoContext.videoInteractionData.set(id3, data2);
-      });
-      this.requestUpdate();
-    }
-    const data = this.videoContext.videoInteractionData.get(index);
-    console.log("old entry", data);
-    if (data) {
-      if (input === this.overlayStartTimeInput) {
-        data.startTime = newTime;
-        if (newTime > data.endTime) {
-          data.endTime = newTime + 5;
-          this.overlayEndTimeInput.value = formatTime(data.endTime);
-        }
-      } else if (input === this.overlayEndTimeInput) {
-        data.endTime = newTime;
-      } else if (input === this.replaceTimestamp) {
-        data.startTime = newTime;
-      }
-      this.saveInteractionConfig();
-    }
-  }
-  /**
-   * Changes the active element to the specified index.
-   * @param newActive - The index of the new active element.
-   */
-  changeActiveElement(newActive) {
-    this.videoContext.activeElement = newActive;
-    this.dispatchEvent(
-      new CustomEvent("updateContext", {
-        bubbles: true,
-        composed: true
-      })
-    );
-    this.interactionSlot.assignedElements().forEach((element) => {
-      if (element.id == newActive) {
-        element.active = true;
-      } else {
-        element.active = false;
-      }
-    });
-  }
-  /**
-   * Helper function for handling click event of baubles.
-   *
-   * @param id - The ID of the element that was clicked.
-   * @remarks
-   * This function is called when a bauble is clicked without the control button being held.
-   * It changes the active element to the clicked element and updates the overlay settings with the corresponding data.
-   */
-  clickEventHelper(id3) {
-    this.changeActiveElement(id3);
-    const interactionData = this.videoContext.videoInteractionData.get(id3);
-    if (interactionData.isReplace) {
-      this.replaceTimestamp.value = formatTime(interactionData.startTime);
-      this.replaceInteractionSettings.hidden = false;
-      this.overlayInteractionSettings.hidden = true;
-    } else {
-      this.overlayStartTimeInput.value = formatTime(interactionData.startTime);
-      this.overlayEndTimeInput.value = formatTime(interactionData.endTime);
-      this.OverlayXPositionInput.value = `${interactionData.position.x}`;
-      this.OverlayYPositionInput.value = `${interactionData.position.y}`;
-      this.overlayContentInput.value = `${interactionData.content}`;
-      this.overlayWidthInput.value = `${interactionData.size.width}`;
-      this.overlayHeightInput.value = `${interactionData.size.height}`;
-      this.colorPicker.setAttribute("value", interactionData.color);
-      this.showOverlaySettings();
-    }
-    if (!this.drawer.open) {
-      this.drawer.open = true;
-      this.videoContext.overlayZIndex = 0;
-      this.setAttribute("videoContext", JSON.stringify(this.videoContext));
-    }
-  }
-};
-_init7 = __decoratorStart(_a7);
-_videoContext4 = new WeakMap();
-_interactionSlot = new WeakMap();
-_replaceTimestamp = new WeakMap();
-_replaceInteractionSettings = new WeakMap();
-_overlayInteractionSettings = new WeakMap();
-_overlayStartTimeInput = new WeakMap();
-_overlayEndTimeInput = new WeakMap();
-_OverlayXPositionInput = new WeakMap();
-_OverlayYPositionInput = new WeakMap();
-_overlayContentInput = new WeakMap();
-_overlayWidthInput = new WeakMap();
-_overlayHeightInput = new WeakMap();
-_colorPicker = new WeakMap();
-_interactionContainer = new WeakMap();
-_drawer = new WeakMap();
-_currentTime = new WeakMap();
-__decorateElement(_init7, 4, "videoContext", _videoContext_dec4, VideoInteractionDrawer, _videoContext4);
-__decorateElement(_init7, 4, "interactionSlot", _interactionSlot_dec, VideoInteractionDrawer, _interactionSlot);
-__decorateElement(_init7, 4, "replaceTimestamp", _replaceTimestamp_dec, VideoInteractionDrawer, _replaceTimestamp);
-__decorateElement(_init7, 4, "replaceInteractionSettings", _replaceInteractionSettings_dec, VideoInteractionDrawer, _replaceInteractionSettings);
-__decorateElement(_init7, 4, "overlayInteractionSettings", _overlayInteractionSettings_dec, VideoInteractionDrawer, _overlayInteractionSettings);
-__decorateElement(_init7, 4, "overlayStartTimeInput", _overlayStartTimeInput_dec, VideoInteractionDrawer, _overlayStartTimeInput);
-__decorateElement(_init7, 4, "overlayEndTimeInput", _overlayEndTimeInput_dec, VideoInteractionDrawer, _overlayEndTimeInput);
-__decorateElement(_init7, 4, "OverlayXPositionInput", _OverlayXPositionInput_dec, VideoInteractionDrawer, _OverlayXPositionInput);
-__decorateElement(_init7, 4, "OverlayYPositionInput", _OverlayYPositionInput_dec, VideoInteractionDrawer, _OverlayYPositionInput);
-__decorateElement(_init7, 4, "overlayContentInput", _overlayContentInput_dec, VideoInteractionDrawer, _overlayContentInput);
-__decorateElement(_init7, 4, "overlayWidthInput", _overlayWidthInput_dec, VideoInteractionDrawer, _overlayWidthInput);
-__decorateElement(_init7, 4, "overlayHeightInput", _overlayHeightInput_dec, VideoInteractionDrawer, _overlayHeightInput);
-__decorateElement(_init7, 4, "colorPicker", _colorPicker_dec, VideoInteractionDrawer, _colorPicker);
-__decorateElement(_init7, 4, "interactionContainer", _interactionContainer_dec, VideoInteractionDrawer, _interactionContainer);
-__decorateElement(_init7, 4, "drawer", _drawer_dec, VideoInteractionDrawer, _drawer);
-__decorateElement(_init7, 4, "currentTime", _currentTime_dec, VideoInteractionDrawer, _currentTime);
-__decoratorMetadata(_init7, VideoInteractionDrawer);
-/*
-
-  */
-//import CSS
-__publicField(VideoInteractionDrawer, "styles", [video_interaction_drawer_styles_default]);
 
 // components/video-chapter-drawer/video-chapter-drawer.styles.ts
 var video_chapter_drawer_styles_default = i`
@@ -25296,16 +24959,13 @@ var plus_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/sv
 // node_modules/@tabler/icons/icons/filled/player-track-next.svg
 var player_track_next_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="currentColor"%0A  class="icon icon-tabler icons-tabler-filled icon-tabler-player-track-next"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M2 5v14c0 .86 1.012 1.318 1.659 .753l8 -7a1 1 0 0 0 0 -1.506l-8 -7c-.647 -.565 -1.659 -.106 -1.659 .753z" />%0A  <path d="M13 5v14c0 .86 1.012 1.318 1.659 .753l8 -7a1 1 0 0 0 0 -1.506l-8 -7c-.647 -.565 -1.659 -.106 -1.659 .753z" />%0A</svg>';
 
-// node_modules/@tabler/icons/icons/outline/trash.svg
-var trash_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M4 7l16 0" />%0A  <path d="M10 11l0 6" />%0A  <path d="M14 11l0 6" />%0A  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />%0A  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />%0A</svg>';
-
 // components/video-chapter-drawer/video-chapter-drawer.ts
-var _drawer_dec2, _videoContext_dec5, _a8, _init8, _videoContext5, _drawer2;
-var VideoChapterDrawer = class extends (_a8 = LitElementWw, _videoContext_dec5 = [c7({ context: videoContext, subscribe: true })], _drawer_dec2 = [e6("#chapters-drawer")], _a8) {
+var _drawer_dec, _videoContext_dec4, _a6, _init6, _videoContext4, _drawer;
+var VideoChapterDrawer = class extends (_a6 = LitElementWw, _videoContext_dec4 = [c7({ context: videoContext, subscribe: true })], _drawer_dec = [e6("#chapters-drawer")], _a6) {
   constructor() {
     super(...arguments);
-    __privateAdd(this, _videoContext5, __runInitializers(_init8, 8, this)), __runInitializers(_init8, 11, this);
-    __privateAdd(this, _drawer2, __runInitializers(_init8, 12, this)), __runInitializers(_init8, 15, this);
+    __privateAdd(this, _videoContext4, __runInitializers(_init6, 8, this)), __runInitializers(_init6, 11, this);
+    __privateAdd(this, _drawer, __runInitializers(_init6, 12, this)), __runInitializers(_init6, 15, this);
     /**
      * Handles the time input change event.
      *
@@ -25341,7 +25001,6 @@ var VideoChapterDrawer = class extends (_a8 = LitElementWw, _videoContext_dec5 =
             startTime: 0
           }
         ]);
-      } else if (!this.videoContext.hasChapters) {
       }
       this.dispatchEvent(
         new CustomEvent("updateContext", {
@@ -25371,7 +25030,6 @@ var VideoChapterDrawer = class extends (_a8 = LitElementWw, _videoContext_dec5 =
   
     */
   firstUpdated() {
-    console.log("chapterConfig", this.videoContext.chapterConfig);
   }
   /**
    * Renders the chapters drawer.
@@ -25557,14 +25215,101 @@ var VideoChapterDrawer = class extends (_a8 = LitElementWw, _videoContext_dec5 =
     this.updateChapters(chapters);
   }
 };
-_init8 = __decoratorStart(_a8);
-_videoContext5 = new WeakMap();
-_drawer2 = new WeakMap();
-__decorateElement(_init8, 4, "videoContext", _videoContext_dec5, VideoChapterDrawer, _videoContext5);
-__decorateElement(_init8, 4, "drawer", _drawer_dec2, VideoChapterDrawer, _drawer2);
-__decoratorMetadata(_init8, VideoChapterDrawer);
+_init6 = __decoratorStart(_a6);
+_videoContext4 = new WeakMap();
+_drawer = new WeakMap();
+__decorateElement(_init6, 4, "videoContext", _videoContext_dec4, VideoChapterDrawer, _videoContext4);
+__decorateElement(_init6, 4, "drawer", _drawer_dec, VideoChapterDrawer, _drawer);
+__decoratorMetadata(_init6, VideoChapterDrawer);
 //import CSS
 __publicField(VideoChapterDrawer, "styles", [video_chapter_drawer_styles_default]);
+
+// components/webwriter-interactive-bauble/webwriter-interactive-bauble.styles.ts
+var webwriter_interactive_bauble_styles_default = i`
+  :host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+  }
+
+  #bauble {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 8px;
+    border-radius: 15px;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+  }
+
+  #bauble:hover {
+    background-color: #0084c6;
+    color: white;
+  }
+
+  :host(.dragging) {
+    cursor: grabbing;
+  }
+`;
+
+// components/webwriter-interactive-bauble/webwriter-interactive-bauble.ts
+var _offset_dec, _initialOffset_dec, _id_dec2, _a7, _init7, _id2, _initialOffset, _offset;
+var WwInteractiveBauble = class extends (_a7 = LitElementWw, _id_dec2 = [n5({ type: Number, attribute: true, reflect: true })], _initialOffset_dec = [n5({ type: Number, attribute: true, reflect: true })], _offset_dec = [n5({ type: Number, attribute: true, reflect: true })], _a7) {
+  constructor() {
+    super(...arguments);
+    __privateAdd(this, _id2, __runInitializers(_init7, 8, this)), __runInitializers(_init7, 11, this);
+    __privateAdd(this, _initialOffset, __runInitializers(_init7, 12, this)), __runInitializers(_init7, 15, this);
+    __privateAdd(this, _offset, __runInitializers(_init7, 16, this)), __runInitializers(_init7, 19, this);
+  }
+  /**
+   * Lifecycle method called after the component's first update.
+   * Sets the initial position of the bauble based on the `initialOffset` property.
+   *
+   * @param _changedProperties - Map of changed properties with their previous values.
+   */
+  firstUpdated(_changedProperties) {
+    this.style.left = `${this.initialOffset}px`;
+  }
+  /**
+   * Lifecycle method called when the component is updated.
+   * Updates the position of the bauble based on the `offset` property.
+   *
+   * @param changedProperties - Map of changed properties with their previous values.
+   */
+  updated(changedProperties) {
+    changedProperties.forEach((_oldValue, property3) => {
+      if (property3 == "offset") {
+        this.style.left = `${this.offset}px`;
+      }
+    });
+  }
+  /**
+   * Renders the component's template.
+   * Displays the bauble's ID inside a paragraph element.
+   *
+   * @returns The HTML template for the component.
+   */
+  render() {
+    return x` <div id="bauble"><p>${this.id}</p></div> `;
+  }
+};
+_init7 = __decoratorStart(_a7);
+_id2 = new WeakMap();
+_initialOffset = new WeakMap();
+_offset = new WeakMap();
+__decorateElement(_init7, 4, "id", _id_dec2, WwInteractiveBauble, _id2);
+__decorateElement(_init7, 4, "initialOffset", _initialOffset_dec, WwInteractiveBauble, _initialOffset);
+__decorateElement(_init7, 4, "offset", _offset_dec, WwInteractiveBauble, _offset);
+__decoratorMetadata(_init7, WwInteractiveBauble);
+/**
+ * CSS styles for the component.
+ * Defines the appearance of the bauble.
+ */
+__publicField(WwInteractiveBauble, "styles", [webwriter_interactive_bauble_styles_default]);
 
 // node_modules/@tabler/icons/icons/outline/timeline-event-plus.svg
 var timeline_event_plus_default = 'data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="24"%0A  height="24"%0A  viewBox="0 0 24 24"%0A  fill="none"%0A  stroke="currentColor"%0A  stroke-width="2"%0A  stroke-linecap="round"%0A  stroke-linejoin="round"%0A  class="icon icon-tabler icons-tabler-outline icon-tabler-timeline-event-plus"%0A>%0A  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>%0A  <path d="M12 20m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />%0A  <path d="M10 20h-6" />%0A  <path d="M14 20h6" />%0A  <path d="M12 15l-2 -2h-3a1 1 0 0 1 -1 -1v-8a1 1 0 0 1 1 -1h10a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-3l-2 2z" />%0A  <path d="M10 8h4" />%0A  <path d="M12 6v4" />%0A</svg>';
@@ -25618,14 +25363,14 @@ var interactions_progress_bar_styles_default = i`
 `;
 
 // components/interactions-progress-bar/interactions-progress-bar.ts
-var _addButton_dec, _upperControls_dec, _dropArea_dec, _videoContext_dec6, _a9, _init9, _videoContext6, _dropArea, _upperControls, _addButton;
-var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_dec6 = [c7({ context: videoContext, subscribe: true })], _dropArea_dec = [e6("#drop-area")], _upperControls_dec = [e6("#controls-upper")], _addButton_dec = [e6("#add-button")], _a9) {
+var _addButton_dec, _upperControls_dec, _dropArea_dec, _videoContext_dec5, _a8, _init8, _videoContext5, _dropArea, _upperControls, _addButton;
+var InteractionsProgressBar = class extends (_a8 = LitElementWw, _videoContext_dec5 = [c7({ context: videoContext, subscribe: true })], _dropArea_dec = [e6("#drop-area")], _upperControls_dec = [e6("#controls-upper")], _addButton_dec = [e6("#add-button")], _a8) {
   constructor() {
     super(...arguments);
-    __privateAdd(this, _videoContext6, __runInitializers(_init9, 8, this)), __runInitializers(_init9, 11, this);
-    __privateAdd(this, _dropArea, __runInitializers(_init9, 12, this)), __runInitializers(_init9, 15, this);
-    __privateAdd(this, _upperControls, __runInitializers(_init9, 16, this)), __runInitializers(_init9, 19, this);
-    __privateAdd(this, _addButton, __runInitializers(_init9, 20, this)), __runInitializers(_init9, 23, this);
+    __privateAdd(this, _videoContext5, __runInitializers(_init8, 8, this)), __runInitializers(_init8, 11, this);
+    __privateAdd(this, _dropArea, __runInitializers(_init8, 12, this)), __runInitializers(_init8, 15, this);
+    __privateAdd(this, _upperControls, __runInitializers(_init8, 16, this)), __runInitializers(_init8, 19, this);
+    __privateAdd(this, _addButton, __runInitializers(_init8, 20, this)), __runInitializers(_init8, 23, this);
     /**
      * Handles the drag start event for a bauble.
      *
@@ -25633,16 +25378,6 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
      */
     __publicField(this, "handleBaubleDragStart", (e15) => {
       e15.dataTransfer.setData("id", e15.target.id);
-      e15.dataTransfer.setData(
-        "previousActive",
-        `${this.videoContext.activeElement}`
-      );
-      this.dispatchEvent(
-        new CustomEvent("changeAddToTrash", {
-          bubbles: true,
-          composed: true
-        })
-      );
     });
     /**
      * Handles the drag end event for the bauble.
@@ -25650,12 +25385,6 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
      * @param e - The drag event.
      */
     __publicField(this, "handleBaubleDragEnd", (e15) => {
-      this.dispatchEvent(
-        new CustomEvent("changeTrashToAdd", {
-          bubbles: true,
-          composed: true
-        })
-      );
       this.dropArea.style.background = "none";
     });
     /**
@@ -25664,7 +25393,7 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
     __publicField(this, "handleAddClick", () => {
       if (!this.videoContext.videoLoaded) return;
       this.dispatchEvent(
-        new CustomEvent("toggleInteractionsDrawer", {
+        new CustomEvent("addInteraction", {
           bubbles: true,
           composed: true
         })
@@ -25701,7 +25430,6 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
           size="small"
           id="add-button"
           @click=${this.handleAddClick}
-          @drop=${this.handleBaubleDroppedOnAdd}
           ?disabled=${!this.isContentEditable}
         >
           <sl-icon
@@ -25709,7 +25437,7 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
             src=${timeline_event_plus_default}
             style="height: 20px; width: 20px;"
           ></sl-icon>
-          Add Interaction
+          Add Popup
         </sl-button>
 
         <div
@@ -25719,31 +25447,22 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
           @dragleave=${this.handleBaubleLeaveDropArea}
         >
           <div id="controls-upper">
-            ${Array.from(this.videoContext.videoInteractionData.entries()).map(
-      ([key, value]) => {
-        return value.isReplace ? x` <!--  -->
-                      <webwriter-interactive-bauble
-                        style="border-radius: 50%;"
-                        offset=${this.calculateOffset(value.startTime)}
-                        @dragstart=${this.handleBaubleDragStart}
-                        @dragend=${this.handleBaubleDragEnd}
-                        draggable="true"
-                        @click=${this.handleBaubleClick}
-                        id=${key}
-                      >
-                      </webwriter-interactive-bauble>` : x` <!--  -->
-                      <webwriter-interactive-bauble
-                        style=""
-                        offset=${this.calculateOffset(value.startTime)}
-                        @dragstart=${this.handleBaubleDragStart}
-                        @dragend=${this.handleBaubleDragEnd}
-                        draggable="true"
-                        @click=${this.handleBaubleClick}
-                        id=${key}
-                      >
-                      </webwriter-interactive-bauble>`;
-      }
-    )}
+            ${Array.from(
+      this.getRootNode().host.videoInteractions
+    ).map((interaction) => {
+      return x`<webwriter-interactive-bauble
+                style=${this.isContentEditable ? "cursor: grab" : "cursor: pointer"}
+                offset=${this.calculateOffset(
+        interaction.startTime
+      )}
+                @dragstart=${this.handleBaubleDragStart}
+                @dragend=${this.handleBaubleDragEnd}
+                draggable=${this.isContentEditable ? "true" : "false"}
+                @click=${this.handleBaubleClick}
+                id=${interaction.id}
+              >
+              </webwriter-interactive-bauble>`;
+    })}
           </div>
         </div>
       </div>
@@ -25756,16 +25475,14 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
    * @remarks
    * This function is called when a bauble is clicked. It checks if the control key is pressed and if so, it sets the video time to the bauble's start time.
    * Otherwise, it calls the clickEventHelper function to handle the click event.
+   * 
+   *  
+   * 
+   *  
+          
    */
   handleBaubleClick(event) {
     const clickedElement = event.target;
-    console.log("test");
-    const videoElement = this.parentNode.parentNode.querySelector(
-      "#video"
-    );
-    videoElement.currentTime = this.videoContext.videoInteractionData.get(
-      clickedElement.id
-    ).startTime;
     this.dispatchEvent(
       new CustomEvent("interactionBaubleClicked", {
         detail: { id: clickedElement.id },
@@ -25788,27 +25505,18 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
       "#video"
     );
     this.dispatchEvent(
-      new CustomEvent("changeInteractionTime", {
+      new CustomEvent("changeInteractionStartTime", {
         detail: {
           newTime: Math.floor(
             videoElement.duration * (distanceFromLeft / rect.width)
           ),
-          index: parseInt(e15.dataTransfer.getData("id")),
-          isReplace: this.videoContext.videoInteractionData.get(
-            parseInt(e15.dataTransfer.getData("id"))
-          ).isReplace
+          index: parseInt(e15.dataTransfer.getData("id"))
         },
         bubbles: true,
         composed: true
       })
     );
     this.dropArea.style.background = "none";
-    this.dispatchEvent(
-      new CustomEvent("changeTrashToAdd", {
-        bubbles: true,
-        composed: true
-      })
-    );
     this.updateBaublePositions();
   }
   /**
@@ -25838,9 +25546,11 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
     Array.from(children).forEach((child) => {
       if (child instanceof WwInteractiveBauble) {
         const id3 = parseInt(child.id);
-        const data = this.videoContext.videoInteractionData.get(id3);
-        if (data) {
-          const newOffset = this.calculateOffset(data.startTime);
+        const slottedInteraction = this.getRootNode().host.videoInteractions.filter(
+          (interaction) => Number(interaction.id) === Number(id3)
+        )[0];
+        if (slottedInteraction) {
+          const newOffset = this.calculateOffset(slottedInteraction.startTime);
           if (newOffset !== void 0) {
             child.setAttribute("offset", `${newOffset}`);
           }
@@ -25860,56 +25570,47 @@ var InteractionsProgressBar = class extends (_a9 = LitElementWw, _videoContext_d
     const videoElement = this.parentNode.parentNode.querySelector(
       "#video"
     );
-    console.log(videoElement);
-    console.log(
-      time / videoElement.duration * 0.95 * videoElement.getBoundingClientRect().width
-    );
     return time / videoElement.duration * 0.95 * videoElement.getBoundingClientRect().width;
   }
-  /**
-   * Handles the event when a bauble is dropped on the "add" button.
-   * This deletes the object. When the drag event starts the add button turns into a trash can.
-   * @param e - The DragEvent object representing the drop event.
-   *
-   */
-  handleBaubleDroppedOnAdd(e15) {
-  }
 };
-_init9 = __decoratorStart(_a9);
-_videoContext6 = new WeakMap();
+_init8 = __decoratorStart(_a8);
+_videoContext5 = new WeakMap();
 _dropArea = new WeakMap();
 _upperControls = new WeakMap();
 _addButton = new WeakMap();
-__decorateElement(_init9, 4, "videoContext", _videoContext_dec6, InteractionsProgressBar, _videoContext6);
-__decorateElement(_init9, 4, "dropArea", _dropArea_dec, InteractionsProgressBar, _dropArea);
-__decorateElement(_init9, 4, "upperControls", _upperControls_dec, InteractionsProgressBar, _upperControls);
-__decorateElement(_init9, 4, "addButton", _addButton_dec, InteractionsProgressBar, _addButton);
-__decoratorMetadata(_init9, InteractionsProgressBar);
+__decorateElement(_init8, 4, "videoContext", _videoContext_dec5, InteractionsProgressBar, _videoContext5);
+__decorateElement(_init8, 4, "dropArea", _dropArea_dec, InteractionsProgressBar, _dropArea);
+__decorateElement(_init8, 4, "upperControls", _upperControls_dec, InteractionsProgressBar, _upperControls);
+__decorateElement(_init8, 4, "addButton", _addButton_dec, InteractionsProgressBar, _addButton);
+__decoratorMetadata(_init8, InteractionsProgressBar);
 //import CSS
 __publicField(InteractionsProgressBar, "styles", [interactions_progress_bar_styles_default]);
 
 // widgets/webwriter-interactive-video/webwriter-interactive-video.component.ts
-var _chaptersDrawer_dec, _interactionDrawer_dec, _progressBar_dec, _interactionsProgressBar_dec, _videoControlsBar_dec, _videoElement_dec, _isDragging_dec, _lastTimeupdate_dec, _videoDurationFormatted_dec, _tabIndex_dec, _videoContext_dec7, _a10, _init10, _videoContext7, _tabIndex, _videoDurationFormatted, _lastTimeupdate, _isDragging, _videoElement, _videoControlsBar, _interactionsProgressBar, _progressBar, _interactionDrawer, _chaptersDrawer;
-var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContext_dec7 = [e14({
+var _chaptersDrawer_dec, _progressBar_dec, _interactionsProgressBar_dec, _videoControlsBar_dec, _videoElement_dec, _isDragging_dec, _lastTimeupdate_dec, _videoDurationFormatted_dec, _tabIndex_dec3, _videoInteractions_dec, _videoContext_dec6, _a9, _init9, _videoContext6, _videoInteractions, _tabIndex3, _videoDurationFormatted, _lastTimeupdate, _isDragging, _videoElement, _videoControlsBar, _interactionsProgressBar, _progressBar, _chaptersDrawer;
+var WebwriterInteractiveVideo = class extends (_a9 = LitElementWw, _videoContext_dec6 = [e14({
   context: videoContext
 }), n5({
   type: Object,
   attribute: true,
   reflect: true
-})], _tabIndex_dec = [n5({ type: Number, attribute: true, reflect: true })], _videoDurationFormatted_dec = [n5({ type: String })], _lastTimeupdate_dec = [n5({ type: Number })], _isDragging_dec = [n5({ type: Boolean })], _videoElement_dec = [e6("#video")], _videoControlsBar_dec = [e6("video-controls-bar")], _interactionsProgressBar_dec = [e6("interactions-progress-bar")], _progressBar_dec = [e6("#progress-bar")], _interactionDrawer_dec = [e6("video-interaction-drawer")], _chaptersDrawer_dec = [e6("video-chapter-drawer")], _a10) {
+})], _videoInteractions_dec = [o6({
+  flatten: true,
+  selector: "webwriter-video-interaction"
+})], _tabIndex_dec3 = [n5({ type: Number, attribute: true, reflect: true })], _videoDurationFormatted_dec = [n5({ type: String })], _lastTimeupdate_dec = [n5({ type: Number })], _isDragging_dec = [n5({ type: Boolean })], _videoElement_dec = [e6("#video")], _videoControlsBar_dec = [e6("video-controls-bar")], _interactionsProgressBar_dec = [e6("interactions-progress-bar")], _progressBar_dec = [e6("#progress-bar")], _chaptersDrawer_dec = [e6("video-chapter-drawer")], _a9) {
   constructor() {
     super(...arguments);
-    __privateAdd(this, _videoContext7, __runInitializers(_init10, 8, this, new InteractiveVideoContext())), __runInitializers(_init10, 11, this);
-    __privateAdd(this, _tabIndex, __runInitializers(_init10, 12, this, -1)), __runInitializers(_init10, 15, this);
-    __privateAdd(this, _videoDurationFormatted, __runInitializers(_init10, 16, this, "00:00")), __runInitializers(_init10, 19, this);
-    __privateAdd(this, _lastTimeupdate, __runInitializers(_init10, 20, this, 0)), __runInitializers(_init10, 23, this);
-    __privateAdd(this, _isDragging, __runInitializers(_init10, 24, this, false)), __runInitializers(_init10, 27, this);
-    __privateAdd(this, _videoElement, __runInitializers(_init10, 28, this)), __runInitializers(_init10, 31, this);
-    __privateAdd(this, _videoControlsBar, __runInitializers(_init10, 32, this)), __runInitializers(_init10, 35, this);
-    __privateAdd(this, _interactionsProgressBar, __runInitializers(_init10, 36, this)), __runInitializers(_init10, 39, this);
-    __privateAdd(this, _progressBar, __runInitializers(_init10, 40, this)), __runInitializers(_init10, 43, this);
-    __privateAdd(this, _interactionDrawer, __runInitializers(_init10, 44, this)), __runInitializers(_init10, 47, this);
-    __privateAdd(this, _chaptersDrawer, __runInitializers(_init10, 48, this)), __runInitializers(_init10, 51, this);
+    __privateAdd(this, _videoContext6, __runInitializers(_init9, 8, this, new InteractiveVideoContext())), __runInitializers(_init9, 11, this);
+    __privateAdd(this, _videoInteractions, __runInitializers(_init9, 12, this)), __runInitializers(_init9, 15, this);
+    __privateAdd(this, _tabIndex3, __runInitializers(_init9, 16, this, -1)), __runInitializers(_init9, 19, this);
+    __privateAdd(this, _videoDurationFormatted, __runInitializers(_init9, 20, this, "00:00")), __runInitializers(_init9, 23, this);
+    __privateAdd(this, _lastTimeupdate, __runInitializers(_init9, 24, this, 0)), __runInitializers(_init9, 27, this);
+    __privateAdd(this, _isDragging, __runInitializers(_init9, 28, this, false)), __runInitializers(_init9, 31, this);
+    __privateAdd(this, _videoElement, __runInitializers(_init9, 32, this)), __runInitializers(_init9, 35, this);
+    __privateAdd(this, _videoControlsBar, __runInitializers(_init9, 36, this)), __runInitializers(_init9, 39, this);
+    __privateAdd(this, _interactionsProgressBar, __runInitializers(_init9, 40, this)), __runInitializers(_init9, 43, this);
+    __privateAdd(this, _progressBar, __runInitializers(_init9, 44, this)), __runInitializers(_init9, 47, this);
+    __privateAdd(this, _chaptersDrawer, __runInitializers(_init9, 48, this)), __runInitializers(_init9, 51, this);
     /**
      * Checks whether a video is already existing on load.
      * @returns whether a video exists (either base64 or URL, used for deciding whether to show file input area or video element)
@@ -25921,13 +25622,29 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
       return false;
     });
     /**
+     * Handles the click event on the video element.
+     *
+     * @param e - The MouseEvent object representing the click event.
+     */
+    __publicField(this, "handleVideoClick", (e15) => {
+      const clickedElement = e15.target;
+      if (clickedElement.closest("webwriter-video-interaction")) {
+        e15.stopImmediatePropagation();
+        e15.preventDefault();
+        return;
+      }
+      if (!this.videoContext.videoLoaded) return;
+      e15.stopPropagation();
+      this.videoContext.selectedInteractionID = -1;
+      this.updateContext();
+    });
+    /**
      * Handles the time update event of the video player and check whether there are interactions to be displayed by comparing current call time to last.
      * This way we dont skip any interactions and dont fire twice since this is called inconsistently.
      *
      * @param e - The custom event object.
      */
     __publicField(this, "handleTimeUpdate", (e15) => {
-      console.log("timeUpdate");
       this.lastTimeupdate = this.videoElement.currentTime;
       this.progressBar.value = this.videoElement.currentTime / this.videoElement.duration * 100;
       this.videoControlsBar.handleTimeUpdate(
@@ -25945,6 +25662,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
      * @param e - The custom event object.
      */
     __publicField(this, "handleProgressChange", (e15) => {
+      this.showPopups();
       const progressBar = e15.target;
       let currentTime = progressBar.value / 100 * this.videoElement.duration;
       this.videoElement.currentTime = Math.floor(currentTime);
@@ -25954,16 +25672,6 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
      * Handles the fullscreen change event by repositioning the baubles to fit the new video size.
      */
     __publicField(this, "handleFullscreenChange", () => {
-    });
-    /**
-     * Handles the click event on the video element.
-     *
-     * @param e - The MouseEvent object representing the click event.
-     */
-    __publicField(this, "handleVideoClick", (e15) => {
-      if (!this.videoContext.videoLoaded) return;
-      e15.stopPropagation();
-      this.startStopVideo();
     });
     /**
      * Handles the click event on the overlay element by calling the clickEventHelper function with the id of the interaction.
@@ -26038,13 +25746,12 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
     return {
       "sl-range": range_default,
       "sl-icon": icon_default,
-      "webwriter-interactive-bauble": WwInteractiveBauble,
       "interactive-video-options": InteractiveVideoOptions,
       "video-input-overlay": VideoInputOverlay,
       "video-controls-bar": VideoControlsBar,
-      "video-interaction-drawer": VideoInteractionDrawer,
       "video-chapter-drawer": VideoChapterDrawer,
-      "interactions-progress-bar": InteractionsProgressBar
+      "interactions-progress-bar": InteractionsProgressBar,
+      "webwriter-video-interaction": WwVideoInteraction
     };
   }
   /**
@@ -26069,6 +25776,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
     } else if (this.videoContext.videoURL) {
       this.setupVideo(this.videoContext.videoURL);
     }
+    this.updateBaublePositions();
   }
   /**
    * Renders the component.
@@ -26086,23 +25794,28 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
             ` : null}
         <div id="container-vertical">
           <!-- VIDEO ELEMENT -->
-          <div id="container-video" @click=${this.handleVideoClick}>
+          <div
+            id="container-video"
+            @interactionClicked=${(e15) => {
+      this.interactionClicked(e15.detail.id);
+    }}
+            @click=${this.handleVideoClick}
+            @updateContext=${() => this.updateContext()}
+          >
             <video id="video"></video>
-            ${this.videoContext.videoLoaded ? this.renderOverlays() : null}
+            ${this.videoContext.videoLoaded ? this.showPopups() : null}
+            <slot></slot>
           </div>
           <!-- CONTROLS -->
           <div id="controls">
             <!-- Baubles // Bubbles on Progress Bar -->
             <interactions-progress-bar
               contenteditable=${this.isContentEditable}
-              @toggleInteractionsDrawer=${() => this.toggleInteractionsDrawer()}
+              @addInteraction=${() => this.addVideoInteraction(this.videoInteractions.length)}
               @interactionBaubleClicked=${(e15) => this.baubleClicked(e15.detail.id)}
-              @changeAddToTrash=${() => this.changeAddToTrash()}
-              @changeTrashToAdd=${() => this.changeTrashToAdd()}
-              @changeInteractionTime=${(e15) => this.changeInteractionTime(
+              @changeInteractionStartTime=${(e15) => this.changeInteractionStartTime(
       e15.detail.newTime,
-      e15.detail.index,
-      e15.detail.isReplace
+      e15.detail.index
     )}
             ></interactions-progress-bar>
             <!-- Progress Bar -->
@@ -26116,7 +25829,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
               contenteditable=${this.isContentEditable}
               @volumeChange=${(e15) => this.handleVolumeChange(e15.detail.value)}
               @toggleMute=${() => this.toggleMute()}
-              @startstopVideo=${() => this.startStopVideo()}
+              @startstopVideo=${() => this.togglePlayVideo()}
               @toggleChaptersDrawer=${() => this.toggleChaptersDrawer()}
               @playbackRateChange=${(e15) => this.changePlaybackRate(e15.detail.value)}
               @getCurrentChapter=${() => this.getCurrentChapter()}
@@ -26132,14 +25845,6 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
           @updateContext=${() => this.updateContext()}
           @jumpToChapter=${(e15) => this.jumpToChapter(e15.detail.startTime)}
         ></video-chapter-drawer>
-        <!-- Video Interaction Drawer -->
-        <video-interaction-drawer
-          style="z-index: 51"
-          contenteditable=${this.isContentEditable}
-          @updateContext=${() => this.updateContext()}
-          @getCurrentTime=${() => this.getCurrentTime()}
-          @updateBaublePositions=${() => this.updateBaublePositions()}
-        ></video-interaction-drawer>
       </div>
 
       <!-- OPTIONS PANEL -->
@@ -26148,6 +25853,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
         part="options"
         class="author-only"
         @updateContext=${() => this.updateContext()}
+        @updateBaublePositions=${() => this.updateBaublePositions()}
       ></interactive-video-options>
     `;
   }
@@ -26158,51 +25864,23 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
    * @remarks
    * this checks video time to see if an overlay should be displayed and renders those from the videoData map.
    */
-  renderOverlays() {
+  showPopups() {
     if (!this.videoContext.showOverlay && this.isContentEditable) return;
-    return Array.from(this.videoContext.videoInteractionData.entries()).filter(([_3, data]) => !data.isReplace).map(([id3, data]) => {
-      if (this.videoElement.currentTime >= data.startTime && this.videoElement.currentTime <= data.endTime) {
-        return x`
-            <div
-              class="overlay-interaction"
-              id="overlay-${id3}"
-              @mousedown="${this.startDragging}"
-              @click="${this.handleOverlayClicked}"
-              style="position: absolute;
-                        left: ${data.position?.x || 0}px;
-                        top: ${data.position?.y || 0}px;
-                        width: ${data.size?.width || 100}px;
-                        height: ${data.size?.height || 100}px;
-                        z-index: ${this.videoContext.overlayZIndex};
-                        background-color: ${data.color || "#ffffff"};
-                        border-radius: 8px;
-                  
-                        padding: 10px;
-                        overflow: hidden;
-                        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);"
-            >
-              <p
-                style="margin: 0; color: ${this.getContrastColor(
-          data.color || "#ffffff"
-        )};"
-              >
-                ${data.content || ""}
-              </p>
-              <sl-icon
-                style="position: absolute;
-                              bottom: 5px;
-                              right: 5px;
-                              color: ${this.getContrastColor(
-          data.color || "#ffffff"
-        )};"
-                @mousedown="${this.startResizing}"
-                src=${radius_bottom_right_default}
-              >
-              </sl-icon>
-            </div>
-          `;
+    Array.from(this.videoInteractions).map((interaction) => {
+      if (this.videoElement.currentTime >= interaction.startTime && this.videoElement.currentTime <= interaction.endTime) {
+        interaction.style.display = "block";
+        if (interaction.initialPause === "false") {
+          this.pauseVideo();
+          interaction.initialPause = "true";
+          interaction.setAttribute("initialPause", "true");
+        }
+      } else {
+        interaction.style.display = "none";
+        if (interaction.initialPause) {
+          interaction.initialPause = "false";
+          interaction.setAttribute("initialPause", "false");
+        }
       }
-      return null;
     });
   }
   /*
@@ -26211,21 +25889,7 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
     */
   updateContext() {
     this.setAttribute("videoContext", JSON.stringify(this.videoContext));
-    if (this.videoContext.videoInteractionDataString) {
-      console.log("updateContext parse incoming");
-      const config = JSON.parse(this.videoContext.videoInteractionDataString);
-      this.videoContext.videoInteractionData = new Map(
-        Object.entries(this.videoContext.videoInteractionData).map(
-          ([key, value]) => [Number(key), value]
-        )
-      );
-      this.videoContext.videoInteractionData.clear();
-      config.forEach((item) => {
-        const { id: id3, ...data } = item;
-        this.videoContext.videoInteractionData.set(id3, data);
-      });
-      this.requestUpdate();
-    }
+    this.requestUpdate();
   }
   /*
   
@@ -26236,19 +25900,35 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
   //
   //
   //
-  baubleClicked(id3) {
-    this.interactionDrawer.clickEventHelper(id3);
+  interactionClicked(id3) {
+    this.videoContext.selectedInteractionID = id3;
+    this.updateContext();
   }
   //
   //
   //
-  changeInteractionTime(newTime, index, isReplace) {
-    console.log(newTime, index, isReplace);
-    this.interactionDrawer.baubleTimeUpdateHelper(
-      newTime,
-      index,
-      isReplace ? this.interactionDrawer.replaceTimestamp : this.interactionDrawer.overlayStartTimeInput
-    );
+  baubleClicked(id3) {
+    this.pauseVideo();
+    const slottedInteraction = this.videoInteractions.filter(
+      (interaction) => Number(interaction.id) === Number(id3)
+    )[0];
+    this.videoElement.currentTime = slottedInteraction.startTime;
+    this.interactionClicked(id3);
+    slottedInteraction.focus();
+  }
+  //
+  //
+  //
+  changeInteractionStartTime(newTime, index) {
+    const slottedInteraction = this.videoInteractions.filter(
+      (interaction) => Number(interaction.id) === Number(index)
+    )[0];
+    slottedInteraction.startTime = newTime;
+    slottedInteraction.setAttribute("starTime", newTime);
+    slottedInteraction.endTime = newTime + 5;
+    slottedInteraction.setAttribute("endTime", String(newTime + 5));
+    this.videoElement.currentTime = slottedInteraction.startTime;
+    this.updateContext();
   }
   /**
    * Retrieves the current chapter based on the current time of the video.
@@ -26269,12 +25949,6 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
     this.videoControlsBar.currentChapter = null;
     return;
   }
-  /*
-  TODO: Make this property of parent and access it trough parent
-    */
-  getCurrentTime() {
-    this.interactionDrawer.currentTime = this.videoElement.currentTime;
-  }
   /**
    * Calculates the offset based on the given time.
    *
@@ -26286,26 +25960,22 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
     const rect = this.videoElement.getBoundingClientRect();
     return time / this.videoElement.duration * 0.95 * rect.width;
   }
-  /**
-   * Changes the add button to a trash button.
-   */
-  changeAddToTrash() {
-  }
-  /**
-   * Changes the trash button to an add button.
-   */
-  changeTrashToAdd() {
-  }
   //
   //
   //
-  toggleInteractionsDrawer() {
-    if (!this.interactionDrawer.drawer.open) {
-      this.interactionDrawer.drawer.open = true;
-    }
-    this.videoContext.overlayZIndex = 0;
-    this.interactionDrawer.replaceInteractionSettings.hidden = true;
-    this.interactionDrawer.overlayInteractionSettings.hidden = true;
+  addVideoInteraction(id3) {
+    const interaction = document.createElement(
+      "webwriter-video-interaction"
+    );
+    interaction.style.position = "absolute";
+    interaction.style.top = "0";
+    interaction.style.left = "0";
+    this.appendChild(interaction);
+    interaction.setAttribute("id", `${id3}`);
+    interaction.setAttribute("startTime", `${this.videoElement.currentTime}`);
+    interaction.setAttribute("endTime", `${this.videoElement.currentTime + 5}`);
+    interaction.setAttribute("color", `#ffffff`);
+    this.updateContext();
   }
   /**
    * Toggles the chapters drawer open or closed.
@@ -26343,29 +26013,8 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
    * Updates the positions of the baubles in the widget.
    */
   updateBaublePositions() {
-    console.log("update Bauble Position");
-  }
-  /* MARK: deletion bug
-   on most deletions, interactions change their id automatically, why is this??
-   on some however, there is a gap. this gap bricks the program since it cannot match up with videodata anymore?
-   planned fix is to recalculate videodata (this function already works), and subsequently recalculate interaction IDs, so they match up again.
-   this should fix it regardless of wrong initial behavior
-  */
-  /**
-   * Recalculates the indexes of the baubles and video interactions.
-   */
-  recalculateIndexes() {
-  }
-  /**
-   * helper function for recalculateIndexes, the entire thing is somehow bugged. Read documentation of updateBaublePositions and recalculateIndexes for more information.
-   * The idea was to recalculate the indexes of those video interactions affected by shifting (or rather, not shifting some times (its really weird)).
-   */
-  recalculateInteractionIndexes() {
-  }
-  /** helper function for recalculateIndexes, the entire thing is somehow bugged. This function works in its current state. Use at own risk.
-   *
-   */
-  recalculateBaubleIndexes() {
+    this.interactionsProgressBar.updateBaublePositions();
+    this.updateContext();
   }
   /**
    * Sets up the video element with the provided source and attaches event listeners to the video object.
@@ -26385,7 +26034,6 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
       this.handleCanPlayThrough
     );
     this.videoElement.addEventListener("timeupdate", this.handleTimeUpdate);
-    this.videoElement.addEventListener("click", this.handleVideoClick);
   }
   /**
      * Toggles the playback of the video. If the video has ended, it resets the current time to 0.
@@ -26393,28 +26041,38 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
      * Also changes the play button icon to 'pause' if the video is playing, and 'play' if the video is paused.
   
      */
-  startStopVideo() {
-    console.log("test");
+  togglePlayVideo() {
     if (!this.videoContext.videoLoaded) return;
-    console.log("test");
     if (this.videoElement.ended) {
       this.videoElement.currentTime = 0;
     }
     if (this.videoElement.paused) {
-      this.videoElement.play();
-      this.videoControlsBar.playButton.setAttribute("src", `${player_pause_default}`);
-      this.videoControlsBar.playButton.classList.add("scale-animation");
-      setTimeout(() => {
-        this.videoControlsBar.playButton.classList.remove("scale-animation");
-      }, 300);
+      this.playVideo();
     } else {
-      this.videoElement.pause();
-      this.videoControlsBar.playButton.setAttribute("src", `${player_play_default}`);
-      this.videoControlsBar.playButton.classList.add("scale-animation");
-      setTimeout(() => {
-        this.videoControlsBar.playButton.classList.remove("scale-animation");
-      }, 300);
+      this.pauseVideo();
     }
+  }
+  //
+  //
+  //
+  playVideo() {
+    this.videoElement.play();
+    this.videoControlsBar.playButton.setAttribute("src", `${player_pause_default}`);
+    this.videoControlsBar.playButton.classList.add("scale-animation");
+    setTimeout(() => {
+      this.videoControlsBar.playButton.classList.remove("scale-animation");
+    }, 300);
+  }
+  //
+  //
+  //
+  pauseVideo() {
+    this.videoElement.pause();
+    this.videoControlsBar.playButton.setAttribute("src", `${player_play_default}`);
+    this.videoControlsBar.playButton.classList.add("scale-animation");
+    setTimeout(() => {
+      this.videoControlsBar.playButton.classList.remove("scale-animation");
+    }, 300);
   }
   /**
    * Calculates the contrast color based on the given hex color.
@@ -26428,109 +26086,11 @@ var WebwriterInteractiveVideo = class extends (_a10 = LitElementWw, _videoContex
     const luminance = (0.299 * r11 + 0.587 * g3 + 0.114 * b4) / 255;
     return luminance > 0.5 ? "#000000" : "#ffffff";
   }
-  /**
-   * Starts the dragging operation when the user clicks and drags the overlay element.
-   *
-   * @param e - The MouseEvent object representing the click event.
-   */
-  startDragging(e15) {
-    if (this.interactionDrawer.drawer.open) return;
-    const overlay = e15.currentTarget;
-    const startX = e15.clientX - overlay.offsetLeft;
-    const startY = e15.clientY - overlay.offsetTop;
-    const onMouseMove = (e16) => {
-      this.isDragging = true;
-      let newX = e16.clientX - startX;
-      let newY = e16.clientY - startY;
-      const videoRect = this.videoElement.getBoundingClientRect();
-      newX = Math.max(0, Math.min(newX, videoRect.width - overlay.offsetWidth));
-      newY = Math.max(
-        0,
-        Math.min(newY, videoRect.height - overlay.offsetHeight)
-      );
-      overlay.style.left = `${newX}px`;
-      overlay.style.top = `${newY}px`;
-      const id3 = parseInt(overlay.id.split("-")[1]);
-      this.videoContext.videoInteractionData.get(id3).position = {
-        x: newX,
-        y: newY
-      };
-    };
-    const onMouseUp = (e16) => {
-      e16.stopPropagation();
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-      const config = Array.from(
-        this.videoContext.videoInteractionData.entries()
-      ).map(([id3, data]) => ({
-        id: id3,
-        ...data
-      }));
-      this.videoContext.videoInteractionDataString = JSON.stringify(config);
-      this.dispatchEvent(
-        new CustomEvent("updateContext", {
-          bubbles: true,
-          composed: true
-        })
-      );
-    };
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
-  }
-  /**
-   * Handles the start of the resizing process for the interactive video overlay.
-   *
-   * @param e - The MouseEvent object representing the start of the resizing process.
-   */
-  startResizing(e15) {
-    if (this.interactionDrawer.drawer.open) return;
-    if (!e15.target.matches("sl-icon")) return;
-    e15.stopPropagation();
-    const overlay = e15.currentTarget.parentElement;
-    const startX = e15.clientX;
-    const startY = e15.clientY;
-    const startWidth = overlay.offsetWidth;
-    const startHeight = overlay.offsetHeight;
-    const onMouseMove = (e16) => {
-      this.isDragging = true;
-      let newWidth = startWidth + e16.clientX - startX;
-      let newHeight = startHeight + e16.clientY - startY;
-      const videoRect = this.videoElement.getBoundingClientRect();
-      newWidth = Math.min(newWidth, videoRect.width - overlay.offsetLeft);
-      newHeight = Math.min(newHeight, videoRect.height - overlay.offsetTop);
-      overlay.style.width = `${newWidth}px`;
-      overlay.style.height = `${newHeight}px`;
-      const id3 = parseInt(overlay.id.split("-")[1]);
-      this.videoContext.videoInteractionData.get(id3).size = {
-        width: newWidth,
-        height: newHeight
-      };
-    };
-    const onMouseUp = (e16) => {
-      e16.stopPropagation();
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-      const config = Array.from(
-        this.videoContext.videoInteractionData.entries()
-      ).map(([id3, data]) => ({
-        id: id3,
-        ...data
-      }));
-      this.videoContext.videoInteractionDataString = JSON.stringify(config);
-      this.dispatchEvent(
-        new CustomEvent("updateContext", {
-          bubbles: true,
-          composed: true
-        })
-      );
-    };
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
-  }
 };
-_init10 = __decoratorStart(_a10);
-_videoContext7 = new WeakMap();
-_tabIndex = new WeakMap();
+_init9 = __decoratorStart(_a9);
+_videoContext6 = new WeakMap();
+_videoInteractions = new WeakMap();
+_tabIndex3 = new WeakMap();
 _videoDurationFormatted = new WeakMap();
 _lastTimeupdate = new WeakMap();
 _isDragging = new WeakMap();
@@ -26538,20 +26098,19 @@ _videoElement = new WeakMap();
 _videoControlsBar = new WeakMap();
 _interactionsProgressBar = new WeakMap();
 _progressBar = new WeakMap();
-_interactionDrawer = new WeakMap();
 _chaptersDrawer = new WeakMap();
-__decorateElement(_init10, 4, "videoContext", _videoContext_dec7, WebwriterInteractiveVideo, _videoContext7);
-__decorateElement(_init10, 4, "tabIndex", _tabIndex_dec, WebwriterInteractiveVideo, _tabIndex);
-__decorateElement(_init10, 4, "videoDurationFormatted", _videoDurationFormatted_dec, WebwriterInteractiveVideo, _videoDurationFormatted);
-__decorateElement(_init10, 4, "lastTimeupdate", _lastTimeupdate_dec, WebwriterInteractiveVideo, _lastTimeupdate);
-__decorateElement(_init10, 4, "isDragging", _isDragging_dec, WebwriterInteractiveVideo, _isDragging);
-__decorateElement(_init10, 4, "videoElement", _videoElement_dec, WebwriterInteractiveVideo, _videoElement);
-__decorateElement(_init10, 4, "videoControlsBar", _videoControlsBar_dec, WebwriterInteractiveVideo, _videoControlsBar);
-__decorateElement(_init10, 4, "interactionsProgressBar", _interactionsProgressBar_dec, WebwriterInteractiveVideo, _interactionsProgressBar);
-__decorateElement(_init10, 4, "progressBar", _progressBar_dec, WebwriterInteractiveVideo, _progressBar);
-__decorateElement(_init10, 4, "interactionDrawer", _interactionDrawer_dec, WebwriterInteractiveVideo, _interactionDrawer);
-__decorateElement(_init10, 4, "chaptersDrawer", _chaptersDrawer_dec, WebwriterInteractiveVideo, _chaptersDrawer);
-__decoratorMetadata(_init10, WebwriterInteractiveVideo);
+__decorateElement(_init9, 4, "videoContext", _videoContext_dec6, WebwriterInteractiveVideo, _videoContext6);
+__decorateElement(_init9, 4, "videoInteractions", _videoInteractions_dec, WebwriterInteractiveVideo, _videoInteractions);
+__decorateElement(_init9, 4, "tabIndex", _tabIndex_dec3, WebwriterInteractiveVideo, _tabIndex3);
+__decorateElement(_init9, 4, "videoDurationFormatted", _videoDurationFormatted_dec, WebwriterInteractiveVideo, _videoDurationFormatted);
+__decorateElement(_init9, 4, "lastTimeupdate", _lastTimeupdate_dec, WebwriterInteractiveVideo, _lastTimeupdate);
+__decorateElement(_init9, 4, "isDragging", _isDragging_dec, WebwriterInteractiveVideo, _isDragging);
+__decorateElement(_init9, 4, "videoElement", _videoElement_dec, WebwriterInteractiveVideo, _videoElement);
+__decorateElement(_init9, 4, "videoControlsBar", _videoControlsBar_dec, WebwriterInteractiveVideo, _videoControlsBar);
+__decorateElement(_init9, 4, "interactionsProgressBar", _interactionsProgressBar_dec, WebwriterInteractiveVideo, _interactionsProgressBar);
+__decorateElement(_init9, 4, "progressBar", _progressBar_dec, WebwriterInteractiveVideo, _progressBar);
+__decorateElement(_init9, 4, "chaptersDrawer", _chaptersDrawer_dec, WebwriterInteractiveVideo, _chaptersDrawer);
+__decoratorMetadata(_init9, WebwriterInteractiveVideo);
 /**
  * The styles for the webwriter-interactive-video component.
  */

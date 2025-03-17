@@ -7,8 +7,6 @@ export default css`
     align-items: center;
 
     position: relative;
-
-    cursor: grab;
   }
 
   #bauble {

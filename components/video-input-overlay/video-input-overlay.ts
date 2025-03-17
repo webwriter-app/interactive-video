@@ -60,13 +60,13 @@ export class VideoInputOverlay extends LitElementWw {
     >
       <sl-button
         variant="default"
-        style="width: 80%"
+        style="width: 20%"
         @click=${this.triggerFileInput}
         @dragover=${this.handleDragOverFileInputArea}
         @drop=${this.handleDropOnFileInputArea}
       >
         <sl-icon slot="prefix" src=${file}></sl-icon>
-        Click to Select or Drop a Video File
+        Select Video
         <input
           name="fileInput"
           id="fileInput"
@@ -77,7 +77,7 @@ export class VideoInputOverlay extends LitElementWw {
         />
       </sl-button>
 
-      <p style="color: gray">OR</p>
+      <!-- <p style="color: gray">OR</p>
       <sl-input
         id="url-input"
         placeholder="Enter video URL"
@@ -85,7 +85,7 @@ export class VideoInputOverlay extends LitElementWw {
         style="width: 80%"
       >
         <sl-icon slot="prefix" src=${worldWWW}></sl-icon>
-      </sl-input>
+      </sl-input> -->
     </div>`;
   }
 

@@ -19,9 +19,10 @@ import {
 } from "@shoelace-style/shoelace";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 
-import { videoData } from "../../types/videoData";
+import { WwVideoInteraction } from "../../widgets/webwriter-video-interaction/webwriter-video-interaction.component";
+import { WebwriterInteractiveVideo } from "../../widgets/webwriter-interactive-video/webwriter-interactive-video.component";
 
-import { WwInteractiveBauble } from "../../widgets/webwriter-interactive-bauble/webwriter-interactive-bauble.component";
+import { WwInteractiveBauble } from "../webwriter-interactive-bauble/webwriter-interactive-bauble";
 
 import { consume } from "@lit/context";
 
@@ -82,7 +83,6 @@ export class InteractionsProgressBar extends LitElementWw {
           size="small"
           id="add-button"
           @click=${this.handleAddClick}
-          @drop=${this.handleBaubleDroppedOnAdd}
           ?disabled=${!this.isContentEditable}
         >
           <sl-icon
@@ -90,7 +90,7 @@ export class InteractionsProgressBar extends LitElementWw {
             src=${add}
             style="height: 20px; width: 20px;"
           ></sl-icon>
-          Add Interaction
+          Add Popup
         </sl-button>
 
         <div
@@ -100,33 +100,27 @@ export class InteractionsProgressBar extends LitElementWw {
           @dragleave=${this.handleBaubleLeaveDropArea}
         >
           <div id="controls-upper">
-            ${Array.from(this.videoContext.videoInteractionData.entries()).map(
-              ([key, value]) => {
-                return value.isReplace
-                  ? html` <!--  -->
-                      <webwriter-interactive-bauble
-                        style="border-radius: 50%;"
-                        offset=${this.calculateOffset(value.startTime)}
-                        @dragstart=${this.handleBaubleDragStart}
-                        @dragend=${this.handleBaubleDragEnd}
-                        draggable="true"
-                        @click=${this.handleBaubleClick}
-                        id=${key}
-                      >
-                      </webwriter-interactive-bauble>`
-                  : html` <!--  -->
-                      <webwriter-interactive-bauble
-                        style=""
-                        offset=${this.calculateOffset(value.startTime)}
-                        @dragstart=${this.handleBaubleDragStart}
-                        @dragend=${this.handleBaubleDragEnd}
-                        draggable="true"
-                        @click=${this.handleBaubleClick}
-                        id=${key}
-                      >
-                      </webwriter-interactive-bauble>`;
-              }
-            )}
+            ${Array.from(
+              (
+                (this.getRootNode() as ShadowRoot)
+                  .host as WebwriterInteractiveVideo
+              ).videoInteractions
+            ).map((interaction) => {
+              return html`<webwriter-interactive-bauble
+                style=${this.isContentEditable
+                  ? "cursor: grab"
+                  : "cursor: pointer"}
+                offset=${this.calculateOffset(
+                  (interaction as WwVideoInteraction).startTime
+                )}
+                @dragstart=${this.handleBaubleDragStart}
+                @dragend=${this.handleBaubleDragEnd}
+                draggable=${this.isContentEditable ? "true" : "false"}
+                @click=${this.handleBaubleClick}
+                id=${(interaction as WwVideoInteraction).id}
+              >
+              </webwriter-interactive-bauble>`;
+            })}
           </div>
         </div>
       </div>
@@ -140,18 +134,14 @@ export class InteractionsProgressBar extends LitElementWw {
    * @remarks
    * This function is called when a bauble is clicked. It checks if the control key is pressed and if so, it sets the video time to the bauble's start time.
    * Otherwise, it calls the clickEventHelper function to handle the click event.
+   * 
+   *  
+   * 
+   *  
+          
    */
   handleBaubleClick(event: MouseEvent) {
     const clickedElement = event.target as WwInteractiveBauble;
-
-    console.log("test");
-    const videoElement = this.parentNode.parentNode.querySelector(
-      "#video"
-    ) as HTMLVideoElement;
-
-    videoElement.currentTime = this.videoContext.videoInteractionData.get(
-      clickedElement.id
-    ).startTime;
 
     this.dispatchEvent(
       new CustomEvent("interactionBaubleClicked", {
@@ -169,18 +159,6 @@ export class InteractionsProgressBar extends LitElementWw {
    */
   handleBaubleDragStart = (e: DragEvent) => {
     e.dataTransfer.setData("id", (e.target as WwInteractiveBauble).id);
-    e.dataTransfer.setData(
-      "previousActive",
-      `${this.videoContext.activeElement}`
-    );
-    //this.changeActiveElement((e.target as WwInteractiveBauble).id);
-
-    this.dispatchEvent(
-      new CustomEvent("changeAddToTrash", {
-        bubbles: true,
-        composed: true,
-      })
-    );
   };
 
   /**
@@ -199,15 +177,12 @@ export class InteractionsProgressBar extends LitElementWw {
     ) as HTMLVideoElement;
 
     this.dispatchEvent(
-      new CustomEvent("changeInteractionTime", {
+      new CustomEvent("changeInteractionStartTime", {
         detail: {
           newTime: Math.floor(
             videoElement.duration * (distanceFromLeft / rect.width)
           ),
           index: parseInt(e.dataTransfer.getData("id")),
-          isReplace: this.videoContext.videoInteractionData.get(
-            parseInt(e.dataTransfer.getData("id"))
-          ).isReplace,
         },
         bubbles: true,
         composed: true,
@@ -216,16 +191,6 @@ export class InteractionsProgressBar extends LitElementWw {
 
     this.dropArea.style.background = "none";
 
-    this.dispatchEvent(
-      new CustomEvent("changeTrashToAdd", {
-        bubbles: true,
-        composed: true,
-      })
-    );
-
-    // this.changeActiveElement(
-    //   parseInt(e.dataTransfer.getData("previousActive"))
-    // );
     this.updateBaublePositions();
   }
 
@@ -255,16 +220,6 @@ export class InteractionsProgressBar extends LitElementWw {
    * @param e - The drag event.
    */
   handleBaubleDragEnd = (e: DragEvent) => {
-    // this.changeActiveElement(
-    //   parseInt(e.dataTransfer.getData("previousActive"))
-    // );
-    this.dispatchEvent(
-      new CustomEvent("changeTrashToAdd", {
-        bubbles: true,
-        composed: true,
-      })
-    );
-
     this.dropArea.style.background = "none";
   };
 
@@ -277,9 +232,15 @@ export class InteractionsProgressBar extends LitElementWw {
     Array.from(children).forEach((child: Element) => {
       if (child instanceof WwInteractiveBauble) {
         const id = parseInt(child.id);
-        const data = this.videoContext.videoInteractionData.get(id);
-        if (data) {
-          const newOffset = this.calculateOffset(data.startTime);
+
+        const slottedInteraction = (
+          (this.getRootNode() as ShadowRoot).host as WebwriterInteractiveVideo
+        ).videoInteractions.filter(
+          (interaction) => Number(interaction.id) === Number(id)
+        )[0] as WwVideoInteraction;
+
+        if (slottedInteraction) {
+          const newOffset = this.calculateOffset(slottedInteraction.startTime);
           if (newOffset !== undefined) {
             child.setAttribute("offset", `${newOffset}`);
           }
@@ -302,14 +263,6 @@ export class InteractionsProgressBar extends LitElementWw {
       "#video"
     ) as HTMLVideoElement;
 
-    console.log(videoElement);
-
-    console.log(
-      (time / videoElement.duration) *
-        0.95 *
-        videoElement.getBoundingClientRect().width
-    );
-
     return (
       (time / videoElement.duration) *
       0.95 *
@@ -324,26 +277,10 @@ export class InteractionsProgressBar extends LitElementWw {
     if (!this.videoContext.videoLoaded) return;
 
     this.dispatchEvent(
-      new CustomEvent("toggleInteractionsDrawer", {
+      new CustomEvent("addInteraction", {
         bubbles: true,
         composed: true,
       })
     );
   };
-
-  /**
-   * Handles the event when a bauble is dropped on the "add" button.
-   * This deletes the object. When the drag event starts the add button turns into a trash can.
-   * @param e - The DragEvent object representing the drop event.
-   *
-   */
-  handleBaubleDroppedOnAdd(e: DragEvent) {
-    // this.dropArea.style.background = "none";
-    // this.deleteElement();
-    // this.changeActiveElement(
-    //   parseInt(e.dataTransfer.getData("previousActive"))
-    // );
-    // this.changeTrashToAdd();
-    //TODO:
-  }
 }

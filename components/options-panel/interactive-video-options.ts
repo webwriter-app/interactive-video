@@ -3,7 +3,14 @@ import { html, css, LitElement, PropertyValues } from "lit";
 import { LitElementWw } from "@webwriter/lit";
 import { customElement, property, query } from "lit/decorators.js";
 
-import { SlSwitch, SlIcon } from "@shoelace-style/shoelace";
+import {
+  SlSwitch,
+  SlIcon,
+  SlColorPicker,
+  SlDetails,
+  SlInput,
+  SlButton,
+} from "@shoelace-style/shoelace";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 
 import {
@@ -15,13 +22,27 @@ import { consume } from "@lit/context";
 
 //CSS
 import styles from "./interactive-video-options.styles";
-
+//Icons
 import movie from "@tabler/icons/outline/movie.svg";
+import timelineEvent from "@tabler/icons/outline/timeline-event.svg";
+import trash from "@tabler/icons/outline/trash.svg";
+
+//Util
+import { formatTime, parseTime } from "../../utils/timeFormatter";
+import { WwVideoInteraction } from "../../widgets/webwriter-video-interaction/webwriter-video-interaction.component";
+import { WebwriterInteractiveVideo } from "../../widgets/webwriter-interactive-video/webwriter-interactive-video.component";
 
 export class InteractiveVideoOptions extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })
   @property({ attribute: false })
   accessor videoContext: InteractiveVideoContext;
+
+  @property({ type: Object, attribute: false, reflect: false })
+  accessor selectedInteraction: WwVideoInteraction = undefined;
+
+  @property({ type: Number, attribute: true, reflect: true })
+  accessor tabIndex = -1;
+
   /**
    * Returns an object that maps custom element names to their corresponding classes.
    * These custom elements can be used within the scope of the `webwriter-interactive-video` component.
@@ -32,6 +53,10 @@ export class InteractiveVideoOptions extends LitElementWw {
     return {
       "sl-switch": SlSwitch,
       "sl-icon": SlIcon,
+      "sl-input": SlInput,
+      "sl-details": SlDetails,
+      "sl-color-picker": SlColorPicker,
+      "sl-button": SlButton,
     };
   }
 
@@ -49,25 +74,204 @@ export class InteractiveVideoOptions extends LitElementWw {
 
   */
   render() {
+    const parent = this.parentNode; // Get parent
+    const root = parent.getRootNode(); // Get shadowRoot or document
+
+    if (root instanceof ShadowRoot) {
+      const slot = root.querySelector("slot"); // Find the slot
+      if (slot) {
+        const assignedElements = slot.assignedElements();
+        const hasVideoInteraction = assignedElements.some(
+          (el) => el.tagName.toLowerCase() === "webwriter-video-interaction"
+        );
+        //
+        if (hasVideoInteraction) {
+          this.selectedInteraction = assignedElements.filter(
+            (interaction) =>
+              interaction.id ===
+              String(this.videoContext?.selectedInteractionID)
+          )[0] as WwVideoInteraction;
+        }
+        //
+        else {
+          // The parentNode's shadow root belongs to a WwVideoInteraction component
+          const parentComponent = root.host;
+
+          if (parentComponent instanceof WwVideoInteraction) {
+            this.selectedInteraction = parentComponent;
+          }
+        }
+      }
+    }
+
     return html`
       <div
-        style="display:flex; flex-direction: column; gap: 10px; "
+        style="display:flex; flex-direction: column; gap: 30px; "
         id="temporary-teacher-options-container"
         class="author-only"
       >
-        <div class="header">
-          <sl-icon src=${movie}></sl-icon>
-          <p>Options</p>
-        </div>
-        <sl-switch
-          checked
-          @sl-change=${this.handleShowOverlayChange}
-          class="temporary-teacher-options"
-          ?checked=${this.videoContext.showOverlay}
-          >Show Interactions</sl-switch
-        >
+        ${this.selectedInteraction !== undefined
+          ? html`${this.videoContext?.videoLoaded
+              ? html` <!--  -->
+                  <div
+                    style="display:flex; flex-direction: column; gap: 10px; "
+                  >
+                    <div class="header">
+                      <sl-icon src=${movie}></sl-icon>
+                      <p>Video</p>
+                    </div>
+                    <sl-switch
+                      @sl-change=${this.handleShowOverlayChange}
+                      class="temporary-teacher-options"
+                      ?checked=${this.videoContext?.showOverlay}
+                      ?disabled=${this.videoContext === undefined}
+                      >Show Popups</sl-switch
+                    >
+                  </div>
+
+                  <!--  -->
+                  <div
+                    style="display:flex; flex-direction: column; gap: 10px; "
+                  >
+                    ${this.selectedInteraction !== undefined
+                      ? html` <!--  -->
+                          <div class="header">
+                            <sl-icon src=${timelineEvent}></sl-icon>
+                            <p>Interaction</p>
+                            <p style="margin-left: auto">
+                              ID: ${this.selectedInteraction?.id}
+                            </p>
+                          </div>
+                          <div id="overlay-interaction-settings">
+                            <sl-input
+                              id="overlay-start-time-input"
+                              label="Start Time"
+                              size="small"
+                              value=${formatTime(
+                                this.selectedInteraction?.startTime
+                              )}
+                              @sl-change=${this.handleStartTimeInputChange}
+                            ></sl-input>
+                            <sl-input
+                              id="overlay-end-time-input"
+                              label="End Time"
+                              size="small"
+                              value=${formatTime(
+                                this.selectedInteraction?.endTime
+                              )}
+                              @sl-change=${this.handleEndTimeInputChange}
+                            ></sl-input>
+                            <div>
+                              <p
+                                style="font-size: 17px; margin: 0px; padding: 0px; margin-bottom: 5px; font-size: 14px;"
+                              >
+                                Background Color
+                              </p>
+                              <sl-color-picker
+                                label="Overlay Color"
+                                id="color-picker"
+                                size="small"
+                                value=${getComputedStyle(
+                                  this.selectedInteraction
+                                ).backgroundColor}
+                                @sl-change=${this.handleOverlayColorChange}
+                              ></sl-color-picker>
+                            </div>
+                            <sl-details summary="Advanced Options">
+                              <div
+                                style="display: flex; flex-direction: column; gap: 10px;"
+                              >
+                                <sl-input
+                                  label="X Position"
+                                  id="overlay-x-position-input"
+                                  type="number"
+                                  value=${parseInt(
+                                    getComputedStyle(this.selectedInteraction)
+                                      .left,
+                                    10
+                                  ) || 0}
+                                  size="small"
+                                >
+                                </sl-input>
+                                <sl-input
+                                  label="Y Position"
+                                  id="overlay-y-position-input"
+                                  type="number"
+                                  value=${parseInt(
+                                    getComputedStyle(this.selectedInteraction)
+                                      .top,
+                                    10
+                                  ) || 0}
+                                  size="small"
+                                >
+                                </sl-input>
+                                <sl-input
+                                  label="Width"
+                                  id="overlay-width-input"
+                                  type="number"
+                                  size="small"
+                                  value=${parseInt(
+                                    getComputedStyle(this.selectedInteraction)
+                                      .width,
+                                    10
+                                  ) || 0}
+                                >
+                                </sl-input>
+                                <sl-input
+                                  label="Height"
+                                  id="overlay-height-input"
+                                  type="number"
+                                  size="small"
+                                  value=${parseInt(
+                                    getComputedStyle(this.selectedInteraction)
+                                      .height,
+                                    10
+                                  ) || 0}
+                                >
+                                </sl-input>
+                              </div>
+                            </sl-details>
+                            <sl-button
+                              slot="footer"
+                              style="margin-left: auto; width: 100px"
+                              variant="danger"
+                              outline
+                              @click=${this.deleteElement}
+                            >
+                              <sl-icon slot="prefix" src=${trash}></sl-icon>
+                              Delete
+                            </sl-button>
+                          </div>`
+                      : html` <!--  -->
+                          <div class="header">
+                            <sl-icon src=${timelineEvent}></sl-icon>
+                            <p>Interaction</p>
+                          </div>
+                          <p
+                            style="padding: 0px; margin: 0px; font-size: 14px;"
+                          >
+                            Select an interaction to view details
+                          </p>`}
+                  </div>`
+              : null}`
+          : null}
       </div>
     `;
+  }
+
+  //
+  //
+  //
+  deleteElement() {
+    if (this.selectedInteraction) {
+      this.dispatchEvent(
+        new CustomEvent("updateContext", {
+          bubbles: true,
+          composed: true,
+        })
+      );
+      this.selectedInteraction.parentNode.removeChild(this.selectedInteraction);
+    }
   }
 
   /**
@@ -86,4 +290,100 @@ export class InteractiveVideoOptions extends LitElementWw {
       })
     );
   };
+
+  /*
+
+
+  */
+  handleStartTimeInputChange = (e: CustomEvent, index?: number) => {
+    const input = e.target as SlInput;
+    const newTime = parseTime(input.value);
+    if (newTime !== null) {
+      //update bauble time
+      this.selectedInteraction.startTime = newTime;
+      this.selectedInteraction.setAttribute("startTime", String(newTime));
+
+      input.value = formatTime(newTime);
+    } else {
+      input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
+    }
+    // // change bauble positions to reflect new time and request an update
+    (
+      this.selectedInteraction.parentNode as WebwriterInteractiveVideo
+    ).updateBaublePositions();
+
+    // // change bauble positions to reflect new time and request an update
+    (
+      this.selectedInteraction.parentNode as WebwriterInteractiveVideo
+    ).videoElement.currentTime = this.selectedInteraction.startTime;
+  };
+
+  /*
+
+
+  */
+  handleEndTimeInputChange = (e: CustomEvent, index?: number) => {
+    const input = e.target as SlInput;
+    const newTime = parseTime(input.value);
+    if (newTime !== null) {
+      //update bauble time
+      this.selectedInteraction.endTime = newTime;
+      this.selectedInteraction.setAttribute("endTime", String(newTime));
+
+      input.value = formatTime(newTime);
+    } else {
+      input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
+    }
+    // // change bauble positions to reflect new time and request an update
+    (
+      this.selectedInteraction.parentNode as WebwriterInteractiveVideo
+    ).updateBaublePositions();
+  };
+
+  /**
+   * Handles the change event when the overlay color is changed.
+   *
+   * @param e - The custom event containing the color picker target.
+   */
+  handleOverlayColorChange(e: CustomEvent) {
+    const colorPicker = e.target as SlColorPicker;
+    this.selectedInteraction.style.backgroundColor = String(colorPicker.value);
+  }
+
+  /**
+   * Handles the change in overlay position.
+   *
+   * @param e - The custom event containing the target element.
+   */
+  handleOverlayPositionChange(e: CustomEvent) {
+    // const input = e.target as SlInput;
+    // const value = parseFloat(input.value);
+    // if (!isNaN(value)) {
+    //   const data = this.videoContext.videoInteractionData.get(this.editingId);
+    //   data.position = data.position || { x: 0, y: 0 };
+    //   if (input.label.toLowerCase() === "x position") {
+    //     data.position.x = value;
+    //   } else if (input.label.toLowerCase() === "y position") {
+    //     data.position.y = value;
+    //   }
+    //   this.saveInteractionConfig();
+    //   this.requestUpdate();
+    // }
+  }
+
+  /**
+   * Handles the change even when inputting a new overlay size.
+   *
+   * @param e - The custom event containing the target element.
+   */
+  handleOverlaySizeChange(e: CustomEvent) {
+    // const input = e.target as SlInput;
+    // const value = parseFloat(input.value);
+    // if (!isNaN(value) && value > 0) {
+    //   const data = this.videoContext.videoInteractionData.get(this.editingId);
+    //   data.size = data.size || { width: 100, height: 100 };
+    //   data.size[input.label.toLowerCase() as "width" | "height"] = value;
+    //   this.saveInteractionConfig();
+    // }
+  }
 }

@@ -2,7 +2,6 @@ import { css } from "lit";
 
 export default css`
   #temporary-teacher-options-container {
-    padding: 4px;
     overflow: visible;
   }
 
@@ -30,5 +29,24 @@ export default css`
     border-bottom: 2px solid #52525b;
     gap: 7px;
     padding-bottom: 10px;
+  }
+
+  .interaction-button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  #overlay-interaction-settings {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+
+    gap: 20px;
+  }
+
+  sl-details {
+    font-size: 14px;
   }
 `;
