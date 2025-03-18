@@ -78,7 +78,6 @@ export class InteractiveVideoOptions extends LitElementWw {
     const root = parent.getRootNode(); // Get shadowRoot or document
 
     if (this.videoContext?.selectedInteractionID !== -1) {
-      console.log("test");
       if (root instanceof ShadowRoot) {
         const slot = root.querySelector("slot"); // Find the slot
         if (slot) {
@@ -140,7 +139,7 @@ export class InteractiveVideoOptions extends LitElementWw {
                         <sl-icon src=${timelineEvent}></sl-icon>
                         <p>Interaction</p>
                         <p style="margin-left: auto">
-                          ID: ${this.selectedInteraction?.id}
+                          ID: ${this.selectedInteraction?.id + 1}
                         </p>
                       </div>
                       <div id="overlay-interaction-settings">
@@ -318,6 +317,7 @@ export class InteractiveVideoOptions extends LitElementWw {
       }
     } else {
       input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
+      input.value = formatTime(this.selectedInteraction.startTime);
     }
   };
 
@@ -353,6 +353,7 @@ export class InteractiveVideoOptions extends LitElementWw {
       }
     } else {
       input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
+      input.value = formatTime(this.selectedInteraction.endTime);
     }
   };
 

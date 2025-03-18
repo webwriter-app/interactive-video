@@ -69,7 +69,6 @@
             }
         },
         "./widgets/webwriter-video-interaction": {
-            "selectable": false,
             "draggable": false,
             "definingForContent": true,
             "isolating": true,

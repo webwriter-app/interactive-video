@@ -135,7 +135,7 @@ export class WwVideoInteraction extends LitElementWw {
       </div>
 
       <interactive-video-options
-        style="user-select: none;"
+        style="outline: none"
         contenteditable=${this.isContentEditable}
         part="options"
         class="author-only"

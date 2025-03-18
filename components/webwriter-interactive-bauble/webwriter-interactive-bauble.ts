@@ -73,7 +73,7 @@ export class WwInteractiveBauble extends LitElementWw {
   render() {
     return html`
       <div id="bauble">
-        ${this.isContentEditable ? html`<p>${this.id}</p>` : null}
+        ${this.isContentEditable ? html`<p>${this.id + 1}</p>` : null}
       </div>
     `;
   }

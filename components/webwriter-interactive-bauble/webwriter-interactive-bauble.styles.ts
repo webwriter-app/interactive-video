@@ -14,10 +14,10 @@ export default css`
     justify-content: center;
     align-items: center;
 
-    font-size: 8px;
+    font-size: 12px;
     border-radius: 15px;
-    width: 10px;
-    height: 10px;
+    width: 18px;
+    height: 18px;
     background-color: #e9e9e9;
   }
 

@@ -169,6 +169,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           <div id="controls">
             <!-- Baubles // Bubbles on Progress Bar -->
             <interactions-progress-bar
+              style="outline: none"
               contenteditable=${this.isContentEditable}
               @addInteraction=${() =>
                 this.addVideoInteraction(this.videoInteractions.length)}
@@ -179,6 +180,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                   e.detail.newTime,
                   e.detail.index
                 )}
+              @jumpToChapter=${(e: CustomEvent) =>
+                this.jumpToChapter(e.detail.startTime)}
             ></interactions-progress-bar>
             <!-- Progress Bar -->
             <sl-range
@@ -188,6 +191,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
             <!-- Video Controls Bar -->
             <video-controls-bar
+              style="outline: none"
               contenteditable=${this.isContentEditable}
               @volumeChange=${(e: CustomEvent) =>
                 this.handleVolumeChange(e.detail.value)}
@@ -216,7 +220,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       <!-- OPTIONS PANEL -->
       <interactive-video-options
         contenteditable=${this.isContentEditable}
-        style="user-select: none"
+        style="outline: none"
         part="options"
         class="author-only"
         @updateContext=${() => this.updateContext()}
@@ -280,6 +284,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   //
   interactionClicked(id) {
     this.videoContext.selectedInteractionID = id;
+    const interaction = this.videoInteractions.filter(
+      (interaction) => Number(interaction.id) === Number(id)
+    )[0] as WwVideoInteraction;
+    interaction.focus();
     this.updateContext();
   }
 
@@ -295,9 +303,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
     this.videoElement.currentTime = slottedInteraction.startTime;
 
-    this.interactionClicked(id);
+    this.requestUpdate();
 
-    slottedInteraction.focus();
+    this.interactionClicked(id);
   }
 
   //

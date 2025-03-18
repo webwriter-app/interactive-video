@@ -27,6 +27,7 @@ import { WwInteractiveBauble } from "../webwriter-interactive-bauble/webwriter-i
 import { consume } from "@lit/context";
 
 import add from "@tabler/icons/outline/timeline-event-plus.svg";
+import bookmark from "@tabler/icons/filled/bookmark.svg";
 
 //CSS
 import styles from "./interactions-progress-bar.styles";
@@ -109,8 +110,8 @@ export class InteractionsProgressBar extends LitElementWw {
               return html`<webwriter-interactive-bauble
                 contenteditable=${this.isContentEditable}
                 style=${this.isContentEditable
-                  ? "cursor: grab"
-                  : "cursor: pointer"}
+                  ? "cursor: grab; position: absolute;"
+                  : "cursor: pointer; position: absolute;"}
                 offset=${this.calculateOffset(
                   (interaction as WwVideoInteraction).startTime
                 )}
@@ -132,9 +133,38 @@ export class InteractionsProgressBar extends LitElementWw {
                           height: 15px; 
                           background-color: #E9E9E9; 
                           position: absolute; 
-                          left: ${this.calculateOffset(startTime)}px;
+                          offset: ${this.calculateOffset(startTime)}px;
                         "
                       ></div>`
+                    : null}
+                `;
+              }
+            )}
+            ${Array.from(JSON.parse(this.videoContext.chapterConfig)).map(
+              ({ title, startTime }) => {
+                return html`
+                  ${startTime !== 0
+                    ? html` <sl-icon
+                        src=${bookmark}
+                        style="
+                          width: 15px; 
+                          height: 15px; 
+                          color: #E9E9E9; 
+                          position: absolute; 
+                          left: ${this.calculateOffset(startTime)}px;
+                        "
+                        @mouseover=${(e) => (e.target.style.color = "#0084C6")}
+                        @mouseleave=${(e) => (e.target.style.color = "#E9E9E9")}
+                        @click=${() => {
+                          this.dispatchEvent(
+                            new CustomEvent("jumpToChapter", {
+                              detail: { startTime: startTime },
+                              bubbles: true,
+                              composed: true,
+                            })
+                          );
+                        }}
+                      ></sl-icon>`
                     : null}
                 `;
               }
@@ -277,13 +307,15 @@ export class InteractionsProgressBar extends LitElementWw {
   calculateOffset(time: number): number {
     if (!this.videoContext.videoLoaded) return;
 
+    console.log(time);
+
     const videoElement = this.parentNode.parentNode.querySelector(
       "#video"
     ) as HTMLVideoElement;
 
     return (
       (time / videoElement.duration) *
-      0.95 *
+      0.97 *
       videoElement.getBoundingClientRect().width
     );
   }
