@@ -292,25 +292,33 @@ export class InteractiveVideoOptions extends LitElementWw {
   */
   handleStartTimeInputChange = (e: CustomEvent, index?: number) => {
     const input = e.target as SlInput;
+    console.log(e);
     const newTime = parseTime(input.value);
     if (newTime !== null) {
       //update bauble time
-      this.selectedInteraction.startTime = newTime;
-      this.selectedInteraction.setAttribute("startTime", String(newTime));
 
-      input.value = formatTime(newTime);
+      if (newTime < this.selectedInteraction.endTime) {
+        this.selectedInteraction.startTime = newTime;
+        this.selectedInteraction.setAttribute("startTime", String(newTime));
+
+        input.value = formatTime(newTime);
+
+        // // change bauble positions to reflect new time and request an update
+        (
+          this.selectedInteraction.parentNode as WebwriterInteractiveVideo
+        ).updateBaublePositions();
+
+        // // change bauble positions to reflect new time and request an update
+        (
+          this.selectedInteraction.parentNode as WebwriterInteractiveVideo
+        ).videoElement.currentTime = this.selectedInteraction.startTime;
+      } else {
+        console.error("The Start Time must be before the End Time.");
+        input.value = formatTime(this.selectedInteraction.startTime);
+      }
     } else {
       input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
     }
-    // // change bauble positions to reflect new time and request an update
-    (
-      this.selectedInteraction.parentNode as WebwriterInteractiveVideo
-    ).updateBaublePositions();
-
-    // // change bauble positions to reflect new time and request an update
-    (
-      this.selectedInteraction.parentNode as WebwriterInteractiveVideo
-    ).videoElement.currentTime = this.selectedInteraction.startTime;
   };
 
   /*
@@ -319,20 +327,33 @@ export class InteractiveVideoOptions extends LitElementWw {
   */
   handleEndTimeInputChange = (e: CustomEvent, index?: number) => {
     const input = e.target as SlInput;
+    console.log(e);
     const newTime = parseTime(input.value);
     if (newTime !== null) {
       //update bauble time
-      this.selectedInteraction.endTime = newTime;
-      this.selectedInteraction.setAttribute("endTime", String(newTime));
 
-      input.value = formatTime(newTime);
+      if (newTime > this.selectedInteraction.startTime) {
+        this.selectedInteraction.endTime = newTime;
+        this.selectedInteraction.setAttribute("endTime", String(newTime));
+
+        input.value = formatTime(newTime);
+
+        // // change bauble positions to reflect new time and request an update
+        (
+          this.selectedInteraction.parentNode as WebwriterInteractiveVideo
+        ).updateBaublePositions();
+
+        // // change bauble positions to reflect new time and request an update
+        (
+          this.selectedInteraction.parentNode as WebwriterInteractiveVideo
+        ).videoElement.currentTime = this.selectedInteraction.startTime;
+      } else {
+        console.error("The End Time must be after the Start Time.");
+        input.value = formatTime(this.selectedInteraction.endTime);
+      }
     } else {
       input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
     }
-    // // change bauble positions to reflect new time and request an update
-    (
-      this.selectedInteraction.parentNode as WebwriterInteractiveVideo
-    ).updateBaublePositions();
   };
 
   /**
