@@ -1,84 +1,85 @@
 {
-  "name": "@webwriter/interactive-video",
-  "version": "1.0.0",
-  "publishConfig": {
-    "access": "public"
-  },
-  "description": "(WIP) Enhance learning by adding interactive content in popups to videos for an engaging, interactive experience.",
-  "keywords": [
-    "webwriter-widget",
-    "widget-lang-de",
-    "widget-presentational",
-    "widget-practical",
-    "isced2011-1",
-    "isced2011-2",
-    "isced2011-3",
-    "isced2011-4",
-    "isced2011-5",
-    "isced2011-6",
-    "isced2011-7",
-    "isced2011-8",
-    "iscedf2013-01",
-    "iscedf2013-02",
-    "iscedf2013-03",
-    "iscedf2013-04",
-    "iscedf2013-05",
-    "iscedf2013-06",
-    "iscedf2013-07",
-    "iscedf2013-08",
-    "iscedf2013-09",
-    "iscedf2013-10"
-  ],
-  "license": "MIT",
-  "author": "Andreas Dymek, based on previous work by Tarik Vural",
-  "scripts": {
-    "prepublishOnly": "npx @webwriter/build",
-    "dev": "npx @webwriter/build dev",
-    "localize": "lit-localize extract && npx @webwriter/build localize && lit-localize build"
-  },
-  "dependencies": {
-    "@lit/context": "^1.1.4",
-    "@lit/localize": "^0.12.2",
-    "@shoelace-style/shoelace": "^2.20.1",
-    "@tabler/icons": "^3.31.0",
-    "@types/node": "^22.13.10",
-    "@webwriter/lit": "^2.1.6",
-    "lit": "^3.2.1"
-  },
-  "devDependencies": {
-    "@lit/localize-tools": "^0.8.0",
-    "@types/drawflow": "^0.0.12",
-    "typescript": "^5.8.2"
-  },
-  "exports": {
-    "./widgets/webwriter-interactive-video.*": {
-      "source": "./widgets/webwriter-interactive-video/webwriter-interactive-video.ts",
-      "default": "./dist/widgets/webwriter-interactive-video.*"
+    "name": "@webwriter/interactive-video",
+    "version": "1.0.0",
+    "description": "(WIP) Enhance learning by adding interactive content in popups to videos for an engaging, interactive experience.",
+    "keywords": [
+        "webwriter-widget",
+        "widget-lang-de",
+        "widget-presentational",
+        "widget-practical",
+        "isced2011-1",
+        "isced2011-2",
+        "isced2011-3",
+        "isced2011-4",
+        "isced2011-5",
+        "isced2011-6",
+        "isced2011-7",
+        "isced2011-8",
+        "iscedf2013-01",
+        "iscedf2013-02",
+        "iscedf2013-03",
+        "iscedf2013-04",
+        "iscedf2013-05",
+        "iscedf2013-06",
+        "iscedf2013-07",
+        "iscedf2013-08",
+        "iscedf2013-09",
+        "iscedf2013-10"
+    ],
+    "license": "MIT",
+    "author": "Andreas Dymek, based on previous work by Tarik Vural",
+    "scripts": {
+        "prepublishOnly": "npx @webwriter/build",
+        "dev": "npx @webwriter/build dev",
+        "localize": "lit-localize extract && npx @webwriter/build localize && lit-localize build"
     },
-    "./widgets/webwriter-video-interaction.*": {
-      "source": "./widgets/webwriter-video-interaction/webwriter-video-interaction.ts",
-      "default": "./dist/widgets/webwriter-video-interaction.*"
+    "dependencies": {
+        "@lit/context": "^1.1.4",
+        "@lit/localize": "^0.12.2",
+        "@shoelace-style/shoelace": "^2.20.1",
+        "@tabler/icons": "^3.31.0",
+        "@types/node": "^22.13.10",
+        "@webwriter/lit": "^2.1.6",
+        "lit": "^3.2.1"
     },
-    "./package.json": "./package.json",
-    "./icon": "./icon.svg"
-  },
-  "editingConfig": {
-    ".": {
-      "description": {
-        "de": "(WIP) Bereichern Sie Videos mit interaktiven Popups, um ein spannendes und effektives Lernerlebnis zu schaffen."
-      }
+    "devDependencies": {
+        "@lit/localize-tools": "^0.8.0",
+        "@types/drawflow": "^0.0.12",
+        "typescript": "^5.8.2"
     },
-    "./widgets/webwriter-video-interaction": {
-      "selectable": false,
-      "definingForContent": true,
-      "content": "(flow)*",
-      "uninsertable": true,
-      "draggable": false
+    "publishConfig": {
+        "access": "public"
     },
-    "./widgets/webwriter-interactive-video": {
-      "definingAsContext": true,
-      "content": "(webwriter-video-interaction)*",
-      "draggable": false
+    "exports": {
+        "./widgets/webwriter-interactive-video.*": {
+            "source": "./widgets/webwriter-interactive-video/webwriter-interactive-video.ts",
+            "default": "./dist/widgets/webwriter-interactive-video.*"
+        },
+        "./widgets/webwriter-video-interaction.*": {
+            "source": "./widgets/webwriter-video-interaction/webwriter-video-interaction.ts",
+            "default": "./dist/widgets/webwriter-video-interaction.*"
+        },
+        "./package.json": "./package.json",
+        "./icon": "./icon.svg"
+    },
+    "editingConfig": {
+        ".": {
+            "description": {
+                "de": "(WIP) Bereichern Sie Videos mit interaktiven Popups, um ein spannendes und effektives Lernerlebnis zu schaffen."
+            }
+        },
+        "./widgets/webwriter-video-interaction": {
+            "selectable": false,
+            "draggable": false,
+            "definingForContent": true,
+            "isolating": true,
+            "content": "(flow)*",
+            "uninsertable": true
+        },
+        "./widgets/webwriter-interactive-video": {
+            "draggable": false,
+            "definingAsContext": true,
+            "content": "(webwriter-video-interaction)*"
+        }
     }
-  }
 }

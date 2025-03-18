@@ -42,7 +42,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     return {
       "sl-range": SlRange,
       "sl-icon": SlIcon,
-
       "interactive-video-options": InteractiveVideoOptions,
       "video-input-overlay": VideoInputOverlay,
       "video-controls-bar": VideoControlsBar,
