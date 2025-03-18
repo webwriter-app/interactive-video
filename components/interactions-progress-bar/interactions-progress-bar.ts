@@ -107,6 +107,7 @@ export class InteractionsProgressBar extends LitElementWw {
               ).videoInteractions
             ).map((interaction) => {
               return html`<webwriter-interactive-bauble
+                contenteditable=${this.isContentEditable}
                 style=${this.isContentEditable
                   ? "cursor: grab"
                   : "cursor: pointer"}

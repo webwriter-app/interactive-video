@@ -111,21 +111,27 @@ export class WwVideoInteraction extends LitElementWw {
             })
           )}
       >
-        <sl-icon
-          id="dragIcon"
-          style="position: sticky; top: 0; /* Keeps it at the top */"
-          src=${gripHorizontal}
-          @pointerdown="${this.startDragging}"
-        >
-        </sl-icon>
+        ${this.isContentEditable
+          ? html`<sl-icon
+              id="dragIcon"
+              style="position: sticky; top: 0; /* Keeps it at the top */"
+              src=${gripHorizontal}
+              @pointerdown="${this.startDragging}"
+            >
+            </sl-icon>`
+          : null}
+
         <slot class="page"></slot>
-        <sl-icon
-          id="bottomRight"
-          style="position: absolute; bottom: 5px; right: 5px; "
-          src=${radiusBottomRight}
-          @pointerdown=${this.startResizing}
-        >
-        </sl-icon>
+
+        ${this.isContentEditable
+          ? html` <sl-icon
+              id="bottomRight"
+              style="position: absolute; bottom: 5px; right: 5px; "
+              src=${radiusBottomRight}
+              @pointerdown=${this.startResizing}
+            >
+            </sl-icon>`
+          : null}
       </div>
 
       <interactive-video-options
