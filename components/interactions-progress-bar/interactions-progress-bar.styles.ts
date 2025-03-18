@@ -11,6 +11,9 @@ export default css`
   }
 
   #add-button {
+    position: absolute;
+    top: -35;
+
     margin-bottom: 10px;
     margin-right: 10px;
   }
@@ -25,7 +28,7 @@ export default css`
     border: none;
 
     border-radius: 8px;
-    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+    background-color: #2c2c2c; /* Black background with opacity */
     color: white;
     font-size: 12px;
   }
@@ -38,7 +41,7 @@ export default css`
     height: 20px;
     display: flex;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+    background-color: #2c2c2c; /* Black background with opacity */
     width: 100%;
   }
 

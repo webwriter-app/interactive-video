@@ -211,6 +211,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       <!-- OPTIONS PANEL -->
       <interactive-video-options
         contenteditable=${this.isContentEditable}
+        style="user-select: none"
         part="options"
         class="author-only"
         @updateContext=${() => this.updateContext()}
@@ -368,9 +369,15 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       "webwriter-video-interaction"
     ) as WwVideoInteraction;
 
+    const videoRect = this.videoElement.getBoundingClientRect();
+    const interactionWidth = 300; // Adjust based on actual element size
+    const interactionHeight = 200; // Adjust based on actual element size
+
     interaction.style.position = "absolute";
-    interaction.style.top = "0";
-    interaction.style.left = "0";
+    interaction.style.top = `${videoRect.height / 2 - interactionHeight / 2}px`;
+    interaction.style.left = `${videoRect.width / 2 - interactionWidth / 2}px`;
+    interaction.style.width = `${interactionWidth}px`;
+    interaction.style.height = `${interactionHeight}px`;
 
     this.appendChild(interaction);
     interaction.setAttribute("id", `${id}`);

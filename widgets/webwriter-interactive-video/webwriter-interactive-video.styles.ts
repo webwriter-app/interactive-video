@@ -47,9 +47,7 @@ export default css`
      visibility: hidden;
     transition: opacity 0.5s ease, visibility 0.5s ease; */
 
-    position: absolute;
-    left: 0;
-    bottom: 0;
+    position: relative;
 
     flex-direction: column;
     align-items: center; /* Prevent stretching */

@@ -2,9 +2,7 @@ import { css } from "lit";
 
 export default css`
   #chapters-drawer::part(panel) {
-    /* background-color: rgba(0, 0, 0, 0.8); // Black background with opacity 
-    color: white; */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
   }
 
   .chapter-list {

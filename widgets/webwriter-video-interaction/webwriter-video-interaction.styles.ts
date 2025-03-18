@@ -4,7 +4,7 @@ export default css`
   :host {
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 1);
   }
 
   .page {
@@ -15,7 +15,6 @@ export default css`
     box-sizing: border-box;
     width: 100%;
     max-height: 100%;
-    height: 100px;
   }
 
   :host(:not([contenteditable="true"]):not([contenteditable=""])) .author-only {

@@ -37,7 +37,7 @@ export class InteractiveVideoOptions extends LitElementWw {
   @property({ attribute: false })
   accessor videoContext: InteractiveVideoContext;
 
-  @property({ type: Object, attribute: false, reflect: false })
+  @property({ type: Object, attribute: true, reflect: false })
   accessor selectedInteraction: WwVideoInteraction = undefined;
 
   @property({ type: Number, attribute: true, reflect: true })
@@ -77,31 +77,38 @@ export class InteractiveVideoOptions extends LitElementWw {
     const parent = this.parentNode; // Get parent
     const root = parent.getRootNode(); // Get shadowRoot or document
 
-    if (root instanceof ShadowRoot) {
-      const slot = root.querySelector("slot"); // Find the slot
-      if (slot) {
-        const assignedElements = slot.assignedElements();
-        const hasVideoInteraction = assignedElements.some(
-          (el) => el.tagName.toLowerCase() === "webwriter-video-interaction"
-        );
-        //
-        if (hasVideoInteraction) {
-          this.selectedInteraction = assignedElements.filter(
-            (interaction) =>
-              interaction.id ===
-              String(this.videoContext?.selectedInteractionID)
-          )[0] as WwVideoInteraction;
-        }
-        //
-        else {
-          // The parentNode's shadow root belongs to a WwVideoInteraction component
-          const parentComponent = root.host;
+    if (this.videoContext?.selectedInteractionID !== -1) {
+      console.log("test");
+      if (root instanceof ShadowRoot) {
+        const slot = root.querySelector("slot"); // Find the slot
+        if (slot) {
+          const assignedElements = slot.assignedElements();
+          const hasVideoInteraction = assignedElements.some(
+            (el) => el.tagName.toLowerCase() === "webwriter-video-interaction"
+          );
+          //
+          if (hasVideoInteraction) {
+            const interaction = assignedElements.filter(
+              (interaction) =>
+                interaction.id ===
+                String(this.videoContext?.selectedInteractionID)
+            )[0] as WwVideoInteraction;
 
-          if (parentComponent instanceof WwVideoInteraction) {
-            this.selectedInteraction = parentComponent;
+            this.selectedInteraction = interaction;
+          }
+          //
+          else {
+            // The parentNode's shadow root belongs to a WwVideoInteraction component
+            const parentComponent = root.host;
+
+            if (parentComponent instanceof WwVideoInteraction) {
+              this.selectedInteraction = parentComponent;
+            }
           }
         }
       }
+    } else {
+      this.selectedInteraction = undefined;
     }
 
     return html`
@@ -112,7 +119,7 @@ export class InteractiveVideoOptions extends LitElementWw {
       >
         ${this.videoContext?.videoLoaded
           ? html` <!--  -->
-              <div style="display:flex; flex-direction: column; gap: 10px; ">
+              <div style="display:flex; flex-direction: column; gap: 10px;">
                 <div class="header">
                   <sl-icon src=${movie}></sl-icon>
                   <p>Video</p>
@@ -121,7 +128,6 @@ export class InteractiveVideoOptions extends LitElementWw {
                   @sl-change=${this.handleShowOverlayChange}
                   class="temporary-teacher-options"
                   ?checked=${this.videoContext?.showOverlay}
-                  ?disabled=${this.videoContext === undefined}
                   >Show Popups</sl-switch
                 >
               </div>
@@ -267,8 +273,9 @@ export class InteractiveVideoOptions extends LitElementWw {
    * @param e - The custom event object.
    */
   handleShowOverlayChange = (e: CustomEvent) => {
+    console.log("sl-switch");
     const target = e.target as SlSwitch;
-    this.videoContext.showOverlay = target.checked;
+    this.videoContext = { ...this.videoContext, showOverlay: target.checked };
 
     this.dispatchEvent(
       new CustomEvent("updateContext", {
@@ -276,6 +283,7 @@ export class InteractiveVideoOptions extends LitElementWw {
         composed: true,
       })
     );
+    this.requestUpdate();
   };
 
   /*
@@ -335,42 +343,5 @@ export class InteractiveVideoOptions extends LitElementWw {
   handleOverlayColorChange(e: CustomEvent) {
     const colorPicker = e.target as SlColorPicker;
     this.selectedInteraction.style.backgroundColor = String(colorPicker.value);
-  }
-
-  /**
-   * Handles the change in overlay position.
-   *
-   * @param e - The custom event containing the target element.
-   */
-  handleOverlayPositionChange(e: CustomEvent) {
-    // const input = e.target as SlInput;
-    // const value = parseFloat(input.value);
-    // if (!isNaN(value)) {
-    //   const data = this.videoContext.videoInteractionData.get(this.editingId);
-    //   data.position = data.position || { x: 0, y: 0 };
-    //   if (input.label.toLowerCase() === "x position") {
-    //     data.position.x = value;
-    //   } else if (input.label.toLowerCase() === "y position") {
-    //     data.position.y = value;
-    //   }
-    //   this.saveInteractionConfig();
-    //   this.requestUpdate();
-    // }
-  }
-
-  /**
-   * Handles the change even when inputting a new overlay size.
-   *
-   * @param e - The custom event containing the target element.
-   */
-  handleOverlaySizeChange(e: CustomEvent) {
-    // const input = e.target as SlInput;
-    // const value = parseFloat(input.value);
-    // if (!isNaN(value) && value > 0) {
-    //   const data = this.videoContext.videoInteractionData.get(this.editingId);
-    //   data.size = data.size || { width: 100, height: 100 };
-    //   data.size[input.label.toLowerCase() as "width" | "height"] = value;
-    //   this.saveInteractionConfig();
-    // }
   }
 }

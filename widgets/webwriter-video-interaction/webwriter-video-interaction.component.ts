@@ -86,7 +86,7 @@ export class WwVideoInteraction extends LitElementWw {
 
     if (assignedElements.length == 0) {
       const par = document.createElement("p");
-      par.textContent = "Modify";
+      par.textContent = "Add something here...";
       this.appendChild(par);
     }
   }
@@ -129,6 +129,7 @@ export class WwVideoInteraction extends LitElementWw {
       </div>
 
       <interactive-video-options
+        style="user-select: none;"
         contenteditable=${this.isContentEditable}
         part="options"
         class="author-only"
@@ -148,7 +149,7 @@ export class WwVideoInteraction extends LitElementWw {
           const paragraphs = this.querySelectorAll("p");
           if (paragraphs.length === 0) {
             const par = document.createElement("p");
-            par.textContent = "Modify...";
+            par.textContent = "Add something here...";
             this.appendChild(par);
           }
         }
