@@ -103,6 +103,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @query("video-chapter-drawer")
   accessor chaptersDrawer: VideoChapterDrawer;
 
+  private observer: MutationObserver | null = null;
+
   /**
    * Called when the element is first connected to the document's DOM.
    * @remarks
@@ -114,6 +116,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.videoContext.videoLoaded = false;
     this.updateContext();
     document.addEventListener("fullscreenchange", this.handleFullscreenChange);
+
+    this.observer = new MutationObserver(this.monitorSlot);
+    this.observer.observe(this, { childList: true });
   }
 
   /*
@@ -657,5 +662,32 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
       this.requestUpdate();
     }, 0);
+  };
+
+  /*
+
+  */
+  private monitorSlot = (mutationList: MutationRecord[]) => {
+    mutationList.forEach((mutation) => {
+      if (mutation.type === "childList") {
+        mutation.removedNodes.forEach((node) => {
+          const nodeName = (node as HTMLElement).nodeName.toLowerCase();
+          const isWidget = (node as HTMLElement).classList.contains(
+            "ww-widget"
+          );
+          // "ProseMirror-selectednode" css class confirms that the element is actively selected by the user
+          const isSelectedNode = (node as HTMLElement).classList.contains(
+            "ProseMirror-selectednode"
+          );
+
+          if (isWidget && isSelectedNode) {
+            if (nodeName === "webwriter-video-interaction") {
+              this.updateContext();
+              this.requestUpdate();
+            }
+          }
+        });
+      }
+    });
   };
 }
