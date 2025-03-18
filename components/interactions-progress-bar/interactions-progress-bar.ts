@@ -122,6 +122,23 @@ export class InteractionsProgressBar extends LitElementWw {
               >
               </webwriter-interactive-bauble>`;
             })}
+            ${Array.from(JSON.parse(this.videoContext.chapterConfig)).map(
+              ({ title, startTime }) => {
+                return html`
+                  ${startTime !== 0
+                    ? html` <div
+                        style="
+                          width: 1px; 
+                          height: 15px; 
+                          background-color: #E9E9E9; 
+                          position: absolute; 
+                          left: ${this.calculateOffset(startTime)}px;
+                        "
+                      ></div>`
+                    : null}
+                `;
+              }
+            )}
           </div>
         </div>
       </div>

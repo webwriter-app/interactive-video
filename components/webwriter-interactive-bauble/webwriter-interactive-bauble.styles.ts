@@ -18,7 +18,7 @@ export default css`
     border-radius: 15px;
     width: 10px;
     height: 10px;
-    background-color: white;
+    background-color: #e9e9e9;
   }
 
   #bauble:hover {
