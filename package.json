@@ -1,6 +1,6 @@
 {
     "name": "@webwriter/interactive-video",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "description": "(WIP) Enhance learning by adding interactive content in popups to videos for an engaging, interactive experience.",
     "keywords": [
         "webwriter-widget",
@@ -59,6 +59,7 @@
             "source": "./widgets/webwriter-video-interaction/webwriter-video-interaction.ts",
             "default": "./dist/widgets/webwriter-video-interaction.*"
         },
+        "./snippets/Mondlandung.html": "./snippets/Mondlandung.html",
         "./package.json": "./package.json",
         "./icon": "./icon.svg"
     },
