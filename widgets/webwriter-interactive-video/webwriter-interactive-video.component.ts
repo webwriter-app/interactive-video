@@ -287,7 +287,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     const interaction = this.videoInteractions.filter(
       (interaction) => Number(interaction.id) === Number(id)
     )[0] as WwVideoInteraction;
-    interaction.focus();
+    // interaction.focus();
     this.updateContext();
   }
 
