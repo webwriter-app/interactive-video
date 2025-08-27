@@ -41,11 +41,11 @@ export default css`
     height: 20px;
     display: flex;
     align-items: center;
-    background-color: #2c2c2c; /* Black background with opacity */
     width: 100%;
   }
 
   #drop-area {
     width: 100%;
+    padding: 4px 0;
   }
 `;

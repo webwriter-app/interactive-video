@@ -83,10 +83,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   accessor videoDurationFormatted: string = "00:00";
 
   @property({ type: Number })
-  accessor lastTimeupdate: number = 0;
+  accessor lastTimeUpdate: number = 0;
 
   @property({ type: Boolean })
   accessor isDragging = false;
+
+  @property({ type: Boolean })
+  accessor isFullscreen = false;
+
+  @property({ type: Number })
+  accessor playbackRate = 1;
 
   @query("#video")
   accessor videoElement: HTMLVideoElement;
@@ -118,7 +124,25 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     document.addEventListener("fullscreenchange", this.handleFullscreenChange);
 
     this.observer = new MutationObserver(this.monitorSlot);
-    this.observer.observe(this, { childList: true });
+    this.observer.observe(this, {
+      childList: true,
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    this.addEventListener("hideAllInteractions", this.hideAllInteractions);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener("fullscreenchange", this.handleFullscreenChange);
+
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = null;
+    }
+
+    this.removeEventListener("hideAllInteractions", this.hideAllInteractions);
   }
 
   /*
@@ -142,7 +166,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    */
   render() {
     return html`
-      <div id="widget">
+      <div id="widget" class=${this.isFullscreen ? "fullscreen" : ""}>
         <!-- VIDEO INPUT -->
         ${!this.hasVideo()
           ? html`
@@ -154,16 +178,20 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         <div id="container-vertical">
           <!-- VIDEO ELEMENT -->
           <div
-            id="container-video"
-            @interactionClicked=${(e: CustomEvent) => {
-              this.interactionClicked(e.detail.id);
-            }}
-            @click=${this.handleVideoClick}
-            @updateContext=${() => this.updateContext()}
+            id="container-video-area"
           >
-            <video id="video"></video>
-            ${this.videoContext.videoLoaded ? this.showPopups() : null}
-            <slot></slot>
+            <div
+              id="container-video"
+              @interactionClicked=${(e: CustomEvent) => {
+                this.interactionClicked(e.detail.id);
+              }}
+              @click=${this.handleVideoClick}
+              @updateContext=${() => this.updateContext()}
+            >
+              <video id="video"></video>
+              ${this.videoContext.videoLoaded ? this.showPopups() : null}
+              <slot></slot>
+            </div>
           </div>
           <!-- CONTROLS -->
           <div id="controls">
@@ -172,7 +200,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
               style="outline: none"
               contenteditable=${this.isContentEditable}
               @addInteraction=${() =>
-                this.addVideoInteraction(this.videoInteractions.length)}
+                this.addVideoInteraction(
+                  Math.max(...Array.from(this.videoInteractions).map(interaction => (interaction as WwVideoInteraction).id)) + 1
+                )}
               @interactionBaubleClicked=${(e: CustomEvent) =>
                 this.baubleClicked(e.detail.id)}
               @changeInteractionStartTime=${(e: CustomEvent) =>
@@ -186,6 +216,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
             <!-- Progress Bar -->
             <sl-range
               id="progress-bar"
+              step="0.001"
               @sl-change=${this.handleProgressChange}
             ></sl-range>
 
@@ -193,6 +224,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
             <video-controls-bar
               style="outline: none"
               contenteditable=${this.isContentEditable}
+              .playbackRate=${this.playbackRate}
               @volumeChange=${(e: CustomEvent) =>
                 this.handleVolumeChange(e.detail.value)}
               @toggleMute=${() => this.toggleMute()}
@@ -201,6 +233,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
               @playbackRateChange=${(e: CustomEvent) =>
                 this.changePlaybackRate(e.detail.value)}
               @getCurrentChapter=${() => this.getCurrentChapter()}
+              @toggleFullscreen=${() => this.toggleFullscreen()}
             ></video-controls-bar>
           </div>
         </div>
@@ -237,7 +270,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * this checks video time to see if an overlay should be displayed and renders those from the videoData map.
    */
   showPopups() {
-    if (!this.videoContext.showOverlay && this.isContentEditable) return;
+    if (!this.videoContext.showOverlay) return;
 
     Array.from(this.videoInteractions).map((interaction) => {
       if (
@@ -349,18 +382,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   /**
-   * Calculates the offset based on the given time.
-   *
-   * @param time - The time in seconds.
-   * @returns The calculated offset.
-   */
-  calculateOffset(time: number): number {
-    if (!this.videoContext.videoLoaded || !this.videoElement) return;
-    const rect = this.videoElement.getBoundingClientRect();
-    return (time / this.videoElement.duration) * 0.95 * rect.width;
-  }
-
-  /**
    * Checks whether a video is already existing on load.
    * @returns whether a video exists (either base64 or URL, used for deciding whether to show file input area or video element)
    */
@@ -383,14 +404,14 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     ) as WwVideoInteraction;
 
     const videoRect = this.videoElement.getBoundingClientRect();
-    const interactionWidth = 300; // Adjust based on actual element size
-    const interactionHeight = 200; // Adjust based on actual element size
+    const interactionWidth = 50; // Adjust based on actual element size
+    const interactionHeight = 50; // Adjust based on actual element size
 
     interaction.style.position = "absolute";
-    interaction.style.top = `${videoRect.height / 2 - interactionHeight / 2}px`;
-    interaction.style.left = `${videoRect.width / 2 - interactionWidth / 2}px`;
-    interaction.style.width = `${interactionWidth}px`;
-    interaction.style.height = `${interactionHeight}px`;
+    interaction.style.top = `${(100 - interactionHeight) / 2}%`;
+    interaction.style.left = `${(100 - interactionWidth) / 2}%`;
+    interaction.style.width = `${interactionWidth}%`;
+    interaction.style.height = `${interactionHeight}%`;
 
     this.appendChild(interaction);
     interaction.setAttribute("id", `${id}`);
@@ -432,12 +453,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   /**
-   * Handles the change event for the volume slider and sets the video volume and button icon accordingly.
+   * Handles the change event for the volume slider and sets the video volume accordingly.
+   * Uses a quadratic scale for more intuitive volume control.
    *
    * @param e - The custom event object.
    */
   handleVolumeChange(value) {
-    this.videoElement.volume = value / 100;
+    this.videoElement.volume = (value / 100) ** 2;
   }
 
   /**
@@ -458,6 +480,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   //
   changePlaybackRate(value) {
     this.videoElement.playbackRate = value;
+    this.playbackRate = value;
   }
 
   /**
@@ -469,18 +492,30 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   /**
+   * Hides all interactions on the video and resets their initialPause attribute.
+   */
+  hideAllInteractions() {
+    Array.from(this.videoInteractions).map((interaction) => {
+      (interaction as HTMLElement).style.display = "none";
+      if ((interaction as WwVideoInteraction).initialPause) {
+        (interaction as WwVideoInteraction).initialPause = "false";
+        (interaction as HTMLElement).setAttribute("initialPause", "false");
+      }
+    });
+  }
+
+  /**
    * Handles the time update event of the video player and check whether there are interactions to be displayed by comparing current call time to last.
    * This way we dont skip any interactions and dont fire twice since this is called inconsistently.
    *
    * @param e - The custom event object.
    */
   handleTimeUpdate = (e: CustomEvent) => {
-    this.lastTimeupdate = this.videoElement.currentTime;
-    this.progressBar.value =
-      (this.videoElement.currentTime / this.videoElement.duration) * 100;
+    this.lastTimeUpdate = this.videoElement.currentTime;
+    this.progressBar.value = this.videoElement.currentTime;
 
     this.videoControlsBar.handleTimeUpdate(
-      this.lastTimeupdate,
+      this.lastTimeUpdate,
       this.videoDurationFormatted
     );
 
@@ -499,17 +534,27 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   handleProgressChange = (e: CustomEvent) => {
     this.showPopups();
     const progressBar = e.target as SlRange;
-    let currentTime = (progressBar.value / 100) * this.videoElement.duration;
-    this.videoElement.currentTime = Math.floor(currentTime);
+    let currentTime = progressBar.value;
+    this.videoElement.currentTime = currentTime;
     this.videoControlsBar.timeStamp.value =
-      formatTime(currentTime) + " / " + this.videoDurationFormatted;
+      formatTime(Math.floor(currentTime)) + " / " + this.videoDurationFormatted;
   };
+
+  toggleFullscreen() {
+    if (this.isFullscreen) {
+      document.exitFullscreen();
+    } else {
+      this.requestFullscreen();
+    }
+  }
 
   /**
    * Handles the fullscreen change event by repositioning the baubles to fit the new video size.
    */
   handleFullscreenChange = () => {
-    //this.updateBaublePositions();
+    this.isFullscreen = document.fullscreenElement === this || this.classList.contains("ww-fullscreen");
+    this.updateBaublePositions();
+    this.videoControlsBar.updateFullscreenIcon(this.isFullscreen);
   };
 
   /**
@@ -522,7 +567,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
     this.videoElement.src = src;
 
-    this.videoElement.style.width = "100%";
     this.videoElement.addEventListener(
       "loadedmetadata",
       this.handleMetadataLoaded
@@ -622,7 +666,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * This function is called when the video can be played through without interruption.
    * @remarks
    * It performs various actions such as enabling/disabling the addButton, setting the progressBar value to 0,
-   * setting the video volume to 0.1, setting the volumeSlider value to 10, and initializing the chapterConfig
+   * setting the video volume to 1, setting the volumeSlider value to 100, and initializing the chapterConfig
    * if it is empty.
    * The Timeout was necessary to ensure that the elements are rendered before the actions are performed.
    */
@@ -635,10 +679,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         this.progressBar.value = 0;
       }
       if (this.videoElement) {
-        this.videoElement.volume = 0.1;
+        this.videoElement.volume = 1;
       }
       if (this.videoControlsBar.volumeSlider) {
-        this.videoControlsBar.volumeSlider.value = 10;
+        this.videoControlsBar.volumeSlider.value = 100;
       }
 
       this.updateContext();
@@ -656,10 +700,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
     setTimeout(() => {
       if (this.progressBar) {
-        this.progressBar.max = 100;
+        this.progressBar.max = this.videoElement.duration;
         this.progressBar.tooltipFormatter = (value: number) => {
           return formatTime(
-            Math.floor((value / 100) * this.videoElement.duration)
+            Math.floor(value)
           );
         };
       }
@@ -677,6 +721,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   */
   private monitorSlot = (mutationList: MutationRecord[]) => {
     mutationList.forEach((mutation) => {
+      if (mutation.type === "attributes" && mutation.attributeName === "class") {
+        this.handleFullscreenChange();
+      }
+
       if (mutation.type === "childList") {
         mutation.removedNodes.forEach((node) => {
           const nodeName = (node as HTMLElement).nodeName.toLowerCase();

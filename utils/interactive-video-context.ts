@@ -1,5 +1,4 @@
 import { provide, consume, createContext } from "@lit/context";
-import { videoData } from "../types/videoData";
 
 export const videoContext =
   createContext<InteractiveVideoContext>("videoContext");

@@ -6,7 +6,6 @@ export default css`
     flex-direction: row;
     width: 100%;
     height: auto;
-    background-color: #2c2c2c; /* Black background with opacity */
   }
 
   #controls-lower-right {

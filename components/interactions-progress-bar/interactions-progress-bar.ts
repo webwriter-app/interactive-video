@@ -70,12 +70,28 @@ export class InteractionsProgressBar extends LitElementWw {
   //import CSS
   static styles = [styles];
 
+  private resizeObserver: ResizeObserver;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.resizeObserver = new ResizeObserver(() => {
+      this.updateBaublePositions();
+    });
+    this.updateComplete.then(() => {
+      this.resizeObserver.observe(this);
+    });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.resizeObserver) {
+      this.resizeObserver.unobserve(this);
+    }
+  }
+
   /*
 
   */
-
-  //TODO: On resize, the offset of baubles need to be recalculated
-
   render() {
     return html`
       <div class="interactions-progress-bar">
@@ -123,52 +139,31 @@ export class InteractionsProgressBar extends LitElementWw {
               >
               </webwriter-interactive-bauble>`;
             })}
-            ${Array.from(JSON.parse(this.videoContext.chapterConfig)).map(
+            ${this.videoContext.hasChapters ? Array.from(JSON.parse(this.videoContext.chapterConfig)).map(
               ({ title, startTime }) => {
-                return html`
-                  ${startTime !== 0
-                    ? html` <div
-                        style="
-                          width: 1px; 
-                          height: 15px; 
-                          background-color: #E9E9E9; 
-                          position: absolute; 
-                          offset: ${this.calculateOffset(startTime)}px;
-                        "
-                      ></div>`
-                    : null}
-                `;
+                return html`<sl-icon
+                  src=${bookmark}
+                  style="
+                    width: 15px; 
+                    height: 15px; 
+                    color: #E9E9E9; 
+                    position: absolute; 
+                    left: ${this.calculateOffset(startTime)}px;
+                  "
+                  @mouseover=${(e) => (e.target.style.color = "#0084C6")}
+                  @mouseleave=${(e) => (e.target.style.color = "#E9E9E9")}
+                  @click=${() => {
+                    this.dispatchEvent(
+                      new CustomEvent("jumpToChapter", {
+                        detail: { startTime: startTime },
+                        bubbles: true,
+                        composed: true,
+                      })
+                    );
+                  }}
+                ></sl-icon>`;
               }
-            )}
-            ${Array.from(JSON.parse(this.videoContext.chapterConfig)).map(
-              ({ title, startTime }) => {
-                return html`
-                  ${startTime !== 0
-                    ? html` <sl-icon
-                        src=${bookmark}
-                        style="
-                          width: 15px; 
-                          height: 15px; 
-                          color: #E9E9E9; 
-                          position: absolute; 
-                          left: ${this.calculateOffset(startTime)}px;
-                        "
-                        @mouseover=${(e) => (e.target.style.color = "#0084C6")}
-                        @mouseleave=${(e) => (e.target.style.color = "#E9E9E9")}
-                        @click=${() => {
-                          this.dispatchEvent(
-                            new CustomEvent("jumpToChapter", {
-                              detail: { startTime: startTime },
-                              bubbles: true,
-                              composed: true,
-                            })
-                          );
-                        }}
-                      ></sl-icon>`
-                    : null}
-                `;
-              }
-            )}
+            ) : null}
           </div>
         </div>
       </div>
@@ -315,8 +310,9 @@ export class InteractionsProgressBar extends LitElementWw {
 
     return (
       (time / videoElement.duration) *
-      0.97 *
-      videoElement.getBoundingClientRect().width
+      // 0.97 *
+      (this.getBoundingClientRect().width - 38) + 19 /* Padding of 10 on each side + 18px slider thumb */
+      - 9 /* Half the width of the bauble (18px / 2 = 9px) */
     );
   }
 

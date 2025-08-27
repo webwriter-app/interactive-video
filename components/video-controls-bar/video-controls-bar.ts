@@ -43,7 +43,11 @@ export class VideoControlsBar extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })
   accessor videoContext: InteractiveVideoContext;
 
+  @property({ type: Number })
+  accessor playbackRate: number = 1;
+
   @property({ type: Object }) accessor currentChapter;
+
   /**
    * Query for the mute button.
    */
@@ -54,7 +58,10 @@ export class VideoControlsBar extends LitElementWw {
    * Query for the volume slider.
    */
   @query("#volume-slider")
-  accessor volumeSlider;
+  accessor volumeSlider: SlRange;
+
+  @query("#playback-rate-options")
+  accessor playbackRateOptions: SlMenu;
 
   /**
    * Query for the fullscreen button.
@@ -155,13 +162,14 @@ export class VideoControlsBar extends LitElementWw {
               class="volume-button"
               id="mute-volume-button"
               @click=${this.handleMuteClick}
-              src="${volumeDown}"
+              src="${volumeUp}"
             >
             </sl-icon-button>
             <sl-range
               id="volume-slider"
-              style="--thumb-size: 15px; --track-height: 5px;"
-              @sl-change=${this.handleVolumeChange}
+              style="--thumb-size: 15px; --track-height: 5px; --tooltip-offset: 22px"
+              .tooltipFormatter=${(value: number) => Math.round(value) + "\u2009%"}
+              @sl-input=${this.handleVolumeChange}
             ></sl-range>
           </div>
 
@@ -176,25 +184,20 @@ export class VideoControlsBar extends LitElementWw {
               src="${brandSpeedtest}"
               slot="trigger"
             ></sl-icon-button>
-            <sl-menu>
-              <sl-menu-item>
-                Playback Speed
-                <sl-menu slot="submenu">
-                  <sl-menu-item value="0.25">0.25x</sl-menu-item>
-                  <sl-menu-item value="0.5">0.5x</sl-menu-item>
-                  <sl-menu-item value="1">1x</sl-menu-item>
-                  <sl-menu-item value="1.5">1.5x</sl-menu-item>
-                  <sl-menu-item value="2">2x</sl-menu-item>
-                </sl-menu>
-              </sl-menu-item>
+            <sl-menu id="playback-rate-options">
+              <sl-menu-item value="0.25" type="checkbox" ?checked=${this.playbackRate === 0.25}>0.25x</sl-menu-item>
+              <sl-menu-item value="0.5" type="checkbox" ?checked=${this.playbackRate === 0.5}>0.5x</sl-menu-item>
+              <sl-menu-item value="1" type="checkbox" ?checked=${this.playbackRate === 1}>1x</sl-menu-item>
+              <sl-menu-item value="1.5" type="checkbox" ?checked=${this.playbackRate === 1.5}>1.5x</sl-menu-item>
+              <sl-menu-item value="2" type="checkbox" ?checked=${this.playbackRate === 2}>2x</sl-menu-item>
             </sl-menu>
           </sl-dropdown>
-          <!-- <sl-icon-button
+          <sl-icon-button
             class="icon-button"
             id="fullscreen-button"
             src="${fullscreenEnter}"
             @click=${this.handleFullscreenClick}
-          ></sl-icon-button> -->
+          ></sl-icon-button>
         </div>
       </div>`;
   }
@@ -311,19 +314,36 @@ export class VideoControlsBar extends LitElementWw {
    */
   handleFullscreenClick = () => {
     if (document.fullscreenElement) {
-      this.fullscreenButton.setAttribute("src", `${fullscreenEnter}`);
-      document.exitFullscreen();
       this.removeEventListener("resize", this.handleFullscreenResize);
     } else {
-      this.fullscreenButton.setAttribute("src", `${fullscreenExit}`);
       this.addEventListener("resize", this.handleFullscreenResize);
-      this.requestFullscreen();
       // MARK: todo
       if (!this.checkControlsVisible()) {
         this.makeControlsSticky();
       }
     }
+    this.dispatchEvent(
+      new CustomEvent("toggleFullscreen", {
+        bubbles: true,
+        composed: true,
+      })
+    );
   };
+
+  /**
+   * Updates the fullscreen button icon based on whether the video is in fullscreen mode or not.
+   * If the video is in fullscreen mode, the icon is set to `fullscreenExit`.
+   * If the video is not in fullscreen mode, the icon is set to `fullscreenEnter`.
+   *
+   * @param isFullscreen - A boolean indicating whether the video is in fullscreen mode or not.
+   */
+  updateFullscreenIcon(isFullscreen: Boolean) {
+    if (isFullscreen) {
+      this.fullscreenButton.setAttribute("src", `${fullscreenExit}`);
+    } else {
+      this.fullscreenButton.setAttribute("src", `${fullscreenEnter}`);
+    }
+  }
 
   /**
    * Event handler for selection of playback speeds from the setting menu.
@@ -331,6 +351,16 @@ export class VideoControlsBar extends LitElementWw {
    */
   settingSelectionHandler = (e: CustomEvent) => {
     if (!this.videoContext.videoLoaded) return;
+
+    const item = e.detail.item;
+    if (!item || !item.value || item.type !== "checkbox") return;
+
+    this.playbackRateOptions.childNodes.forEach((child) => {
+      if (child instanceof SlMenuItem && child !== item) {
+        child.checked = false;
+      }
+    });
+    item.checked = true;
 
     this.dispatchEvent(
       new CustomEvent("playbackRateChange", {

@@ -139,6 +139,7 @@ export class WwVideoInteraction extends LitElementWw {
         contenteditable=${this.isContentEditable}
         part="options"
         class="author-only"
+        @click=${(e: Event) => e.stopPropagation()}
       ></interactive-video-options>
     `;
   }
@@ -193,8 +194,11 @@ export class WwVideoInteraction extends LitElementWw {
       const newWidth = Math.max(50, Math.min(startWidth + deltaX, maxWidth));
       const newHeight = Math.max(50, Math.min(startHeight + deltaY, maxHeight));
 
-      this.style.width = `${newWidth}px`;
-      this.style.height = `${newHeight}px`;
+      const newWidthPercent = (newWidth / parentRect.width) * 100;
+      const newHeightPercent = (newHeight / parentRect.height) * 100;
+
+      this.style.width = `${newWidthPercent}%`;
+      this.style.height = `${newHeightPercent}%`;
     };
 
     const onPointerUp = () => {
@@ -239,9 +243,12 @@ export class WwVideoInteraction extends LitElementWw {
       const clampedX = Math.max(0, Math.min(newX, maxX));
       const clampedY = Math.max(0, Math.min(newY, maxY));
 
+      const clampedXPercent = (clampedX / parentRect.width) * 100;
+      const clampedYPercent = (clampedY / parentRect.height) * 100
+
       this.style.position = "absolute";
-      this.style.left = `${clampedX}px`;
-      this.style.top = `${clampedY}px`;
+      this.style.left = `${clampedXPercent}%`;
+      this.style.top = `${clampedYPercent}%`;
     };
 
     const onPointerUp = () => {

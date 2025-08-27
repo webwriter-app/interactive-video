@@ -271,10 +271,9 @@ export class InteractiveVideoOptions extends LitElementWw {
    *
    * @param e - The custom event object.
    */
-  handleShowOverlayChange = (e: CustomEvent) => {
-    console.log("sl-switch");
+  handleShowOverlayChange = (e: CustomEvent) => {    
     const target = e.target as SlSwitch;
-    this.videoContext = { ...this.videoContext, showOverlay: target.checked };
+    this.videoContext.showOverlay = target.checked;
 
     this.dispatchEvent(
       new CustomEvent("updateContext", {
@@ -282,6 +281,17 @@ export class InteractiveVideoOptions extends LitElementWw {
         composed: true,
       })
     );
+
+    if (!this.videoContext.showOverlay) {
+      // Hide all interactions immediately
+      this.dispatchEvent(
+        new CustomEvent("hideAllInteractions", {
+          bubbles: true,
+          composed: true,
+        })
+      );
+    }
+
     this.requestUpdate();
   };
 
