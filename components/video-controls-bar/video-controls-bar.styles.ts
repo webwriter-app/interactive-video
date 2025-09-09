@@ -72,7 +72,7 @@ export default css`
     font-size: 15px;
   }
 
-  #chapters-button::part(base) {
+  #chapters-button::part(base), #add-button::part(base) {
     /* Set design tokens for height and border width */
 
     border: 1px solid transparent;
@@ -83,7 +83,7 @@ export default css`
     font-size: 14px;
   }
 
-  #chapters-button::part(base):hover {
+  #chapters-button::part(base):hover, #add-button::part(base):hover {
     color: #0084c6;
   }
 

@@ -19,8 +19,8 @@ import {
 } from "@shoelace-style/shoelace";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 
-import { WwVideoInteraction } from "../../widgets/webwriter-video-interaction/webwriter-video-interaction.component";
-import { WebwriterInteractiveVideo } from "../../widgets/webwriter-interactive-video/webwriter-interactive-video.component";
+import { WwVideoInteraction } from "../../widgets/webwriter-video-interaction/webwriter-video-interaction";
+import { WebwriterInteractiveVideo } from "../../widgets/webwriter-interactive-video/webwriter-interactive-video";
 
 import { WwInteractiveBauble } from "../webwriter-interactive-bauble/webwriter-interactive-bauble";
 
@@ -31,6 +31,7 @@ import bookmark from "@tabler/icons/filled/bookmark.svg";
 
 //CSS
 import styles from "./interactions-progress-bar.styles";
+import { msg } from "@lit/localize";
 
 export class InteractionsProgressBar extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })
@@ -41,12 +42,6 @@ export class InteractionsProgressBar extends LitElementWw {
 
   @query("#controls-upper")
   accessor upperControls: HTMLDivElement;
-
-  /**
-   * Query for the add interactions button.
-   */
-  @query("#add-button")
-  accessor addButton: SlIconButton;
 
   /**
    * Returns an object that maps custom element names to their corresponding classes.
@@ -95,21 +90,6 @@ export class InteractionsProgressBar extends LitElementWw {
   render() {
     return html`
       <div class="interactions-progress-bar">
-        <sl-button
-          variant="default"
-          size="small"
-          id="add-button"
-          @click=${this.handleAddClick}
-          ?disabled=${!this.isContentEditable}
-        >
-          <sl-icon
-            slot="prefix"
-            src=${add}
-            style="height: 20px; width: 20px;"
-          ></sl-icon>
-          Add Popup
-        </sl-button>
-
         <div
           id="drop-area"
           @drop=${this.handleBaubleDroppedOnDropArea}
@@ -139,7 +119,7 @@ export class InteractionsProgressBar extends LitElementWw {
               >
               </webwriter-interactive-bauble>`;
             })}
-            ${this.videoContext.hasChapters ? Array.from(JSON.parse(this.videoContext.chapterConfig)).map(
+            ${this.videoContext.hasChapters ? this.videoContext.chapterConfig.map(
               ({ title, startTime }) => {
                 return html`<sl-icon
                   src=${bookmark}
@@ -223,8 +203,8 @@ export class InteractionsProgressBar extends LitElementWw {
       new CustomEvent("changeInteractionStartTime", {
         detail: {
           newTime: Math.floor(
-            videoElement.duration * (distanceFromLeft / rect.width)
-          ),
+            videoElement.duration * (distanceFromLeft / rect.width) * 1000
+          ) / 1000,
           index: parseInt(e.dataTransfer.getData("id")),
         },
         bubbles: true,
@@ -302,7 +282,7 @@ export class InteractionsProgressBar extends LitElementWw {
   calculateOffset(time: number): number {
     if (!this.videoContext.videoLoaded) return;
 
-    console.log(time);
+    // console.log(time);
 
     const videoElement = this.parentNode.parentNode.querySelector(
       "#video"
@@ -315,18 +295,4 @@ export class InteractionsProgressBar extends LitElementWw {
       - 9 /* Half the width of the bauble (18px / 2 = 9px) */
     );
   }
-
-  /**
-   * Handles the click event for the add button.
-   */
-  handleAddClick = () => {
-    if (!this.videoContext.videoLoaded) return;
-
-    this.dispatchEvent(
-      new CustomEvent("addInteraction", {
-        bubbles: true,
-        composed: true,
-      })
-    );
-  };
 }

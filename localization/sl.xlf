@@ -1,0 +1,178 @@
+<xliff xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="lit-localize-inputs" datatype="plaintext" source-language="en" target-language="sl">
+    <body>
+      <trans-unit id="s15733d7d0f6d1d73">
+        <source>Chapters</source>
+        <target>Poglavja</target>
+      </trans-unit>
+      <trans-unit id="sf9aee319a006c9b4">
+        <source>Add</source>
+        <target>Dodaj</target>
+      </trans-unit>
+      <trans-unit id="s99f110d27e30b289">
+        <source>Title</source>
+        <target>Naslov</target>
+      </trans-unit>
+      <trans-unit id="sae1c7f13b7c0c47f">
+        <source>Start</source>
+        <target>Začetek</target>
+      </trans-unit>
+      <trans-unit id="s58d4e5482a78f056">
+        <source>Skip to Chapter</source>
+        <target>Preskoči na poglavje</target>
+      </trans-unit>
+      <trans-unit id="s178bb121d5131532">
+        <source>Chapter</source>
+        <target>Poglavje</target>
+      </trans-unit>
+      <trans-unit id="sa76bb33ac0cfda96">
+        <source>Invalid time format. Use hh:mm:ss or mm:ss</source>
+        <target>Nepravilna časovna oblika. Uporabite hh:mm:ss ali mm:ss</target>
+      </trans-unit>
+      <trans-unit id="s85186a61e0d55bac">
+        <source>Video</source>
+        <target>Videoposnetek</target>
+      </trans-unit>
+      <trans-unit id="s486ef6c2cdc505d7">
+        <source>Show Popups</source>
+        <target>Prikaži pojavna okna</target>
+      </trans-unit>
+      <trans-unit id="s6fa430a5a501eb4b">
+        <source>Interaction</source>
+        <target>Interakcija</target>
+      </trans-unit>
+      <trans-unit id="s167f53f89012d24c">
+        <source>Start Time</source>
+        <target>Čas začetka</target>
+      </trans-unit>
+      <trans-unit id="s58c17428301e0137">
+        <source>End Time</source>
+        <target>Končni čas</target>
+      </trans-unit>
+      <trans-unit id="s9c356016f81585f6">
+        <source>Background Color</source>
+        <target>Barva ozadja</target>
+      </trans-unit>
+      <trans-unit id="s55435611e2a8e6dc">
+        <source>Overlay Color</source>
+        <target>Barva prekrivanja</target>
+      </trans-unit>
+      <trans-unit id="s3d09398e555ee5f9">
+        <source>Advanced Options</source>
+        <target>Napredne možnosti</target>
+      </trans-unit>
+      <trans-unit id="s8de4d921e17c46aa">
+        <source>X Position</source>
+        <target>X Položaj</target>
+      </trans-unit>
+      <trans-unit id="s58369cf8082f2d5f">
+        <source>Y Position</source>
+        <target>Položaj Y</target>
+      </trans-unit>
+      <trans-unit id="sf21fb4f4b9e8911f">
+        <source>Width</source>
+        <target>Širina</target>
+      </trans-unit>
+      <trans-unit id="sffdadf0a576fd802">
+        <source>Height</source>
+        <target>Višina</target>
+      </trans-unit>
+      <trans-unit id="sdc673e73b5c13aea">
+        <source>Delete</source>
+        <target>Izbriši</target>
+      </trans-unit>
+      <trans-unit id="s1ad02de8e1d50d2c">
+        <source>Select an interaction to view details</source>
+        <target>Izberite interakcijo za ogled podrobnosti</target>
+      </trans-unit>
+      <trans-unit id="sb2e1884d9dace006">
+        <source>Add Popup</source>
+        <target>Dodajanje pojavnega okna</target>
+      </trans-unit>
+      <trans-unit id="s5f6d35d8cdd58c1b">
+        <source>Error loading video. Please try again.</source>
+        <target>Napaka pri nalaganju videoposnetka. Poskusite znova.</target>
+      </trans-unit>
+      <trans-unit id="s08b05407b5565ca4">
+        <source>or</source>
+        <target>ali</target>
+      </trans-unit>
+      <trans-unit id="see2eca66ecd60d30">
+        <source>Enable chapters</source>
+        <target>Omogočite poglavja</target>
+      </trans-unit>
+      <trans-unit id="s86d33eabf23f17c4">
+        <source>Add something here...</source>
+        <target>Dodajte nekaj tukaj...</target>
+      </trans-unit>
+      <trans-unit id="s39691ba3f371adc1">
+        <source>Allow playback rate change</source>
+        <target>Omogočite spremembo hitrosti predvajanja</target>
+      </trans-unit>
+      <trans-unit id="s75ff661d0f492c89">
+        <source>Select video or audio file</source>
+        <target>Izberite video ali zvočno datoteko</target>
+      </trans-unit>
+      <trans-unit id="s2f4a323ed88d2650">
+        <source>Enter video or audio URL</source>
+        <target>Vnesite video ali zvočni naslov URL</target>
+      </trans-unit>
+      <trans-unit id="s8d3cb828b9649568">
+        <source>Supported services: YouTube, Vimeo, TikTok, Spotify, direct video/audio links</source>
+        <target>Podprte storitve: YouTube, Vimeo, TikTok, Spotify, neposredne video/avdio povezave</target>
+      </trans-unit>
+      <trans-unit id="s9aa13e6e7201d216">
+        <source>Are you sure you want to remove the current audio?</source>
+        <target>Ali ste prepričani, da želite odstraniti trenutni zvok?</target>
+      </trans-unit>
+      <trans-unit id="sadb8fadf3bbadd95">
+        <source>Are you sure you want to remove the current video?</source>
+        <target>Ali ste prepričani, da želite odstraniti trenutni videoposnetek?</target>
+      </trans-unit>
+      <trans-unit id="sc2a0d87e2a79ff83">
+        <source>Also remove all interactions and chapters</source>
+        <target>Odstranite tudi vse interakcije in poglavja</target>
+      </trans-unit>
+      <trans-unit id="s55cb5824c6210259">
+        <source>Yes, remove it</source>
+        <target>Da, odstranite ga</target>
+      </trans-unit>
+      <trans-unit id="s8213840a0f7d2644">
+        <source>No, keep it</source>
+        <target>Ne, obdržite ga.</target>
+      </trans-unit>
+      <trans-unit id="s08e6bd98452e6bb9">
+        <source>Audio</source>
+        <target>Audio</target>
+      </trans-unit>
+      <trans-unit id="s62155488d6519cf3">
+        <source>Remove audio</source>
+        <target>Odstranjevanje zvoka</target>
+      </trans-unit>
+      <trans-unit id="sdcb649c4baf8dafa">
+        <source>Remove video</source>
+        <target>Odstranitev videoposnetka</target>
+      </trans-unit>
+      <trans-unit id="s0960574e3b6ca412">
+        <source>Video File</source>
+        <target>Video datoteka</target>
+      </trans-unit>
+      <trans-unit id="s3cda547ac2158bf5">
+        <source>Audio File</source>
+        <target>Zvočna datoteka</target>
+      </trans-unit>
+      <trans-unit id="sf29ef97c6e418a92">
+        <source>Remove media?</source>
+        <target>Odstranite medije?</target>
+      </trans-unit>
+      <trans-unit id="s9d2a1c7fe017a7cd">
+        <source>Loading audio...</source>
+        <target>Nalaganje zvoka...</target>
+      </trans-unit>
+      <trans-unit id="seed71b0ff741f5c3">
+        <source>Pause video when shown</source>
+        <target>Zaustavitev videoposnetka, ko je prikazan</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,56 @@
+
+    // Do not modify this file by hand!
+    // Re-generate this file by running lit-localize
+
+    
+    
+
+    /* eslint-disable no-irregular-whitespace */
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+
+    export const templates = {
+      's08b05407b5565ca4': `vagy`,
+'s08e6bd98452e6bb9': `Audio`,
+'s0960574e3b6ca412': `Videó fájl`,
+'s15733d7d0f6d1d73': `Fejezetek`,
+'s167f53f89012d24c': `Kezdési idő`,
+'s178bb121d5131532': `Fejezet`,
+'s1ad02de8e1d50d2c': `Válasszon ki egy interakciót a részletek megtekintéséhez`,
+'s2f4a323ed88d2650': `Videó vagy hang URL megadása`,
+'s39691ba3f371adc1': `A lejátszási sebesség megváltoztatásának engedélyezése`,
+'s3cda547ac2158bf5': `Hangfájl`,
+'s3d09398e555ee5f9': `Speciális beállítások`,
+'s486ef6c2cdc505d7': `Popupok megjelenítése`,
+'s55435611e2a8e6dc': `Overlay szín`,
+'s55cb5824c6210259': `Igen, távolítsa el`,
+'s58369cf8082f2d5f': `Y pozíció`,
+'s58c17428301e0137': `Végidő`,
+'s58d4e5482a78f056': `Ugrás a fejezetre`,
+'s5f6d35d8cdd58c1b': `Hiba a videó betöltésében. Kérjük, próbálja újra.`,
+'s62155488d6519cf3': `Hang eltávolítása`,
+'s6fa430a5a501eb4b': `Interakció`,
+'s75ff661d0f492c89': `Videó- vagy hangfájl kiválasztása`,
+'s8213840a0f7d2644': `Nem, tartsd meg`,
+'s85186a61e0d55bac': `Videó`,
+'s86d33eabf23f17c4': `Adj hozzá valamit...`,
+'s8d3cb828b9649568': `Támogatott szolgáltatások: TikTok, Spotify, közvetlen videó/hang linkek`,
+'s8de4d921e17c46aa': `X pozíció`,
+'s99f110d27e30b289': `Cím`,
+'s9aa13e6e7201d216': `Biztos, hogy el akarja távolítani a jelenlegi hangot?`,
+'s9c356016f81585f6': `Háttérszín`,
+'s9d2a1c7fe017a7cd': `Hang betöltése...`,
+'sa76bb33ac0cfda96': `Érvénytelen időformátum. Használjon hh:mm:ss vagy mm:ss időt.`,
+'sadb8fadf3bbadd95': `Biztos, hogy el akarja távolítani a jelenlegi videót?`,
+'sae1c7f13b7c0c47f': `Indítsa el a  oldalt.`,
+'sb2e1884d9dace006': `Popup hozzáadása`,
+'sc2a0d87e2a79ff83': `Szintén távolítson el minden interakciót és fejezetet`,
+'sdc673e73b5c13aea': `Törölje a  címet.`,
+'sdcb649c4baf8dafa': `Videó eltávolítása`,
+'see2eca66ecd60d30': `Fejezetek engedélyezése`,
+'seed71b0ff741f5c3': `Videó szüneteltetése megjelenítéskor`,
+'sf21fb4f4b9e8911f': `Szélesség`,
+'sf29ef97c6e418a92': `Eltávolítani a médiát?`,
+'sf9aee319a006c9b4': `Add`,
+'sffdadf0a576fd802': `Magasság`,
+    };
+  

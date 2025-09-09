@@ -1,0 +1,178 @@
+<xliff xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="lit-localize-inputs" datatype="plaintext" source-language="en" target-language="sk">
+    <body>
+      <trans-unit id="s15733d7d0f6d1d73">
+        <source>Chapters</source>
+        <target>Kapitoly</target>
+      </trans-unit>
+      <trans-unit id="sf9aee319a006c9b4">
+        <source>Add</source>
+        <target>Pridať</target>
+      </trans-unit>
+      <trans-unit id="s99f110d27e30b289">
+        <source>Title</source>
+        <target>Názov</target>
+      </trans-unit>
+      <trans-unit id="sae1c7f13b7c0c47f">
+        <source>Start</source>
+        <target>Štart</target>
+      </trans-unit>
+      <trans-unit id="s58d4e5482a78f056">
+        <source>Skip to Chapter</source>
+        <target>Prejsť na kapitolu</target>
+      </trans-unit>
+      <trans-unit id="s178bb121d5131532">
+        <source>Chapter</source>
+        <target>Kapitola</target>
+      </trans-unit>
+      <trans-unit id="sa76bb33ac0cfda96">
+        <source>Invalid time format. Use hh:mm:ss or mm:ss</source>
+        <target>Nesprávny formát času. Použite hh:mm:ss alebo mm:ss</target>
+      </trans-unit>
+      <trans-unit id="s85186a61e0d55bac">
+        <source>Video</source>
+        <target>Video</target>
+      </trans-unit>
+      <trans-unit id="s486ef6c2cdc505d7">
+        <source>Show Popups</source>
+        <target>Zobraziť vyskakovacie okná</target>
+      </trans-unit>
+      <trans-unit id="s6fa430a5a501eb4b">
+        <source>Interaction</source>
+        <target>Interakcia</target>
+      </trans-unit>
+      <trans-unit id="s167f53f89012d24c">
+        <source>Start Time</source>
+        <target>Čas začiatku</target>
+      </trans-unit>
+      <trans-unit id="s58c17428301e0137">
+        <source>End Time</source>
+        <target>Čas konca</target>
+      </trans-unit>
+      <trans-unit id="s9c356016f81585f6">
+        <source>Background Color</source>
+        <target>Farba pozadia</target>
+      </trans-unit>
+      <trans-unit id="s55435611e2a8e6dc">
+        <source>Overlay Color</source>
+        <target>Farba prekrytia</target>
+      </trans-unit>
+      <trans-unit id="s3d09398e555ee5f9">
+        <source>Advanced Options</source>
+        <target>Rozšírené možnosti</target>
+      </trans-unit>
+      <trans-unit id="s8de4d921e17c46aa">
+        <source>X Position</source>
+        <target>X Pozícia</target>
+      </trans-unit>
+      <trans-unit id="s58369cf8082f2d5f">
+        <source>Y Position</source>
+        <target>Pozícia Y</target>
+      </trans-unit>
+      <trans-unit id="sf21fb4f4b9e8911f">
+        <source>Width</source>
+        <target>Šírka</target>
+      </trans-unit>
+      <trans-unit id="sffdadf0a576fd802">
+        <source>Height</source>
+        <target>Výška</target>
+      </trans-unit>
+      <trans-unit id="sdc673e73b5c13aea">
+        <source>Delete</source>
+        <target>Odstrániť</target>
+      </trans-unit>
+      <trans-unit id="s1ad02de8e1d50d2c">
+        <source>Select an interaction to view details</source>
+        <target>Výberom interakcie zobrazíte podrobnosti</target>
+      </trans-unit>
+      <trans-unit id="sb2e1884d9dace006">
+        <source>Add Popup</source>
+        <target>Pridanie vyskakovacieho okna</target>
+      </trans-unit>
+      <trans-unit id="s5f6d35d8cdd58c1b">
+        <source>Error loading video. Please try again.</source>
+        <target>Chyba pri načítaní videa. Skúste to prosím znova.</target>
+      </trans-unit>
+      <trans-unit id="s08b05407b5565ca4">
+        <source>or</source>
+        <target>alebo</target>
+      </trans-unit>
+      <trans-unit id="see2eca66ecd60d30">
+        <source>Enable chapters</source>
+        <target>Povolenie kapitol</target>
+      </trans-unit>
+      <trans-unit id="s86d33eabf23f17c4">
+        <source>Add something here...</source>
+        <target>Pridajte sem niečo...</target>
+      </trans-unit>
+      <trans-unit id="s39691ba3f371adc1">
+        <source>Allow playback rate change</source>
+        <target>Povolenie zmeny rýchlosti prehrávania</target>
+      </trans-unit>
+      <trans-unit id="s75ff661d0f492c89">
+        <source>Select video or audio file</source>
+        <target>Vyberte video alebo zvukový súbor</target>
+      </trans-unit>
+      <trans-unit id="s2f4a323ed88d2650">
+        <source>Enter video or audio URL</source>
+        <target>Zadajte adresu URL videa alebo zvuku</target>
+      </trans-unit>
+      <trans-unit id="s8d3cb828b9649568">
+        <source>Supported services: YouTube, Vimeo, TikTok, Spotify, direct video/audio links</source>
+        <target>Podporované služby: YouTube, Vimeo, TikTok, Spotify, priame odkazy na video/audio</target>
+      </trans-unit>
+      <trans-unit id="s9aa13e6e7201d216">
+        <source>Are you sure you want to remove the current audio?</source>
+        <target>Ste si istí, že chcete odstrániť aktuálny zvuk?</target>
+      </trans-unit>
+      <trans-unit id="sadb8fadf3bbadd95">
+        <source>Are you sure you want to remove the current video?</source>
+        <target>Ste si istí, že chcete odstrániť aktuálne video?</target>
+      </trans-unit>
+      <trans-unit id="sc2a0d87e2a79ff83">
+        <source>Also remove all interactions and chapters</source>
+        <target>Odstráňte aj všetky interakcie a kapitoly</target>
+      </trans-unit>
+      <trans-unit id="s55cb5824c6210259">
+        <source>Yes, remove it</source>
+        <target>Áno, odstráňte ho</target>
+      </trans-unit>
+      <trans-unit id="s8213840a0f7d2644">
+        <source>No, keep it</source>
+        <target>Nie, nechajte si ho</target>
+      </trans-unit>
+      <trans-unit id="s08e6bd98452e6bb9">
+        <source>Audio</source>
+        <target>Audio</target>
+      </trans-unit>
+      <trans-unit id="s62155488d6519cf3">
+        <source>Remove audio</source>
+        <target>Odstránenie zvuku</target>
+      </trans-unit>
+      <trans-unit id="sdcb649c4baf8dafa">
+        <source>Remove video</source>
+        <target>Odstránenie videa</target>
+      </trans-unit>
+      <trans-unit id="s0960574e3b6ca412">
+        <source>Video File</source>
+        <target>Video súbor</target>
+      </trans-unit>
+      <trans-unit id="s3cda547ac2158bf5">
+        <source>Audio File</source>
+        <target>Zvukový súbor</target>
+      </trans-unit>
+      <trans-unit id="sf29ef97c6e418a92">
+        <source>Remove media?</source>
+        <target>Odstrániť médiá?</target>
+      </trans-unit>
+      <trans-unit id="s9d2a1c7fe017a7cd">
+        <source>Loading audio...</source>
+        <target>Načítanie zvuku...</target>
+      </trans-unit>
+      <trans-unit id="seed71b0ff741f5c3">
+        <source>Pause video when shown</source>
+        <target>Pozastavenie videa pri zobrazení</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,1604 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "widgets/webwriter-interactive-video/webwriter-interactive-video.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Class containing the video player as well as all the logic for video playback, interactive elements, controls, file input, and more.\r\nThis class extends the `LitElementWw` class.",
+          "name": "WebwriterInteractiveVideo",
+          "members": [
+            {
+              "kind": "field",
+              "name": "scopedElements",
+              "privacy": "protected",
+              "static": true,
+              "description": "Returns an object that maps custom element names to their corresponding classes.\r\nThese custom elements can be used within the scope of the `webwriter-interactive-video` component.",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "localize",
+              "privacy": "protected",
+              "default": "LOCALIZE"
+            },
+            {
+              "kind": "field",
+              "name": "videoContext",
+              "type": {
+                "text": "InteractiveVideoContext"
+              },
+              "privacy": "private",
+              "description": "The context for the interactive video component, containing all widget data in a JSON object."
+            },
+            {
+              "kind": "field",
+              "name": "_composedContext",
+              "type": {
+                "text": "InteractiveVideoContext"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "hideInteractions",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether interactions should be shown",
+              "attribute": "hide-interactions",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "hideChapters",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the video has chapters and they should be shown",
+              "attribute": "hide-chapters",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "disablePlaybackRateChange",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the user is allowed to change the playback rate",
+              "attribute": "disable-playback-rate-change",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "videoBase64",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "Video file as a base64 string for offline storage.",
+              "attribute": "video-base64",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "videoURL",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "Video URL for online playback.",
+              "attribute": "video-url",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "videoLoaded",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Indicates whether the video is currently loaded.",
+              "attribute": "videoLoaded"
+            },
+            {
+              "kind": "field",
+              "name": "videoType",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"placeholder\"",
+              "description": "Type of the video source.",
+              "attribute": "video-type",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "videoDetails",
+              "type": {
+                "text": "{ title: string; author: string; duration: number }"
+              },
+              "default": "{ title: \"\", author: \"\", duration: 0, }",
+              "description": "Details of the video, such as title, author, and duration.",
+              "attribute": "video-details",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "waveformData",
+              "type": {
+                "text": "number[][]"
+              },
+              "default": "null",
+              "description": "Waveform data for audio visualization generated by WaveSurfer.js.",
+              "attribute": "waveform-data",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "chapterConfig",
+              "type": {
+                "text": "{ title: string, startTime: number }[]"
+              },
+              "default": "[]",
+              "description": "Contains the current chapter configuration as an object.",
+              "attribute": "chapter-config",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "selectedInteractionId",
+              "type": {
+                "text": "number"
+              },
+              "default": "-1",
+              "description": "Contains the ID of the selected interaction.",
+              "attribute": "selectedInteractionId"
+            },
+            {
+              "kind": "field",
+              "name": "videoInteractions",
+              "description": "The list of video interaction elements slotted into the component."
+            },
+            {
+              "kind": "field",
+              "name": "tabIndex",
+              "type": {
+                "text": "number"
+              },
+              "default": "-1",
+              "description": "The tab index of the component.",
+              "attribute": "tabIndex",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "videoDurationFormatted",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "\"00:00\"",
+              "attribute": "videoDurationFormatted"
+            },
+            {
+              "kind": "field",
+              "name": "lastTimeUpdate",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0",
+              "attribute": "lastTimeUpdate"
+            },
+            {
+              "kind": "field",
+              "name": "isDragging",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "attribute": "isDragging"
+            },
+            {
+              "kind": "field",
+              "name": "isFullscreen",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "attribute": "isFullscreen"
+            },
+            {
+              "kind": "field",
+              "name": "controlsVisible",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "true",
+              "attribute": "controlsVisible"
+            },
+            {
+              "kind": "field",
+              "name": "areControlsHovered",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "attribute": "areControlsHovered"
+            },
+            {
+              "kind": "field",
+              "name": "playbackRate",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "1",
+              "attribute": "playbackRate"
+            },
+            {
+              "kind": "field",
+              "name": "volumeControlsVisible",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "true",
+              "attribute": "volumeControlsVisible"
+            },
+            {
+              "kind": "field",
+              "name": "playbackRateControlsVisible",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "true",
+              "attribute": "playbackRateControlsVisible"
+            },
+            {
+              "kind": "field",
+              "name": "isProgressBarFocused",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "attribute": "isProgressBarFocused"
+            },
+            {
+              "kind": "field",
+              "name": "hadLoadingError",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "attribute": "hadLoadingError"
+            },
+            {
+              "kind": "field",
+              "name": "videoContainerHeight",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0",
+              "attribute": "videoContainerHeight"
+            },
+            {
+              "kind": "field",
+              "name": "videoContainerWidth",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0",
+              "attribute": "videoContainerWidth"
+            },
+            {
+              "kind": "field",
+              "name": "videoPlayer",
+              "type": {
+                "text": "VideoPlayer"
+              },
+              "description": "The video player element"
+            },
+            {
+              "kind": "field",
+              "name": "videoAreaContainer",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "controlsElement",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "videoControlsBar",
+              "type": {
+                "text": "VideoControlsBar"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "interactionsProgressBar",
+              "type": {
+                "text": "InteractionsProgressBar"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "progressBar",
+              "type": {
+                "text": "SlRange"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "chaptersDrawer",
+              "type": {
+                "text": "VideoChapterDrawer"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "removeVideoDialog",
+              "type": {
+                "text": "SlDialog"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "removeInteractionsCheckbox",
+              "type": {
+                "text": "SlCheckbox"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "observer",
+              "type": {
+                "text": "MutationObserver | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "resizeObserver",
+              "type": {
+                "text": "ResizeObserver | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "controlsTimeout",
+              "type": {
+                "text": "number | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "method",
+              "name": "showPopups",
+              "description": "Renders the overlay elements for the video.",
+              "return": {
+                "type": {
+                  "text": "Array<TemplateResult>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "updateContext",
+              "description": "Updates the videoContext attribute and requests an update."
+            },
+            {
+              "kind": "method",
+              "name": "isAudio",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "calculateVideoAreaSize",
+              "privacy": "private",
+              "description": "Calculates the size of the video area based on the aspect ratio and container dimensions.",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "calculateVideoBaseSize",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "jumpToChapter",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "time",
+                  "description": "The time in seconds to jump to."
+                }
+              ],
+              "description": "Jumps to a specific time stamp in the video."
+            },
+            {
+              "kind": "method",
+              "name": "interactionClicked",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "id",
+                  "description": "the ID of the interaction that was clicked"
+                }
+              ],
+              "description": "Handles the click event on an interaction element."
+            },
+            {
+              "kind": "method",
+              "name": "baubleClicked",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "id",
+                  "description": "the ID of the interaction associated with the clicked bauble"
+                }
+              ],
+              "description": "Handles the click event on a bauble in the progress bar."
+            },
+            {
+              "kind": "method",
+              "name": "changeInteractionStartTime",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "newTime",
+                  "description": "new start time for the interaction"
+                },
+                {
+                  "name": "index",
+                  "description": "the ID of the interaction to update"
+                }
+              ],
+              "description": "Changes the start time of an interaction and updates its end time to be 5 seconds later."
+            },
+            {
+              "kind": "method",
+              "name": "getCurrentChapter",
+              "privacy": "private",
+              "description": "Retrieves the current chapter based on the current time of the video.",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "hasVideo",
+              "privacy": "private",
+              "description": "Checks whether a video is already existing on load.",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addVideoInteraction",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "id",
+                  "description": "the ID to assign to the new interaction"
+                }
+              ],
+              "description": "Adds a new video interaction element to the video at the current time."
+            },
+            {
+              "kind": "field",
+              "name": "handleVideoClick",
+              "privacy": "private",
+              "description": "Handles the click event on the video element.",
+              "parameters": [
+                {
+                  "description": "The MouseEvent object representing the click event.",
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "toggleChaptersDrawer",
+              "privacy": "private",
+              "description": "Toggles the chapters drawer open or closed."
+            },
+            {
+              "kind": "method",
+              "name": "handleVolumeChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "value"
+                },
+                {
+                  "description": "The custom event object.",
+                  "name": "e"
+                }
+              ],
+              "description": "Handles the change event for the volume slider and sets the video volume accordingly.\r\nUses a quadratic scale for more intuitive volume control."
+            },
+            {
+              "kind": "method",
+              "name": "toggleMute",
+              "privacy": "private",
+              "description": "Handles the click event for the mute button.",
+              "parameters": [
+                {
+                  "description": "The custom event object.",
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "changePlaybackRate",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "value",
+                  "description": "The new playback rate value."
+                }
+              ],
+              "description": "Sets the video playback rate (speed) to the specified value."
+            },
+            {
+              "kind": "method",
+              "name": "updateBaublePositions",
+              "description": "Updates the positions of the baubles in the widget."
+            },
+            {
+              "kind": "method",
+              "name": "hideAllInteractions",
+              "privacy": "private",
+              "description": "Hides all interactions on the video and resets their hasPaused attribute."
+            },
+            {
+              "kind": "method",
+              "name": "closeChaptersDrawer",
+              "privacy": "private",
+              "description": "Closes the chapters drawer."
+            },
+            {
+              "kind": "field",
+              "name": "handleTimeUpdate",
+              "privacy": "private",
+              "description": "Handles the time update event of the video player and check whether there are interactions to be displayed by comparing current call time to last.\r\nThis way we dont skip any interactions and dont fire twice since this is called inconsistently.",
+              "parameters": [
+                {
+                  "description": "The custom event object.",
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleTimeSkip",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "amount",
+                  "type": {
+                    "text": "number"
+                  },
+                  "description": "The amount of time to skip (in seconds). Positive values skip forward, negative values skip backward."
+                }
+              ],
+              "description": "Handles time skips through keyboard shortcuts"
+            },
+            {
+              "kind": "field",
+              "name": "handleProgressChange",
+              "privacy": "private",
+              "description": "Handles the progress change event and updates the video's progress bar and time stamp based on the current video time.",
+              "parameters": [
+                {
+                  "description": "The custom event object.",
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "toggleFullscreen",
+              "privacy": "private",
+              "description": "Enables or disables fullscreen mode."
+            },
+            {
+              "kind": "field",
+              "name": "handleFullscreenChange",
+              "privacy": "private",
+              "description": "Handles the fullscreen change event by repositioning the baubles to fit the new video size."
+            },
+            {
+              "kind": "field",
+              "name": "handleMouseMove",
+              "privacy": "private",
+              "description": "Handles mouse movement in fullscreen mode to show the controls when the mouse is moved.",
+              "parameters": [
+                {
+                  "description": "The MouseEvent object representing the mouse movement event.",
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleControlMouseEnter",
+              "privacy": "private",
+              "description": "Handles mouse enter the controls in fullscreen mode to prevent hiding the controls while hovering over them.",
+              "parameters": [
+                {
+                  "description": "The MouseEvent object representing the mouse hover event.",
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleControlMouseLeave",
+              "privacy": "private",
+              "description": "Handles mouse leave the controls in fullscreen mode to allow hiding the controls again.",
+              "parameters": [
+                {
+                  "description": "The MouseEvent object representing the mouse hover event.",
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "showControls",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "hideControls",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "setupVideoBase64",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "src",
+                  "type": {
+                    "text": "string"
+                  },
+                  "description": "The base64-encoded video source."
+                }
+              ],
+              "description": "Sets up the video player with a base64-encoded video source."
+            },
+            {
+              "kind": "method",
+              "name": "setupVideoURL",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "src",
+                  "type": {
+                    "text": "string"
+                  },
+                  "description": "The video URL."
+                }
+              ],
+              "description": "Sets up the video player with a YouTube or video URL."
+            },
+            {
+              "kind": "method",
+              "name": "handleVideoPlay",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleVideoPause",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "startPlayButtonAnimation",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "togglePlayVideo",
+              "privacy": "private",
+              "description": "Toggles the playback of the video. If the video has ended, it resets the current time to 0."
+            },
+            {
+              "kind": "method",
+              "name": "playVideo",
+              "description": "Plays the video."
+            },
+            {
+              "kind": "method",
+              "name": "pauseVideo",
+              "description": "Pauses the video."
+            },
+            {
+              "kind": "method",
+              "name": "getContrastColor",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              },
+              "parameters": [
+                {
+                  "name": "hexColor",
+                  "type": {
+                    "text": "string"
+                  },
+                  "description": "The hex color value."
+                }
+              ],
+              "description": "Calculates the contrast color based on the given hex color."
+            },
+            {
+              "kind": "field",
+              "name": "handleOverlayClicked",
+              "privacy": "private",
+              "description": "Handles the click event on the overlay element by calling the clickEventHelper function with the id of the interaction.",
+              "parameters": [
+                {
+                  "description": "The MouseEvent object representing the click event.",
+                  "name": "event"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleCanPlay",
+              "privacy": "private",
+              "description": "Handles the 'canplay' event of the video element.\r\n\r\nThis function is called when the video can be played."
+            },
+            {
+              "kind": "field",
+              "name": "handleDurationChange",
+              "privacy": "private",
+              "description": "Handles the duration change event of the video element."
+            },
+            {
+              "kind": "method",
+              "name": "handleLoadingError",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "error",
+                  "type": {
+                    "text": "string"
+                  },
+                  "description": "The error message or object."
+                }
+              ],
+              "description": "Handles loading errors for the video element."
+            },
+            {
+              "kind": "method",
+              "name": "clearVideo",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "removeInteractions",
+                  "default": "true",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "Clears the current video and resets the video context and player."
+            },
+            {
+              "kind": "method",
+              "name": "showRemoveVideoDialog",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "setShowOverlay",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setHasChapters",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setAllowPlaybackRateChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setChapterConfig",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "monitorSlot",
+              "privacy": "private",
+              "description": "Monitors the slot for changes and handles fullscreen changes and interaction removals.",
+              "parameters": [
+                {
+                  "description": "List of mutations to be monitored",
+                  "name": "mutationList"
+                }
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "name": "hide-interactions",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether interactions should be shown",
+              "fieldName": "hideInteractions"
+            },
+            {
+              "name": "hide-chapters",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the video has chapters and they should be shown",
+              "fieldName": "hideChapters"
+            },
+            {
+              "name": "disable-playback-rate-change",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the user is allowed to change the playback rate",
+              "fieldName": "disablePlaybackRateChange"
+            },
+            {
+              "name": "video-base64",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "Video file as a base64 string for offline storage.",
+              "fieldName": "videoBase64"
+            },
+            {
+              "name": "video-url",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "Video URL for online playback.",
+              "fieldName": "videoURL"
+            },
+            {
+              "name": "videoLoaded",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Indicates whether the video is currently loaded.",
+              "fieldName": "videoLoaded"
+            },
+            {
+              "name": "video-type",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"placeholder\"",
+              "description": "Type of the video source.",
+              "fieldName": "videoType"
+            },
+            {
+              "name": "video-details",
+              "type": {
+                "text": "{ title: string; author: string; duration: number }"
+              },
+              "default": "{ title: \"\", author: \"\", duration: 0, }",
+              "description": "Details of the video, such as title, author, and duration.",
+              "fieldName": "videoDetails"
+            },
+            {
+              "name": "waveform-data",
+              "type": {
+                "text": "number[][]"
+              },
+              "default": "null",
+              "description": "Waveform data for audio visualization generated by WaveSurfer.js.",
+              "fieldName": "waveformData"
+            },
+            {
+              "name": "chapter-config",
+              "type": {
+                "text": "{ title: string, startTime: number }[]"
+              },
+              "default": "[]",
+              "description": "Contains the current chapter configuration as an object.",
+              "fieldName": "chapterConfig"
+            },
+            {
+              "name": "selectedInteractionId",
+              "type": {
+                "text": "number"
+              },
+              "default": "-1",
+              "description": "Contains the ID of the selected interaction.",
+              "fieldName": "selectedInteractionId"
+            },
+            {
+              "name": "tabIndex",
+              "type": {
+                "text": "number"
+              },
+              "default": "-1",
+              "description": "The tab index of the component.",
+              "fieldName": "tabIndex"
+            },
+            {
+              "name": "videoDurationFormatted",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"00:00\"",
+              "fieldName": "videoDurationFormatted"
+            },
+            {
+              "name": "lastTimeUpdate",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "lastTimeUpdate"
+            },
+            {
+              "name": "isDragging",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "isDragging"
+            },
+            {
+              "name": "isFullscreen",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "isFullscreen"
+            },
+            {
+              "name": "controlsVisible",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "fieldName": "controlsVisible"
+            },
+            {
+              "name": "areControlsHovered",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "areControlsHovered"
+            },
+            {
+              "name": "playbackRate",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "fieldName": "playbackRate"
+            },
+            {
+              "name": "volumeControlsVisible",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "fieldName": "volumeControlsVisible"
+            },
+            {
+              "name": "playbackRateControlsVisible",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "fieldName": "playbackRateControlsVisible"
+            },
+            {
+              "name": "isProgressBarFocused",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "isProgressBarFocused"
+            },
+            {
+              "name": "hadLoadingError",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "hadLoadingError"
+            },
+            {
+              "name": "videoContainerHeight",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "videoContainerHeight"
+            },
+            {
+              "name": "videoContainerWidth",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "videoContainerWidth"
+            }
+          ],
+          "superclass": {
+            "name": "LitElementWw",
+            "package": "@webwriter/lit"
+          },
+          "tagName": "webwriter-interactive-video",
+          "customElement": true,
+          "modulePath": "widgets/webwriter-interactive-video/webwriter-interactive-video.ts",
+          "definitionPath": "widgets/webwriter-interactive-video/webwriter-interactive-video.ts"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "WebwriterInteractiveVideo",
+          "declaration": {
+            "name": "WebwriterInteractiveVideo",
+            "module": "widgets/webwriter-interactive-video/webwriter-interactive-video.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "webwriter-interactive-video",
+          "declaration": {
+            "name": "WebwriterInteractiveVideo",
+            "module": "widgets/webwriter-interactive-video/webwriter-interactive-video.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "widgets/webwriter-video-interaction/webwriter-video-interaction.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "`webwriter-video-interaction` is a custom element that represents an interaction in a `replace` interaction.\r\nIt extends `LitElementWw` and provides a slot for content insertion.",
+          "name": "WwVideoInteraction",
+          "members": [
+            {
+              "kind": "field",
+              "name": "localize",
+              "privacy": "protected",
+              "default": "LOCALIZE"
+            },
+            {
+              "kind": "field",
+              "name": "tabIndex",
+              "type": {
+                "text": "number"
+              },
+              "default": "-1",
+              "description": "The tab index of the component.",
+              "attribute": "tabIndex",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "id",
+              "description": "The interaction id. Must be unique.",
+              "attribute": "id",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "startTime",
+              "description": "The interaction start time in seconds.",
+              "attribute": "startTime",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "endTime",
+              "description": "The interaction end time in seconds.",
+              "attribute": "endTime",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "noInitialPause",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the interaction should pause the video when shown.",
+              "attribute": "noInitialPause",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "hasPaused",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the interaction has already paused the video.",
+              "attribute": "hasPaused"
+            },
+            {
+              "kind": "field",
+              "name": "posX",
+              "description": "The x position of the interaction as a percentage of the video width.",
+              "attribute": "posX",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "posY",
+              "description": "The y position of the interaction as a percentage of the video height.",
+              "attribute": "posY",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "description": "The width of the interaction in pixels.",
+              "attribute": "width",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "description": "The height of the interaction in pixels.",
+              "attribute": "height",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "parentWidth",
+              "description": "The width of the parent video player.",
+              "attribute": "parentWidth"
+            },
+            {
+              "kind": "field",
+              "name": "parentHeight",
+              "description": "The height of the parent video player.",
+              "attribute": "parentHeight"
+            },
+            {
+              "kind": "field",
+              "name": "videoBaseWidth",
+              "type": {
+                "text": "number"
+              },
+              "default": "800",
+              "description": "The video width in non-full-screen mode.",
+              "attribute": "videoBaseWidth"
+            },
+            {
+              "kind": "field",
+              "name": "videoBaseHeight",
+              "type": {
+                "text": "number"
+              },
+              "default": "450",
+              "description": "The video height in non-full-screen mode.",
+              "attribute": "videoBaseHeight"
+            },
+            {
+              "kind": "field",
+              "name": "isDragging",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "attribute": "isDragging"
+            },
+            {
+              "kind": "field",
+              "name": "draggingPosX",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0",
+              "attribute": "draggingPosX"
+            },
+            {
+              "kind": "field",
+              "name": "draggingPosY",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0",
+              "attribute": "draggingPosY"
+            },
+            {
+              "kind": "field",
+              "name": "isResizing",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "attribute": "isResizing"
+            },
+            {
+              "kind": "field",
+              "name": "resizingWidth",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0",
+              "attribute": "resizingWidth"
+            },
+            {
+              "kind": "field",
+              "name": "resizingHeight",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0",
+              "attribute": "resizingHeight"
+            },
+            {
+              "kind": "field",
+              "name": "container",
+              "type": {
+                "text": "HTMLDivElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "bottomRight",
+              "type": {
+                "text": "SlIcon"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "dragIcon",
+              "type": {
+                "text": "SlIcon"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "mutationObserver",
+              "type": {
+                "text": "MutationObserver"
+              },
+              "privacy": "private",
+              "default": "new MutationObserver(this.mutationCallback)"
+            },
+            {
+              "kind": "field",
+              "name": "scopedElements",
+              "privacy": "protected",
+              "static": true,
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "mutationCallback",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "startResizing",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "PointerEvent"
+                  },
+                  "description": "The pointer event that initiates the resizing."
+                }
+              ],
+              "description": "Initiates the resizing process when the user starts dragging the resize handle."
+            },
+            {
+              "kind": "method",
+              "name": "startDragging",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "PointerEvent"
+                  },
+                  "description": "PointerEvent that initiates the dragging."
+                }
+              ],
+              "description": "Initiates the dragging process when the user starts dragging the drag icon."
+            }
+          ],
+          "events": [
+            {
+              "name": "interactionClicked",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "positionChanged",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "tabIndex",
+              "type": {
+                "text": "number"
+              },
+              "default": "-1",
+              "description": "The tab index of the component.",
+              "fieldName": "tabIndex"
+            },
+            {
+              "name": "id",
+              "description": "The interaction id. Must be unique.",
+              "fieldName": "id"
+            },
+            {
+              "name": "startTime",
+              "description": "The interaction start time in seconds.",
+              "fieldName": "startTime"
+            },
+            {
+              "name": "endTime",
+              "description": "The interaction end time in seconds.",
+              "fieldName": "endTime"
+            },
+            {
+              "name": "noInitialPause",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the interaction should pause the video when shown.",
+              "fieldName": "noInitialPause"
+            },
+            {
+              "name": "hasPaused",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the interaction has already paused the video.",
+              "fieldName": "hasPaused"
+            },
+            {
+              "name": "posX",
+              "description": "The x position of the interaction as a percentage of the video width.",
+              "fieldName": "posX"
+            },
+            {
+              "name": "posY",
+              "description": "The y position of the interaction as a percentage of the video height.",
+              "fieldName": "posY"
+            },
+            {
+              "name": "width",
+              "description": "The width of the interaction in pixels.",
+              "fieldName": "width"
+            },
+            {
+              "name": "height",
+              "description": "The height of the interaction in pixels.",
+              "fieldName": "height"
+            },
+            {
+              "name": "parentWidth",
+              "description": "The width of the parent video player.",
+              "fieldName": "parentWidth"
+            },
+            {
+              "name": "parentHeight",
+              "description": "The height of the parent video player.",
+              "fieldName": "parentHeight"
+            },
+            {
+              "name": "videoBaseWidth",
+              "type": {
+                "text": "number"
+              },
+              "default": "800",
+              "description": "The video width in non-full-screen mode.",
+              "fieldName": "videoBaseWidth"
+            },
+            {
+              "name": "videoBaseHeight",
+              "type": {
+                "text": "number"
+              },
+              "default": "450",
+              "description": "The video height in non-full-screen mode.",
+              "fieldName": "videoBaseHeight"
+            },
+            {
+              "name": "isDragging",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "isDragging"
+            },
+            {
+              "name": "draggingPosX",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "draggingPosX"
+            },
+            {
+              "name": "draggingPosY",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "draggingPosY"
+            },
+            {
+              "name": "isResizing",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "isResizing"
+            },
+            {
+              "name": "resizingWidth",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "resizingWidth"
+            },
+            {
+              "name": "resizingHeight",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "resizingHeight"
+            }
+          ],
+          "superclass": {
+            "name": "LitElementWw",
+            "package": "@webwriter/lit"
+          },
+          "tagName": "webwriter-video-interaction",
+          "customElement": true,
+          "modulePath": "widgets/webwriter-video-interaction/webwriter-video-interaction.ts",
+          "definitionPath": "widgets/webwriter-video-interaction/webwriter-video-interaction.ts"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "WwVideoInteraction",
+          "declaration": {
+            "name": "WwVideoInteraction",
+            "module": "widgets/webwriter-video-interaction/webwriter-video-interaction.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "webwriter-video-interaction",
+          "declaration": {
+            "name": "WwVideoInteraction",
+            "module": "widgets/webwriter-video-interaction/webwriter-video-interaction.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

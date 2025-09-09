@@ -10,6 +10,8 @@ import {
   SlDetails,
   SlInput,
   SlButton,
+  SlDialog,
+  SlCheckbox,
 } from "@shoelace-style/shoelace";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 
@@ -20,17 +22,24 @@ import {
 
 import { consume } from "@lit/context";
 
-//CSS
+// CSS
 import styles from "./interactive-video-options.styles";
-//Icons
+
+// Icons
 import movie from "@tabler/icons/outline/movie.svg";
+import headphones from "@tabler/icons/outline/headphones.svg";
 import timelineEvent from "@tabler/icons/outline/timeline-event.svg";
 import trash from "@tabler/icons/outline/trash.svg";
+import youtubeIcon from "@tabler/icons/filled/brand-youtube.svg";
+import spotifyIcon from "@tabler/icons/filled/brand-spotify.svg";
+import vimeoIcon from "@tabler/icons/filled/brand-vimeo.svg";
+import tiktokIcon from "@tabler/icons/filled/brand-tiktok.svg";
 
-//Util
+// Util
 import { formatTime, parseTime } from "../../utils/timeFormatter";
-import { WwVideoInteraction } from "../../widgets/webwriter-video-interaction/webwriter-video-interaction.component";
-import { WebwriterInteractiveVideo } from "../../widgets/webwriter-interactive-video/webwriter-interactive-video.component";
+import type { WwVideoInteraction } from "../../widgets/webwriter-video-interaction/webwriter-video-interaction";
+import { WebwriterInteractiveVideo } from "../../widgets/webwriter-interactive-video/webwriter-interactive-video";
+import { msg } from "@lit/localize";
 
 export class InteractiveVideoOptions extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })
@@ -42,6 +51,15 @@ export class InteractiveVideoOptions extends LitElementWw {
 
   @property({ type: Number, attribute: true, reflect: true })
   accessor tabIndex = -1;
+
+  @property({ type: String })
+  accessor interactionXPos: string = "0";
+  @property({ type: String })
+  accessor interactionYPos: string = "0";
+  @property({ type: String })
+  accessor interactionWidth: string = "0";
+  @property({ type: String })
+  accessor interactionHeight: string = "0";
 
   /**
    * Returns an object that maps custom element names to their corresponding classes.
@@ -60,19 +78,28 @@ export class InteractiveVideoOptions extends LitElementWw {
     };
   }
 
-  /*
-
-  */
   //import CSS
   static styles = [styles];
 
-  /*
+  protected updated(_changedProperties: PropertyValues): void {
+    if (_changedProperties.has("selectedInteraction")) {
+      this.updateInteractionProperties();
 
-  */
-  firstUpdated() {}
-  /*
+      this.selectedInteraction?.addEventListener("positionChanged", () => {
+        this.updateInteractionProperties();
+      });
+    }
+  }
 
-  */
+  private updateInteractionProperties() {
+    if (this.selectedInteraction) {
+      this.interactionXPos = String(Math.round(this.selectedInteraction.posX * 100) / 100 || 0);
+      this.interactionYPos = String(Math.round(this.selectedInteraction.posY * 100) / 100 || 0);
+      this.interactionWidth = String(Math.round(this.selectedInteraction.width / this.selectedInteraction.videoBaseWidth * 10000) / 100 || 0);
+      this.interactionHeight = String(Math.round(this.selectedInteraction.height / this.selectedInteraction.videoBaseHeight * 10000) / 100 || 0);
+    }
+  }
+
   render() {
     const parent = this.parentNode; // Get parent
     const root = parent.getRootNode(); // Get shadowRoot or document
@@ -83,13 +110,15 @@ export class InteractiveVideoOptions extends LitElementWw {
         if (slot) {
           const assignedElements = slot.assignedElements();
           const hasVideoInteraction = assignedElements.some(
-            (el) => el.tagName.toLowerCase() === "webwriter-video-interaction"
+            (el) =>
+              el.tagName.toLowerCase() ===
+              "webwriter-video-interaction"
           );
           //
           if (hasVideoInteraction) {
             const interaction = assignedElements.filter(
               (interaction) =>
-                interaction.id ===
+                String(interaction.id) ===
                 String(this.videoContext?.selectedInteractionID)
             )[0] as WwVideoInteraction;
 
@@ -100,8 +129,8 @@ export class InteractiveVideoOptions extends LitElementWw {
             // The parentNode's shadow root belongs to a WwVideoInteraction component
             const parentComponent = root.host;
 
-            if (parentComponent instanceof WwVideoInteraction) {
-              this.selectedInteraction = parentComponent;
+            if (parentComponent.tagName.toLowerCase() === 'webwriter-video-interaction') {
+              this.selectedInteraction = parentComponent as WwVideoInteraction;
             }
           }
         }
@@ -118,110 +147,202 @@ export class InteractiveVideoOptions extends LitElementWw {
       >
         ${this.videoContext?.videoLoaded
           ? html` <!--  -->
-              <div style="display:flex; flex-direction: column; gap: 10px;">
+              <div
+                style="display:flex; flex-direction: column; gap: 10px;"
+              >
                 <div class="header">
-                  <sl-icon src=${movie}></sl-icon>
-                  <p>Video</p>
+                  ${this.isAudio() ? html`
+                    <sl-icon src=${headphones}></sl-icon>
+                    <p>${msg("Audio")}</p>
+                  ` : html`
+                    <sl-icon src=${movie}></sl-icon>
+                    <p>${msg("Video")}</p>
+                  `}
                 </div>
+                ${this.videoContext.videoDetails ? html`
+                  <div class="video-details">
+                    <p class="video-title" title=${this.videoContext?.videoDetails.title}>${this.videoContext?.videoDetails.title}</p>
+                    <p class="video-author" title=${this.videoContext?.videoDetails.author}>${this.videoContext?.videoDetails.author}</p>
+                    <div class="video-source">
+                      ${this.renderSourceInfo()}
+                    </div>
+                  </div>
+                  <sl-button
+                    size="small"
+                    @click=${() => {
+                      this.dispatchEvent(new CustomEvent("showRemoveVideoDialog", {
+                        bubbles: true,
+                        composed: true,
+                      }));
+                    }}
+                    >${this.isAudio() ? msg("Remove audio") : msg("Remove video")}</sl-button
+                  >
+                ` : null }
                 <sl-switch
                   @sl-change=${this.handleShowOverlayChange}
                   class="temporary-teacher-options"
                   ?checked=${this.videoContext?.showOverlay}
-                  >Show Popups</sl-switch
+                  >${msg("Show Popups")}</sl-switch
                 >
+                <sl-switch
+                  @sl-change=${this
+                    .handleEnableChaptersChange}
+                  class="temporary-teacher-options"
+                  ?checked=${this.videoContext?.hasChapters}
+                  >${msg("Enable chapters")}</sl-switch
+                >
+                ${!["spotify", "tiktok"].includes(this.videoContext?.videoType) ? html`
+                  <sl-switch
+                    @sl-change=${this.handleAllowPlaybackRateChangeChage}
+                    class="temporary-teacher-options"
+                    ?checked=${this.videoContext?.allowPlaybackRateChange}
+                    >${msg("Allow playback rate change")}</sl-switch
+                  >
+                ` : null }
+                  
               </div>
 
               <!--  -->
-              <div style="display:flex; flex-direction: column; gap: 10px; ">
+              <div
+                style="display:flex; flex-direction: column; gap: 10px; "
+              >
                 ${this.selectedInteraction !== undefined
                   ? html` <!--  -->
                       <div class="header">
-                        <sl-icon src=${timelineEvent}></sl-icon>
-                        <p>Interaction</p>
+                        <sl-icon
+                          src=${timelineEvent}
+                        ></sl-icon>
+                        <p>${msg("Interaction")}</p>
                         <p style="margin-left: auto">
-                          ID: ${this.selectedInteraction?.id + 1}
+                          ID:
+                          ${this.selectedInteraction
+                            ?.id + 1}
                         </p>
                       </div>
-                      <div id="overlay-interaction-settings">
+                      <div
+                        id="overlay-interaction-settings"
+                      >
                         <sl-input
                           id="overlay-start-time-input"
-                          label="Start Time"
+                          label=${msg("Start Time")}
                           size="small"
                           value=${formatTime(
-                            this.selectedInteraction?.startTime
+                            this.selectedInteraction
+                              ?.startTime
                           )}
-                          @sl-change=${this.handleStartTimeInputChange}
+                          @sl-change=${this
+                            .handleStartTimeInputChange}
                         ></sl-input>
                         <sl-input
                           id="overlay-end-time-input"
-                          label="End Time"
+                          label=${msg("End Time")}
                           size="small"
-                          value=${formatTime(this.selectedInteraction?.endTime)}
-                          @sl-change=${this.handleEndTimeInputChange}
+                          value=${formatTime(
+                            this.selectedInteraction
+                              ?.endTime
+                          )}
+                          @sl-change=${this
+                            .handleEndTimeInputChange}
                         ></sl-input>
+                        <sl-switch
+                          @sl-change=${(e: CustomEvent) => {
+                            const target = e.target as SlSwitch;
+                            this.selectedInteraction.noInitialPause = !target.checked;
+                            this.selectedInteraction.hasPaused = false;
+                            this.selectedInteraction.requestUpdate();
+                          }}
+                          class="temporary-teacher-options"
+                          ?checked=${!this.selectedInteraction?.noInitialPause}
+                          >${msg("Pause video when shown")}</sl-switch
+                        >
                         <div>
                           <p
                             style="font-size: 17px; margin: 0px; padding: 0px; margin-bottom: 5px; font-size: 14px;"
                           >
-                            Background Color
+                            ${msg(
+                              "Background Color"
+                            )}
                           </p>
                           <sl-color-picker
-                            label="Overlay Color"
+                            label=${msg(
+                              "Overlay Color"
+                            )}
                             id="color-picker"
                             size="small"
-                            value=${getComputedStyle(this.selectedInteraction)
-                              .backgroundColor}
-                            @sl-change=${this.handleOverlayColorChange}
+                            value=${getComputedStyle(
+                              this
+                                .selectedInteraction
+                            ).backgroundColor}
+                            @sl-change=${this
+                              .handleOverlayColorChange}
                           ></sl-color-picker>
                         </div>
-                        <sl-details summary="Advanced Options">
+                        <sl-details
+                          summary=${msg(
+                            "Advanced Options"
+                          )}
+                        >
                           <div
                             style="display: flex; flex-direction: column; gap: 10px;"
                           >
                             <sl-input
-                              label="X Position"
+                              label=${msg(
+                                "X Position"
+                              )}
                               id="overlay-x-position-input"
                               type="number"
-                              value=${parseInt(
-                                getComputedStyle(this.selectedInteraction).left,
-                                10
-                              ) || 0}
+                              min="0"
+                              .max=${100 - Number(this.interactionWidth)}
+                              .value=${this.interactionXPos}
+                              @sl-input=${(e: CustomEvent) => {
+                                this.selectedInteraction.posX = parseFloat((e.target as SlInput).value) || 0;
+                              }}
                               size="small"
                             >
                             </sl-input>
                             <sl-input
-                              label="Y Position"
+                              label=${msg(
+                                "Y Position"
+                              )}
                               id="overlay-y-position-input"
                               type="number"
-                              value=${parseInt(
-                                getComputedStyle(this.selectedInteraction).top,
-                                10
-                              ) || 0}
+                              min="0"
+                              .max=${100 - Number(this.interactionHeight)}
+                              .value=${this.interactionYPos}
+                              @sl-input=${(e: CustomEvent) => {
+                                this.selectedInteraction.posY = parseFloat((e.target as SlInput).value) || 0;
+                              }}
                               size="small"
                             >
                             </sl-input>
                             <sl-input
-                              label="Width"
+                              label=${msg(
+                                "Width"
+                              )}
                               id="overlay-width-input"
                               type="number"
+                              min="10"
+                              .max=${100 - Number(this.interactionXPos)}
+                              .value=${this.interactionWidth}
+                              @sl-input=${(e: CustomEvent) => {
+                                this.selectedInteraction.width = (parseFloat((e.target as SlInput).value) / 100 * this.selectedInteraction.videoBaseWidth) || 0;
+                              }}
                               size="small"
-                              value=${parseInt(
-                                getComputedStyle(this.selectedInteraction)
-                                  .width,
-                                10
-                              ) || 0}
                             >
                             </sl-input>
                             <sl-input
-                              label="Height"
+                              label=${msg(
+                                "Height"
+                              )}
                               id="overlay-height-input"
                               type="number"
+                              min="10"
+                              .max=${100 - Number(this.interactionYPos)}
+                              .value=${this.interactionHeight}
+                              @sl-input=${(e: CustomEvent) => {
+                                this.selectedInteraction.height = (parseFloat((e.target as SlInput).value) / 100 * this.selectedInteraction.videoBaseHeight) || 0;
+                              }}
                               size="small"
-                              value=${parseInt(
-                                getComputedStyle(this.selectedInteraction)
-                                  .height,
-                                10
-                              ) || 0}
                             >
                             </sl-input>
                           </div>
@@ -233,22 +354,72 @@ export class InteractiveVideoOptions extends LitElementWw {
                           outline
                           @click=${this.deleteElement}
                         >
-                          <sl-icon slot="prefix" src=${trash}></sl-icon>
-                          Delete
+                          <sl-icon
+                            slot="prefix"
+                            src=${trash}
+                          ></sl-icon>
+                          ${msg("Delete")}
                         </sl-button>
                       </div>`
                   : html` <!--  -->
                       <div class="header">
-                        <sl-icon src=${timelineEvent}></sl-icon>
-                        <p>Interaction</p>
+                        <sl-icon
+                          src=${timelineEvent}
+                        ></sl-icon>
+                        <p>${msg("Interaction")}</p>
                       </div>
-                      <p style="padding: 0px; margin: 0px; font-size: 14px;">
-                        Select an interaction to view details
+                      <p
+                        style="padding: 0px; margin: 0px; font-size: 14px;"
+                      >
+                        ${msg(
+                          "Select an interaction to view details"
+                        )}
                       </p>`}
               </div>`
           : null}
       </div>
     `;
+  }
+
+  renderSourceInfo() {
+    switch (this.videoContext.videoType) {
+      case "youtube":
+        return html`<sl-icon
+          .src=${youtubeIcon}
+        ></sl-icon>
+        <p>YouTube</p>`;
+      case "spotify":
+        return html`<sl-icon
+          .src=${spotifyIcon}
+        ></sl-icon>
+        <p>Spotify</p>`;
+      case "vimeo":
+        return html`<sl-icon
+          .src=${vimeoIcon}
+        ></sl-icon>
+        <p>Vimeo</p>`;
+      case "tiktok":
+        return html`<sl-icon
+          .src=${tiktokIcon}
+        ></sl-icon>
+        <p>TikTok</p>`;
+      case "htmlvideo":
+        return html`<sl-icon
+          .src=${movie}
+        ></sl-icon>
+        <p>${msg("Video File")}</p>`;
+      case "htmlaudio":
+        return html`<sl-icon
+          .src=${headphones}
+        ></sl-icon>
+        <p>${msg("Audio File")}</p>`;
+      default:
+        return null;
+    }
+  }
+
+  isAudio() {
+    return ["spotify", "htmlaudio"].includes(this.videoContext?.videoType);
   }
 
   //
@@ -262,7 +433,9 @@ export class InteractiveVideoOptions extends LitElementWw {
           composed: true,
         })
       );
-      this.selectedInteraction.parentNode.removeChild(this.selectedInteraction);
+      this.selectedInteraction.parentNode.removeChild(
+        this.selectedInteraction
+      );
     }
   }
 
@@ -271,26 +444,71 @@ export class InteractiveVideoOptions extends LitElementWw {
    *
    * @param e - The custom event object.
    */
-  handleShowOverlayChange = (e: CustomEvent) => {    
+  handleShowOverlayChange = (e: CustomEvent) => {
     const target = e.target as SlSwitch;
-    this.videoContext.showOverlay = target.checked;
-
     this.dispatchEvent(
-      new CustomEvent("updateContext", {
+      new CustomEvent("setShowOverlay", {
         bubbles: true,
         composed: true,
+        detail: { value: target.checked },
       })
     );
 
-    if (!this.videoContext.showOverlay) {
-      // Hide all interactions immediately
+    this.requestUpdate();
+  };
+
+  /**
+   * Handles the change event when teacher options for enabling chapters is triggered.
+   *
+   * @param e - The custom event object.
+   */
+  handleEnableChaptersChange = (e: CustomEvent) => {
+    const target = e.target as SlSwitch;
+    this.dispatchEvent(
+      new CustomEvent("setHasChapters", {
+        bubbles: true,
+        composed: true,
+        detail: { value: target.checked },
+      })
+    );
+
+    if (
+      target.checked &&
+      this.videoContext.chapterConfig.length === 0
+    ) {
       this.dispatchEvent(
-        new CustomEvent("hideAllInteractions", {
+        new CustomEvent("setChapterConfig", {
+          bubbles: true,
+          composed: true,
+          detail: { value: [
+            {
+              title: `${msg("Chapter")} 1`,
+              startTime: 0,
+            },
+          ]},
+        })
+      );
+    } else if (!this.videoContext.hasChapters) {
+      this.dispatchEvent(
+        new CustomEvent("closeChaptersDrawer", {
           bubbles: true,
           composed: true,
         })
       );
     }
+
+    this.requestUpdate();
+  };
+
+  handleAllowPlaybackRateChangeChage = (e: CustomEvent) => {
+    const target = e.target as SlSwitch;
+    this.dispatchEvent(
+      new CustomEvent("setAllowPlaybackRateChange", {
+        bubbles: true,
+        composed: true,
+        detail: { value: target.checked },
+      })
+    );
 
     this.requestUpdate();
   };
@@ -301,26 +519,31 @@ export class InteractiveVideoOptions extends LitElementWw {
   */
   handleStartTimeInputChange = (e: CustomEvent, index?: number) => {
     const input = e.target as SlInput;
-    console.log(e);
+    // console.log(e);
     const newTime = parseTime(input.value);
     if (newTime !== null) {
       //update bauble time
 
       if (newTime < this.selectedInteraction.endTime) {
         this.selectedInteraction.startTime = newTime;
-        this.selectedInteraction.setAttribute("startTime", String(newTime));
+        this.selectedInteraction.setAttribute(
+          "startTime",
+          String(newTime)
+        );
 
         input.value = formatTime(newTime);
 
         // // change bauble positions to reflect new time and request an update
         (
-          this.selectedInteraction.parentNode as WebwriterInteractiveVideo
+          this.selectedInteraction
+            .parentNode as WebwriterInteractiveVideo
         ).updateBaublePositions();
 
         // // change bauble positions to reflect new time and request an update
         (
-          this.selectedInteraction.parentNode as WebwriterInteractiveVideo
-        ).videoElement.currentTime = this.selectedInteraction.startTime;
+          this.selectedInteraction
+            .parentNode as WebwriterInteractiveVideo
+        ).videoPlayer.currentTime = this.selectedInteraction.startTime;
       } else {
         console.error("The Start Time must be before the End Time.");
         input.value = formatTime(this.selectedInteraction.startTime);
@@ -337,26 +560,31 @@ export class InteractiveVideoOptions extends LitElementWw {
   */
   handleEndTimeInputChange = (e: CustomEvent, index?: number) => {
     const input = e.target as SlInput;
-    console.log(e);
+    // console.log(e);
     const newTime = parseTime(input.value);
     if (newTime !== null) {
       //update bauble time
 
       if (newTime > this.selectedInteraction.startTime) {
         this.selectedInteraction.endTime = newTime;
-        this.selectedInteraction.setAttribute("endTime", String(newTime));
+        this.selectedInteraction.setAttribute(
+          "endTime",
+          String(newTime)
+        );
 
         input.value = formatTime(newTime);
 
         // // change bauble positions to reflect new time and request an update
         (
-          this.selectedInteraction.parentNode as WebwriterInteractiveVideo
+          this.selectedInteraction
+            .parentNode as WebwriterInteractiveVideo
         ).updateBaublePositions();
 
         // // change bauble positions to reflect new time and request an update
         (
-          this.selectedInteraction.parentNode as WebwriterInteractiveVideo
-        ).videoElement.currentTime = this.selectedInteraction.startTime;
+          this.selectedInteraction
+            .parentNode as WebwriterInteractiveVideo
+        ).videoPlayer.currentTime = this.selectedInteraction.startTime;
       } else {
         console.error("The End Time must be after the Start Time.");
         input.value = formatTime(this.selectedInteraction.endTime);
@@ -374,6 +602,8 @@ export class InteractiveVideoOptions extends LitElementWw {
    */
   handleOverlayColorChange(e: CustomEvent) {
     const colorPicker = e.target as SlColorPicker;
-    this.selectedInteraction.style.backgroundColor = String(colorPicker.value);
+    this.selectedInteraction.style.backgroundColor = String(
+      colorPicker.value
+    );
   }
 }

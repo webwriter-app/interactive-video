@@ -11,11 +11,6 @@ import {
 } from "@shoelace-style/shoelace";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 
-import {
-  videoContext,
-  InteractiveVideoContext,
-} from "../../utils/interactive-video-context";
-
 import { consume } from "@lit/context";
 
 //Tabler
@@ -23,10 +18,13 @@ import worldWWW from "@tabler/icons/outline/world-www.svg";
 import file from "@tabler/icons/outline/file.svg";
 
 import styles from "./video-input-overlay.styles";
+import { msg } from "@lit/localize";
+
+const supportedTypes = ["video/mp4", "video/webm", "audio/mpeg", "audio/mp4", "audio/wav", "audio/aac", "audio/flac", "audio/ogg"];
 
 export class VideoInputOverlay extends LitElementWw {
-  @consume({ context: videoContext, subscribe: true })
-  accessor videoContext: InteractiveVideoContext;
+  @property({ type: Boolean, attribute: "error" })
+  accessor error: boolean = false;
 
   /**
    * Returns an object that maps custom element names to their corresponding classes.
@@ -57,35 +55,40 @@ export class VideoInputOverlay extends LitElementWw {
       class="overlay"
       style="display: flex;
       flex-direction: column;"
+      @dragover=${this.handleDragOverFileInputArea}
+      @drop=${this.handleDropOnFileInputArea}
     >
+      ${this.error
+        ? html`<p class="error-message">
+            ${msg("Error loading video. Please try again.")}
+          </p>`
+        : null}
       <sl-button
         variant="default"
-        style="width: 20%"
         @click=${this.triggerFileInput}
-        @dragover=${this.handleDragOverFileInputArea}
-        @drop=${this.handleDropOnFileInputArea}
       >
         <sl-icon slot="prefix" src=${file}></sl-icon>
-        Select Video
+        ${msg("Select video or audio file")}
         <input
           name="fileInput"
           id="fileInput"
           type="file"
-          accept="video/*"
+          accept=${supportedTypes.join(",")}
           @change=${this.handleFileInput}
           style="display: none;"
         />
       </sl-button>
 
-      <!-- <p style="color: gray">OR</p>
+      <p style="color: lightgray">${msg("or")}</p>
       <sl-input
         id="url-input"
-        placeholder="Enter video URL"
+        placeholder=${msg("Enter video or audio URL")}
+        help-text=${msg("Supported services: YouTube, Vimeo, TikTok, Spotify, direct video/audio links")}
         @sl-change=${this.handleUrlInput}
         style="width: 80%"
       >
         <sl-icon slot="prefix" src=${worldWWW}></sl-icon>
-      </sl-input> -->
+      </sl-input>
     </div>`;
   }
 
@@ -139,17 +142,14 @@ export class VideoInputOverlay extends LitElementWw {
    * @param file - The file to be handled.
    */
   handleFile(file: File) {
-    const supportedTypes = ["video/mp4", "video/webm", "video/ogg"];
     if (supportedTypes.includes(file.type)) {
       const reader = new FileReader();
 
       reader.onload = (e: ProgressEvent<FileReader>) => {
         const result = e.target?.result as string;
         if (result) {
-          this.videoContext.videoBase64 = result;
-
           this.dispatchEvent(
-            new CustomEvent("setupVideo", {
+            new CustomEvent("setupVideoBase64", {
               detail: { src: result },
               bubbles: true,
               composed: true,
@@ -177,10 +177,8 @@ export class VideoInputOverlay extends LitElementWw {
     const input = e.target as SlInput;
     const url = input.value;
     if (url) {
-      this.videoContext.videoURL = url;
-
       this.dispatchEvent(
-        new CustomEvent("setupVideo", {
+        new CustomEvent("setupVideoURL", {
           detail: { src: url },
           bubbles: true,
           composed: true,

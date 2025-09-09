@@ -1,0 +1,178 @@
+<xliff xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="lit-localize-inputs" datatype="plaintext" source-language="en" target-language="lv">
+    <body>
+      <trans-unit id="s15733d7d0f6d1d73">
+        <source>Chapters</source>
+        <target>Nodaļas</target>
+      </trans-unit>
+      <trans-unit id="sf9aee319a006c9b4">
+        <source>Add</source>
+        <target>Pievienot</target>
+      </trans-unit>
+      <trans-unit id="s99f110d27e30b289">
+        <source>Title</source>
+        <target>Nosaukums</target>
+      </trans-unit>
+      <trans-unit id="sae1c7f13b7c0c47f">
+        <source>Start</source>
+        <target>Sākt</target>
+      </trans-unit>
+      <trans-unit id="s58d4e5482a78f056">
+        <source>Skip to Chapter</source>
+        <target>Pāriet uz nodaļu</target>
+      </trans-unit>
+      <trans-unit id="s178bb121d5131532">
+        <source>Chapter</source>
+        <target>Nodaļa</target>
+      </trans-unit>
+      <trans-unit id="sa76bb33ac0cfda96">
+        <source>Invalid time format. Use hh:mm:ss or mm:ss</source>
+        <target>Nederīgs laika formāts. Izmantojiet hh:mm:ss vai mm:ss</target>
+      </trans-unit>
+      <trans-unit id="s85186a61e0d55bac">
+        <source>Video</source>
+        <target>Video</target>
+      </trans-unit>
+      <trans-unit id="s486ef6c2cdc505d7">
+        <source>Show Popups</source>
+        <target>Rādīt uznirstošos logus</target>
+      </trans-unit>
+      <trans-unit id="s6fa430a5a501eb4b">
+        <source>Interaction</source>
+        <target>Mijiedarbība</target>
+      </trans-unit>
+      <trans-unit id="s167f53f89012d24c">
+        <source>Start Time</source>
+        <target>Sākuma laiks</target>
+      </trans-unit>
+      <trans-unit id="s58c17428301e0137">
+        <source>End Time</source>
+        <target>Beigu laiks</target>
+      </trans-unit>
+      <trans-unit id="s9c356016f81585f6">
+        <source>Background Color</source>
+        <target>Fona krāsa</target>
+      </trans-unit>
+      <trans-unit id="s55435611e2a8e6dc">
+        <source>Overlay Color</source>
+        <target>Pārklājuma krāsa</target>
+      </trans-unit>
+      <trans-unit id="s3d09398e555ee5f9">
+        <source>Advanced Options</source>
+        <target>Izvērstās opcijas</target>
+      </trans-unit>
+      <trans-unit id="s8de4d921e17c46aa">
+        <source>X Position</source>
+        <target>X pozīcija</target>
+      </trans-unit>
+      <trans-unit id="s58369cf8082f2d5f">
+        <source>Y Position</source>
+        <target>Y pozīcija</target>
+      </trans-unit>
+      <trans-unit id="sf21fb4f4b9e8911f">
+        <source>Width</source>
+        <target>Platums</target>
+      </trans-unit>
+      <trans-unit id="sffdadf0a576fd802">
+        <source>Height</source>
+        <target>Augstums</target>
+      </trans-unit>
+      <trans-unit id="sdc673e73b5c13aea">
+        <source>Delete</source>
+        <target>Dzēst</target>
+      </trans-unit>
+      <trans-unit id="s1ad02de8e1d50d2c">
+        <source>Select an interaction to view details</source>
+        <target>Izvēlieties mijiedarbību, lai skatītu sīkāku informāciju</target>
+      </trans-unit>
+      <trans-unit id="sb2e1884d9dace006">
+        <source>Add Popup</source>
+        <target>Pievienot uznirstošo logu</target>
+      </trans-unit>
+      <trans-unit id="s5f6d35d8cdd58c1b">
+        <source>Error loading video. Please try again.</source>
+        <target>Kļūda ielādējot video. Lūdzu, mēģiniet vēlreiz.</target>
+      </trans-unit>
+      <trans-unit id="s08b05407b5565ca4">
+        <source>or</source>
+        <target>vai</target>
+      </trans-unit>
+      <trans-unit id="see2eca66ecd60d30">
+        <source>Enable chapters</source>
+        <target>Iespējot nodaļas</target>
+      </trans-unit>
+      <trans-unit id="s86d33eabf23f17c4">
+        <source>Add something here...</source>
+        <target>Pievienot kaut ko šeit...</target>
+      </trans-unit>
+      <trans-unit id="s39691ba3f371adc1">
+        <source>Allow playback rate change</source>
+        <target>Atļaut atskaņošanas ātruma maiņu</target>
+      </trans-unit>
+      <trans-unit id="s75ff661d0f492c89">
+        <source>Select video or audio file</source>
+        <target>Izvēlieties video vai audio failu</target>
+      </trans-unit>
+      <trans-unit id="s2f4a323ed88d2650">
+        <source>Enter video or audio URL</source>
+        <target>Ievadiet video vai audio URL</target>
+      </trans-unit>
+      <trans-unit id="s8d3cb828b9649568">
+        <source>Supported services: YouTube, Vimeo, TikTok, Spotify, direct video/audio links</source>
+        <target>Atbalstītie pakalpojumi: YouTube, Vimeo, TikTok, Spotify, tiešās video/audio saites</target>
+      </trans-unit>
+      <trans-unit id="s9aa13e6e7201d216">
+        <source>Are you sure you want to remove the current audio?</source>
+        <target>Vai esat pārliecināts, ka vēlaties noņemt pašreizējo audioierakstu?</target>
+      </trans-unit>
+      <trans-unit id="sadb8fadf3bbadd95">
+        <source>Are you sure you want to remove the current video?</source>
+        <target>Vai esat pārliecināts, ka vēlaties noņemt pašreizējo videoklipu?</target>
+      </trans-unit>
+      <trans-unit id="sc2a0d87e2a79ff83">
+        <source>Also remove all interactions and chapters</source>
+        <target>Noņemiet arī visas mijiedarbības un nodaļas</target>
+      </trans-unit>
+      <trans-unit id="s55cb5824c6210259">
+        <source>Yes, remove it</source>
+        <target>Jā, noņemiet to</target>
+      </trans-unit>
+      <trans-unit id="s8213840a0f7d2644">
+        <source>No, keep it</source>
+        <target>Nē, paturiet to</target>
+      </trans-unit>
+      <trans-unit id="s08e6bd98452e6bb9">
+        <source>Audio</source>
+        <target>Audio</target>
+      </trans-unit>
+      <trans-unit id="s62155488d6519cf3">
+        <source>Remove audio</source>
+        <target>Audio noņemšana</target>
+      </trans-unit>
+      <trans-unit id="sdcb649c4baf8dafa">
+        <source>Remove video</source>
+        <target>Video noņemšana</target>
+      </trans-unit>
+      <trans-unit id="s0960574e3b6ca412">
+        <source>Video File</source>
+        <target>Video fails</target>
+      </trans-unit>
+      <trans-unit id="s3cda547ac2158bf5">
+        <source>Audio File</source>
+        <target>Audio fails</target>
+      </trans-unit>
+      <trans-unit id="sf29ef97c6e418a92">
+        <source>Remove media?</source>
+        <target>Noņemt medijus?</target>
+      </trans-unit>
+      <trans-unit id="s9d2a1c7fe017a7cd">
+        <source>Loading audio...</source>
+        <target>Audio ielāde...</target>
+      </trans-unit>
+      <trans-unit id="seed71b0ff741f5c3">
+        <source>Pause video when shown</source>
+        <target>Pārtraukt video, kad parādīts</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

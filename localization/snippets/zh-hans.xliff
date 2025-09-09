@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.1" srcLang="en" trgLang="zh-hans">
+<file id="./snippets/Mondlandung.html" original="./snippets/Mondlandung.html">
+<unit id="Es spricht:#1"><segment><source>Es spricht:</source><target>Es spricht：</target></segment></unit>
+<unit id="Neil Armstrong#1"><segment><source>Neil Armstrong</source><target>尼尔-阿姆斯特朗</target></segment></unit>
+<unit id="That's one small step for [a] man, one giant leap for mankind.#1"><segment><source>That's one small step for [a] man, one giant leap for mankind.</source><target>这是人类的一小步，也是人类的一大步。</target></segment></unit>
+</file>
+</xliff>

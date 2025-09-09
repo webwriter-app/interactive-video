@@ -24,6 +24,7 @@ import { consume } from "@lit/context";
 //Tabler
 import playerPlay from "@tabler/icons/filled/player-play.svg";
 import list from "@tabler/icons/outline/list.svg";
+import add from "@tabler/icons/outline/timeline-event-plus.svg";
 
 import volumeDown from "@tabler/icons/outline/volume-2.svg";
 import volumeUp from "@tabler/icons/outline/volume.svg";
@@ -38,21 +39,41 @@ import brandSpeedtest from "@tabler/icons/outline/brand-speedtest.svg";
 import { formatTime, parseTime } from "../../utils/timeFormatter";
 
 import styles from "./video-controls-bar.styles";
+import { msg } from "@lit/localize";
 
 export class VideoControlsBar extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })
   accessor videoContext: InteractiveVideoContext;
 
+  @property({ type: Boolean, attribute: true, reflect: true })
+  accessor volumeHidden: boolean = false;
+
+  @property({ type: Boolean, attribute: true, reflect: true })
+  accessor playbackRateHidden: boolean = false;
+
+  @property({ type: Number, attribute: true, reflect: true })
+  accessor currentTime: number = 0;
+
+  @property({ type: Number, attribute: true, reflect: true })
+  accessor videoDuration: number = 0;
+
   @property({ type: Number })
   accessor playbackRate: number = 1;
 
-  @property({ type: Object }) accessor currentChapter;
+  @property({ type: Object }) 
+  accessor currentChapter;
 
   /**
    * Query for the mute button.
    */
   @query("#mute-volume-button")
   accessor muteButton: SlIconButton;
+
+  /**
+   * Query for the add interactions button.
+   */
+  @query("#add-button")
+  accessor addButton: SlButton;
 
   /**
    * Query for the volume slider.
@@ -102,11 +123,22 @@ export class VideoControlsBar extends LitElementWw {
   //import CSS
   static styles = [styles];
 
-  /*
+  private boundKeydownHandler;
 
- */
+  constructor() {
+    super();
+    this.boundKeydownHandler = this.keydownHandler.bind(this);
+  }
 
-  firstUpdated() {}
+  connectedCallback(): void {
+    super.connectedCallback();
+    document.addEventListener("keydown", this.boundKeydownHandler, true);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener("keydown", this.boundKeydownHandler, true);
+  }
 
   /**
    * Renders the lower controls for the webwriter interactive video widget.
@@ -126,20 +158,12 @@ export class VideoControlsBar extends LitElementWw {
             @click=${this.handlePlayClick}
             src="${playerPlay}"
           ></sl-icon-button>
-          <p id="time-stamp">00:00 / 00:00</p>
-          ${this.isContentEditable
-            ? html` <sl-button
-                id="chapters-button"
-                @click=${this.toggleChaptersDrawer}
-              >
-                <sl-icon
-                  style="height: 20px; width: 20px;"
-                  slot="prefix"
-                  src=${list}
-                ></sl-icon>
-                ${this.renderCurrentChapter()}
-              </sl-button>`
-            : this.videoContext.hasChapters
+          <p id="time-stamp">
+            ${formatTime(this.currentTime) + 
+              (this.isValidDuration() ? (" / " + formatTime(this.videoDuration)) : 
+              ((this.videoContext.videoDetails && this.isValidDuration(this.videoContext.videoDetails.duration)) ? (" / " + formatTime(this.videoContext.videoDetails.duration)) : ""))}
+          </p>
+          ${this.videoContext.hasChapters
             ? html` <sl-button
                 id="chapters-button"
                 @click=${this.toggleChaptersDrawer}
@@ -155,43 +179,60 @@ export class VideoControlsBar extends LitElementWw {
         </div>
         <!-- contains the volume slider and other controls -->
         <div id="controls-lower-right">
-          <div
-            style="display: flex; flex-direction: row; gap: 6px; align-items: center; justify-content: center;"
+          ${this.isContentEditable ? html`
+          <sl-button
+            id="add-button"
+            @click=${this.handleAddClick}
           >
-            <sl-icon-button
-              class="volume-button"
-              id="mute-volume-button"
-              @click=${this.handleMuteClick}
-              src="${volumeUp}"
+            <sl-icon
+              slot="prefix"
+              src=${add}
+              style="height: 20px; width: 20px;"
+            ></sl-icon>
+            ${msg("Add Popup")}
+          </sl-button>` : null}
+          ${!this.volumeHidden ? html`
+            <div
+              style="display: flex; flex-direction: row; gap: 6px; align-items: center; justify-content: center;"
             >
-            </sl-icon-button>
-            <sl-range
-              id="volume-slider"
-              style="--thumb-size: 15px; --track-height: 5px; --tooltip-offset: 22px"
-              .tooltipFormatter=${(value: number) => Math.round(value) + "\u2009%"}
-              @sl-input=${this.handleVolumeChange}
-            ></sl-range>
-          </div>
+              <sl-icon-button
+                class="volume-button"
+                id="mute-volume-button"
+                @click=${this.handleMuteClick}
+                src="${volumeUp}"
+              >
+              </sl-icon-button>
+              <sl-range
+                id="volume-slider"
+                style="--thumb-size: 15px; --track-height: 5px; --tooltip-offset: 22px"
+                .tooltipFormatter=${(value: number) => Math.round(value) + "\u2009%"}
+                @sl-input=${this.handleVolumeChange}
+              ></sl-range>
+            </div>` : null
+          }
 
-          <sl-dropdown
-            placement="top-start"
-            id="settings-menu"
-            @sl-select=${this.settingSelectionHandler}
-          >
-            <sl-icon-button
-              class="icon-button"
-              id="settings-button"
-              src="${brandSpeedtest}"
-              slot="trigger"
-            ></sl-icon-button>
-            <sl-menu id="playback-rate-options">
-              <sl-menu-item value="0.25" type="checkbox" ?checked=${this.playbackRate === 0.25}>0.25x</sl-menu-item>
-              <sl-menu-item value="0.5" type="checkbox" ?checked=${this.playbackRate === 0.5}>0.5x</sl-menu-item>
-              <sl-menu-item value="1" type="checkbox" ?checked=${this.playbackRate === 1}>1x</sl-menu-item>
-              <sl-menu-item value="1.5" type="checkbox" ?checked=${this.playbackRate === 1.5}>1.5x</sl-menu-item>
-              <sl-menu-item value="2" type="checkbox" ?checked=${this.playbackRate === 2}>2x</sl-menu-item>
-            </sl-menu>
-          </sl-dropdown>
+          ${(!this.playbackRateHidden && this.videoContext.allowPlaybackRateChange) ? html`
+            <sl-dropdown
+              placement="top-start"
+              id="settings-menu"
+              @sl-select=${this.settingSelectionHandler}
+            >
+              <sl-icon-button
+                class="icon-button"
+                id="settings-button"
+                src="${brandSpeedtest}"
+                slot="trigger"
+              ></sl-icon-button>
+              <sl-menu id="playback-rate-options">
+                <sl-menu-item value="0.25" type="checkbox" ?checked=${this.playbackRate === 0.25}>0.25x</sl-menu-item>
+                <sl-menu-item value="0.5" type="checkbox" ?checked=${this.playbackRate === 0.5}>0.5x</sl-menu-item>
+                <sl-menu-item value="1" type="checkbox" ?checked=${this.playbackRate === 1}>1x</sl-menu-item>
+                <sl-menu-item value="1.5" type="checkbox" ?checked=${this.playbackRate === 1.5}>1.5x</sl-menu-item>
+                <sl-menu-item value="2" type="checkbox" ?checked=${this.playbackRate === 2}>2x</sl-menu-item>
+              </sl-menu>
+            </sl-dropdown>` : null
+          }
+
           <sl-icon-button
             class="icon-button"
             id="fullscreen-button"
@@ -202,12 +243,16 @@ export class VideoControlsBar extends LitElementWw {
       </div>`;
   }
 
+  private isValidDuration(duration: number = this.videoDuration) {
+    return duration && !isNaN(duration) && duration !== Infinity && duration > 0;
+  }
+
   /**
    * Handles the click event when the play button is clicked.
    *
    * @param e - The custom event object.
    */
-  handlePlayClick = (e: CustomEvent) => {
+  handlePlayClick = () => {
     this.dispatchEvent(
       new CustomEvent("startstopVideo", {
         bubbles: true,
@@ -269,7 +314,7 @@ export class VideoControlsBar extends LitElementWw {
    *
    * @param e - The custom event object.
    */
-  handleMuteClick = (e: CustomEvent) => {
+  handleMuteClick = () => {
     if (!this.videoContext.videoLoaded) return;
 
     this.dispatchEvent(
@@ -338,12 +383,28 @@ export class VideoControlsBar extends LitElementWw {
    * @param isFullscreen - A boolean indicating whether the video is in fullscreen mode or not.
    */
   updateFullscreenIcon(isFullscreen: Boolean) {
+    if (!this.fullscreenButton) return;
+
     if (isFullscreen) {
       this.fullscreenButton.setAttribute("src", `${fullscreenExit}`);
     } else {
       this.fullscreenButton.setAttribute("src", `${fullscreenEnter}`);
     }
   }
+
+  /**
+   * Handles the click event for the add button.
+   */
+  handleAddClick = () => {
+    if (!this.videoContext.videoLoaded) return;
+
+    this.dispatchEvent(
+      new CustomEvent("addInteraction", {
+        bubbles: true,
+        composed: true,
+      })
+    );
+  };
 
   /**
    * Event handler for selection of playback speeds from the setting menu.
@@ -397,8 +458,78 @@ export class VideoControlsBar extends LitElementWw {
     }
   }
 
-  handleTimeUpdate(lastTimeupdate, videoDurationFormatted) {
-    this.timeStamp.innerHTML =
-      formatTime(lastTimeupdate) + " / " + videoDurationFormatted;
+  handleTimeUpdate(time: number) {
+    this.currentTime = time;
+  }
+
+  handleDurationUpdate(duration: number) {
+    this.videoDuration = duration;
+  }
+
+  keydownHandler(event: KeyboardEvent) {
+    // check if the event target is an input element
+    const targetPath = event.composedPath() as HTMLElement[];
+    let hasWwInteractiveVideoComponent = false;
+    for (const el of targetPath) {
+      if (el.tagName) {
+        const tagName = el.tagName.toLowerCase();
+        if (tagName === "input" || tagName === "textarea" || tagName === "webwriter-video-interaction") {
+          return; // do nothing if the target is an input element
+        } else if (tagName === "webwriter-interactive-video") {
+          hasWwInteractiveVideoComponent = true;
+        }
+      }
+    }
+    if (!hasWwInteractiveVideoComponent) return;
+    event.preventDefault();
+    if (event.code === "Space" || event.code === "KeyK") {
+      this.handlePlayClick();
+    } else if (event.code === "KeyF") {
+      this.handleFullscreenClick();
+    } else if (event.code === "KeyM") {
+      this.handleMuteClick();
+    } else if (event.code === "ArrowUp") {
+      let newVolume = Math.min(this.volumeSlider.value + 5, 100);
+      this.volumeSlider.value = newVolume;
+      this.volumeSlider.dispatchEvent(new CustomEvent("sl-input"));
+    } else if (event.code === "ArrowDown") {
+      let newVolume = Math.max(this.volumeSlider.value - 5, 0);
+      this.volumeSlider.value = newVolume;
+      this.volumeSlider.dispatchEvent(new CustomEvent("sl-input"));
+    } else if (event.code === "ArrowRight") {
+      this.dispatchEvent(
+        new CustomEvent("skipTime", {
+          detail: { amount: 5 },
+          bubbles: true,
+          composed: true,
+        })
+      );
+    } else if (event.code === "ArrowLeft") {
+      this.dispatchEvent(
+        new CustomEvent("skipTime", {
+          detail: { amount: -5 },
+          bubbles: true,
+          composed: true,
+        })
+      );
+    } else if (event.code === "KeyJ") {
+      this.dispatchEvent(
+        new CustomEvent("skipTime", {
+          detail: { amount: -10 },
+          bubbles: true,
+          composed: true,
+        })
+      );
+    } else if (event.code === "KeyL") {
+      this.dispatchEvent(
+        new CustomEvent("skipTime", {
+          detail: { amount: 10 },
+          bubbles: true,
+          composed: true,
+        })
+      );
+    } else if (event.code === "KeyC") {
+      this.toggleChaptersDrawer();
+    }
   }
 }

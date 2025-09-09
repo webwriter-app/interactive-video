@@ -7,7 +7,7 @@ export default css`
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+    background-color: rgba(50, 50, 50, 0.8); /* Gray background with opacity */
     display: flex; /* Flexbox for centering */
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
@@ -16,5 +16,18 @@ export default css`
 
   #file-input-label:hover {
     color: blue;
+  }
+
+  #url-input::part(form-control-help-text) {
+    color: lightgray;
+    margin-top: 0.25em;
+  }
+
+  .error-message {
+    background-color: #c74848;
+    color: white;
+    padding: .5em 1em;
+    border-radius: 5px;
+    margin-bottom: 1em;
   }
 `;

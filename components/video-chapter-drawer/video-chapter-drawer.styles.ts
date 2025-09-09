@@ -8,11 +8,12 @@ export default css`
   .chapter-list {
     list-style-type: none;
     padding: 0;
+    margin: 0;
   }
 
-  .chapter-item {
+  .chapter-item:not(:last-child) {
+    padding-bottom: 1rem;
     margin-bottom: 1rem;
-    padding: 0.5rem;
     border-bottom: 1px solid #ccc;
   }
 

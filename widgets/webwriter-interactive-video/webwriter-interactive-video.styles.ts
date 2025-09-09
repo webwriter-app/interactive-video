@@ -1,17 +1,26 @@
 import { css } from "lit";
 
 export default css`
+  :host {
+    overflow-y: hidden !important; /* Prevent scrollbars */
+  }
+
   :host * {
     box-sizing: border-box;
   }
 
   #widget {
     display: flex;
-    //flex-direction: column;
     align-items: center;
     position: relative;
     height: 100%;
     width: 100%;
+    overflow: hidden;
+  }
+
+  #widget.fullscreen.controls-hidden, 
+  #widget.fullscreen.controls-hidden * {
+    cursor: none;
   }
 
   #container-vertical {
@@ -23,9 +32,8 @@ export default css`
     height: 100%;
   }
 
-  #container-vertical:hover #controls {
-    opacity: 1;
-    visibility: visible;
+  .fullscreen #container-vertical {
+    display: block;
   }
 
   #container-video-area {
@@ -41,30 +49,16 @@ export default css`
   }
 
   .fullscreen #container-video-area {
-    height: 1px; // Hack to make it expand to full height
+    height: 100%;
   }
 
   #container-video {
-    width: 100%;
-    height: fit-content;
-    max-height: 100%;
     display: flex;
-    flex-grow: 1;
     position: relative;
-  }
-
-  .fullscreen #container-video {
-    width: fit-content;
-    max-width: 100%;
   }
 
   #video {
     width: 100%;
-    object-fit: contain;
-  }
-
-  .fullscreen #video {
-    // width: unset; // Causes issues
     height: 100%;
   }
 
@@ -72,9 +66,6 @@ export default css`
     display: flex;
     flex-grow: 0;
     flex-shrink: 0;
-    /*opacity: 0;
-     visibility: hidden;
-    transition: opacity 0.5s ease, visibility 0.5s ease; */
 
     position: relative;
 
@@ -84,6 +75,22 @@ export default css`
     width: 100%;
 
     background-color: #2c2c2c;
+    
+    transition: filter 0.25s ease, visibility 0.25s ease;
+  }
+
+  .fullscreen #controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    background: rgba(44, 44, 44, 0.7);
+  }
+
+  .fullscreen #controls.hide {
+    filter: opacity(0);
+    visibility: hidden;
   }
 
   #controls * {
@@ -109,6 +116,18 @@ export default css`
     max-height: 6px;
     display: flex;
     align-items: center;
+  }
+
+  #confirm-delete-dialog {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    transform: translateX(0px);
+  }
+
+  #remove-video-dialog {
+    pointer-events: all;
   }
 
   :host(:not([contenteditable="true"]):not([contenteditable=""])) .author-only {
