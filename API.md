@@ -1,5 +1,5 @@
-# Interactive,Video (`@webwriter/interactive-video@2.1.2`)
-[License: MIT](LICENSE) | Version: 2.1.2
+# Interactive,Video (`@webwriter/interactive-video@3.0.0`)
+[License: MIT](LICENSE) | Version: 3.0.0
 
 (WIP) Enhance learning by adding interactive content in popups to videos for an engaging, interactive experience.
 
