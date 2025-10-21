@@ -976,7 +976,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * Toggles the playback of the video. If the video has ended, it resets the current time to 0.
    * @remarks
    * Also changes the play button icon to 'pause' if the video is playing, and 'play' if the video is paused.
-
    */
   private togglePlayVideo() {
     if (!this.videoLoaded) return;

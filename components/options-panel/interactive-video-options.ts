@@ -295,7 +295,9 @@ export class InteractiveVideoOptions extends LitElementWw {
                               .max=${100 - Number(this.interactionWidth)}
                               .value=${this.interactionXPos}
                               @sl-input=${(e: CustomEvent) => {
-                                this.selectedInteraction.posX = parseFloat((e.target as SlInput).value) || 0;
+                                const newValue = parseFloat((e.target as SlInput).value) || 0;
+                                this.interactionXPos = String(newValue);
+                                this.selectedInteraction.posX = newValue;
                               }}
                               size="small"
                             >
@@ -310,7 +312,9 @@ export class InteractiveVideoOptions extends LitElementWw {
                               .max=${100 - Number(this.interactionHeight)}
                               .value=${this.interactionYPos}
                               @sl-input=${(e: CustomEvent) => {
-                                this.selectedInteraction.posY = parseFloat((e.target as SlInput).value) || 0;
+                                const newValue = parseFloat((e.target as SlInput).value) || 0;
+                                this.interactionYPos = String(newValue);
+                                this.selectedInteraction.posY = newValue;
                               }}
                               size="small"
                             >
@@ -325,7 +329,9 @@ export class InteractiveVideoOptions extends LitElementWw {
                               .max=${100 - Number(this.interactionXPos)}
                               .value=${this.interactionWidth}
                               @sl-input=${(e: CustomEvent) => {
-                                this.selectedInteraction.width = (parseFloat((e.target as SlInput).value) / 100 * this.selectedInteraction.videoBaseWidth) || 0;
+                                const newValue = parseFloat((e.target as SlInput).value) || 0;
+                                this.interactionWidth = String(newValue);
+                                this.selectedInteraction.width = (newValue / 100 * this.selectedInteraction.videoBaseWidth) || 0;
                               }}
                               size="small"
                             >
@@ -340,7 +346,9 @@ export class InteractiveVideoOptions extends LitElementWw {
                               .max=${100 - Number(this.interactionYPos)}
                               .value=${this.interactionHeight}
                               @sl-input=${(e: CustomEvent) => {
-                                this.selectedInteraction.height = (parseFloat((e.target as SlInput).value) / 100 * this.selectedInteraction.videoBaseHeight) || 0;
+                                const newValue = parseFloat((e.target as SlInput).value) || 0;
+                                this.interactionHeight = String(newValue);
+                                this.selectedInteraction.height = (newValue / 100 * this.selectedInteraction.videoBaseHeight) || 0;
                               }}
                               size="small"
                             >

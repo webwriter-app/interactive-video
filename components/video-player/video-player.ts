@@ -470,6 +470,9 @@ export class VideoPlayer extends LitElementWw {
           new Event("canplay", { bubbles: true, composed: true })
         );
       }, { once: true } );
+      this.videoElement.addEventListener("waiting", () => {
+        this.play();
+      });
     } 
     else if (this.playerType === PlayerType.TikTok) {
       (this.videoElement as any).loadComplete.then(() => {
