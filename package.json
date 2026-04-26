@@ -1,7 +1,7 @@
 {
   "name": "@webwriter/interactive-video",
   "version": "3.0.1",
-  "description": "(WIP) Enhance learning by adding interactive content in popups to videos for an engaging, interactive experience.",
+  "description": "Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).",
   "keywords": [
     "webwriter-widget",
     "widget-lang-de",
