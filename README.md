@@ -1,7 +1,7 @@
-# Interactive Video (`@webwriter/interactive-video@3.0.1`)
-[License: MIT](LICENSE) | Version: 3.0.1
+# Interactive Video (`@webwriter/interactive-video@3.0.2`)
+[License: MIT](LICENSE) | Version: 3.0.2
 
-(WIP) Enhance learning by adding interactive content in popups to videos for an engaging, interactive experience.
+Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).
 
 ## Snippets
 [Snippets](https://webwriter.app/docs/snippets/snippets/) are examples and templates using the package's widgets.
