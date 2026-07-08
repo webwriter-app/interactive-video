@@ -368,7 +368,7 @@ export class VideoPlayer extends LitElementWw {
   }
   set volume(value: number) {
     if (this.videoElement && this.playerType !== PlayerType.Spotify && this.playerType !== PlayerType.TikTok) {
-      this.videoElement.volume = value;
+      this.videoElement.volume = this.playerType === PlayerType.Vimeo ? value : value ** 2;
     }
   }
 

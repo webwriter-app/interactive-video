@@ -740,12 +740,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   /**
    * Handles the change event for the volume slider and sets the video volume accordingly.
-   * Uses a quadratic scale for more intuitive volume control.
    *
    * @param e - The custom event object.
    */
   private handleVolumeChange(value) {
-    this.videoPlayer.volume = (value / 100) ** 2;
+    this.videoPlayer.volume = value / 100;
   }
 
   /**
