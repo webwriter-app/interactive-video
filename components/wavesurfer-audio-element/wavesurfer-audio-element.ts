@@ -48,6 +48,7 @@ export class WaveSurferAudioElement extends LitElementWw {
 				progressColor: "#e9e9e9",
 				cursorColor: "#0284C7",
 				cursorWidth: 2,
+				interact: false,
 				autoScroll: true,
 				autoCenter: true,
 				minPxPerSec: 100,

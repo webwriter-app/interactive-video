@@ -415,8 +415,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
               id="progress-bar"
               step="0.001"
               @sl-change=${this.handleProgressChange}
-              @mousedown=${() => (this.isProgressBarFocused = true)}
-              @mouseup=${() => (this.isProgressBarFocused = false)}
+              @pointerdown=${() => (this.isProgressBarFocused = true)}
+              @pointerup=${() => (this.isProgressBarFocused = false)}
+              @pointercancel=${() => (this.isProgressBarFocused = false)}
             ></sl-range>
 
             <!-- Video Controls Bar -->
