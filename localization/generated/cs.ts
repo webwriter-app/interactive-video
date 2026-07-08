@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `nebo`,
 's08e6bd98452e6bb9': `Audio`,
 's0960574e3b6ca412': `Soubor s videem`,
+'s11f3370df4b0a8a1': `Alba a seznamy skladeb ze služby Spotify nejsou podporovány. Použijte prosím odkaz na jednotlivou skladbu nebo epizodu.`,
 's15733d7d0f6d1d73': `Kapitoly`,
 's167f53f89012d24c': `Čas zahájení`,
 's178bb121d5131532': `Kapitola`,

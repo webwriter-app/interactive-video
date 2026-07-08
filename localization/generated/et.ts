@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `või`,
 's08e6bd98452e6bb9': `Audio`,
 's0960574e3b6ca412': `Videofail`,
+'s11f3370df4b0a8a1': `Spotify albumid ja esitusloendid ei ole toetatud. Palun kasuta linki ühele loole või episoodile.`,
 's15733d7d0f6d1d73': `Peatükid`,
 's167f53f89012d24c': `Algusaeg`,
 's178bb121d5131532': `Peatükk`,

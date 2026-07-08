@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `of`,
 's08e6bd98452e6bb9': `Audio`,
 's0960574e3b6ca412': `Videobestand`,
+'s11f3370df4b0a8a1': `Spotify-albums en -afspeellijsten worden niet ondersteund. Gebruik alstublieft een link naar een afzonderlijk nummer of een aflevering.`,
 's15733d7d0f6d1d73': `Hoofdstukken`,
 's167f53f89012d24c': `Starttijd`,
 's178bb121d5131532': `Hoofdstuk`,

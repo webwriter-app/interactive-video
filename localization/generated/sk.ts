@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `alebo`,
 's08e6bd98452e6bb9': `Audio`,
 's0960574e3b6ca412': `Video súbor`,
+'s11f3370df4b0a8a1': `Albumy a playlisty zo služby Spotify nie sú podporované. Použite prosím odkaz na jednu skladbu alebo epizódu.`,
 's15733d7d0f6d1d73': `Kapitoly`,
 's167f53f89012d24c': `Čas začiatku`,
 's178bb121d5131532': `Kapitola`,

@@ -28,6 +28,7 @@ export default css`
     color: white;
     padding: .5em 1em;
     border-radius: 5px;
-    margin-bottom: 1em;
+    margin: 2em 2em 0;
+    font-size: 1rem;
   }
 `;

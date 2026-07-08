@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `o`,
 's08e6bd98452e6bb9': `Audio`,
 's0960574e3b6ca412': `File video`,
+'s11f3370df4b0a8a1': `Gli album e le playlist di Spotify non sono supportati. Si prega di utilizzare un link a un singolo brano o episodio.`,
 's15733d7d0f6d1d73': `Capitoli`,
 's167f53f89012d24c': `Ora di inizio`,
 's178bb121d5131532': `Capitolo`,

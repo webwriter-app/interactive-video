@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `lub`,
 's08e6bd98452e6bb9': `Audio`,
 's0960574e3b6ca412': `Plik wideo`,
+'s11f3370df4b0a8a1': `Albumy i playlisty serwisu Spotify nie są obsługiwane. Prosimy o podanie linku do pojedynczego utworu lub odcinka.`,
 's15733d7d0f6d1d73': `Rozdziały`,
 's167f53f89012d24c': `Godzina rozpoczęcia`,
 's178bb121d5131532': `Rozdział`,

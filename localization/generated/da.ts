@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `eller`,
 's08e6bd98452e6bb9': `Lyd`,
 's0960574e3b6ca412': `Video-fil`,
+'s11f3370df4b0a8a1': `Spotify-albummer og -afspilningslister understøttes ikke. Brug venligst et link til et enkelt nummer eller en episode.`,
 's15733d7d0f6d1d73': `Kapitler`,
 's167f53f89012d24c': `Starttidspunkt`,
 's178bb121d5131532': `Kapitel`,

@@ -173,6 +173,10 @@
         <source>Pause video when shown</source>
         <target>顯示時暫停視訊</target>
       </trans-unit>
+      <trans-unit id="s11f3370df4b0a8a1">
+        <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
+        <target>Spotify 的專輯和播放清單不被支援。請提供單曲或單集的連結。</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

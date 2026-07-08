@@ -173,6 +173,10 @@
         <source>Pause video when shown</source>
         <target>Menjeda video saat ditampilkan</target>
       </trans-unit>
+      <trans-unit id="s11f3370df4b0a8a1">
+        <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
+        <target>Album dan daftar putar Spotify tidak didukung. Silakan gunakan tautan ke satu lagu atau satu episode.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

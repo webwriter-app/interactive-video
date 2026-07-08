@@ -9,11 +9,11 @@
     /* eslint-disable @typescript-eslint/no-explicit-any */
 
     export const templates = {
-      's5f6d35d8cdd58c1b': `Error loading video. Please try again.`,
-'s75ff661d0f492c89': `Select video or audio file`,
+      's75ff661d0f492c89': `Select video or audio file`,
 's08b05407b5565ca4': `or`,
 's2f4a323ed88d2650': `Enter video or audio URL`,
 's8d3cb828b9649568': `Supported services: YouTube, Vimeo, TikTok, Spotify, direct video/audio links`,
+'s5f6d35d8cdd58c1b': `Error loading video. Please try again.`,
 'sb2e1884d9dace006': `Add Popup`,
 's15733d7d0f6d1d73': `Chapters`,
 'sf9aee319a006c9b4': `Add`,
@@ -23,6 +23,7 @@
 's178bb121d5131532': `Chapter`,
 'sa76bb33ac0cfda96': `Invalid time format. Use hh:mm:ss or mm:ss`,
 's9d2a1c7fe017a7cd': `Loading audio...`,
+'s11f3370df4b0a8a1': `Spotify albums and playlists aren't supported. Please use a link to a single track or episode.`,
 'sf29ef97c6e418a92': `Remove media?`,
 's9aa13e6e7201d216': `Are you sure you want to remove the current audio?`,
 'sadb8fadf3bbadd95': `Are you sure you want to remove the current video?`,

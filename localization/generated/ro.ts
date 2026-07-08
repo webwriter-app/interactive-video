@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `sau`,
 's08e6bd98452e6bb9': `Audio`,
 's0960574e3b6ca412': `Fișier video`,
+'s11f3370df4b0a8a1': `Albumele și listele de redare de pe Spotify nu sunt acceptate. Te rugăm să folosești un link către o singură piesă sau un singur episod.`,
 's15733d7d0f6d1d73': `Capitole`,
 's167f53f89012d24c': `Ora de începere`,
 's178bb121d5131532': `Capitol`,

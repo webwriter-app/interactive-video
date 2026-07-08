@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `vagy`,
 's08e6bd98452e6bb9': `Audio`,
 's0960574e3b6ca412': `Videó fájl`,
+'s11f3370df4b0a8a1': `A Spotify-albumok és lejátszási listák nem támogatottak. Kérjük, használjon egy-egy zeneszámra vagy epizódra mutató linket.`,
 's15733d7d0f6d1d73': `Fejezetek`,
 's167f53f89012d24c': `Kezdési idő`,
 's178bb121d5131532': `Fejezet`,

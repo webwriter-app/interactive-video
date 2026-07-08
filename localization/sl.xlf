@@ -173,6 +173,10 @@
         <source>Pause video when shown</source>
         <target>Zaustavitev videoposnetka, ko je prikazan</target>
       </trans-unit>
+      <trans-unit id="s11f3370df4b0a8a1">
+        <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
+        <target>Albumi in seznami predvajanja na Spotifyju niso podprti. Uporabite povezavo do posamezne skladbe ali epizode.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -26,6 +26,9 @@ export class VideoInputOverlay extends LitElementWw {
   @property({ type: Boolean, attribute: "error" })
   accessor error: boolean = false;
 
+  @property({ type: String, attribute: "error-message" })
+  accessor errorMessage: string = "";
+
   /**
    * Returns an object that maps custom element names to their corresponding classes.
    * These custom elements can be used within the scope of the `webwriter-interactive-video` component.
@@ -58,11 +61,6 @@ export class VideoInputOverlay extends LitElementWw {
       @dragover=${this.handleDragOverFileInputArea}
       @drop=${this.handleDropOnFileInputArea}
     >
-      ${this.error
-        ? html`<p class="error-message">
-            ${msg("Error loading video. Please try again.")}
-          </p>`
-        : null}
       <sl-button
         variant="default"
         @click=${this.triggerFileInput}
@@ -89,6 +87,11 @@ export class VideoInputOverlay extends LitElementWw {
       >
         <sl-icon slot="prefix" src=${worldWWW}></sl-icon>
       </sl-input>
+      ${this.error
+        ? html`<p class="error-message">
+            ${this.errorMessage || msg("Error loading video. Please try again.")}
+          </p>`
+        : null}
     </div>`;
   }
 

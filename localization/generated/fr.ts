@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `ou`,
 's08e6bd98452e6bb9': `Audio`,
 's0960574e3b6ca412': `Fichier vidéo`,
+'s11f3370df4b0a8a1': `Les albums et les playlists Spotify ne sont pas pris en charge. Veuillez utiliser un lien vers un titre ou un épisode unique.`,
 's15733d7d0f6d1d73': `Chapitres`,
 's167f53f89012d24c': `Heure de début`,
 's178bb121d5131532': `Chapitre`,

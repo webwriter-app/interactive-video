@@ -173,6 +173,10 @@
         <source>Pause video when shown</source>
         <target>동영상 표시 시 일시 중지</target>
       </trans-unit>
+      <trans-unit id="s11f3370df4b0a8a1">
+        <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
+        <target>Spotify 앨범 및 재생목록은 지원되지 않습니다. 개별 곡이나 에피소드 링크를 사용해 주세요.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `arba`,
 's08e6bd98452e6bb9': `Garso`,
 's0960574e3b6ca412': `Vaizdo failas`,
+'s11f3370df4b0a8a1': `„Spotify“ albumai ir grojaraščiai nepalaikomi. Prašome naudoti nuorodą į atskirą kūrinį arba epizodą.`,
 's15733d7d0f6d1d73': `Skyriai`,
 's167f53f89012d24c': `Pradžios laikas`,
 's178bb121d5131532': `Skyrius`,

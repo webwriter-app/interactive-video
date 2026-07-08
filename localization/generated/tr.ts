@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `veya`,
 's08e6bd98452e6bb9': `Ses`,
 's0960574e3b6ca412': `Video Dosyası`,
+'s11f3370df4b0a8a1': `Spotify albümleri ve çalma listeleri desteklenmemektedir. Lütfen tek bir parçaya veya bölüme ait bir bağlantı kullanın.`,
 's15733d7d0f6d1d73': `Bölümler`,
 's167f53f89012d24c': `Başlangıç Zamanı`,
 's178bb121d5131532': `Bölüm`,

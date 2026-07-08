@@ -7,6 +7,7 @@ import { consume } from "@lit/context";
 import { property, query } from "lit/decorators.js";
 import styles from "./video-player.styles";
 import { html } from "lit";
+import { msg } from "@lit/localize";
 
 import YouTubeVideoElement from "youtube-video-element";
 import VimeoVideoElement from "vimeo-video-element";
@@ -180,6 +181,18 @@ export class VideoPlayer extends LitElementWw {
     // SPOTIFY
     else if (spotifyRegex.test(url)) {
       console.log("Loading Spotify URL:", url);
+      const spotifyType = url.match(spotifyRegex)[1].toLowerCase();
+      if (spotifyType === "playlist" || spotifyType === "album" || spotifyType === "artist" || spotifyType === "show" || spotifyType === "user") {
+        this.dispatchEvent(
+          new CustomEvent("loadingerror", {
+            detail: {
+              error: `Unsupported Spotify source type: ${spotifyType}`,
+              message: msg("Spotify albums and playlists aren't supported. Please use a link to a single track or episode."),
+            },
+          })
+        );
+        return;
+      }
       url = "https://open.spotify.com/" + url.match(spotifyRegex)[1] + "/" + url.match(spotifyRegex)[2];
       this.playerType = PlayerType.Spotify;
       this.dispatchControlsVisible(false, false);

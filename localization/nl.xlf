@@ -173,6 +173,10 @@
         <source>Pause video when shown</source>
         <target>Video pauzeren wanneer getoond</target>
       </trans-unit>
+      <trans-unit id="s11f3370df4b0a8a1">
+        <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
+        <target>Spotify-albums en -afspeellijsten worden niet ondersteund. Gebruik alstublieft een link naar een afzonderlijk nummer of een aflevering.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

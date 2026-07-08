@@ -173,6 +173,10 @@
         <source>Pause video when shown</source>
         <target>Sustabdyti vaizdo įrašą, kai jis rodomas</target>
       </trans-unit>
+      <trans-unit id="s11f3370df4b0a8a1">
+        <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
+        <target>„Spotify“ albumai ir grojaraščiai nepalaikomi. Prašome naudoti nuorodą į atskirą kūrinį arba epizodą.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

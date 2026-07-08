@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.1" srcLang="en" trgLang="sl">
 <file id="." original=".">
-<unit id="description"><segment><source>(WIP) Enhance learning by adding interactive content in popups to videos for an engaging, interactive experience.</source><target>(WIP) Izboljšajte učenje z dodajanjem interaktivne vsebine v pojavnih oknih videoposnetkov za zanimivo in interaktivno izkušnjo.</target></segment></unit>
+<unit id="description"><segment><source>Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).</source><target>(WIP) Izboljšajte učenje z dodajanjem interaktivne vsebine v pojavnih oknih videoposnetkov za zanimivo in interaktivno izkušnjo.</target></segment></unit>
 </file>
 </xliff>

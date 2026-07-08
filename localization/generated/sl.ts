@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `ali`,
 's08e6bd98452e6bb9': `Audio`,
 's0960574e3b6ca412': `Video datoteka`,
+'s11f3370df4b0a8a1': `Albumi in seznami predvajanja na Spotifyju niso podprti. Uporabite povezavo do posamezne skladbe ali epizode.`,
 's15733d7d0f6d1d73': `Poglavja`,
 's167f53f89012d24c': `Čas začetka`,
 's178bb121d5131532': `Poglavje`,

@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `o`,
 's08e6bd98452e6bb9': `Audio`,
 's0960574e3b6ca412': `Archivo de vídeo`,
+'s11f3370df4b0a8a1': `No se admiten álbumes ni listas de reproducción de Spotify. Utiliza un enlace a una canción o un episodio concreto.`,
 's15733d7d0f6d1d73': `Capítulos`,
 's167f53f89012d24c': `Hora de inicio`,
 's178bb121d5131532': `Capítulo`,

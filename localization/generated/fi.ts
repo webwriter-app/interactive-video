@@ -12,6 +12,7 @@
       's08b05407b5565ca4': `tai`,
 's08e6bd98452e6bb9': `Audio`,
 's0960574e3b6ca412': `Videotiedosto`,
+'s11f3370df4b0a8a1': `Spotify-albumeita ja -soittolistoja ei tueta. Käytä linkkiä yksittäiseen kappaleeseen tai jaksoon.`,
 's15733d7d0f6d1d73': `Luvut`,
 's167f53f89012d24c': `Aloitusaika`,
 's178bb121d5131532': `Luku`,

@@ -193,6 +193,9 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property({ type: Boolean })
   private accessor hadLoadingError = false;
 
+  @property({ type: String })
+  private accessor loadingErrorMessage = "";
+
   @property({ type: Number })
   private accessor videoContainerHeight: number = 0;
 
@@ -354,6 +357,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                 @setupVideoBase64=${(e: CustomEvent) => this.setupVideoBase64(e.detail.src)}
                 @setupVideoURL=${(e: CustomEvent) => this.setupVideoURL(e.detail.src)}
                 .error=${this.hadLoadingError}
+                .errorMessage=${this.loadingErrorMessage}
               ></video-input-overlay>
             `
           : null}
@@ -383,7 +387,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                 @durationchange=${() => this.handleDurationChange()}
                 @canplay=${() => this.handleCanPlay()}
                 @timeupdate=${() => this.handleTimeUpdate()}
-                @loadingerror=${(e: CustomEvent) => this.handleLoadingError(e.detail.error)}
+                @loadingerror=${(e: CustomEvent) => this.handleLoadingError(e.detail.error, e.detail.message)}
                 @setvolumecontrolsvisible=${(e: CustomEvent) => { this.volumeControlsVisible = e.detail.visible; }}
                 @setplaybackratecontrolsvisible=${(e: CustomEvent) => { this.playbackRateControlsVisible = e.detail.visible; }}
                 @setvideodetails=${(e: CustomEvent) => { this.videoDetails = { ...this.videoDetails, ...e.detail } }}
@@ -1108,10 +1112,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * Handles loading errors for the video element.
    * @param error - The error message or object.
    */
-  private handleLoadingError(error: string) {
+  private handleLoadingError(error: string, message?: string) {
     console.error("Error loading video:", error);
     this.clearVideo();
     this.hadLoadingError = true;
+    this.loadingErrorMessage = message ?? "";
   }
 
   /**
@@ -1132,6 +1137,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     if (!!this.progressBar)
       this.progressBar.value = 0;
     this.hadLoadingError = false;
+    this.loadingErrorMessage = "";
     this.hideAllInteractions();
 
     if (removeInteractions) {
