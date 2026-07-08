@@ -1,7 +1,7 @@
 import { html, css, LitElement, PropertyValues } from "lit";
 
 import { LitElementWw } from "@webwriter/lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { property, query, state } from "lit/decorators.js";
 
 import {
   SlIconButton,
@@ -12,6 +12,7 @@ import {
   SlButton,
   SlIcon,
 } from "@shoelace-style/shoelace";
+// @ts-ignore
 import "@shoelace-style/shoelace/dist/themes/light.css";
 
 import {
@@ -62,6 +63,17 @@ export class VideoControlsBar extends LitElementWw {
 
   @property({ type: Object }) 
   accessor currentChapter;
+
+  @state()
+  private accessor narrow: boolean = false;
+
+  @state()
+  private accessor volumeExpanded: boolean = false;
+
+  private resizeObserver: ResizeObserver;
+
+  private static readonly NARROW_BREAKPOINT_STUDENT = 500;
+  private static readonly NARROW_BREAKPOINT_EDITOR = 600;
 
   /**
    * Query for the mute button.
@@ -128,16 +140,32 @@ export class VideoControlsBar extends LitElementWw {
   constructor() {
     super();
     this.boundKeydownHandler = this.keydownHandler.bind(this);
+    this.resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        this.updateNarrow(entry.contentRect.width);
+      }
+    });
   }
 
   connectedCallback(): void {
     super.connectedCallback();
     document.addEventListener("keydown", this.boundKeydownHandler, true);
+    this.resizeObserver.observe(this);
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
     document.removeEventListener("keydown", this.boundKeydownHandler, true);
+    this.resizeObserver.disconnect();
+  }
+
+  private updateNarrow(width: number) {
+    const narrow = width > 0 && width <= (this.isContentEditable ? VideoControlsBar.NARROW_BREAKPOINT_EDITOR : VideoControlsBar.NARROW_BREAKPOINT_STUDENT);
+    if (narrow === this.narrow) return;
+    this.narrow = narrow;
+    if (!narrow) {
+      this.volumeExpanded = false;
+    }
   }
 
   /**
@@ -173,7 +201,7 @@ export class VideoControlsBar extends LitElementWw {
                   slot="prefix"
                   src=${list}
                 ></sl-icon>
-                ${this.renderCurrentChapter()}
+                ${this.narrow ? null : this.renderCurrentChapter()}
               </sl-button>`
             : null}
         </div>
@@ -189,16 +217,17 @@ export class VideoControlsBar extends LitElementWw {
               src=${add}
               style="height: 20px; width: 20px;"
             ></sl-icon>
-            ${msg("Add Popup")}
+            ${this.narrow ? null : msg("Add Popup")}
           </sl-button>` : null}
           ${!this.volumeHidden ? html`
             <div
-              style="display: flex; flex-direction: row; gap: 6px; align-items: center; justify-content: center;"
+              class="volume-control ${this.narrow ? "narrow" : ""} ${this.volumeExpanded ? "expanded" : ""}"
             >
               <sl-icon-button
                 class="volume-button"
                 id="mute-volume-button"
-                @click=${this.handleMuteClick}
+                @click=${this.handleVolumeButtonClick}
+                @sl-blur=${this.handleVolumeButtonBlur}
                 src="${volumeUp}"
               >
               </sl-icon-button>
@@ -207,6 +236,7 @@ export class VideoControlsBar extends LitElementWw {
                 style="--thumb-size: 15px; --track-height: 5px; --tooltip-offset: 22px"
                 .tooltipFormatter=${(value: number) => Math.round(value) + "\u2009%"}
                 @sl-input=${this.handleVolumeChange}
+                @sl-blur=${this.handleVolumeSliderBlur}
               ></sl-range>
             </div>` : null
           }
@@ -310,9 +340,44 @@ export class VideoControlsBar extends LitElementWw {
   }
 
   /**
-   * Handles the click event for the mute button.
-   *
-   * @param e - The custom event object.
+   * Handles the click event for the volume button.
+   * In narrow mode the slider is hidden by default, so the
+   * first tap reveals it, the second tap toggles mute. 
+   * At regular widths the icon toggles mute directly.
+   */
+  handleVolumeButtonClick = () => {
+    if (this.narrow && !this.volumeExpanded) {
+      this.volumeExpanded = true;
+      return;
+    }
+    this.handleMuteClick();
+  };
+
+  /**
+   * Collapses the volume slider again once it loses focus in narrow mode.
+   */
+  handleVolumeSliderBlur = () => {
+    if (this.narrow) {
+      this.volumeExpanded = false;
+    }
+  };
+
+  /**
+   * Collapses the volume slider when the volume icon loses focus in narrow mode,
+   * unless focus moved on to the slider itself (e.g. the user just revealed it
+   * and is about to drag it). Deferred so the new focus target has settled.
+   */
+  handleVolumeButtonBlur = () => {
+    if (!this.narrow) return;
+    requestAnimationFrame(() => {
+      if (this.narrow && this.shadowRoot?.activeElement !== this.volumeSlider) {
+        this.volumeExpanded = false;
+      }
+    });
+  };
+
+  /**
+   * Handles toggling mute.
    */
   handleMuteClick = () => {
     if (!this.videoContext.videoLoaded) return;
@@ -345,7 +410,7 @@ export class VideoControlsBar extends LitElementWw {
     );
 
     return this.currentChapter
-      ? html`<p style="margin: 0px; padding: 0px;">
+      ? html`<p class="chapter-title">
           ${this.currentChapter.title}
         </p>`
       : "";

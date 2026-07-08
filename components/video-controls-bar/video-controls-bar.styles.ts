@@ -14,6 +14,7 @@ export default css`
     justify-content: flex-end;
     gap: 10px;
     margin-right: 5px;
+    flex-shrink: 0;
   }
 
   #controls-lower-left {
@@ -24,6 +25,35 @@ export default css`
     margin-right: auto;
     margin-left: 5px;
     gap: 2px;
+    min-width: 0; /* allow shrinking */
+  }
+
+  #controls-lower-left #play,
+  #controls-lower-left #time-stamp {
+    flex-shrink: 0;
+  }
+
+  #chapters-button {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  #chapters-button::part(base) {
+    min-width: 0;
+  }
+
+  #chapters-button::part(label) {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .chapter-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
   }
 
   .icon-button {
@@ -32,10 +62,40 @@ export default css`
     font-size: 1.3rem;
   }
 
+  .volume-control {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+  }
+
   .volume-button {
     text-align: center;
     color: white;
     font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  #volume-slider {
+    transition: width 0.2s ease, opacity 0.2s ease, margin 0.2s ease;
+  }
+
+  .volume-control.narrow {
+    overflow: hidden;
+  }
+
+  .volume-control.narrow #volume-slider {
+    width: 0;
+    opacity: 0;
+    margin: 0;
+    pointer-events: none;
+  }
+
+  .volume-control.narrow.expanded #volume-slider {
+    width: 80px;
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .volume-button::part(base) {
