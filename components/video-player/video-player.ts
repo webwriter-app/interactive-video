@@ -8,7 +8,7 @@ import { property, query } from "lit/decorators.js";
 import styles from "./video-player.styles";
 import { html } from "lit";
 import { msg } from "@lit/localize";
-import { youtubeErrorMessage } from "../../utils/youtube-errors";
+import { youtubeErrorMessage, youtubeRegex } from "../../utils/youtube";
 
 import YouTubeVideoElement from "youtube-video-element";
 import VimeoVideoElement from "vimeo-video-element";
@@ -135,9 +135,6 @@ export class VideoPlayer extends LitElementWw {
   }
 
   loadVideoURL(url: string) {
-    // Taken from the youtube-video-element source code
-    const youtubeRegex =
-      /(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/|live\/))((\w|-){11})/;
     const youtubeOEmbedURL = "https://www.youtube.com/oembed?url=";
     // Taken from the spotify-audio-element source code and adapted to support local URLs
     const spotifyRegex = /open\.spotify\.com\/(?:[a-z\-]+\/)?(\w+)\/(\w+)/i;

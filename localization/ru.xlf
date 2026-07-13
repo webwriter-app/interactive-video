@@ -197,6 +197,34 @@
         <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
         <target>Не удалось загрузить видео с YouTube. Проверьте ссылку и подключение к Интернету, а затем попробуйте ещё раз.</target>
       </trans-unit>
+      <trans-unit id="sd974a9bae026bd45">
+        <source>YouTube videos only play on a web server</source>
+        <target>Видео с YouTube воспроизводятся только на веб-сервере</target>
+      </trans-unit>
+      <trans-unit id="sce061dbb316d94ea">
+        <source>YouTube only plays embedded videos on pages that are served by a web server. This is a restriction imposed by YouTube, not by WebWriter.</source>
+        <target>YouTube воспроизводит встроенные видео только на страницах, которые обслуживаются веб-сервером. Это ограничение наложено YouTube, а не WebWriter.</target>
+      </trans-unit>
+      <trans-unit id="s5383b85bb420a2bb">
+        <source>As a result, this video will not load in WebWriter's preview mode and in documents opened directly from a device. To let your students watch it, publish the document to a web server (e.g. WebWriter Cloud) and share the link from there.</source>
+        <target>В результате это видео не будет загружаться в режиме предварительного просмотра WebWriter и в документах, открытых непосредственно с устройства. Чтобы ваши ученики могли его посмотреть, опубликуйте документ на веб-сервере (например, в WebWriter Cloud) и поделитесь ссылкой оттуда.</target>
+      </trans-unit>
+      <trans-unit id="s349093a6b4a3a15e">
+        <source>If you want to distribute this document as a file rather than through a web server, use a different video source instead of YouTube.</source>
+        <target>Если вы хотите распространять этот документ в виде файла, а не через веб-сервер, используйте другой источник видео вместо YouTube.</target>
+      </trans-unit>
+      <trans-unit id="sb459c43758ae0ae9">
+        <source>Videos from other sources and uploaded video or audio files aren't affected by this.</source>
+        <target>Это ограничение не распространяется на видео из других источников, а также на загруженные видео- или аудиофайлы.</target>
+      </trans-unit>
+      <trans-unit id="s3c25c6a16358737f">
+        <source>Choose a different source</source>
+        <target>Выберите другой источник</target>
+      </trans-unit>
+      <trans-unit id="s2ec9e13e6bb4b91e">
+        <source>Use YouTube anyway</source>
+        <target>Все равно использовать YouTube</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

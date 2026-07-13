@@ -197,6 +197,34 @@
         <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
         <target>YouTube 동영상을 불러올 수 없습니다. 링크와 인터넷 연결 상태를 확인한 후 다시 시도해 주세요.</target>
       </trans-unit>
+      <trans-unit id="sd974a9bae026bd45">
+        <source>YouTube videos only play on a web server</source>
+        <target>YouTube 동영상은 웹 서버에서만 재생됩니다</target>
+      </trans-unit>
+      <trans-unit id="sce061dbb316d94ea">
+        <source>YouTube only plays embedded videos on pages that are served by a web server. This is a restriction imposed by YouTube, not by WebWriter.</source>
+        <target>YouTube는 웹 서버에서 제공되는 페이지에서만 삽입된 동영상을 재생합니다. 이는 WebWriter가 아닌 YouTube에서 부과한 제한 사항입니다.</target>
+      </trans-unit>
+      <trans-unit id="s5383b85bb420a2bb">
+        <source>As a result, this video will not load in WebWriter's preview mode and in documents opened directly from a device. To let your students watch it, publish the document to a web server (e.g. WebWriter Cloud) and share the link from there.</source>
+        <target>따라서 이 동영상은 WebWriter의 미리보기 모드나 기기에서 직접 연 문서에서는 로드되지 않습니다. 학생들이 이 동영상을 시청할 수 있도록 하려면, 문서를 웹 서버(예: WebWriter Cloud)에 게시한 후 해당 링크를 공유하십시오.</target>
+      </trans-unit>
+      <trans-unit id="s349093a6b4a3a15e">
+        <source>If you want to distribute this document as a file rather than through a web server, use a different video source instead of YouTube.</source>
+        <target>웹 서버를 통하지 않고 파일을 통해 이 문서를 배포하려면 YouTube 대신 다른 동영상 소스를 사용하십시오.</target>
+      </trans-unit>
+      <trans-unit id="sb459c43758ae0ae9">
+        <source>Videos from other sources and uploaded video or audio files aren't affected by this.</source>
+        <target>다른 출처의 동영상이나 업로드된 동영상 및 오디오 파일은 이 제한 사항의 영향을 받지 않습니다.</target>
+      </trans-unit>
+      <trans-unit id="s3c25c6a16358737f">
+        <source>Choose a different source</source>
+        <target>다른 소스를 선택하세요</target>
+      </trans-unit>
+      <trans-unit id="s2ec9e13e6bb4b91e">
+        <source>Use YouTube anyway</source>
+        <target>어쨌든 YouTube 사용</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

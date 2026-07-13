@@ -197,6 +197,34 @@
         <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
         <target>De YouTube-video kon niet worden geladen. Controleer de link en je internetverbinding en probeer het vervolgens opnieuw.</target>
       </trans-unit>
+      <trans-unit id="sd974a9bae026bd45">
+        <source>YouTube videos only play on a web server</source>
+        <target>YouTube-video’s worden alleen afgespeeld op een webserver</target>
+      </trans-unit>
+      <trans-unit id="sce061dbb316d94ea">
+        <source>YouTube only plays embedded videos on pages that are served by a web server. This is a restriction imposed by YouTube, not by WebWriter.</source>
+        <target>YouTube speelt alleen ingesloten video's af op pagina's die door een webserver worden aangeboden. Dit is een beperking die door YouTube wordt opgelegd, niet door WebWriter.</target>
+      </trans-unit>
+      <trans-unit id="s5383b85bb420a2bb">
+        <source>As a result, this video will not load in WebWriter's preview mode and in documents opened directly from a device. To let your students watch it, publish the document to a web server (e.g. WebWriter Cloud) and share the link from there.</source>
+        <target>Daardoor wordt deze video niet geladen in de voorbeeldmodus van WebWriter en in documenten die rechtstreeks vanaf een apparaat worden geopend. Om uw leerlingen de video te laten bekijken, publiceert u het document op een webserver (bijvoorbeeld WebWriter Cloud) en deelt u de link vanaf daar.</target>
+      </trans-unit>
+      <trans-unit id="s349093a6b4a3a15e">
+        <source>If you want to distribute this document as a file rather than through a web server, use a different video source instead of YouTube.</source>
+        <target>Als u dit document als bestand wilt verspreiden in plaats van via een webserver, gebruik dan een andere videobron in plaats van YouTube.</target>
+      </trans-unit>
+      <trans-unit id="sb459c43758ae0ae9">
+        <source>Videos from other sources and uploaded video or audio files aren't affected by this.</source>
+        <target>Video’s uit andere bronnen en geüploade video- of audiobestanden worden hierdoor niet beïnvloed.</target>
+      </trans-unit>
+      <trans-unit id="s3c25c6a16358737f">
+        <source>Choose a different source</source>
+        <target>Kies een andere bron</target>
+      </trans-unit>
+      <trans-unit id="s2ec9e13e6bb4b91e">
+        <source>Use YouTube anyway</source>
+        <target>Gebruik toch YouTube</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -1,5 +1,9 @@
 import { msg } from "@lit/localize";
 
+// Taken from the youtube-video-element source code
+export const youtubeRegex =
+	/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/|live\/))((\w|-){11})/;
+
 export function youtubeErrorMessage(code: number): () => string {
   switch (code) {
     case 2:

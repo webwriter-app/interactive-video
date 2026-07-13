@@ -197,6 +197,34 @@
         <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
         <target>YouTube videosu yüklenemedi. Lütfen bağlantıyı ve internet bağlantınızı kontrol edin, ardından tekrar deneyin.</target>
       </trans-unit>
+      <trans-unit id="sd974a9bae026bd45">
+        <source>YouTube videos only play on a web server</source>
+        <target>YouTube videoları yalnızca bir web sunucusunda oynatılır</target>
+      </trans-unit>
+      <trans-unit id="sce061dbb316d94ea">
+        <source>YouTube only plays embedded videos on pages that are served by a web server. This is a restriction imposed by YouTube, not by WebWriter.</source>
+        <target>YouTube, yalnızca bir web sunucusu tarafından barındırılan sayfalarda gömülü videoları oynatır. Bu, WebWriter tarafından değil, YouTube tarafından uygulanan bir kısıtlamadır.</target>
+      </trans-unit>
+      <trans-unit id="s5383b85bb420a2bb">
+        <source>As a result, this video will not load in WebWriter's preview mode and in documents opened directly from a device. To let your students watch it, publish the document to a web server (e.g. WebWriter Cloud) and share the link from there.</source>
+        <target>Sonuç olarak, bu video WebWriter'ın önizleme modunda ve bir cihazdan doğrudan açılan belgelerde yüklenmez. Öğrencilerinizin videoyu izlemesini sağlamak için, belgeyi bir web sunucusuna (örn. WebWriter Cloud) yayınlayın ve bağlantıyı oradan paylaşın.</target>
+      </trans-unit>
+      <trans-unit id="s349093a6b4a3a15e">
+        <source>If you want to distribute this document as a file rather than through a web server, use a different video source instead of YouTube.</source>
+        <target>Bu belgeyi bir web sunucusu üzerinden değil, dosya olarak dağıtmak istiyorsanız, YouTube yerine farklı bir video kaynağı kullanın.</target>
+      </trans-unit>
+      <trans-unit id="sb459c43758ae0ae9">
+        <source>Videos from other sources and uploaded video or audio files aren't affected by this.</source>
+        <target>Diğer kaynaklardan gelen videolar ve yüklenen video veya ses dosyaları bu durumdan etkilenmez.</target>
+      </trans-unit>
+      <trans-unit id="s3c25c6a16358737f">
+        <source>Choose a different source</source>
+        <target>Farklı bir kaynak seçin</target>
+      </trans-unit>
+      <trans-unit id="s2ec9e13e6bb4b91e">
+        <source>Use YouTube anyway</source>
+        <target>Yine de YouTube'u kullanın</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

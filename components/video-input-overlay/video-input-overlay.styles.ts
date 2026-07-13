@@ -31,4 +31,26 @@ export default css`
     margin: 2em 2em 0;
     font-size: 1rem;
   }
+
+  #youtube-disclaimer-dialog {
+    --width: 40rem;
+  }
+
+  #youtube-disclaimer-dialog p {
+    margin-top: 0;
+  }
+
+  #youtube-disclaimer-dialog p:last-of-type {
+    margin-bottom: 0;
+  }
+
+  #youtube-disclaimer-dialog::part(base),
+  #youtube-disclaimer-dialog::part(overlay) {
+    position: absolute;
+  }
+
+  #youtube-disclaimer-dialog::part(panel) {
+    max-width: calc(100% - 2rem);
+    max-height: calc(100% - 2rem);
+  }
 `;
