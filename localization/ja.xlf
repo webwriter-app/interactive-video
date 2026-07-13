@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Spotifyのアルバムやプレイリストは対応していません。1曲または1エピソードへのリンクをご使用ください。</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>この YouTube リンクは無効です。リンクを確認して、もう一度お試しください。</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>このYouTube動画は存在しないか、非公開です。</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>このYouTube動画の所有者は、埋め込みを許可していません。別の動画をご利用ください。</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>このページがYouTubeに対して自身を識別していないため、YouTubeはこの動画の再生を拒否しています。これは、WebWriterのプレビューモードや、お使いのデバイスから直接開いたドキュメントで発生します。このドキュメントをWebサーバー（例：WebWriter Cloud）に公開し、そこから開いてください。</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>YouTube動画を読み込むことができませんでした。リンクとインターネット接続を確認してから、もう一度お試しください。</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

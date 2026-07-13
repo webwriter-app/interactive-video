@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>„Spotify“ albumai ir grojaraščiai nepalaikomi. Prašome naudoti nuorodą į atskirą kūrinį arba epizodą.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Ši „YouTube“ nuoroda yra negaliojanti. Patikrinkite nuorodą ir pabandykite dar kartą.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Šio „YouTube“ vaizdo įrašo nėra arba jis yra privatus.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>Šio „YouTube“ vaizdo įrašo savininkas neleidžia jo įterpti. Prašome pasirinkti kitą vaizdo įrašą.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>„YouTube“ atsisako čia paleisti šį vaizdo įrašą, nes puslapis neprisistato „YouTube“. Tai atsitinka „WebWriter“ peržiūros režime arba dokumentuose, atidarytuose tiesiogiai iš jūsų įrenginio. Paskelbkite šį dokumentą žiniatinklio serveryje (pvz., „WebWriter Cloud“) ir atidarykite jį iš ten.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>„YouTube“ vaizdo įrašo nepavyko įkelti. Patikrinkite nuorodą ir interneto ryšį, tada pabandykite dar kartą.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Албумите и плейлистите в Spotify не се поддържат. Моля, използвайте линк към отделна песен или епизод.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Тази връзка към YouTube е невалидна. Моля, проверете връзката и опитайте отново.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Това видео в YouTube не съществува или е с ограничен достъп.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>Собственикът на това видео в YouTube не позволява то да бъде вградено. Моля, използвайте друго видео.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>YouTube отказва да възпроизведе това видео тук, защото страницата не се идентифицира пред YouTube. Това се случва в режим на предварителен преглед на WebWriter или в документи, отворени директно от вашето устройство. Публикувайте този документ на уеб сървър (например WebWriter Cloud) и го отворете оттам.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>Видеоклипът в YouTube не може да бъде зареден. Моля, проверете линка и интернет връзката си, след което опитайте отново.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

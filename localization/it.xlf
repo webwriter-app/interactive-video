@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Gli album e le playlist di Spotify non sono supportati. Si prega di utilizzare un link a un singolo brano o episodio.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Questo link YouTube non è valido. Controlla il link e riprova.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Questo video di YouTube non esiste o è privato.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>Il proprietario di questo video di YouTube non ne consente l'incorporamento. Si prega di utilizzare un altro video.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>YouTube non consente la riproduzione di questo video in questa pagina perché la pagina non si identifica con YouTube. Ciò accade nella modalità di anteprima di WebWriter o nei documenti aperti direttamente dal tuo dispositivo. Pubblica questo documento su un server web (ad es. WebWriter Cloud) e aprilo da lì.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>Impossibile caricare il video di YouTube. Controlla il link e la tua connessione Internet, quindi riprova.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>لا يتم دعم ألبومات وقوائم التشغيل على Spotify. يرجى استخدام رابط لأغنية واحدة أو حلقة واحدة.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>رابط يوتيوب هذا غير صالح. يرجى التحقق من الرابط والمحاولة مرة أخرى.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>مقطع الفيديو هذا على يوتيوب غير موجود أو خاص.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>لا يسمح مالك مقطع الفيديو هذا على YouTube بتضمينه. يرجى استخدام مقطع فيديو آخر.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>يرفض YouTube تشغيل هذا الفيديو هنا لأن الصفحة لا تُعرّف نفسها لـ YouTube. يحدث هذا في وضع المعاينة في WebWriter أو في المستندات التي يتم فتحها مباشرةً من جهازك. انشر هذا المستند على خادم ويب (مثل WebWriter Cloud) وافتحه من هناك.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>تعذر تحميل مقطع فيديو YouTube. يرجى التحقق من الرابط واتصالك بالإنترنت، ثم حاول مرة أخرى.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

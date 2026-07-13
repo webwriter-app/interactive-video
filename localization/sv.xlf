@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Spotify-album och spellistor stöds inte. Använd gärna en länk till en enskild låt eller ett avsnitt.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Den här YouTube-länken är ogiltig. Kontrollera länken och försök igen.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Den här YouTube-videon finns inte eller är privat.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>Ägaren till den här YouTube-videon tillåter inte att den bäddas in. Använd en annan video.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>YouTube vägrar att spela upp den här videon här eftersom sidan inte identifierar sig för YouTube. Detta händer i WebWriters förhandsgranskningsläge eller i dokument som öppnas direkt från din enhet. Publicera detta dokument på en webbserver (t.ex. WebWriter Cloud) och öppna det därifrån.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>YouTube-videon kunde inte laddas. Kontrollera länken och din internetanslutning och försök sedan igen.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

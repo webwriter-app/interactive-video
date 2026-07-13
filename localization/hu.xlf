@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>A Spotify-albumok és lejátszási listák nem támogatottak. Kérjük, használjon egy-egy zeneszámra vagy epizódra mutató linket.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Ez a YouTube-link érvénytelen. Kérjük, ellenőrizze a linket, majd próbálja meg újra.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Ez a YouTube-videó nem létezik, vagy privát.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>A YouTube-videó tulajdonosa nem engedélyezi a beágyazását. Kérjük, válasszon egy másik videót.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>A YouTube nem hajlandó lejátszani ezt a videót, mert az oldal nem azonosítja magát a YouTube-nak. Ez a WebWriter előnézeti módjában vagy a készülékről közvetlenül megnyitott dokumentumokban fordul elő. Tegye közzé ezt a dokumentumot egy webszerveren (pl. a WebWriter Cloudon), és onnan nyissa meg.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>A YouTube-videó nem töltődött be. Kérjük, ellenőrizze a linket és az internetkapcsolatát, majd próbálja meg újra.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

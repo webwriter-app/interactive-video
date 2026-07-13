@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Spotify 的专辑和播放列表不被支持。请提供单首歌曲或单集的链接。</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>此 YouTube 链接无效。请检查链接并重试。</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>该 YouTube 视频不存在或为私密视频。</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>该 YouTube 视频的所有者不允许嵌入此视频。请使用其他视频。</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>YouTube 拒绝在此处播放此视频，因为该页面未向 YouTube 进行身份验证。这种情况通常发生在 WebWriter 的预览模式下，或直接从您的设备打开文档时。请将此文档发布到 Web 服务器（例如 WebWriter Cloud），然后从那里打开它。</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>无法加载该 YouTube 视频。请检查链接和网络连接，然后重试。</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

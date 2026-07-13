@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Τα άλμπουμ και οι λίστες αναπαραγωγής του Spotify δεν υποστηρίζονται. Παρακαλούμε χρησιμοποιήστε έναν σύνδεσμο προς ένα μεμονωμένο κομμάτι ή επεισόδιο.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Αυτός ο σύνδεσμος του YouTube δεν είναι έγκυρος. Ελέγξτε τον σύνδεσμο και δοκιμάστε ξανά.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Αυτό το βίντεο στο YouTube δεν υπάρχει ή είναι ιδιωτικό.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>Ο κάτοχος αυτού του βίντεο στο YouTube δεν επιτρέπει την ενσωμάτωσή του. Παρακαλώ χρησιμοποιήστε ένα διαφορετικό βίντεο.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>Το YouTube αρνείται να αναπαράγει αυτό το βίντεο εδώ, επειδή η σελίδα δεν αναγνωρίζεται από το YouTube. Αυτό συμβαίνει στη λειτουργία προεπισκόπησης του WebWriter ή σε έγγραφα που ανοίγονται απευθείας από τη συσκευή σας. Δημοσιεύστε αυτό το έγγραφο σε έναν διακομιστή ιστού (π.χ. WebWriter Cloud) και ανοίξτε το από εκεί.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>Δεν ήταν δυνατή η φόρτωση του βίντεο του YouTube. Ελέγξτε τον σύνδεσμο και τη σύνδεσή σας στο διαδίκτυο και, στη συνέχεια, δοκιμάστε ξανά.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Альбоми та плейлисти Spotify не підтримуються. Будь ласка, використовуйте посилання на окремий трек або епізод.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Це посилання на YouTube недійсне. Будь ласка, перевірте посилання та спробуйте ще раз.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Це відео на YouTube не існує або є приватним.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>Власник цього відео на YouTube не дозволяє вбудовувати його. Будь ласка, скористайтеся іншим відео.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>YouTube відмовляється відтворювати це відео тут, оскільки сторінка не ідентифікує себе перед YouTube. Це трапляється в режимі попереднього перегляду WebWriter або в документах, відкритих безпосередньо з вашого пристрою. Опублікуйте цей документ на веб-сервері (наприклад, WebWriter Cloud) і відкрийте його звідти.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>Відео з YouTube не вдалося завантажити. Перевірте посилання та підключення до Інтернету, а потім спробуйте ще раз.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Spotify albumi un atskaņošanas saraksti netiek atbalstīti. Lūdzu, izmantojiet saiti uz atsevišķu dziesmu vai epizodi.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Šī YouTube saite ir nederīga. Lūdzu, pārbaudiet saiti un mēģiniet vēlreiz.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Šis YouTube video neeksistē vai ir privāts.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>Šī YouTube videoklipa īpašnieks neļauj to ievietot. Lūdzu, izmantojiet citu videoklipu.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>YouTube atsakās atskaņot šo video šeit, jo lapa neidentificējas YouTube. Tas notiek WebWriter priekšskatīšanas režīmā vai dokumentos, kas atvērti tieši no jūsu ierīces. Publicējiet šo dokumentu tīmekļa serverī (piem., WebWriter Cloud) un atveriet to no turienes.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>YouTube video neizdevās ielādēt. Lūdzu, pārbaudiet saiti un savu interneta savienojumu, pēc tam mēģiniet vēlreiz.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

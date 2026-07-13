@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Spotify albümleri ve çalma listeleri desteklenmemektedir. Lütfen tek bir parçaya veya bölüme ait bir bağlantı kullanın.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Bu YouTube bağlantısı geçersiz. Lütfen bağlantıyı kontrol edip tekrar deneyin.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Bu YouTube videosu mevcut değil veya gizlidir.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>Bu YouTube videosunun sahibi, videonun gömülmesine izin vermiyor. Lütfen başka bir video kullanın.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>Sayfa, YouTube'a kimliğini belirtmediği için YouTube bu videoyu burada oynatmayı reddediyor. Bu durum, WebWriter'ın önizleme modunda veya cihazınızdan doğrudan açılan belgelerde meydana gelir. Bu belgeyi bir web sunucusuna (örn. WebWriter Cloud) yayınlayın ve oradan açın.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>YouTube videosu yüklenemedi. Lütfen bağlantıyı ve internet bağlantınızı kontrol edin, ardından tekrar deneyin.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

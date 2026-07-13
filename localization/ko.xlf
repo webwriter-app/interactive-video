@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Spotify 앨범 및 재생목록은 지원되지 않습니다. 개별 곡이나 에피소드 링크를 사용해 주세요.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>이 YouTube 링크가 유효하지 않습니다. 링크를 확인한 후 다시 시도해 주세요.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>이 YouTube 동영상은 존재하지 않거나 비공개로 설정되어 있습니다.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>이 YouTube 동영상의 소유자가 동영상의 삽입을 허용하지 않습니다. 다른 동영상을 사용해 주세요.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>이 페이지가 YouTube에 자신을 식별하지 못했기 때문에 YouTube에서 이 동영상을 재생할 수 없습니다. 이 문제는 WebWriter의 미리보기 모드나 기기에서 직접 연 문서에서 발생합니다. 이 문서를 웹 서버(예: WebWriter Cloud)에 게시한 후, 해당 서버에서 열어보세요.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>YouTube 동영상을 불러올 수 없습니다. 링크와 인터넷 연결 상태를 확인한 후 다시 시도해 주세요.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

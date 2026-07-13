@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Os álbuns e as listas de reprodução do Spotify não são suportados. Por favor, utilize um link para uma faixa ou episódio específico.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Este link do YouTube não é válido. Verifique o link e tente novamente.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Este vídeo do YouTube não existe ou é privado.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>O proprietário deste vídeo do YouTube não permite que seja incorporado. Por favor, utilize um vídeo diferente.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>O YouTube recusa-se a reproduzir este vídeo aqui porque a página não se identifica junto do YouTube. Isto acontece no modo de pré-visualização do WebWriter ou em documentos abertos diretamente a partir do seu dispositivo. Publique este documento num servidor web (por exemplo, WebWriter Cloud) e abra-o a partir daí.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>Não foi possível carregar o vídeo do YouTube. Verifique o link e a sua ligação à Internet e, em seguida, tente novamente.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

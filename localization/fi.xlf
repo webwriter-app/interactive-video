@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Spotify-albumeita ja -soittolistoja ei tueta. Käytä linkkiä yksittäiseen kappaleeseen tai jaksoon.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Tämä YouTube-linkki ei toimi. Tarkista linkki ja yritä uudelleen.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Tätä YouTube-videota ei ole olemassa tai se on yksityinen.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>Tämän YouTube-videon omistaja ei salli sen upottamista. Käytä toista videota.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>YouTube kieltäytyy toistamasta tätä videota täällä, koska sivu ei tunnista itseään YouTubelle. Tämä tapahtuu WebWriterin esikatselutilassa tai asiakirjoissa, jotka avataan suoraan laitteeltasi. Julkaise tämä asiakirja verkkopalvelimelle (esim. WebWriter Cloud) ja avaa se sieltä.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>YouTube-videota ei voitu ladata. Tarkista linkki ja internetyhteytesi ja yritä uudelleen.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

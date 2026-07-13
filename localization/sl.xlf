@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Albumi in seznami predvajanja na Spotifyju niso podprti. Uporabite povezavo do posamezne skladbe ali epizode.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Ta povezava do YouTube-a je neveljavna. Preverite povezavo in poskusite znova.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Ta videoposnetek na YouTube ne obstaja ali je zaseben.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>Lastnik tega videoposnetka na YouTube ne dovoljuje njegovega vgrajevanja. Uporabite drug videoposnetek.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>YouTube ne dovoli predvajanja tega videoposnetka na tej strani, ker se stran ne identificira pri YouTube. To se zgodi v načinu predogleda programa WebWriter ali v dokumentih, odprtih neposredno z vaše naprave. Objavite ta dokument na spletnem strežniku (npr. WebWriter Cloud) in ga odprite od tam.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>Videoposnetka na YouTubu ni bilo mogoče naložiti. Preverite povezavo in svojo internetno povezavo, nato poskusite znova.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

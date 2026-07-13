@@ -177,6 +177,26 @@
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
         <target>Spotify-albums en -afspeellijsten worden niet ondersteund. Gebruik alstublieft een link naar een afzonderlijk nummer of een aflevering.</target>
       </trans-unit>
+      <trans-unit id="sa7e813528c029362">
+        <source>This YouTube link is invalid. Please check the link and try again.</source>
+        <target>Deze YouTube-link is ongeldig. Controleer de link en probeer het opnieuw.</target>
+      </trans-unit>
+      <trans-unit id="s964cac1bdaaf41b4">
+        <source>This YouTube video doesn't exist or is private.</source>
+        <target>Deze YouTube-video bestaat niet of is privé.</target>
+      </trans-unit>
+      <trans-unit id="s97ea3e96d4a6d036">
+        <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+        <target>De eigenaar van deze YouTube-video staat het insluiten ervan niet toe. Gebruik een andere video.</target>
+      </trans-unit>
+      <trans-unit id="sfbf044c175e1bc7a">
+        <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+        <target>YouTube weigert deze video hier af te spelen omdat de pagina zich niet bij YouTube identificeert. Dit gebeurt in de voorbeeldmodus van WebWriter of in documenten die rechtstreeks vanaf je apparaat worden geopend. Publiceer dit document naar een webserver (bijv. WebWriter Cloud) en open het vanaf daar.</target>
+      </trans-unit>
+      <trans-unit id="sb09bf8953fdb009c">
+        <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>De YouTube-video kon niet worden geladen. Controleer de link en je internetverbinding en probeer het vervolgens opnieuw.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

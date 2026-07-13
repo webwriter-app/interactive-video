@@ -8,6 +8,7 @@ import { property, query } from "lit/decorators.js";
 import styles from "./video-player.styles";
 import { html } from "lit";
 import { msg } from "@lit/localize";
+import { youtubeErrorMessage } from "../../utils/youtube-errors";
 
 import YouTubeVideoElement from "youtube-video-element";
 import VimeoVideoElement from "vimeo-video-element";
@@ -66,6 +67,8 @@ export class VideoPlayer extends LitElementWw {
 
   @query("#thumbnail-container")
   accessor thumbnailContainerElement: HTMLDivElement;
+
+  private youtubeLoadTimer?: number;
 
   static get scopedElements() {
     return {
@@ -153,15 +156,31 @@ export class VideoPlayer extends LitElementWw {
       this.dispatchControlsVisible(true, true);
       this.performUpdate();
       if (this.videoElement) {
-        (this.videoElement as YouTubeVideoElement).addEventListener("error", (e) => {
+        const videoElement = this.videoElement as YouTubeVideoElement;
+        const youtubeId = url.match(youtubeRegex)[1];
+        const embedUrl = `https://www.youtube-nocookie.com/embed/${youtubeId}`;
+        
+        clearTimeout(this.youtubeLoadTimer);
+
+        const fail = (error: string, message: () => string) => {
+          clearTimeout(this.youtubeLoadTimer);
           this.dispatchEvent(
-            new CustomEvent("loadingerror", { detail: { error: (e as ErrorEvent).message } })
+            new CustomEvent("loadingerror", { detail: { error, message } })
           );
-        });
-        (this.videoElement as YouTubeVideoElement).config = {
-          disablekb: 1,
         };
-        (this.videoElement as YouTubeVideoElement).src = url;
+
+        videoElement.addEventListener("error", () => {
+          const code = videoElement.error.code;
+          fail(`YouTube iframe player error #${code}`, youtubeErrorMessage(code));
+        });
+        videoElement.addEventListener("loadcomplete", () => clearTimeout(this.youtubeLoadTimer), { once: true });
+        this.youtubeLoadTimer = window.setTimeout(
+          () => fail("YouTube player did not initialise", youtubeErrorMessage(NaN)),
+          10000
+        );
+
+        videoElement.config = { disablekb: 1 };
+        videoElement.src = embedUrl;
 
         fetch(youtubeOEmbedURL + encodeURIComponent(url))
           .then(response => response.json())
@@ -187,7 +206,7 @@ export class VideoPlayer extends LitElementWw {
           new CustomEvent("loadingerror", {
             detail: {
               error: `Unsupported Spotify source type: ${spotifyType}`,
-              message: msg("Spotify albums and playlists aren't supported. Please use a link to a single track or episode."),
+              message: () => msg("Spotify albums and playlists aren't supported. Please use a link to a single track or episode."),
             },
           })
         );
@@ -360,6 +379,7 @@ export class VideoPlayer extends LitElementWw {
   }
 
   clearVideo() {
+    clearTimeout(this.youtubeLoadTimer);
     this.playerType = PlayerType.Placeholder;
   }
 

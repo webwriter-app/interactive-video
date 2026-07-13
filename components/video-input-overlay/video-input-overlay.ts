@@ -26,8 +26,8 @@ export class VideoInputOverlay extends LitElementWw {
   @property({ type: Boolean, attribute: "error" })
   accessor error: boolean = false;
 
-  @property({ type: String, attribute: "error-message" })
-  accessor errorMessage: string = "";
+  @property({ attribute: false })
+  accessor errorMessage: (() => string) | undefined = undefined;
 
   /**
    * Returns an object that maps custom element names to their corresponding classes.
@@ -89,7 +89,7 @@ export class VideoInputOverlay extends LitElementWw {
       </sl-input>
       ${this.error
         ? html`<p class="error-message">
-            ${this.errorMessage || msg("Error loading video. Please try again.")}
+            ${this.errorMessage?.() || msg("Error loading video. Please try again.")}
           </p>`
         : null}
     </div>`;

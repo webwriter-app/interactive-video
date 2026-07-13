@@ -6,6 +6,7 @@ import { customElement, property, query, queryAssignedElements, state } from "li
 // @ts-ignore
 import LOCALIZE from "../../localization/generated";
 
+// @ts-ignore
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import { SlButton, SlRange, SlIcon, SlDialog, SlCheckbox } from "@shoelace-style/shoelace";
 
@@ -193,8 +194,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   @property({ type: Boolean })
   private accessor hadLoadingError = false;
 
-  @property({ type: String })
-  private accessor loadingErrorMessage = "";
+  @property({ attribute: false })
+  private accessor loadingErrorMessage: (() => string) | undefined = undefined;
 
   @property({ type: Number })
   private accessor videoContainerHeight: number = 0;
@@ -1112,11 +1113,11 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * Handles loading errors for the video element.
    * @param error - The error message or object.
    */
-  private handleLoadingError(error: string, message?: string) {
+  private handleLoadingError(error: string, message?: () => string) {
     console.error("Error loading video:", error);
     this.clearVideo();
     this.hadLoadingError = true;
-    this.loadingErrorMessage = message ?? "";
+    this.loadingErrorMessage = message;
   }
 
   /**
@@ -1137,7 +1138,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     if (!!this.progressBar)
       this.progressBar.value = 0;
     this.hadLoadingError = false;
-    this.loadingErrorMessage = "";
+    this.loadingErrorMessage = undefined;
     this.hideAllInteractions();
 
     if (removeInteractions) {
