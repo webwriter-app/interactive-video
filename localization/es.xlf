@@ -89,10 +89,6 @@
         <source>Add Popup</source>
         <target>Añadir ventana emergente</target>
       </trans-unit>
-      <trans-unit id="s5f6d35d8cdd58c1b">
-        <source>Error loading video. Please try again.</source>
-        <target>Error al cargar el vídeo. Por favor, inténtelo de nuevo.</target>
-      </trans-unit>
       <trans-unit id="s08b05407b5565ca4">
         <source>or</source>
         <target>o</target>
@@ -224,6 +220,74 @@
       <trans-unit id="s2ec9e13e6bb4b91e">
         <source>Use YouTube anyway</source>
         <target>Utiliza YouTube de todos modos</target>
+      </trans-unit>
+      <trans-unit id="scd1dd6ff53d0d01a">
+        <source>Try again</source>
+        <target>Inténtalo de nuevo</target>
+      </trans-unit>
+      <trans-unit id="s4f9913323d0454e8">
+        <source>No media has been added here yet.</source>
+        <target>Aún no se ha añadido ningún archivo multimedia aquí.</target>
+      </trans-unit>
+      <trans-unit id="sed50aa23ed358b33">
+        <source>This file could not be read. Please try again or choose a different file.</source>
+        <target>No se ha podido leer este archivo. Inténtalo de nuevo o elige otro archivo.</target>
+      </trans-unit>
+      <trans-unit id="s4b93a142098860d9">
+        <source>This file type isn't supported. Please choose an MP4 or WebM video, or an MP3, WAV, AAC, FLAC or OGG audio file.</source>
+        <target>Este tipo de archivo no es compatible. Elige un vídeo en formato MP4 o WebM, o un archivo de audio en formato MP3, WAV, AAC, FLAC u OGG.</target>
+      </trans-unit>
+      <trans-unit id="sc255dd92bfffab10">
+        <source>The media player could not be started. Please try again.</source>
+        <target>No se ha podido iniciar el reproductor multimedia. Inténtalo de nuevo.</target>
+      </trans-unit>
+      <trans-unit id="s1748fa0e940a7f04">
+        <source>This file could not be loaded. It is damaged or isn't a video or audio file.</source>
+        <target>No se ha podido cargar este archivo. Está dañado o no es un archivo de vídeo ni de audio.</target>
+      </trans-unit>
+      <trans-unit id="s23811970ee056cd6">
+        <source>The media could not be loaded. The link may be broken or the file may no longer exist.</source>
+        <target>No se ha podido cargar el archivo multimedia. Es posible que el enlace no funcione o que el archivo ya no exista.</target>
+      </trans-unit>
+      <trans-unit id="sc282195e53905990">
+        <source>This link doesn't point to a video or audio file. Please check the link, or use a link to a supported service.</source>
+        <target>Este enlace no apunta a un archivo de vídeo o audio. Comprueba el enlace o utiliza uno que apunte a un servicio compatible.</target>
+      </trans-unit>
+      <trans-unit id="s55b6789531afffdb">
+        <source>Loading the media was aborted. Please try again.</source>
+        <target>Se ha interrumpido la carga del contenido multimedia. Inténtalo de nuevo.</target>
+      </trans-unit>
+      <trans-unit id="s29fdfa31c7b42598">
+        <source>The media could not be loaded because of a network error. Please check your internet connection, then try again.</source>
+        <target>No se ha podido cargar el archivo multimedia debido a un error de red. Comprueba tu conexión a Internet y vuelve a intentarlo.</target>
+      </trans-unit>
+      <trans-unit id="sa656bae1f3f1213a">
+        <source>The media file is damaged or uses a format your browser cannot play.</source>
+        <target>El archivo multimedia está dañado o utiliza un formato que tu navegador no puede reproducir.</target>
+      </trans-unit>
+      <trans-unit id="sa4fda558b6798486">
+        <source>The media could not be loaded. The link may be broken, or the format isn't supported by your browser.</source>
+        <target>No se ha podido cargar el archivo multimedia. Es posible que el enlace no funcione o que tu navegador no admita ese formato.</target>
+      </trans-unit>
+      <trans-unit id="sfa88e6145d78a722">
+        <source>The media could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>No se ha podido cargar el archivo multimedia. Comprueba el enlace y tu conexión a Internet y vuelve a intentarlo.</target>
+      </trans-unit>
+      <trans-unit id="s97becfe48a3d368f">
+        <source>The Vimeo video could not be loaded. It may not exist, may be private, or may not allow being embedded.</source>
+        <target>No se ha podido cargar el vídeo de Vimeo. Es posible que no exista, que sea privado o que no permita su incrustación.</target>
+      </trans-unit>
+      <trans-unit id="s5507d0b5ed2397d5">
+        <source>The TikTok video could not be loaded. It may not exist, may be private, or may not allow being embedded.</source>
+        <target>No se ha podido cargar el vídeo de TikTok. Es posible que no exista, que sea privado o que no permita la incrustación.</target>
+      </trans-unit>
+      <trans-unit id="sf0da5b972a25370a">
+        <source>The Spotify track could not be loaded. It may not exist or may not be available in your region.</source>
+        <target>No se ha podido cargar la canción de Spotify. Es posible que no exista o que no esté disponible en tu región.</target>
+      </trans-unit>
+      <trans-unit id="se6ba3e3a2756df92">
+        <source>The media took too long to load. Please check the link and your internet connection, then try again.</source>
+        <target>El contenido tardó demasiado en cargarse. Comprueba el enlace y tu conexión a Internet y vuelve a intentarlo.</target>
       </trans-unit>
     </body>
   </file>

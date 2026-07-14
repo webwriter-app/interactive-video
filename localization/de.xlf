@@ -89,10 +89,6 @@
         <source>Add Popup</source>
         <target>Popup hinzufügen</target>
       </trans-unit>
-      <trans-unit id="s5f6d35d8cdd58c1b">
-        <source>Error loading video. Please try again.</source>
-        <target>Fehler beim Laden des Videos. Bitte versuchen Sie es erneut.</target>
-      </trans-unit>
       <trans-unit id="s08b05407b5565ca4">
         <source>or</source>
         <target>oder</target>
@@ -195,7 +191,7 @@
       </trans-unit>
       <trans-unit id="sb09bf8953fdb009c">
         <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
-        <target>Das YouTube-Video konnte nicht geladen werden. Bitte überprüfe den Link und deine Internetverbindung und versuche es dann erneut.</target>
+        <target>Das YouTube-Video konnte nicht geladen werden. Bitte überprüfen Sie den Link und Ihre Internetverbindung und versuche es dann erneut.</target>
       </trans-unit>
       <trans-unit id="sd974a9bae026bd45">
         <source>YouTube videos only play on a web server</source>
@@ -224,6 +220,74 @@
       <trans-unit id="s2ec9e13e6bb4b91e">
         <source>Use YouTube anyway</source>
         <target>Trotzdem YouTube verwenden</target>
+      </trans-unit>
+      <trans-unit id="scd1dd6ff53d0d01a">
+        <source>Try again</source>
+        <target>Erneut versuchen</target>
+      </trans-unit>
+      <trans-unit id="s4f9913323d0454e8">
+        <source>No media has been added here yet.</source>
+        <target>Es wurden noch keine Medien hinzugefügt.</target>
+      </trans-unit>
+      <trans-unit id="sed50aa23ed358b33">
+        <source>This file could not be read. Please try again or choose a different file.</source>
+        <target>Diese Datei konnte nicht gelesen werden. Bitte versuchen Sie es erneut oder wählen Sie eine andere Datei.</target>
+      </trans-unit>
+      <trans-unit id="s4b93a142098860d9">
+        <source>This file type isn't supported. Please choose an MP4 or WebM video, or an MP3, WAV, AAC, FLAC or OGG audio file.</source>
+        <target>Dieser Dateityp wird nicht unterstützt. Bitte wählen Sie ein MP4- oder WebM-Video oder eine MP3-, WAV-, AAC-, FLAC- oder OGG-Audiodatei aus.</target>
+      </trans-unit>
+      <trans-unit id="sc255dd92bfffab10">
+        <source>The media player could not be started. Please try again.</source>
+        <target>Der Mediaplayer konnte nicht gestartet werden. Bitte versuchen Sie es erneut.</target>
+      </trans-unit>
+      <trans-unit id="s1748fa0e940a7f04">
+        <source>This file could not be loaded. It is damaged or isn't a video or audio file.</source>
+        <target>Diese Datei konnte nicht geladen werden. Sie ist beschädigt oder es handelt sich nicht um eine Video- oder Audiodatei.</target>
+      </trans-unit>
+      <trans-unit id="s23811970ee056cd6">
+        <source>The media could not be loaded. The link may be broken or the file may no longer exist.</source>
+        <target>Die Medien konnten nicht geladen werden. Der Link ist möglicherweise defekt oder die Datei existiert nicht mehr.</target>
+      </trans-unit>
+      <trans-unit id="sc282195e53905990">
+        <source>This link doesn't point to a video or audio file. Please check the link, or use a link to a supported service.</source>
+        <target>Dieser Link verweist nicht auf eine Video- oder Audiodatei. Bitte überprüfen Sie den Link oder verwenden Sie einen Link zu einem unterstützten Dienst.</target>
+      </trans-unit>
+      <trans-unit id="s55b6789531afffdb">
+        <source>Loading the media was aborted. Please try again.</source>
+        <target>Das Laden der Medien wurde abgebrochen. Bitte versuchen Sie es erneut.</target>
+      </trans-unit>
+      <trans-unit id="s29fdfa31c7b42598">
+        <source>The media could not be loaded because of a network error. Please check your internet connection, then try again.</source>
+        <target>Die Medien konnten aufgrund eines Netzwerkfehlers nicht geladen werden. Bitte überprüfen Sie Ihre Internetverbindung und versuchen es dann erneut.</target>
+      </trans-unit>
+      <trans-unit id="sa656bae1f3f1213a">
+        <source>The media file is damaged or uses a format your browser cannot play.</source>
+        <target>Die Mediendatei ist beschädigt oder hat ein Format, das Ihr Browser nicht wiedergeben kann.</target>
+      </trans-unit>
+      <trans-unit id="sa4fda558b6798486">
+        <source>The media could not be loaded. The link may be broken, or the format isn't supported by your browser.</source>
+        <target>Die Mediendatei konnte nicht geladen werden. Der Link ist möglicherweise defekt oder das Format wird von Ihrem Browser nicht unterstützt.</target>
+      </trans-unit>
+      <trans-unit id="sfa88e6145d78a722">
+        <source>The media could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>Die Mediendatei konnte nicht geladen werden. Bitte überprüfen Sie den Link und Ihre Internetverbindung und versuchen es dann erneut.</target>
+      </trans-unit>
+      <trans-unit id="s97becfe48a3d368f">
+        <source>The Vimeo video could not be loaded. It may not exist, may be private, or may not allow being embedded.</source>
+        <target>Das Vimeo-Video konnte nicht geladen werden. Es existiert möglicherweise nicht, ist privat oder darf nicht eingebettet werden.</target>
+      </trans-unit>
+      <trans-unit id="s5507d0b5ed2397d5">
+        <source>The TikTok video could not be loaded. It may not exist, may be private, or may not allow being embedded.</source>
+        <target>Das TikTok-Video konnte nicht geladen werden. Möglicherweise existiert es nicht, ist privat oder darf nicht eingebettet werden.</target>
+      </trans-unit>
+      <trans-unit id="sf0da5b972a25370a">
+        <source>The Spotify track could not be loaded. It may not exist or may not be available in your region.</source>
+        <target>Der Spotify-Titel konnte nicht geladen werden. Möglicherweise existiert er nicht oder ist in Ihrer Region nicht verfügbar.</target>
+      </trans-unit>
+      <trans-unit id="se6ba3e3a2756df92">
+        <source>The media took too long to load. Please check the link and your internet connection, then try again.</source>
+        <target>Das Laden der Medien hat zu lange gedauert. Bitte überprüfen Sie den Link und Ihre Internetverbindung und versuchen es dann erneut.</target>
       </trans-unit>
     </body>
   </file>

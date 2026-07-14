@@ -115,6 +115,5 @@
       "definingAsContext": true,
       "content": "(webwriter-video-interaction)*"
     }
-  },
-  "customElements": "custom-elements.json"
+  }
 }

@@ -89,10 +89,6 @@
         <source>Add Popup</source>
         <target>Popup hozzáadása</target>
       </trans-unit>
-      <trans-unit id="s5f6d35d8cdd58c1b">
-        <source>Error loading video. Please try again.</source>
-        <target>Hiba a videó betöltésében. Kérjük, próbálja újra.</target>
-      </trans-unit>
       <trans-unit id="s08b05407b5565ca4">
         <source>or</source>
         <target>vagy</target>
@@ -224,6 +220,74 @@
       <trans-unit id="s2ec9e13e6bb4b91e">
         <source>Use YouTube anyway</source>
         <target>Használja mégis a YouTube-ot</target>
+      </trans-unit>
+      <trans-unit id="scd1dd6ff53d0d01a">
+        <source>Try again</source>
+        <target>Próbáld meg újra</target>
+      </trans-unit>
+      <trans-unit id="s4f9913323d0454e8">
+        <source>No media has been added here yet.</source>
+        <target>Még nem került ide médiafájl.</target>
+      </trans-unit>
+      <trans-unit id="sed50aa23ed358b33">
+        <source>This file could not be read. Please try again or choose a different file.</source>
+        <target>A fájl nem olvasható. Kérjük, próbálja meg újra, vagy válasszon egy másik fájlt.</target>
+      </trans-unit>
+      <trans-unit id="s4b93a142098860d9">
+        <source>This file type isn't supported. Please choose an MP4 or WebM video, or an MP3, WAV, AAC, FLAC or OGG audio file.</source>
+        <target>Ez a fájltípus nem támogatott. Kérjük, válasszon MP4 vagy WebM videót, illetve MP3, WAV, AAC, FLAC vagy OGG hangfájlt.</target>
+      </trans-unit>
+      <trans-unit id="sc255dd92bfffab10">
+        <source>The media player could not be started. Please try again.</source>
+        <target>A médialejátszó nem indult el. Kérjük, próbálja meg újra.</target>
+      </trans-unit>
+      <trans-unit id="s1748fa0e940a7f04">
+        <source>This file could not be loaded. It is damaged or isn't a video or audio file.</source>
+        <target>A fájl nem töltődött be. A fájl sérült, vagy nem videó- vagy hangfájl.</target>
+      </trans-unit>
+      <trans-unit id="s23811970ee056cd6">
+        <source>The media could not be loaded. The link may be broken or the file may no longer exist.</source>
+        <target>A média nem töltődött be. Lehet, hogy a link nem működik, vagy a fájl már nem létezik.</target>
+      </trans-unit>
+      <trans-unit id="sc282195e53905990">
+        <source>This link doesn't point to a video or audio file. Please check the link, or use a link to a supported service.</source>
+        <target>Ez a link nem videó- vagy hangfájlra mutat. Kérjük, ellenőrizze a linket, vagy használjon egy támogatott szolgáltatásra mutató linket.</target>
+      </trans-unit>
+      <trans-unit id="s55b6789531afffdb">
+        <source>Loading the media was aborted. Please try again.</source>
+        <target>A média betöltése megszakadt. Kérjük, próbálja meg újra.</target>
+      </trans-unit>
+      <trans-unit id="s29fdfa31c7b42598">
+        <source>The media could not be loaded because of a network error. Please check your internet connection, then try again.</source>
+        <target>A médiafájl hálózati hiba miatt nem töltődött be. Kérjük, ellenőrizze az internetkapcsolatát, majd próbálja meg újra.</target>
+      </trans-unit>
+      <trans-unit id="sa656bae1f3f1213a">
+        <source>The media file is damaged or uses a format your browser cannot play.</source>
+        <target>A médiafájl sérült, vagy olyan formátumot használ, amelyet a böngészője nem tud lejátszani.</target>
+      </trans-unit>
+      <trans-unit id="sa4fda558b6798486">
+        <source>The media could not be loaded. The link may be broken, or the format isn't supported by your browser.</source>
+        <target>A médiafájl betöltése nem sikerült. Lehet, hogy a link nem működik, vagy a formátumot a böngészője nem támogatja.</target>
+      </trans-unit>
+      <trans-unit id="sfa88e6145d78a722">
+        <source>The media could not be loaded. Please check the link and your internet connection, then try again.</source>
+        <target>A médiafájl betöltése nem sikerült. Kérjük, ellenőrizze a linket és az internetkapcsolatát, majd próbálja meg újra.</target>
+      </trans-unit>
+      <trans-unit id="s97becfe48a3d368f">
+        <source>The Vimeo video could not be loaded. It may not exist, may be private, or may not allow being embedded.</source>
+        <target>A Vimeo-videó betöltése nem sikerült. Lehet, hogy a videó nem létezik, privát, vagy nem engedélyezi a beágyazást.</target>
+      </trans-unit>
+      <trans-unit id="s5507d0b5ed2397d5">
+        <source>The TikTok video could not be loaded. It may not exist, may be private, or may not allow being embedded.</source>
+        <target>A TikTok-videó nem töltődött be. Lehet, hogy nem létezik, privát, vagy nem engedélyezi a beágyazást.</target>
+      </trans-unit>
+      <trans-unit id="sf0da5b972a25370a">
+        <source>The Spotify track could not be loaded. It may not exist or may not be available in your region.</source>
+        <target>A Spotify-szám betöltése nem sikerült. Lehet, hogy nem létezik, vagy az Ön régiójában nem érhető el.</target>
+      </trans-unit>
+      <trans-unit id="se6ba3e3a2756df92">
+        <source>The media took too long to load. Please check the link and your internet connection, then try again.</source>
+        <target>A média betöltése túl sokáig tartott. Kérjük, ellenőrizze a linket és az internetkapcsolatát, majd próbálja meg újra.</target>
       </trans-unit>
     </body>
   </file>
