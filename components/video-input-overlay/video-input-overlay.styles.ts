@@ -8,10 +8,12 @@ export default css`
     width: 100%;
     height: 100%;
     background-color: rgba(50, 50, 50, 0.8); /* Gray background with opacity */
+    backdrop-filter: blur(1px);
     display: flex; /* Flexbox for centering */
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
     z-index: 100;
+    box-sizing: border-box;
   }
 
   #file-input-label:hover {
@@ -28,8 +30,35 @@ export default css`
     color: white;
     padding: .5em 1em;
     border-radius: 5px;
-    margin: 2em 2em 0;
     font-size: 1rem;
+  }
+
+  .status-overlay {
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+    color: white;
+    text-align: center;
+  }
+
+  .status-overlay sl-icon {
+    font-size: 2.5rem;
+  }
+
+  .status-overlay .error-icon {
+    color: #c74848;
+  }
+
+  .status-overlay p {
+    margin: 0;
+    max-width: 40em;
+  }
+
+  .status-overlay .status-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5em;
   }
 
   #youtube-disclaimer-dialog {

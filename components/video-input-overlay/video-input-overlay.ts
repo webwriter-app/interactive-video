@@ -1,7 +1,7 @@
 import { html, css, LitElement, PropertyValues } from "lit";
 
 import { LitElementWw } from "@webwriter/lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 
 import {
   SlCheckbox,
@@ -16,19 +16,27 @@ import "@shoelace-style/shoelace/dist/themes/light.css";
 //Tabler
 import worldWWW from "@tabler/icons/outline/world-www.svg";
 import file from "@tabler/icons/outline/file.svg";
+import alertTriangle from "@tabler/icons/outline/alert-triangle.svg";
+import videoOff from "@tabler/icons/outline/video-off.svg";
 
 import styles from "./video-input-overlay.styles";
 import { msg } from "@lit/localize";
-import { youtubeRegex } from "../../utils/youtube";
+import { youtubeRegex } from "../video-player/video-player";
 
 const supportedTypes = ["video/mp4", "video/webm", "audio/mpeg", "audio/mp4", "audio/wav", "audio/aac", "audio/flac", "audio/ogg"];
 
 export class VideoInputOverlay extends LitElementWw {
+  @property({ type: Boolean, attribute: "has-video" })
+  accessor hasVideo: boolean = false;
+
   @property({ type: Boolean, attribute: "error" })
   accessor error: boolean = false;
 
   @property({ attribute: false })
   accessor errorMessage: (() => string) | undefined = undefined;
+
+  @state()
+  private accessor fileError: (() => string) | undefined = undefined;
 
   @query("#url-input")
   private accessor urlInput: SlInput;
@@ -63,7 +71,54 @@ export class VideoInputOverlay extends LitElementWw {
 
   firstUpdated() {}
 
+  private get showErrorOverlay() {
+    return this.error && (!this.isContentEditable || this.hasVideo);
+  }
+
   render() {
+    if (this.showErrorOverlay) {
+      return this.renderErrorOverlay();
+    }
+    if (!this.isContentEditable) {
+      return this.renderNoMediaOverlay();
+    }
+    return this.renderSelectionOverlay();
+  }
+
+  private renderErrorOverlay() {
+    return html`
+      <div class="overlay status-overlay">
+        <sl-icon src=${alertTriangle} class="error-icon"></sl-icon>
+        <p class="error-message">
+          ${this.errorMessage?.() ??
+          msg("The media could not be loaded. Please check the link and your internet connection, then try again.")}
+        </p>
+        <div class="status-actions">
+          <sl-button variant="default" @click=${this.dispatchRetry}>
+            ${msg("Try again")}
+          </sl-button>
+          ${this.isContentEditable
+            ? html`
+                <sl-button variant="primary" @click=${this.dispatchChooseDifferentSource}>
+                  ${msg("Choose a different source")}
+                </sl-button>
+              `
+            : null}
+        </div>
+      </div>
+    `;
+  }
+
+  private renderNoMediaOverlay() {
+    return html`
+      <div class="overlay status-overlay">
+        <sl-icon src=${videoOff}></sl-icon>
+        <p>${msg("No media has been added here yet.")}</p>
+      </div>
+    `;
+  }
+
+  private renderSelectionOverlay() {
     return html` <div
       class="overlay"
       style="display: flex;
@@ -97,11 +152,6 @@ export class VideoInputOverlay extends LitElementWw {
       >
         <sl-icon slot="prefix" src=${worldWWW}></sl-icon>
       </sl-input>
-      ${this.error
-        ? html`<p class="error-message">
-            ${this.errorMessage?.() || msg("Error loading video. Please try again.")}
-          </p>`
-        : null}
 
       <sl-dialog
         id="youtube-disclaimer-dialog"
@@ -138,6 +188,18 @@ export class VideoInputOverlay extends LitElementWw {
       </sl-dialog>
     </div>`;
   }
+
+  private dispatchRetry = () => {
+    this.dispatchEvent(
+      new CustomEvent("retryLoad", { bubbles: true, composed: true })
+    );
+  };
+
+  private dispatchChooseDifferentSource = () => {
+    this.dispatchEvent(
+      new CustomEvent("chooseDifferentSource", { bubbles: true, composed: true })
+    );
+  };
 
   triggerFileInput() {
     const fileInput =
@@ -190,6 +252,7 @@ export class VideoInputOverlay extends LitElementWw {
    */
   handleFile(file: File) {
     if (supportedTypes.includes(file.type)) {
+      this.fileError = undefined;
       const reader = new FileReader();
 
       reader.onload = (e: ProgressEvent<FileReader>) => {
@@ -206,12 +269,14 @@ export class VideoInputOverlay extends LitElementWw {
       };
       reader.onerror = (error) => {
         console.error("Error reading file:", error);
+        this.fileError = () => msg("This file could not be read. Please try again or choose a different file.");
       };
       reader.readAsDataURL(file);
     }
     //
     else {
       console.error("Unsupported file type:", file.type);
+      this.fileError = () => msg("This file type isn't supported. Please choose an MP4 or WebM video, or an MP3, WAV, AAC, FLAC or OGG audio file.");
     }
   }
 
@@ -274,6 +339,7 @@ export class VideoInputOverlay extends LitElementWw {
   }
 
   private dispatchVideoURL(url: string) {
+    this.fileError = undefined;
     this.dispatchEvent(
       new CustomEvent("setupVideoURL", {
         detail: { src: url },

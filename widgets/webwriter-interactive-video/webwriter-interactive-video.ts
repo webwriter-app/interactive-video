@@ -8,7 +8,7 @@ import LOCALIZE from "../../localization/generated";
 
 // @ts-ignore
 import "@shoelace-style/shoelace/dist/themes/light.css";
-import { SlButton, SlRange, SlIcon, SlDialog, SlCheckbox } from "@shoelace-style/shoelace";
+import { SlButton, SlRange, SlDialog, SlCheckbox } from "@shoelace-style/shoelace";
 
 import styles from "./webwriter-interactive-video.styles";
 
@@ -31,7 +31,11 @@ import { WwVideoInteraction } from "../webwriter-video-interaction/webwriter-vid
 import { PlayerType, VideoPlayer } from "../../components/video-player/video-player";
 
 import { formatTime } from "../../utils/timeFormatter";
+import { timeoutErrorMessage } from "../../utils/media-errors";
 import { msg } from "@lit/localize";
+
+/** How long a media source may take to become playable before it counts as failed. */
+const LOAD_TIMEOUT_MS = 30000;
 
 
 /**
@@ -48,7 +52,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   protected static get scopedElements() {
     return {
       "sl-range": SlRange,
-      "sl-icon": SlIcon,
       "sl-dialog": SlDialog,
       "sl-button": SlButton,
       "sl-checkbox": SlCheckbox,
@@ -237,6 +240,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   private controlsTimeout: number | null = null;
 
+  private loadTimeout: number | null = null;
+
   /**
    * Called when the element is first connected to the document's DOM.
    * @remarks
@@ -273,6 +278,8 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener("fullscreenchange", this.handleFullscreenChange);
+
+    this.clearLoadTimeout();
 
     if (this.observer) {
       this.observer.disconnect();
@@ -351,12 +358,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   render() {
     return html`
       <div id="widget" class="${this.isFullscreen ? "fullscreen" : null} ${!this.controlsVisible ? "controls-hidden" : null}">
-        <!-- VIDEO INPUT -->
-        ${!this.hasVideo()
+        <!-- VIDEO INPUT / LOADING ERROR / MISSING MEDIA -->
+        ${!this.hasVideo() || this.hadLoadingError
           ? html`
               <video-input-overlay
+                contenteditable=${this.isContentEditable}
                 @setupVideoBase64=${(e: CustomEvent) => this.setupVideoBase64(e.detail.src)}
                 @setupVideoURL=${(e: CustomEvent) => this.setupVideoURL(e.detail.src)}
+                @retryLoad=${() => this.retryLoad()}
+                @chooseDifferentSource=${() => this.chooseDifferentSource()}
+                .hasVideo=${this.hasVideo()}
                 .error=${this.hadLoadingError}
                 .errorMessage=${this.loadingErrorMessage}
               ></video-input-overlay>
@@ -943,7 +954,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    */
   private setupVideoBase64(src: string) {
     this.videoBase64 = src;
-    this.updateContext();
+    this.startLoading();
     this.videoPlayer.loadVideoBase64(src);
   }
 
@@ -953,8 +964,69 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    */
   private setupVideoURL(src: string) {
     this.videoURL = src;
-    this.updateContext();
+    this.startLoading();
     this.videoPlayer.loadVideoURL(src);
+  }
+
+  /**
+   * Resets the loading state before a source is handed to the player and starts the load timeout,
+   * so that a source which never becomes playable ends up in the error view instead of a dead player.
+   */
+  private startLoading() {
+    this.videoLoaded = false;
+    this.hadLoadingError = false;
+    this.loadingErrorMessage = undefined;
+    this.updateContext();
+
+    this.clearLoadTimeout();
+    this.loadTimeout = window.setTimeout(() => {
+      this.loadTimeout = null;
+      if (this.videoLoaded) return;
+      this.handleLoadingError("Media did not become playable in time", timeoutErrorMessage());
+    }, LOAD_TIMEOUT_MS);
+  }
+
+  private clearLoadTimeout() {
+    if (this.loadTimeout !== null) {
+      clearTimeout(this.loadTimeout);
+      this.loadTimeout = null;
+    }
+  }
+
+  /**
+   * Loads the current source again, e.g. after a network error.
+   */
+  private async retryLoad() {
+    const base64 = this.videoBase64;
+    const url = this.videoURL;
+    if (!base64 && !url) return;
+
+    this.clearLoadTimeout();
+    this.hadLoadingError = false;
+    this.loadingErrorMessage = undefined;
+    this.videoLoaded = false;
+    this.updateContext();
+
+    this.videoPlayer.clearVideo();
+    await this.videoPlayer.updateComplete;
+
+    if (base64) {
+      this.setupVideoBase64(base64);
+    } else {
+      this.setupVideoURL(url);
+    }
+  }
+
+  /**
+   * Discards the failed source so the author can pick another one, keeping their interactions and chapters.
+   * The error message stays visible in the video input.
+   */
+  private chooseDifferentSource() {
+    const message = this.loadingErrorMessage;
+    this.clearVideo(false);
+    this.hadLoadingError = true;
+    this.loadingErrorMessage = message;
+    this.updateContext();
   }
 
   private handleVideoPlay() {
@@ -1052,8 +1124,12 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * The Timeout was necessary to ensure that the elements are rendered before the actions are performed.
    */
   private handleCanPlay = () => {
+    this.clearLoadTimeout();
     if (this.videoLoaded) return;
     this.videoLoaded = true;
+    // A player that becomes playable after all (e.g. a slow embed) leaves the error view behind.
+    this.hadLoadingError = false;
+    this.loadingErrorMessage = undefined;
     this.updateContext();
     setTimeout(() => {
       if (this.progressBar) {
@@ -1111,19 +1187,32 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   /**
    * Handles loading errors for the video element.
-   * @param error - The error message or object.
+   * @param error - The technical error, for the console.
+   * @param message - A localized message explaining the error to the user.
    */
   private handleLoadingError(error: string, message?: () => string) {
     console.error("Error loading video:", error);
-    this.clearVideo();
+    this.clearLoadTimeout();
+
+    if (this.hadLoadingError) return;
+
+    this.videoLoaded = false;
     this.hadLoadingError = true;
     this.loadingErrorMessage = message;
+    this.hideAllInteractions();
+
+    try {
+      this.videoPlayer?.pause();
+    } catch { }
+
+    this.updateContext();
   }
 
   /**
    * Clears the current video and resets the video context and player.
    */
   private clearVideo(removeInteractions: boolean = true) {
+    this.clearLoadTimeout();
     this.videoLoaded = false;
     this.videoType = "placeholder";
     this.videoBase64 = "";

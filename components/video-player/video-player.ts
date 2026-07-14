@@ -8,7 +8,13 @@ import { property, query } from "lit/decorators.js";
 import styles from "./video-player.styles";
 import { html } from "lit";
 import { msg } from "@lit/localize";
-import { youtubeErrorMessage, youtubeRegex } from "../../utils/youtube";
+import {
+  mediaErrorMessage,
+	youtubeErrorMessage,
+  spotifyErrorMessage,
+  tiktokErrorMessage,
+  vimeoErrorMessage,
+} from "../../utils/media-errors";
 
 import YouTubeVideoElement from "youtube-video-element";
 import VimeoVideoElement from "vimeo-video-element";
@@ -46,6 +52,9 @@ const VIDEO_EVENTS = [
   "error"
 ];
 
+// Taken from the youtube-video-element source code
+export const youtubeRegex =	/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/|live\/))((\w|-){11})/;
+
 export class VideoPlayer extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })
   accessor videoContext: InteractiveVideoContext;
@@ -69,6 +78,7 @@ export class VideoPlayer extends LitElementWw {
   accessor thumbnailContainerElement: HTMLDivElement;
 
   private youtubeLoadTimer?: number;
+  private vimeoMessageListener?: (e: MessageEvent) => void;
 
   static get scopedElements() {
     return {
@@ -107,13 +117,32 @@ export class VideoPlayer extends LitElementWw {
     }
   }
 
+  /**
+   * Reports a loading error
+   * @param error - Technical description of the error, for the console
+   * @param message - Localized message explaining the error to the user
+   */
+  private failLoad(error: string, message?: () => string) {
+    this.dispatchEvent(
+      new CustomEvent("loadingerror", { detail: { error, message } })
+    );
+  }
+
+  private failMissingElement() {
+    this.failLoad(
+      "Media element not found",
+      () => msg("The media player could not be started. Please try again.")
+    );
+  }
+
   loadVideoBase64(base64: string) {
     // check if base64 is video or audio
     const isVideo = base64.startsWith("data:video");
     const isAudio = base64.startsWith("data:audio");
     if (!isVideo && !isAudio) {
-      this.dispatchEvent(
-        new CustomEvent("loadingerror", { detail: { error: "Invalid base64 string" } })
+      this.failLoad(
+        "Invalid base64 string",
+        () => msg("This file could not be loaded. It is damaged or isn't a video or audio file.")
       );
       return;
     }
@@ -121,16 +150,16 @@ export class VideoPlayer extends LitElementWw {
     this.playerType = isVideo ? PlayerType.HTMLVideo : PlayerType.HTMLAudio;
     this.dispatchControlsVisible(true, true);
     this.performUpdate();
-    if (this.videoElement) {(
-      this.videoElement as YouTubeVideoElement).addEventListener("error", (e) => {
-        this.dispatchEvent(
-          new CustomEvent("loadingerror", { detail: { error: (e as ErrorEvent).message } })
-        );
+    if (this.videoElement) {
+      const videoElement = this.videoElement as HTMLVideoElement;
+      videoElement.addEventListener("error", () => {
+        const code = videoElement.error?.code;
+        this.failLoad(`Media element error #${code}`, mediaErrorMessage(code));
       });
-      this.videoElement.src = base64;
-      this.videoElement.load();
+      videoElement.src = base64;
+      videoElement.load();
     } else {
-      console.warn("Video element not found");
+      this.failMissingElement();
     }
   }
 
@@ -161,13 +190,11 @@ export class VideoPlayer extends LitElementWw {
 
         const fail = (error: string, message: () => string) => {
           clearTimeout(this.youtubeLoadTimer);
-          this.dispatchEvent(
-            new CustomEvent("loadingerror", { detail: { error, message } })
-          );
+          this.failLoad(error, message);
         };
 
         videoElement.addEventListener("error", () => {
-          const code = videoElement.error.code;
+          const code = videoElement.error?.code;
           fail(`YouTube iframe player error #${code}`, youtubeErrorMessage(code));
         });
         videoElement.addEventListener("loadcomplete", () => clearTimeout(this.youtubeLoadTimer), { once: true });
@@ -190,7 +217,7 @@ export class VideoPlayer extends LitElementWw {
             console.warn("Error fetching YouTube video details:", error);
           });
       } else {
-        console.warn("Video element not found");
+        this.failMissingElement();
       }
     }
 
@@ -199,13 +226,9 @@ export class VideoPlayer extends LitElementWw {
       console.log("Loading Spotify URL:", url);
       const spotifyType = url.match(spotifyRegex)[1].toLowerCase();
       if (spotifyType === "playlist" || spotifyType === "album" || spotifyType === "artist" || spotifyType === "show" || spotifyType === "user") {
-        this.dispatchEvent(
-          new CustomEvent("loadingerror", {
-            detail: {
-              error: `Unsupported Spotify source type: ${spotifyType}`,
-              message: () => msg("Spotify albums and playlists aren't supported. Please use a link to a single track or episode."),
-            },
-          })
+        this.failLoad(
+          `Unsupported Spotify source type: ${spotifyType}`,
+          () => msg("Spotify albums and playlists aren't supported. Please use a link to a single track or episode.")
         );
         return;
       }
@@ -214,10 +237,8 @@ export class VideoPlayer extends LitElementWw {
       this.dispatchControlsVisible(false, false);
       this.performUpdate();
       if (this.videoElement) {
-        (this.videoElement as SpotifyAudioElement).addEventListener("error", (e) => {
-          this.dispatchEvent(
-            new CustomEvent("loadingerror", { detail: { error: (e as ErrorEvent).message } })
-          );
+        (this.videoElement as SpotifyAudioElement).addEventListener("error", () => {
+          this.failLoad("Spotify player error", spotifyErrorMessage());
         });
         (this.videoElement as SpotifyAudioElement).src = url;
 
@@ -249,7 +270,7 @@ export class VideoPlayer extends LitElementWw {
             console.warn("Error fetching Spotify video details:", error);
           });
       } else {
-        console.warn("Video element not found");
+        this.failMissingElement();
       }
     } 
 
@@ -260,15 +281,39 @@ export class VideoPlayer extends LitElementWw {
       this.dispatchControlsVisible(true, true);
       this.performUpdate();
       if (this.videoElement) {
-        (this.videoElement as VimeoVideoElement).addEventListener("error", (e) => {
-          this.dispatchEvent(
-            new CustomEvent("loadingerror", { detail: { error: (e as ErrorEvent).message } })
-          );
+        const videoElement = this.videoElement as VimeoVideoElement;
+        this.clearVimeoMessageListener();
+
+        const fail = (error: string) => {
+          this.clearVimeoMessageListener();
+          this.failLoad(error, vimeoErrorMessage());
+        };
+
+        this.vimeoMessageListener = (e: MessageEvent) => {
+          if (e.origin !== "https://player.vimeo.com") return;
+          let data: any;
+          try {
+            data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+          } catch {
+            return;
+          }
+          if (data?.event === "error") {
+            fail(`Vimeo player error: ${data.data?.name ?? data.data?.message ?? "unknown"}`);
+          }
+        };
+        window.addEventListener("message", this.vimeoMessageListener);
+
+        videoElement.addEventListener("error", () => {
+          fail("Vimeo player error");
         });
-        (this.videoElement as VimeoVideoElement).config = {
+        videoElement.addEventListener("loadcomplete", () => {
+          this.clearVimeoMessageListener();
+        }, { once: true });
+
+        videoElement.config = {
           dnt: true,
         };
-        (this.videoElement as VimeoVideoElement).src = url;
+        videoElement.src = url;
 
         fetch(vimeoOEmbedURL + encodeURIComponent(url))
           .then(response => response.json())
@@ -284,7 +329,7 @@ export class VideoPlayer extends LitElementWw {
             console.warn("Error fetching Vimeo video details:", error);
           });
       } else {
-        console.warn("Video element not found");
+        this.failMissingElement();
       }
     }
 
@@ -295,10 +340,8 @@ export class VideoPlayer extends LitElementWw {
       this.dispatchControlsVisible(false, false);
       this.performUpdate();
       if (this.videoElement) {
-        (this.videoElement as TikTokVideoElement).addEventListener("error", (e) => {
-          this.dispatchEvent(
-            new CustomEvent("loadingerror", { detail: { error: (e as ErrorEvent).message } })
-          );
+        (this.videoElement as TikTokVideoElement).addEventListener("error", () => {
+          this.failLoad("TikTok player error", tiktokErrorMessage());
         });
         (this.videoElement as TikTokVideoElement).config = {
           fullscreen_button: false,
@@ -326,7 +369,7 @@ export class VideoPlayer extends LitElementWw {
             console.warn("Error fetching TikTok video details:", error);
           });
       } else {
-        console.warn("Video element not found");
+        this.failMissingElement();
       }
     }
     
@@ -336,40 +379,46 @@ export class VideoPlayer extends LitElementWw {
 
       fetch(url, { method: 'HEAD' })
         .then(response => {
-          const contentType = response.headers.get("Content-Type");
-          if (contentType) {
-            if (contentType.startsWith("video/")) {
-              this.playerType = PlayerType.HTMLVideo;
-            } else if (contentType.startsWith("audio/")) {
-              this.playerType = PlayerType.HTMLAudio;
-              this.dispatchControlsVisible(true, true);
-              this.performUpdate();
-            } else {
-              this.dispatchEvent(
-                new CustomEvent("loadingerror", { detail: { error: "URL is not a valid video or audio file" } })
-              );
-              return;
-            }
-            
-            this.dispatchControlsVisible(true, true);
-            this.performUpdate();
-            if (this.videoElement) {
-              (this.videoElement as HTMLVideoElement).addEventListener("error", (e) => {
-                this.dispatchEvent(
-                  new CustomEvent("loadingerror", { detail: { error: (e as ErrorEvent).message } })
-                );
-              });
-              this.videoElement.src = url;
-              this.videoElement.load();
-            } else {
-              console.warn("Video element not found");
-            }
+          if (!response.ok) {
+            this.failLoad(
+              `Media URL responded with status ${response.status}`,
+              () => msg("The media could not be loaded. The link may be broken or the file may no longer exist.")
+            );
+            return;
+          }
+
+          const contentType = response.headers.get("Content-Type") ?? "";
+          if (contentType.startsWith("video/")) {
+            this.playerType = PlayerType.HTMLVideo;
+          } else if (contentType.startsWith("audio/")) {
+            this.playerType = PlayerType.HTMLAudio;
+          } else {
+            this.failLoad(
+              "URL is not a valid video or audio file",
+              () => msg("This link doesn't point to a video or audio file. Please check the link, or use a link to a supported service.")
+            );
+            return;
+          }
+          
+          this.dispatchControlsVisible(true, true);
+          this.performUpdate();
+          if (this.videoElement) {
+            const videoElement = this.videoElement as HTMLVideoElement;
+            videoElement.addEventListener("error", () => {
+              const code = videoElement.error?.code;
+              this.failLoad(`Media element error #${code}`, mediaErrorMessage(code));
+            });
+            videoElement.src = url;
+            videoElement.load();
+          } else {
+            this.failMissingElement();
           }
         })
         .catch(error => {
           console.warn("Error fetching media URL:", error);
-          this.dispatchEvent(
-            new CustomEvent("loadingerror", { detail: { error: "Error fetching media URL" } })
+          this.failLoad(
+            "Error fetching media URL",
+            () => msg("The media could not be loaded. Please check the link and your internet connection, then try again.")
           );
         });
     }
@@ -377,7 +426,15 @@ export class VideoPlayer extends LitElementWw {
 
   clearVideo() {
     clearTimeout(this.youtubeLoadTimer);
+    this.clearVimeoMessageListener();
     this.playerType = PlayerType.Placeholder;
+  }
+
+  private clearVimeoMessageListener() {
+    if (this.vimeoMessageListener) {
+      window.removeEventListener("message", this.vimeoMessageListener);
+      this.vimeoMessageListener = undefined;
+    }
   }
 
   get aspectRatio() {
@@ -516,6 +573,10 @@ export class VideoPlayer extends LitElementWw {
           this.currentTime = 0;
           this.muted = false;
         }, { once: true } );
+      })
+      .catch((error: unknown) => {
+        console.warn("Error loading TikTok video:", error);
+        this.failLoad("TikTok player did not initialise", tiktokErrorMessage());
       });
     }
   }
