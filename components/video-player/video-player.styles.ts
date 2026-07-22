@@ -31,6 +31,18 @@ export default css`
     background-color: #2c2c2c;
   }
 
+  .buffering-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-color: rgba(44, 44, 44, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    z-index: 10;
+  }
+
   #thumbnail-container {
     position: relative;
     display: flex;

@@ -4,7 +4,7 @@ import {
   videoContext,
 } from "../../utils/interactive-video-context";
 import { consume } from "@lit/context";
-import { property, query } from "lit/decorators.js";
+import { property, query, state } from "lit/decorators.js";
 import styles from "./video-player.styles";
 import { html } from "lit";
 import { msg } from "@lit/localize";
@@ -21,6 +21,7 @@ import VimeoVideoElement from "vimeo-video-element";
 import TikTokVideoElement from "tiktok-video-element";
 import SpotifyAudioElement from "spotify-audio-element";
 import { WaveSurferAudioElement } from "../wavesurfer-audio-element/wavesurfer-audio-element";
+import { SlSpinner } from "@shoelace-style/shoelace";
 
 export enum PlayerType {
   Placeholder,
@@ -52,6 +53,19 @@ const VIDEO_EVENTS = [
   "error"
 ];
 
+const BUFFERING_START_EVENTS = ["waiting", "stalled"];
+const BUFFERING_END_EVENTS = [
+  "playing",
+  "play",
+  "pause",
+  "canplay",
+  "canplaythrough",
+  "seeked",
+  "ended",
+  "error",
+];
+const BUFFERING_DELAY = 300;
+
 // Taken from the youtube-video-element source code
 export const youtubeRegex =	/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/|live\/))((\w|-){11})/;
 
@@ -77,8 +91,12 @@ export class VideoPlayer extends LitElementWw {
   @query("#thumbnail-container")
   accessor thumbnailContainerElement: HTMLDivElement;
 
+  @state()
+  private accessor buffering: boolean = false;
+
   private youtubeLoadTimer?: number;
   private vimeoMessageListener?: (e: MessageEvent) => void;
+  private bufferingTimer?: number;
 
   static get scopedElements() {
     return {
@@ -87,6 +105,7 @@ export class VideoPlayer extends LitElementWw {
       "tiktok-video": TikTokVideoElement,
       "spotify-audio": SpotifyAudioElement,
       "wavesurfer-audio": WaveSurferAudioElement,
+      "sl-spinner": SlSpinner,
     };
   }
 
@@ -94,6 +113,10 @@ export class VideoPlayer extends LitElementWw {
   static styles = [styles];
 
   render() {
+    return html`${this.renderMedia()}${this.buffering ? html`<div class="buffering-overlay"><sl-spinner></sl-spinner></div>` : null}`;
+  }
+
+  private renderMedia() {
     if (this.playerType === PlayerType.Placeholder) {
       return html`<div class="placeholder"></div>`;
     }
@@ -123,9 +146,25 @@ export class VideoPlayer extends LitElementWw {
    * @param message - Localized message explaining the error to the user
    */
   private failLoad(error: string, message?: () => string) {
+    this.setBuffering(false);
     this.dispatchEvent(
       new CustomEvent("loadingerror", { detail: { error, message } })
     );
+  }
+
+  private setBuffering(value: boolean) {
+    if (value) {
+      if (this.paused) return;
+      if (this.buffering || this.bufferingTimer !== undefined) return;
+      this.bufferingTimer = window.setTimeout(() => {
+        this.bufferingTimer = undefined;
+        this.buffering = true;
+      }, BUFFERING_DELAY);
+    } else {
+      clearTimeout(this.bufferingTimer);
+      this.bufferingTimer = undefined;
+      this.buffering = false;
+    }
   }
 
   private failMissingElement() {
@@ -427,7 +466,15 @@ export class VideoPlayer extends LitElementWw {
   clearVideo() {
     clearTimeout(this.youtubeLoadTimer);
     this.clearVimeoMessageListener();
+    this.setBuffering(false);
     this.playerType = PlayerType.Placeholder;
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    clearTimeout(this.youtubeLoadTimer);
+    this.setBuffering(false);
+    this.clearVimeoMessageListener();
   }
 
   private clearVimeoMessageListener() {
@@ -527,6 +574,14 @@ export class VideoPlayer extends LitElementWw {
 
   private addVideoEventListeners() {
     if (!this.videoElement) return;
+
+    this.setBuffering(false);
+    BUFFERING_START_EVENTS.forEach((eventName) => {
+      this.videoElement.addEventListener(eventName, () => this.setBuffering(true));
+    });
+    BUFFERING_END_EVENTS.forEach((eventName) => {
+      this.videoElement.addEventListener(eventName, () => this.setBuffering(false));
+    });
 
     VIDEO_EVENTS.forEach((eventName) => {
       this.videoElement.addEventListener(eventName, () => {

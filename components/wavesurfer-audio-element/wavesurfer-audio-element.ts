@@ -11,6 +11,8 @@ import {
 import { SlSpinner } from "@shoelace-style/shoelace";
 import { msg } from "@lit/localize";
 
+const PASSTHROUGH_EVENTS = ["waiting", "stalled", "playing", "seeked"];
+
 export class WaveSurferAudioElement extends LitElementWw {
 	@consume({ context: videoContext, subscribe: true })
 	accessor videoContext: InteractiveVideoContext;
@@ -26,6 +28,12 @@ export class WaveSurferAudioElement extends LitElementWw {
 
 	@query("#wavesurfer")
 	accessor waveSurferContainer!: HTMLDivElement;
+
+	private mediaElement?: HTMLMediaElement;
+
+	private forwardMediaEvent = (e: Event) => {
+		this.dispatchEvent(new Event(e.type, { bubbles: true, composed: true }));
+	};
 
 	//import CSS
 	static styles = [styles];
@@ -59,6 +67,12 @@ export class WaveSurferAudioElement extends LitElementWw {
 					? this.videoContext.waveformData
 					: undefined,
 			});
+
+			this.mediaElement = this.waveSurfer.getMediaElement();
+			PASSTHROUGH_EVENTS.forEach((eventName) => {
+				this.mediaElement.addEventListener(eventName, this.forwardMediaEvent);
+			});
+
 			if (!hasWaveformData) {
 				this.waveSurfer.once("decode", () => {
 					const peaks =
@@ -128,6 +142,13 @@ export class WaveSurferAudioElement extends LitElementWw {
 	}
 
 	disconnectedCallback(): void {
+		super.disconnectedCallback();
+		if (this.mediaElement) {
+			PASSTHROUGH_EVENTS.forEach((eventName) => {
+				this.mediaElement.removeEventListener(eventName, this.forwardMediaEvent);
+			});
+			this.mediaElement = undefined;
+		}
 		if (this.waveSurfer) {
 			this.waveSurfer.unAll();
 			this.waveSurfer.destroy();
