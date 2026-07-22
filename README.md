@@ -1,5 +1,5 @@
-# Interactive Video (`@webwriter/interactive-video@3.0.2`)
-[License: MIT](LICENSE) | Version: 3.0.2
+# Interactive Video (`@webwriter/interactive-video@3.0.3`)
+[License: MIT](LICENSE) | Version: 3.0.3
 
 Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).
 
@@ -148,4 +148,4 @@ npm install @webwriter/interactive-video
 
 
 ---
-*Generated with @webwriter/build@1.9.0*
+*Generated with @webwriter/build@1.9.1*

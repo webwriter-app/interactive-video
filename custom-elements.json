@@ -295,6 +295,15 @@
             },
             {
               "kind": "field",
+              "name": "loadingErrorMessage",
+              "type": {
+                "text": "(() => string) | undefined"
+              },
+              "privacy": "private",
+              "default": "undefined"
+            },
+            {
+              "kind": "field",
               "name": "videoContainerHeight",
               "type": {
                 "text": "number"
@@ -406,6 +415,15 @@
             {
               "kind": "field",
               "name": "controlsTimeout",
+              "type": {
+                "text": "number | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "loadTimeout",
               "type": {
                 "text": "number | null"
               },
@@ -565,7 +583,7 @@
                   "name": "e"
                 }
               ],
-              "description": "Handles the change event for the volume slider and sets the video volume accordingly.\r\nUses a quadratic scale for more intuitive volume control."
+              "description": "Handles the change event for the volume slider and sets the video volume accordingly."
             },
             {
               "kind": "method",
@@ -737,6 +755,29 @@
             },
             {
               "kind": "method",
+              "name": "startLoading",
+              "privacy": "private",
+              "description": "Resets the loading state before a source is handed to the player and starts the load timeout,\r\nso that a source which never becomes playable ends up in the error view instead of a dead player."
+            },
+            {
+              "kind": "method",
+              "name": "clearLoadTimeout",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "retryLoad",
+              "privacy": "private",
+              "description": "Loads the current source again, e.g. after a network error."
+            },
+            {
+              "kind": "method",
+              "name": "chooseDifferentSource",
+              "privacy": "private",
+              "description": "Discards the failed source so the author can pick another one, keeping their interactions and chapters.\r\nThe error message stays visible in the video input."
+            },
+            {
+              "kind": "method",
               "name": "handleVideoPlay",
               "privacy": "private"
             },
@@ -820,7 +861,15 @@
                   "type": {
                     "text": "string"
                   },
-                  "description": "The error message or object."
+                  "description": "The technical error, for the console."
+                },
+                {
+                  "name": "message",
+                  "optional": true,
+                  "type": {
+                    "text": "() => string"
+                  },
+                  "description": "A localized message explaining the error to the user."
                 }
               ],
               "description": "Handles loading errors for the video element."
