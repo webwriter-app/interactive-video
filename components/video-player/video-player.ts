@@ -391,11 +391,18 @@ export class VideoPlayer extends LitElementWw {
           music_info: false,
           description: false,
           rel: false,
-        };
+          autoplay: true,
+          muted: true,
+        } as TikTokVideoElement["config"];
         (this.videoElement as TikTokVideoElement).src = url;
 
         fetch(tiktokOEmbedURL + encodeURIComponent(url))
-          .then(response => response.json())
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`oEmbed responded with status ${response.status}`);
+            }
+            return response.json();
+          })
           .then((data) => {
             this.dispatchEvent(
               new CustomEvent("setvideodetails", { 
@@ -403,9 +410,11 @@ export class VideoPlayer extends LitElementWw {
                 detail: { title: data.title, author: data.author_name }
               })
             );
+            this.dispatchEvent(new Event("canplay", { bubbles: true, composed: true }));
           })
           .catch(error => {
             console.warn("Error fetching TikTok video details:", error);
+            this.failLoad(`TikTok oEmbed request failed: ${error}`, tiktokErrorMessage());
           });
       } else {
         this.failMissingElement();
