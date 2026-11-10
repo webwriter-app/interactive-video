@@ -1,3 +1,4 @@
+import { effectiveLanguage, localizeElement, nativeLanguageAttributes } from "../../localization/localizer";
 import { html, css, LitElement, PropertyValues } from "lit";
 
 import { LitElementWw } from "@webwriter/lit";
@@ -40,9 +41,13 @@ import brandSpeedtest from "@tabler/icons/outline/brand-speedtest.svg";
 import { formatTime, parseTime } from "../../utils/timeFormatter";
 
 import styles from "./video-controls-bar.styles";
-import { msg } from "@lit/localize";
 
 export class VideoControlsBar extends LitElementWw {
+  static override get observedAttributes() { return nativeLanguageAttributes(this, super.observedAttributes); }
+
+  override get lang(): string { return effectiveLanguage(this); }
+  override set lang(value: string) { this.setAttribute("lang", value); }
+  private readonly msg = localizeElement(this);
   @consume({ context: videoContext, subscribe: true })
   accessor videoContext: InteractiveVideoContext;
 
@@ -217,7 +222,7 @@ export class VideoControlsBar extends LitElementWw {
               src=${add}
               style="height: 20px; width: 20px;"
             ></sl-icon>
-            ${this.narrow ? null : msg("Add Popup")}
+            ${this.narrow ? null : this.msg("Add Popup")}
           </sl-button>` : null}
           ${!this.volumeHidden ? html`
             <div

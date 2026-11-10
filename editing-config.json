@@ -31,7 +31,73 @@
       "id": "(WIP) Tingkatkan pembelajaran dengan menambahkan konten interaktif dalam popup ke video untuk pengalaman interaktif yang menarik.",
       "zh-hans": "(WIP)通过在视频中添加弹出式互动内容，增强学习效果，带来引人入胜的互动体验。",
       "zh-hant": "(WIP)透過在影片中加入彈出式互動內容，增強學習的吸引力與互動體驗。",
-      "uk": "(WIP) Покращуйте навчання, додаючи до відео інтерактивний контент у спливаючих вікнах, щоб зробити його більш цікавим та інтерактивним."
+      "uk": "(WIP) Покращуйте навчання, додаючи до відео інтерактивний контент у спливаючих вікнах, щоб зробити його більш цікавим та інтерактивним.",
+      "_": "Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).",
+      "en": "Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).",
+      "en-US": "Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).",
+      "en-GB": "Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).",
+      "en-CA": "Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).",
+      "en-AU": "Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).",
+      "en-IN": "Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).",
+      "zh": "(WIP)通过在视频中添加弹出式互动内容，增强学习效果，带来引人入胜的互动体验。",
+      "zh-Hans": "(WIP)通过在视频中添加弹出式互动内容，增强学习效果，带来引人入胜的互动体验。",
+      "zh-Hant": "(WIP)透過在影片中加入彈出式互動內容，增強學習的吸引力與互動體驗。",
+      "pt": "(WIP) Melhorar a aprendizagem adicionando conteúdo interativo em popups aos vídeos para uma experiência envolvente e interactiva.",
+      "no": "(WIP) Forbedre læringen ved å legge til interaktivt innhold i popup-vinduer til videoer for en engasjerende, interaktiv opplevelse."
+    },
+    "label": {
+      "_": "Interactive Video",
+      "en": "Interactive Video",
+      "en-US": "Interactive Video",
+      "en-GB": "Interactive Video",
+      "en-CA": "Interactive Video",
+      "en-AU": "Interactive Video",
+      "en-IN": "Interactive Video",
+      "fr": "Vidéo interactive",
+      "de": "Interaktives Video",
+      "es": "Vídeo interactivo"
+    }
+  },
+  "./widgets/webwriter-interactive-video": {
+    "label": {
+      "_": "Interactive Video",
+      "en": "Interactive Video",
+      "en-US": "Interactive Video",
+      "en-GB": "Interactive Video",
+      "en-CA": "Interactive Video",
+      "en-AU": "Interactive Video",
+      "en-IN": "Interactive Video",
+      "fr": "Vidéo interactive",
+      "de": "Interaktives Video",
+      "es": "Vídeo interactivo"
+    }
+  },
+  "./widgets/webwriter-video-interaction": {
+    "label": {
+      "_": "Video Interaction",
+      "en": "Video Interaction",
+      "en-US": "Video Interaction",
+      "en-GB": "Video Interaction",
+      "en-CA": "Video Interaction",
+      "en-AU": "Video Interaction",
+      "en-IN": "Video Interaction",
+      "fr": "Interaction vidéo",
+      "de": "Videointeraktion",
+      "es": "Interacción con el vídeo"
+    }
+  },
+  "./snippets/Mondlandung": {
+    "label": {
+      "_": "Mondlandung",
+      "en": "Mondlandung",
+      "en-US": "Mondlandung",
+      "en-GB": "Mondlandung",
+      "en-CA": "Mondlandung",
+      "en-AU": "Mondlandung",
+      "en-IN": "Mondlandung",
+      "fr": "Alunissage",
+      "de": "Mondlandung",
+      "es": "Alunizaje"
     }
   }
 }

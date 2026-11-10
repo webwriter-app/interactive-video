@@ -31,7 +31,6 @@ import bookmark from "@tabler/icons/filled/bookmark.svg";
 
 //CSS
 import styles from "./interactions-progress-bar.styles";
-import { msg } from "@lit/localize";
 
 export class InteractionsProgressBar extends LitElementWw {
   @consume({ context: videoContext, subscribe: true })

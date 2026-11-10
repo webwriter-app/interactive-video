@@ -1,10 +1,11 @@
-import { msg } from "@lit/localize";
+import { sourceMsg } from "../localization/localizer";
+import type { MsgFn } from "@lit/localize";
 
 /**
  * Maps the error code of an `HTMLMediaElement` to a message explaining the error to the author.
  * @param code - The `MediaError` code of the media element, if any.
  */
-export function mediaErrorMessage(code?: number): () => string {
+export function mediaErrorMessage(code?: number, msg: MsgFn = sourceMsg): () => string {
   switch (code) {
     case 1: // MEDIA_ERR_ABORTED
       return () => msg("Loading the media was aborted. Please try again.");
@@ -25,7 +26,7 @@ export function mediaErrorMessage(code?: number): () => string {
  * Maps the error code of a YouTube iframe to a message explaining the error to the author.
  * @param code - The error code returned by the YouTube iframe API, if any.
  */
-export function youtubeErrorMessage(code?: number): () => string {
+export function youtubeErrorMessage(code?: number, msg: MsgFn = sourceMsg): () => string {
   switch (code) {
     case 2:
       return () => msg("This YouTube link is invalid. Please check the link and try again.");
@@ -44,7 +45,7 @@ export function youtubeErrorMessage(code?: number): () => string {
 /**
  * Message shown when an embedded Vimeo video fails to load.
  */
-export function vimeoErrorMessage(): () => string {
+export function vimeoErrorMessage(msg: MsgFn = sourceMsg): () => string {
   return () =>
     msg("The Vimeo video could not be loaded. It may not exist, may be private, or may not allow being embedded.");
 }
@@ -52,7 +53,7 @@ export function vimeoErrorMessage(): () => string {
 /**
  * Message shown when an embedded TikTok video fails to load.
  */
-export function tiktokErrorMessage(): () => string {
+export function tiktokErrorMessage(msg: MsgFn = sourceMsg): () => string {
   return () =>
     msg("The TikTok video could not be loaded. It may not exist, may be private, or may not allow being embedded.");
 }
@@ -60,7 +61,7 @@ export function tiktokErrorMessage(): () => string {
 /**
  * Message shown when an embedded Spotify track fails to load.
  */
-export function spotifyErrorMessage(): () => string {
+export function spotifyErrorMessage(msg: MsgFn = sourceMsg): () => string {
   return () =>
     msg("The Spotify track could not be loaded. It may not exist or may not be available in your region.");
 }
@@ -68,7 +69,7 @@ export function spotifyErrorMessage(): () => string {
 /**
  * Message shown when a media source takes too long to become playable.
  */
-export function timeoutErrorMessage(): () => string {
+export function timeoutErrorMessage(msg: MsgFn = sourceMsg): () => string {
   return () =>
     msg("The media took too long to load. Please check the link and your internet connection, then try again.");
 }

@@ -1,10 +1,9 @@
+import type { MsgFn } from "@lit/localize";
+import { effectiveLanguage, localizeElement, nativeLanguageAttributes, sourceMsg } from "../../localization/localizer";
 import { html, css, LitElement, PropertyValues } from "lit";
 import { LitElementWw } from "@webwriter/lit";
 import { customElement, property, query } from "lit/decorators.js";
 
-// @ts-ignore
-import LOCALIZE from "../../localization/generated";
-import { msg } from "@lit/localize";
 
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import { SlIcon } from "@shoelace-style/shoelace";
@@ -21,40 +20,57 @@ import gripHorizontal from "@tabler/icons/outline/grip-horizontal.svg";
  * It extends `LitElementWw` and provides a slot for content insertion.
  */
 export class WwVideoInteraction extends LitElementWw {
-  readonly options = WwVideoInteraction.options;
-  static options: Record<string, any> = {
-    startTime: { type: "number", control: "duration", min: 0, step: 0.1, group: "timing", label: { _: "Start time" } },
-    endTime: { type: "number", control: "duration", min: 0, step: 0.1, group: "timing", label: { _: "End time" } },
-    noInitialPause: { type: "boolean", group: "timing", label: { _: "Do not pause when shown" } },
-    posX: { type: "number", group: "position", label: { _: "X position (%)" }, min: 0, max: 100, step: 0.1, unit: "%" },
-    posY: { type: "number", group: "position", label: { _: "Y position (%)" }, min: 0, max: 100, step: 0.1, unit: "%" },
-    width: { type: "number", group: "position", label: { _: "Width" }, min: 10, step: 1, unit: "px" },
-    height: { type: "number", group: "position", label: { _: "Height" }, min: 10, step: 1, unit: "px" },
-    backgroundColor: { type: "color", group: "appearance", label: { _: "Overlay color" } },
-  };
+  static override get observedAttributes() { return nativeLanguageAttributes(this, super.observedAttributes); }
 
-  static optionGroups: Record<string, any> = {
-    timing: { label: { _: "Interaction timing" }, collapsible: true, advanced: false },
-    position: { label: { _: "Position and size" }, collapsible: true, advanced: true },
-    appearance: { label: { _: "Appearance" }, collapsible: true, advanced: true },
-  };
+  override get lang(): string { return effectiveLanguage(this); }
+  override set lang(value: string) { this.setAttribute("lang", value); }
+  public readonly msg = localizeElement(this, true);
+  readonly options = WwVideoInteraction.buildOptions(this.msg);
+  static get options(): Record<string, any> { return this.buildOptions(sourceMsg); }
 
-  static actions: Record<string, any> = {
-    deleteInteraction: {
-      label: { _: "Delete interaction" },
-      group: "timing",
-      icon: "Delete",
-      intent: "danger",
-      confirm: { _: "Delete this interaction?" },
-    },
-  };
-  readonly actions = WwVideoInteraction.actions;
+  private static buildOptions(msg: MsgFn): Record<string, any> {
+    return {
+      startTime: { type: "number", control: "duration", min: 0, step: 0.1, group: "timing", label: { get _() { return msg("Start time"); } } },
+      endTime: { type: "number", control: "duration", min: 0, step: 0.1, group: "timing", label: { get _() { return msg("End time"); } } },
+      noInitialPause: { type: "boolean", group: "timing", label: { get _() { return msg("Do not pause when shown"); } } },
+      posX: { type: "number", group: "position", label: { get _() { return msg("X position (%)"); } }, min: 0, max: 100, step: 0.1, unit: "%" },
+      posY: { type: "number", group: "position", label: { get _() { return msg("Y position (%)"); } }, min: 0, max: 100, step: 0.1, unit: "%" },
+      width: { type: "number", group: "position", label: { get _() { return msg("Width"); } }, min: 10, step: 1, unit: "px" },
+      height: { type: "number", group: "position", label: { get _() { return msg("Height"); } }, min: 10, step: 1, unit: "px" },
+      backgroundColor: { type: "color", group: "appearance", label: { get _() { return msg("Overlay color"); } } },
+    };
+  }
+
+  readonly optionGroups = WwVideoInteraction.buildOptionGroups(this.msg);
+
+  static get optionGroups(): Record<string, any> { return this.buildOptionGroups(sourceMsg); }
+
+  private static buildOptionGroups(msg: MsgFn) {
+    return {
+      timing: { label: { get _() { return msg("Interaction timing"); } }, collapsible: true, advanced: false },
+      position: { label: { get _() { return msg("Position and size"); } }, collapsible: true, advanced: true },
+      appearance: { label: { get _() { return msg("Appearance"); } }, collapsible: true, advanced: true },
+    };
+  }
+
+  static get actions(): Record<string, any> { return this.buildActions(sourceMsg); }
+
+  private static buildActions(msg: MsgFn): Record<string, any> {
+    return {
+      deleteInteraction: {
+        label: { get _() { return msg("Delete interaction"); } },
+        group: "timing",
+        icon: "Delete",
+        intent: "danger",
+        confirm: { get _() { return msg("Delete this interaction?"); } },
+      },
+    };
+  }
+  readonly actions = WwVideoInteraction.buildActions(this.msg);
   /**
    * The styles for the webwriter-interactive-video component.
    */
   static styles = [styles];
-
-  protected localize = LOCALIZE;
 
   /** The tab index of the component. */
   @property({ type: Number, attribute: true, reflect: true })
@@ -202,7 +218,7 @@ export class WwVideoInteraction extends LitElementWw {
 
     if (assignedElements.length == 0) {
       const par = document.createElement("p");
-      par.textContent = msg("Add something here...");
+      par.textContent = this.msg("Add something here...");
       this.appendChild(par);
     }
   }
@@ -275,7 +291,7 @@ export class WwVideoInteraction extends LitElementWw {
           const paragraphs = this.querySelectorAll("p");
           if (paragraphs.length === 0) {
             const par = document.createElement("p");
-            par.textContent = msg("Add something here...");
+            par.textContent = this.msg("Add something here...");
             this.appendChild(par);
           }
         }

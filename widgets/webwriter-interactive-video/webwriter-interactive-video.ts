@@ -1,10 +1,10 @@
+import type { MsgFn } from "@lit/localize";
+import { effectiveLanguage, localizeElement, nativeLanguageAttributes, sourceMsg } from "../../localization/localizer";
 import { html, PropertyValues } from "lit";
 import { LitElementWw } from "@webwriter/lit";
 
 import { customElement, property, query, queryAssignedElements, state } from "lit/decorators.js";
 
-// @ts-ignore
-import LOCALIZE from "../../localization/generated";
 
 // @ts-ignore
 import "@shoelace-style/shoelace/dist/themes/light.css";
@@ -32,7 +32,6 @@ import { PlayerType, VideoPlayer } from "../../components/video-player/video-pla
 
 import { formatTime } from "../../utils/timeFormatter";
 import { timeoutErrorMessage } from "../../utils/media-errors";
-import { msg } from "@lit/localize";
 import { readData, writeData } from "./data";
 
 /** How long a media source may take to become playable before it counts as failed. */
@@ -44,34 +43,53 @@ const LOAD_TIMEOUT_MS = 30000;
  * This class extends the `LitElementWw` class.
  */
 export class WebwriterInteractiveVideo extends LitElementWw {
+  static override get observedAttributes() { return nativeLanguageAttributes(this, super.observedAttributes); }
+
+  override get lang(): string { return effectiveLanguage(this); }
+  override set lang(value: string) { this.setAttribute("lang", value); }
+  public readonly msg = localizeElement(this, true);
   static dataType = "application/json";
-  readonly options = WebwriterInteractiveVideo.options;
-  readonly actions = WebwriterInteractiveVideo.actions;
-  static options: Record<string, any> = {
-    "hide-interactions": { type: "boolean", group: "playback", label: { _: "Hide interactions" } },
-    "hide-chapters": { type: "boolean", group: "playback", label: { _: "Hide chapters" } },
-    "disable-playback-rate-change": { type: "boolean", group: "playback", label: { _: "Disable playback rate changes" } },
-  };
+  readonly options = WebwriterInteractiveVideo.buildOptions(this.msg);
+  readonly actions = WebwriterInteractiveVideo.buildActions(this.msg);
+  static get options(): Record<string, any> { return this.buildOptions(sourceMsg); }
 
-  static actions: Record<string, any> = {
-    importMedia: {
-      label: { _: "Import media file" },
-      group: "playback",
-      icon: "Upload",
-      input: { type: "file", accept: "video/*,audio/*", multiple: false },
-    },
-    removeMedia: {
-      label: { _: "Remove media" },
-      group: "playback",
-      icon: "Delete",
-      intent: "danger",
-      confirm: { _: "Remove the current media and keep its interactions and chapters?" },
-    },
-  };
+  private static buildOptions(msg: MsgFn): Record<string, any> {
+    return {
+      "hide-interactions": { type: "boolean", group: "playback", label: { get _() { return msg("Hide interactions"); } } },
+      "hide-chapters": { type: "boolean", group: "playback", label: { get _() { return msg("Hide chapters"); } } },
+      "disable-playback-rate-change": { type: "boolean", group: "playback", label: { get _() { return msg("Disable playback rate changes"); } } },
+    };
+  }
 
-  static optionGroups: Record<string, any> = {
-    playback: { label: { _: "Playback" }, collapsible: true, advanced: false },
-  };
+  static get actions(): Record<string, any> { return this.buildActions(sourceMsg); }
+
+  private static buildActions(msg: MsgFn): Record<string, any> {
+    return {
+      importMedia: {
+        label: { get _() { return msg("Import media file"); } },
+        group: "playback",
+        icon: "Upload",
+        input: { type: "file", accept: "video/*,audio/*", multiple: false },
+      },
+      removeMedia: {
+        label: { get _() { return msg("Remove media"); } },
+        group: "playback",
+        icon: "Delete",
+        intent: "danger",
+        confirm: { get _() { return msg("Remove the current media and keep its interactions and chapters?"); } },
+      },
+    };
+  }
+
+  readonly optionGroups = WebwriterInteractiveVideo.buildOptionGroups(this.msg);
+
+  static get optionGroups(): Record<string, any> { return this.buildOptionGroups(sourceMsg); }
+
+  private static buildOptionGroups(msg: MsgFn) {
+    return {
+      playback: { label: { get _() { return msg("Playback"); } }, collapsible: true, advanced: false },
+    };
+  }
 
   async importMedia(files: File[]): Promise<void> {
     const file = files[0];
@@ -118,8 +136,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * The styles for the webwriter-interactive-video component.
    */
   static styles = [styles];
-
-  protected localize = LOCALIZE;
 
   /** The context for the interactive video component, containing all widget data in a JSON object. */
   @provide({
@@ -527,16 +543,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           </div>
           <!-- CONFIRM INTERACTION DELETE DIALOG -->
           <div id="confirm-delete-dialog">
-            <sl-dialog label=${msg("Remove media?")} id="remove-video-dialog">
-              <p>${this.isAudio() ? msg("Are you sure you want to remove the current audio?") : msg("Are you sure you want to remove the current video?")}</p>
-              <sl-checkbox id="remove-interactions-checkbox">${msg("Also remove all interactions and chapters")}</sl-checkbox>
+            <sl-dialog label=${this.msg("Remove media?")} id="remove-video-dialog">
+              <p>${this.isAudio() ? this.msg("Are you sure you want to remove the current audio?") : this.msg("Are you sure you want to remove the current video?")}</p>
+              <sl-checkbox id="remove-interactions-checkbox">${this.msg("Also remove all interactions and chapters")}</sl-checkbox>
               <sl-button slot="footer" variant="primary" @click=${() => {
                 this.clearVideo(this.removeInteractionsCheckbox.checked);
                 this.removeVideoDialog.hide();
-              }}>${msg("Yes, remove it")}</sl-button>
+              }}>${this.msg("Yes, remove it")}</sl-button>
               <sl-button slot="footer" variant="text" @click=${() => {
                 this.removeVideoDialog.hide();
-              }}>${msg("No, keep it")}</sl-button>
+              }}>${this.msg("No, keep it")}</sl-button>
             </sl-dialog>
           </div>
         </div>
@@ -1050,7 +1066,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.loadTimeout = window.setTimeout(() => {
       this.loadTimeout = null;
       if (this.videoLoaded) return;
-      this.handleLoadingError("Media did not become playable in time", timeoutErrorMessage());
+      this.handleLoadingError("Media did not become playable in time", timeoutErrorMessage(this.msg));
     }, LOAD_TIMEOUT_MS);
   }
 
@@ -1211,7 +1227,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       }
       if (!this.chapterConfig || this.chapterConfig.length === 0) {
         const defaultChapter = [
-          { title: `${msg("Chapter")} 1`, startTime: 0 },
+          { title: `${this.msg("Chapter")} 1`, startTime: 0 },
         ];
         this.chapterConfig = defaultChapter;
       }

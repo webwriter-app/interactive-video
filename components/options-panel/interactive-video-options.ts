@@ -1,3 +1,4 @@
+import { effectiveLanguage, localizeElement, nativeLanguageAttributes } from "../../localization/localizer";
 import { html, css, LitElement, PropertyValues } from "lit";
 
 import { LitElementWw } from "@webwriter/lit";
@@ -39,9 +40,13 @@ import tiktokIcon from "@tabler/icons/filled/brand-tiktok.svg";
 import { formatTime, parseTime } from "../../utils/timeFormatter";
 import type { WwVideoInteraction } from "../../widgets/webwriter-video-interaction/webwriter-video-interaction";
 import { WebwriterInteractiveVideo } from "../../widgets/webwriter-interactive-video/webwriter-interactive-video";
-import { msg } from "@lit/localize";
 
 export class InteractiveVideoOptions extends LitElementWw {
+  static override get observedAttributes() { return nativeLanguageAttributes(this, super.observedAttributes); }
+
+  override get lang(): string { return effectiveLanguage(this); }
+  override set lang(value: string) { this.setAttribute("lang", value); }
+  private readonly msg = localizeElement(this);
   @consume({ context: videoContext, subscribe: true })
   @property({ attribute: false })
   accessor videoContext: InteractiveVideoContext;
@@ -153,10 +158,10 @@ export class InteractiveVideoOptions extends LitElementWw {
                 <div class="header">
                   ${this.isAudio() ? html`
                     <sl-icon src=${headphones}></sl-icon>
-                    <p>${msg("Audio")}</p>
+                    <p>${this.msg("Audio")}</p>
                   ` : html`
                     <sl-icon src=${movie}></sl-icon>
-                    <p>${msg("Video")}</p>
+                    <p>${this.msg("Video")}</p>
                   `}
                 </div>
                 ${this.videoContext.videoDetails ? html`
@@ -175,28 +180,28 @@ export class InteractiveVideoOptions extends LitElementWw {
                         composed: true,
                       }));
                     }}
-                    >${this.isAudio() ? msg("Remove audio") : msg("Remove video")}</sl-button
+                    >${this.isAudio() ? this.msg("Remove audio") : this.msg("Remove video")}</sl-button
                   >
                 ` : null }
                 <sl-switch
                   @sl-change=${this.handleShowOverlayChange}
                   class="temporary-teacher-options"
                   ?checked=${this.videoContext?.showOverlay}
-                  >${msg("Show Popups")}</sl-switch
+                  >${this.msg("Show Popups")}</sl-switch
                 >
                 <sl-switch
                   @sl-change=${this
                     .handleEnableChaptersChange}
                   class="temporary-teacher-options"
                   ?checked=${this.videoContext?.hasChapters}
-                  >${msg("Enable chapters")}</sl-switch
+                  >${this.msg("Enable chapters")}</sl-switch
                 >
                 ${!["spotify", "tiktok"].includes(this.videoContext?.videoType) ? html`
                   <sl-switch
                     @sl-change=${this.handleAllowPlaybackRateChangeChage}
                     class="temporary-teacher-options"
                     ?checked=${this.videoContext?.allowPlaybackRateChange}
-                    >${msg("Allow playback rate change")}</sl-switch
+                    >${this.msg("Allow playback rate change")}</sl-switch
                   >
                 ` : null }
                   
@@ -212,7 +217,7 @@ export class InteractiveVideoOptions extends LitElementWw {
                         <sl-icon
                           src=${timelineEvent}
                         ></sl-icon>
-                        <p>${msg("Interaction")}</p>
+                        <p>${this.msg("Interaction")}</p>
                         <p style="margin-left: auto">
                           ID:
                           ${this.selectedInteraction
@@ -224,7 +229,7 @@ export class InteractiveVideoOptions extends LitElementWw {
                       >
                         <sl-input
                           id="overlay-start-time-input"
-                          label=${msg("Start Time")}
+                          label=${this.msg("Start Time")}
                           size="small"
                           value=${formatTime(
                             this.selectedInteraction
@@ -235,7 +240,7 @@ export class InteractiveVideoOptions extends LitElementWw {
                         ></sl-input>
                         <sl-input
                           id="overlay-end-time-input"
-                          label=${msg("End Time")}
+                          label=${this.msg("End Time")}
                           size="small"
                           value=${formatTime(
                             this.selectedInteraction
@@ -253,18 +258,18 @@ export class InteractiveVideoOptions extends LitElementWw {
                           }}
                           class="temporary-teacher-options"
                           ?checked=${!this.selectedInteraction?.noInitialPause}
-                          >${msg("Pause video when shown")}</sl-switch
+                          >${this.msg("Pause video when shown")}</sl-switch
                         >
                         <div>
                           <p
                             style="font-size: 17px; margin: 0px; padding: 0px; margin-bottom: 5px; font-size: 14px;"
                           >
-                            ${msg(
+                            ${this.msg(
                               "Background Color"
                             )}
                           </p>
                           <sl-color-picker
-                            label=${msg(
+                            label=${this.msg(
                               "Overlay Color"
                             )}
                             id="color-picker"
@@ -278,7 +283,7 @@ export class InteractiveVideoOptions extends LitElementWw {
                           ></sl-color-picker>
                         </div>
                         <sl-details
-                          summary=${msg(
+                          summary=${this.msg(
                             "Advanced Options"
                           )}
                         >
@@ -286,7 +291,7 @@ export class InteractiveVideoOptions extends LitElementWw {
                             style="display: flex; flex-direction: column; gap: 10px;"
                           >
                             <sl-input
-                              label=${msg(
+                              label=${this.msg(
                                 "X Position"
                               )}
                               id="overlay-x-position-input"
@@ -303,7 +308,7 @@ export class InteractiveVideoOptions extends LitElementWw {
                             >
                             </sl-input>
                             <sl-input
-                              label=${msg(
+                              label=${this.msg(
                                 "Y Position"
                               )}
                               id="overlay-y-position-input"
@@ -320,7 +325,7 @@ export class InteractiveVideoOptions extends LitElementWw {
                             >
                             </sl-input>
                             <sl-input
-                              label=${msg(
+                              label=${this.msg(
                                 "Width"
                               )}
                               id="overlay-width-input"
@@ -337,7 +342,7 @@ export class InteractiveVideoOptions extends LitElementWw {
                             >
                             </sl-input>
                             <sl-input
-                              label=${msg(
+                              label=${this.msg(
                                 "Height"
                               )}
                               id="overlay-height-input"
@@ -366,7 +371,7 @@ export class InteractiveVideoOptions extends LitElementWw {
                             slot="prefix"
                             src=${trash}
                           ></sl-icon>
-                          ${msg("Delete")}
+                          ${this.msg("Delete")}
                         </sl-button>
                       </div>`
                   : html` <!--  -->
@@ -374,12 +379,12 @@ export class InteractiveVideoOptions extends LitElementWw {
                         <sl-icon
                           src=${timelineEvent}
                         ></sl-icon>
-                        <p>${msg("Interaction")}</p>
+                        <p>${this.msg("Interaction")}</p>
                       </div>
                       <p
                         style="padding: 0px; margin: 0px; font-size: 14px;"
                       >
-                        ${msg(
+                        ${this.msg(
                           "Select an interaction to view details"
                         )}
                       </p>`}
@@ -415,12 +420,12 @@ export class InteractiveVideoOptions extends LitElementWw {
         return html`<sl-icon
           .src=${movie}
         ></sl-icon>
-        <p>${msg("Video File")}</p>`;
+        <p>${this.msg("Video File")}</p>`;
       case "htmlaudio":
         return html`<sl-icon
           .src=${headphones}
         ></sl-icon>
-        <p>${msg("Audio File")}</p>`;
+        <p>${this.msg("Audio File")}</p>`;
       default:
         return null;
     }
@@ -490,7 +495,7 @@ export class InteractiveVideoOptions extends LitElementWw {
           composed: true,
           detail: { value: [
             {
-              title: `${msg("Chapter")} 1`,
+              title: `${this.msg("Chapter")} 1`,
               startTime: 0,
             },
           ]},
