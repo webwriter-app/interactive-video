@@ -26,11 +26,29 @@ export class WwVideoInteraction extends LitElementWw {
     startTime: { type: "number", control: "duration", min: 0, step: 0.1, group: "timing", label: { _: "Start time" } },
     endTime: { type: "number", control: "duration", min: 0, step: 0.1, group: "timing", label: { _: "End time" } },
     noInitialPause: { type: "boolean", group: "timing", label: { _: "Do not pause when shown" } },
+    posX: { type: "number", group: "position", label: { _: "X position (%)" }, min: 0, max: 100, step: 0.1, unit: "%" },
+    posY: { type: "number", group: "position", label: { _: "Y position (%)" }, min: 0, max: 100, step: 0.1, unit: "%" },
+    width: { type: "number", group: "position", label: { _: "Width" }, min: 10, step: 1, unit: "px" },
+    height: { type: "number", group: "position", label: { _: "Height" }, min: 10, step: 1, unit: "px" },
+    backgroundColor: { type: "color", group: "appearance", label: { _: "Overlay color" } },
   };
 
   static optionGroups: Record<string, any> = {
     timing: { label: { _: "Interaction timing" }, collapsible: true, advanced: false },
+    position: { label: { _: "Position and size" }, collapsible: true, advanced: true },
+    appearance: { label: { _: "Appearance" }, collapsible: true, advanced: true },
   };
+
+  static actions: Record<string, any> = {
+    deleteInteraction: {
+      label: { _: "Delete interaction" },
+      group: "timing",
+      icon: "Delete",
+      intent: "danger",
+      confirm: { _: "Delete this interaction?" },
+    },
+  };
+  readonly actions = WwVideoInteraction.actions;
   /**
    * The styles for the webwriter-interactive-video component.
    */
@@ -77,6 +95,10 @@ export class WwVideoInteraction extends LitElementWw {
   /** The height of the interaction in pixels. */
   @property({ type: Number, attribute: true, reflect: true })
   accessor height;
+
+  /** The background color of the interaction overlay. */
+  @property({ type: String, attribute: "background-color", reflect: true })
+  accessor backgroundColor;
 
   /** The width of the parent video player. */
   @property({ type: Number, attribute: true })
@@ -139,6 +161,16 @@ export class WwVideoInteraction extends LitElementWw {
     this.mutationObserver = new MutationObserver(this.mutationCallback);
   }
 
+  deleteInteraction(): void {
+    if (!this.isConnected) return;
+    const video = this.closest("webwriter-interactive-video") as
+      | (HTMLElement & { selectedInteractionId?: number; updateContext?: () => void })
+      | null;
+    if (video && video.selectedInteractionId === this.id) video.selectedInteractionId = -1;
+    this.remove();
+    video?.updateContext?.();
+  }
+
   /**
    * Called when the component is removed from the DOM.
    * Cleans up event listeners and disconnects observers.
@@ -187,6 +219,7 @@ export class WwVideoInteraction extends LitElementWw {
         id="container"
         style="width: ${this.isResizing ? this.resizingWidth : this.width}px;
           height: ${this.isResizing ? this.resizingHeight : this.height}px;
+          background-color: ${this.backgroundColor || "inherit"};
           transform: 
             translate(
               ${this.isDragging ? this.draggingPosX : (this.posX * this.parentWidth / 100)}px, 

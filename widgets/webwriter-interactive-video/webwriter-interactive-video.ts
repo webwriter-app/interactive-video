@@ -60,6 +60,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       icon: "Upload",
       input: { type: "file", accept: "video/*,audio/*", multiple: false },
     },
+    removeMedia: {
+      label: { _: "Remove media" },
+      group: "playback",
+      icon: "Delete",
+      intent: "danger",
+      confirm: { _: "Remove the current media and keep its interactions and chapters?" },
+    },
   };
 
   static optionGroups: Record<string, any> = {
@@ -80,6 +87,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.videoType = file.type.startsWith("audio/") ? "htmlaudio" : "htmlvideo";
     this.videoDetails = { title: file.name, author: "", duration: 0 };
     this.updateContext();
+  }
+
+  removeMedia(): void {
+    this.clearVideo(false);
   }
   /**
    * Returns an object that maps custom element names to their corresponding classes.
