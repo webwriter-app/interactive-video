@@ -21,6 +21,16 @@ import gripHorizontal from "@tabler/icons/outline/grip-horizontal.svg";
  * It extends `LitElementWw` and provides a slot for content insertion.
  */
 export class WwVideoInteraction extends LitElementWw {
+  readonly options = WwVideoInteraction.options;
+  static options: Record<string, any> = {
+    startTime: { type: "number", control: "duration", min: 0, step: 0.1, group: "timing", label: { _: "Start time" } },
+    endTime: { type: "number", control: "duration", min: 0, step: 0.1, group: "timing", label: { _: "End time" } },
+    noInitialPause: { type: "boolean", group: "timing", label: { _: "Do not pause when shown" } },
+  };
+
+  static optionGroups: Record<string, any> = {
+    timing: { label: { _: "Interaction timing" }, collapsible: true, advanced: false },
+  };
   /**
    * The styles for the webwriter-interactive-video component.
    */
@@ -220,12 +230,6 @@ export class WwVideoInteraction extends LitElementWw {
         </div>
       </div>
 
-      <interactive-video-options
-        style="outline: none"
-        part="options"
-        class="author-only"
-        @click=${(e: Event) => e.stopPropagation()}
-      ></interactive-video-options>
     `;
   }
 
