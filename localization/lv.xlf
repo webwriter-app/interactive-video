@@ -1,4 +1,5 @@
-<xliff xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2">
   <file original="lit-localize-inputs" datatype="plaintext" source-language="en" target-language="lv">
     <body>
       <trans-unit id="s15733d7d0f6d1d73">
@@ -289,6 +290,60 @@
         <source>The media took too long to load. Please check the link and your internet connection, then try again.</source>
         <target>Multivides faila ielāde ilga pārāk ilgi. Lūdzu, pārbaudiet saiti un savu interneta savienojumu, pēc tam mēģiniet vēlreiz.</target>
       </trans-unit>
-    </body>
+    <trans-unit id="s97f78c37615bdaf2">
+  <source>Hide interactions</source>
+<target>Slēpt mijiedarbības</target></trans-unit>
+<trans-unit id="sc7e2b06a922c3979">
+  <source>Hide chapters</source>
+<target>Slēpt nodaļas</target></trans-unit>
+<trans-unit id="s089b6f6551227e0b">
+  <source>Disable playback rate changes</source>
+<target>Atspējot atskaņošanas ātruma maiņu</target></trans-unit>
+<trans-unit id="s8fef389de26459e6">
+  <source>Import media file</source>
+<target>Importēt multivides failu</target></trans-unit>
+<trans-unit id="s87a7c34815708e19">
+  <source>Remove media</source>
+<target>Noņemt multividi</target></trans-unit>
+<trans-unit id="s491dc50bced9bedc">
+  <source>Remove the current media and keep its interactions and chapters?</source>
+<target>Vai noņemt pašreizējo multividi, saglabājot tās mijiedarbības un nodaļas?</target></trans-unit>
+<trans-unit id="sac494a087707be4c">
+  <source>Playback</source>
+<target>Atskaņošana</target></trans-unit>
+<trans-unit id="sef5852ec91873a6c">
+  <source>Start time</source>
+<target>Sākuma laiks</target></trans-unit>
+<trans-unit id="s2e33731c2ead8d57">
+  <source>End time</source>
+<target>Beigu laiks</target></trans-unit>
+<trans-unit id="sfc902fb1179ecb70">
+  <source>Do not pause when shown</source>
+<target>Rādīšanas laikā nepauzēt</target></trans-unit>
+<trans-unit id="s6a0937ef686b96c4">
+  <source>X position (%)</source>
+<target>X pozīcija (%)</target></trans-unit>
+<trans-unit id="s7751f12230bb00e5">
+  <source>Y position (%)</source>
+<target>Y pozīcija (%)</target></trans-unit>
+<trans-unit id="s95836eab7093947c">
+  <source>Overlay color</source>
+<target>Pārklājuma krāsa</target></trans-unit>
+<trans-unit id="s1c5b38a1790e5663">
+  <source>Interaction timing</source>
+<target>Mijiedarbības laiks</target></trans-unit>
+<trans-unit id="s1d2c9dcc771033fc">
+  <source>Position and size</source>
+<target>Pozīcija un izmērs</target></trans-unit>
+<trans-unit id="sf0e261e04eda82ff">
+  <source>Appearance</source>
+<target>Izskats</target></trans-unit>
+<trans-unit id="s7ac532234bc05506">
+  <source>Delete interaction</source>
+<target>Dzēst mijiedarbību</target></trans-unit>
+<trans-unit id="s54296d2feba264b7">
+  <source>Delete this interaction?</source>
+<target>Vai dzēst šo mijiedarbību?</target></trans-unit>
+</body>
   </file>
 </xliff>

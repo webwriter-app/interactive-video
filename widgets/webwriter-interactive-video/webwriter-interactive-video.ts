@@ -32,7 +32,7 @@ import { PlayerType, VideoPlayer } from "../../components/video-player/video-pla
 
 import { formatTime } from "../../utils/timeFormatter";
 import { timeoutErrorMessage } from "../../utils/media-errors";
-import { readData, writeData } from "./data";
+import { chapterSeedSelector, readData, writeData } from "./data";
 
 /** How long a media source may take to become playable before it counts as failed. */
 const LOAD_TIMEOUT_MS = 30000;
@@ -323,10 +323,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     if (data.videoBase64 !== undefined) this.videoBase64 = data.videoBase64;
     if (data.videoDetails !== undefined) this.videoDetails = data.videoDetails;
     if (data.waveformData !== undefined) this.waveformData = data.waveformData;
-    if (data.chapterConfig !== undefined) this.chapterConfig = data.chapterConfig;
+    const chapterSeed = this.querySelector(chapterSeedSelector);
+    const seededChapters = chapterSeed
+      ? readData<{ chapterConfig: { title: string; startTime: number }[] }>(this, chapterSeedSelector).chapterConfig
+      : undefined;
+    if (Array.isArray(seededChapters)) this.chapterConfig = seededChapters;
+    else if (Array.isArray(data.chapterConfig)) this.chapterConfig = data.chapterConfig;
     super.connectedCallback();
     this.videoLoaded = false;
     this.updateContext();
+    if (Array.isArray(seededChapters)) chapterSeed?.remove();
     document.addEventListener("fullscreenchange", this.handleFullscreenChange);
 
     this.observer = new MutationObserver(this.monitorSlot);

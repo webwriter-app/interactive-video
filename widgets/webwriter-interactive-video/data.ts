@@ -1,7 +1,9 @@
-const selector = ':scope > script[type="application/json"][slot="data"]:not([src])';
+const blockSelector = ':scope > script[type="application/json"][slot="data"]:not([src])';
+const selector = blockSelector + ':not([data-video-chapters])';
+export const chapterSeedSelector = blockSelector + '[data-video-chapters]';
 
-export function readData<T>(host: HTMLElement): Partial<T> {
-  const text = host.querySelector(selector)?.textContent;
+export function readData<T>(host: HTMLElement, dataSelector = selector): Partial<T> {
+  const text = host.querySelector(dataSelector)?.textContent;
   if (!text) return {};
   try {
     const value = JSON.parse(text);
