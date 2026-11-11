@@ -105,7 +105,16 @@
       "so": "Ku dar daaqado soo-bax ah oo isdhexgal leh nuxurka codka iyo fiidyowga. YouTube, Vimeo, TikTok iyo xiriirrada tooska ah waa la taageeraa.",
       "ti": "ኣብ ትሕዝቶ ድምጽን ቪድዮን ኢንተራክቲቭ ብቅ ዝብሉ መስኮታት ወስኹ። YouTube፣ Vimeo፣ TikTok ከምኡውን ቀጥታዊ መላግቦታት ይድገፉ።",
       "sw": "Ongeza madirisha ibukizi shirikishi kwenye maudhui ya sauti na video. YouTube, Vimeo, TikTok na viungo vya moja kwa moja vinaungwa mkono.",
-      "ha": "Ƙara tagogin hulɗa masu tashi a kan abun cikin sauti da bidiyo. Ana tallafa wa YouTube, Vimeo, TikTok da hanyoyin haɗi kai tsaye."
+      "ha": "Ƙara tagogin hulɗa masu tashi a kan abun cikin sauti da bidiyo. Ana tallafa wa YouTube, Vimeo, TikTok da hanyoyin haɗi kai tsaye.",
+      "yue-Hans": "喺音讯同影片内容加入互动弹出视窗。支援多个平台（YouTube、Vimeo、TikTok 同直接连结）。",
+      "yue-Hant": "喺音訊同影片內容加入互動彈出視窗。支援多個平台（YouTube、Vimeo、TikTok 同直接連結）。",
+      "kmr": "Li naveroka deng û vîdyoyê popupên înteraktîf lê zêde bike. Çend pêşkêşvanan piştgirî dike (YouTube, Vimeo, TikTok, girêdanên rasterast).",
+      "kmr-Latn": "Li naveroka deng û vîdyoyê popupên înteraktîf lê zêde bike. Çend pêşkêşvanan piştgirî dike (YouTube, Vimeo, TikTok, girêdanên rasterast).",
+      "kmr-Arab": "ل ناڤەرۆکا دەنگ ئوو ڤیدیۆیێ پۆپوپێن ئینتەراکتیف لێ زێدە بکە. چەند پێشکێشڤانان پشتگری dike (یۆوتوبە, ڤمەۆ, تکتۆک, گرێدانێن راستەراست).",
+      "ckb": "پاپ‌ئاپی کارلێک‌لێکراو زیاد بکە بۆ ناوەڕۆکی دەنگ و ڤیدیۆ. چەند دابینکەرێک پشتگیری دەکات (YouTube، Vimeo، TikTok، بەستەری ڕاستەوخۆ).",
+      "ckb-Arab": "پاپ‌ئاپی کارلێک‌لێکراو زیاد بکە بۆ ناوەڕۆکی دەنگ و ڤیدیۆ. چەند دابینکەرێک پشتگیری دەکات (YouTube، Vimeo، TikTok، بەستەری ڕاستەوخۆ).",
+      "af-ZA": "Voeg interaktiewe opspringvensters by oudio- en video-inhoud. Ondersteun verskeie bronne (YouTube, Vimeo, TikTok, direkte skakels).",
+      "af-NA": "Voeg interaktiewe opspringvensters by oudio- en video-inhoud. Ondersteun verskeie bronne (YouTube, Vimeo, TikTok, direkte skakels)."
     },
     "label": {
       "_": "Interactive Video",
@@ -210,7 +219,16 @@
       "so": "Fiidiyow isdhexgal leh",
       "ti": "ኢንተራክቲቭ ቪድዮ",
       "sw": "Video shirikishi",
-      "ha": "Bidiyon mu’amala"
+      "ha": "Bidiyon mu’amala",
+      "yue-Hans": "互动影片",
+      "yue-Hant": "互動影片",
+      "kmr": "Vîdyoya înteraktîf",
+      "kmr-Latn": "Vîdyoya înteraktîf",
+      "kmr-Arab": "ڤیدیۆیا ئینتەراکتیف",
+      "ckb": "ڤیدیۆی کارلێک‌لێکراو",
+      "ckb-Arab": "ڤیدیۆی کارلێک‌لێکراو",
+      "af-ZA": "Interaktiewe video",
+      "af-NA": "Interaktiewe video"
     }
   },
   "./widgets/webwriter-interactive-video": {
@@ -317,7 +335,16 @@
       "so": "Fiidiyow isdhexgal leh",
       "ti": "ኢንተራክቲቭ ቪድዮ",
       "sw": "Video shirikishi",
-      "ha": "Bidiyon mu’amala"
+      "ha": "Bidiyon mu’amala",
+      "yue-Hans": "互动影片",
+      "yue-Hant": "互動影片",
+      "kmr": "Vîdyoya înteraktîf",
+      "kmr-Latn": "Vîdyoya înteraktîf",
+      "kmr-Arab": "ڤیدیۆیا ئینتەراکتیف",
+      "ckb": "ڤیدیۆی کارلێک‌لێکراو",
+      "ckb-Arab": "ڤیدیۆی کارلێک‌لێکراو",
+      "af-ZA": "Interaktiewe video",
+      "af-NA": "Interaktiewe video"
     }
   },
   "./widgets/webwriter-video-interaction": {
@@ -424,7 +451,16 @@
       "so": "Isdhexgalka fiidyowga",
       "ti": "ኣብ ውሽጢ ቪድዮ ዘሎ ምትእስሳር",
       "sw": "Mwingiliano kwenye video",
-      "ha": "Mu’amala a bidiyo"
+      "ha": "Mu’amala a bidiyo",
+      "yue-Hans": "影片互动",
+      "yue-Hant": "影片互動",
+      "kmr": "Têkiliya Vîdyoyê",
+      "kmr-Latn": "Têkiliya Vîdyoyê",
+      "kmr-Arab": "تێکلیا ڤیدیۆیێ",
+      "ckb": "کارلێکی ڤیدیۆ",
+      "ckb-Arab": "کارلێکی ڤیدیۆ",
+      "af-ZA": "Video-interaksie",
+      "af-NA": "Video-interaksie"
     }
   },
   "./snippets/Mondlandung": {
@@ -531,7 +567,16 @@
       "so": "Ku degista Dayaxa",
       "ti": "ኣብ ጨረቃ ምዕራፍ",
       "sw": "Kutua mwezini",
-      "ha": "Sauka a Wata"
+      "ha": "Sauka a Wata",
+      "yue-Hans": "登陆月球",
+      "yue-Hant": "登陸月球",
+      "kmr": "Daketina heyvê",
+      "kmr-Latn": "Daketina heyvê",
+      "kmr-Arab": "داکەتنا هەیڤێ",
+      "ckb": "هاتنە سەر مانگ",
+      "ckb-Arab": "هاتنە سەر مانگ",
+      "af-ZA": "Maanlanding",
+      "af-NA": "Maanlanding"
     }
   }
 }
