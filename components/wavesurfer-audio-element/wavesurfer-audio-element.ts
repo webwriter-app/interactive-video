@@ -1,3 +1,4 @@
+import { effectiveLanguage, localizeElement, nativeLanguageAttributes } from "../../localization/localizer";
 import { LitElementWw } from "@webwriter/lit";
 import styles from "./wavesurfer-audio-element.styles";
 import { html, PropertyValues } from "lit";
@@ -9,11 +10,15 @@ import {
 	videoContext,
 } from "../../utils/interactive-video-context";
 import { SlSpinner } from "@shoelace-style/shoelace";
-import { msg } from "@lit/localize";
 
 const PASSTHROUGH_EVENTS = ["waiting", "stalled", "playing", "seeked"];
 
 export class WaveSurferAudioElement extends LitElementWw {
+	static override get observedAttributes() { return nativeLanguageAttributes(this, super.observedAttributes); }
+
+	override get lang(): string { return effectiveLanguage(this); }
+	override set lang(value: string) { this.setAttribute("lang", value); }
+	private readonly msg = localizeElement(this);
 	@consume({ context: videoContext, subscribe: true })
 	accessor videoContext: InteractiveVideoContext;
 
@@ -175,7 +180,7 @@ export class WaveSurferAudioElement extends LitElementWw {
 	protected render() {
 		return html`<div id="wrapper">
       <div id="wavesurfer"></div>
-      ${!this.isReady ? html`<div id="loading-overlay"><sl-spinner></sl-spinner>${msg("Loading audio...")}</div>` : null}
+      ${!this.isReady ? html`<div id="loading-overlay"><sl-spinner></sl-spinner>${this.msg("Loading audio...")}</div>` : null}
     </div>`;
 	}
 

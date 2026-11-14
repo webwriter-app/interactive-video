@@ -1,3 +1,4 @@
+import { effectiveLanguage, localizeElement, nativeLanguageAttributes } from "../../localization/localizer";
 import { LitElementWw } from "@webwriter/lit";
 import {
   InteractiveVideoContext,
@@ -7,7 +8,6 @@ import { consume } from "@lit/context";
 import { property, query, state } from "lit/decorators.js";
 import styles from "./video-player.styles";
 import { html } from "lit";
-import { msg } from "@lit/localize";
 import {
   mediaErrorMessage,
 	youtubeErrorMessage,
@@ -70,6 +70,11 @@ const BUFFERING_DELAY = 300;
 export const youtubeRegex =	/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/|live\/))((\w|-){11})/;
 
 export class VideoPlayer extends LitElementWw {
+  static override get observedAttributes() { return nativeLanguageAttributes(this, super.observedAttributes); }
+
+  override get lang(): string { return effectiveLanguage(this); }
+  override set lang(value: string) { this.setAttribute("lang", value); }
+  private readonly msg = localizeElement(this);
   @consume({ context: videoContext, subscribe: true })
   accessor videoContext: InteractiveVideoContext;
 
@@ -170,7 +175,7 @@ export class VideoPlayer extends LitElementWw {
   private failMissingElement() {
     this.failLoad(
       "Media element not found",
-      () => msg("The media player could not be started. Please try again.")
+      () => this.msg("The media player could not be started. Please try again.")
     );
   }
 
@@ -181,7 +186,7 @@ export class VideoPlayer extends LitElementWw {
     if (!isVideo && !isAudio) {
       this.failLoad(
         "Invalid base64 string",
-        () => msg("This file could not be loaded. It is damaged or isn't a video or audio file.")
+        () => this.msg("This file could not be loaded. It is damaged or isn't a video or audio file.")
       );
       return;
     }
@@ -193,7 +198,7 @@ export class VideoPlayer extends LitElementWw {
       const videoElement = this.videoElement as HTMLVideoElement;
       videoElement.addEventListener("error", () => {
         const code = videoElement.error?.code;
-        this.failLoad(`Media element error #${code}`, mediaErrorMessage(code));
+        this.failLoad(`Media element error #${code}`, mediaErrorMessage(code, this.msg));
       });
       videoElement.src = base64;
       videoElement.load();
@@ -234,11 +239,11 @@ export class VideoPlayer extends LitElementWw {
 
         videoElement.addEventListener("error", () => {
           const code = videoElement.error?.code;
-          fail(`YouTube iframe player error #${code}`, youtubeErrorMessage(code));
+          fail(`YouTube iframe player error #${code}`, youtubeErrorMessage(code, this.msg));
         });
         videoElement.addEventListener("loadcomplete", () => clearTimeout(this.youtubeLoadTimer), { once: true });
         this.youtubeLoadTimer = window.setTimeout(
-          () => fail("YouTube player did not initialise", youtubeErrorMessage(NaN)),
+          () => fail("YouTube player did not initialise", youtubeErrorMessage(NaN, this.msg)),
           10000
         );
 
@@ -267,7 +272,7 @@ export class VideoPlayer extends LitElementWw {
       if (spotifyType === "playlist" || spotifyType === "album" || spotifyType === "artist" || spotifyType === "show" || spotifyType === "user") {
         this.failLoad(
           `Unsupported Spotify source type: ${spotifyType}`,
-          () => msg("Spotify albums and playlists aren't supported. Please use a link to a single track or episode.")
+          () => this.msg("Spotify albums and playlists aren't supported. Please use a link to a single track or episode.")
         );
         return;
       }
@@ -277,7 +282,7 @@ export class VideoPlayer extends LitElementWw {
       this.performUpdate();
       if (this.videoElement) {
         (this.videoElement as SpotifyAudioElement).addEventListener("error", () => {
-          this.failLoad("Spotify player error", spotifyErrorMessage());
+          this.failLoad("Spotify player error", spotifyErrorMessage(this.msg));
         });
         (this.videoElement as SpotifyAudioElement).src = url;
 
@@ -325,7 +330,7 @@ export class VideoPlayer extends LitElementWw {
 
         const fail = (error: string) => {
           this.clearVimeoMessageListener();
-          this.failLoad(error, vimeoErrorMessage());
+          this.failLoad(error, vimeoErrorMessage(this.msg));
         };
 
         this.vimeoMessageListener = (e: MessageEvent) => {
@@ -380,7 +385,7 @@ export class VideoPlayer extends LitElementWw {
       this.performUpdate();
       if (this.videoElement) {
         (this.videoElement as TikTokVideoElement).addEventListener("error", () => {
-          this.failLoad("TikTok player error", tiktokErrorMessage());
+          this.failLoad("TikTok player error", tiktokErrorMessage(this.msg));
         });
         (this.videoElement as TikTokVideoElement).config = {
           fullscreen_button: false,
@@ -414,7 +419,7 @@ export class VideoPlayer extends LitElementWw {
           })
           .catch(error => {
             console.warn("Error fetching TikTok video details:", error);
-            this.failLoad(`TikTok oEmbed request failed: ${error}`, tiktokErrorMessage());
+            this.failLoad(`TikTok oEmbed request failed: ${error}`, tiktokErrorMessage(this.msg));
           });
       } else {
         this.failMissingElement();
@@ -430,7 +435,7 @@ export class VideoPlayer extends LitElementWw {
           if (!response.ok) {
             this.failLoad(
               `Media URL responded with status ${response.status}`,
-              () => msg("The media could not be loaded. The link may be broken or the file may no longer exist.")
+              () => this.msg("The media could not be loaded. The link may be broken or the file may no longer exist.")
             );
             return;
           }
@@ -443,7 +448,7 @@ export class VideoPlayer extends LitElementWw {
           } else {
             this.failLoad(
               "URL is not a valid video or audio file",
-              () => msg("This link doesn't point to a video or audio file. Please check the link, or use a link to a supported service.")
+              () => this.msg("This link doesn't point to a video or audio file. Please check the link, or use a link to a supported service.")
             );
             return;
           }
@@ -454,7 +459,7 @@ export class VideoPlayer extends LitElementWw {
             const videoElement = this.videoElement as HTMLVideoElement;
             videoElement.addEventListener("error", () => {
               const code = videoElement.error?.code;
-              this.failLoad(`Media element error #${code}`, mediaErrorMessage(code));
+              this.failLoad(`Media element error #${code}`, mediaErrorMessage(code, this.msg));
             });
             videoElement.src = url;
             videoElement.load();
@@ -466,7 +471,7 @@ export class VideoPlayer extends LitElementWw {
           console.warn("Error fetching media URL:", error);
           this.failLoad(
             "Error fetching media URL",
-            () => msg("The media could not be loaded. Please check the link and your internet connection, then try again.")
+            () => this.msg("The media could not be loaded. Please check the link and your internet connection, then try again.")
           );
         });
     }
@@ -640,7 +645,7 @@ export class VideoPlayer extends LitElementWw {
       })
       .catch((error: unknown) => {
         console.warn("Error loading TikTok video:", error);
-        this.failLoad("TikTok player did not initialise", tiktokErrorMessage());
+        this.failLoad("TikTok player did not initialise", tiktokErrorMessage(this.msg));
       });
     }
   }

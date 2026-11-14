@@ -1,3 +1,4 @@
+import { effectiveLanguage, localizeElement, nativeLanguageAttributes } from "../../localization/localizer";
 import { html, css, LitElement, PropertyValues } from "lit";
 
 import { LitElementWw } from "@webwriter/lit";
@@ -20,12 +21,16 @@ import alertTriangle from "@tabler/icons/outline/alert-triangle.svg";
 import videoOff from "@tabler/icons/outline/video-off.svg";
 
 import styles from "./video-input-overlay.styles";
-import { msg } from "@lit/localize";
 import { youtubeRegex } from "../video-player/video-player";
 
 const supportedTypes = ["video/mp4", "video/webm", "audio/mpeg", "audio/mp4", "audio/wav", "audio/aac", "audio/flac", "audio/ogg"];
 
 export class VideoInputOverlay extends LitElementWw {
+  static override get observedAttributes() { return nativeLanguageAttributes(this, super.observedAttributes); }
+
+  override get lang(): string { return effectiveLanguage(this); }
+  override set lang(value: string) { this.setAttribute("lang", value); }
+  private readonly msg = localizeElement(this);
   @property({ type: Boolean, attribute: "has-video" })
   accessor hasVideo: boolean = false;
 
@@ -91,16 +96,16 @@ export class VideoInputOverlay extends LitElementWw {
         <sl-icon src=${alertTriangle} class="error-icon"></sl-icon>
         <p class="error-message">
           ${this.errorMessage?.() ??
-          msg("The media could not be loaded. Please check the link and your internet connection, then try again.")}
+          this.msg("The media could not be loaded. Please check the link and your internet connection, then try again.")}
         </p>
         <div class="status-actions">
           <sl-button variant="default" @click=${this.dispatchRetry}>
-            ${msg("Try again")}
+            ${this.msg("Try again")}
           </sl-button>
           ${this.isContentEditable
             ? html`
                 <sl-button variant="primary" @click=${this.dispatchChooseDifferentSource}>
-                  ${msg("Choose a different source")}
+                  ${this.msg("Choose a different source")}
                 </sl-button>
               `
             : null}
@@ -113,7 +118,7 @@ export class VideoInputOverlay extends LitElementWw {
     return html`
       <div class="overlay status-overlay">
         <sl-icon src=${videoOff}></sl-icon>
-        <p>${msg("No media has been added here yet.")}</p>
+        <p>${this.msg("No media has been added here yet.")}</p>
       </div>
     `;
   }
@@ -131,7 +136,7 @@ export class VideoInputOverlay extends LitElementWw {
         @click=${this.triggerFileInput}
       >
         <sl-icon slot="prefix" src=${file}></sl-icon>
-        ${msg("Select video or audio file")}
+        ${this.msg("Select video or audio file")}
         <input
           name="fileInput"
           id="fileInput"
@@ -142,11 +147,11 @@ export class VideoInputOverlay extends LitElementWw {
         />
       </sl-button>
 
-      <p style="color: lightgray">${msg("or")}</p>
+      <p style="color: lightgray">${this.msg("or")}</p>
       <sl-input
         id="url-input"
-        placeholder=${msg("Enter video or audio URL")}
-        help-text=${msg("Supported services: YouTube, Vimeo, TikTok, Spotify, direct video/audio links")}
+        placeholder=${this.msg("Enter video or audio URL")}
+        help-text=${this.msg("Supported services: YouTube, Vimeo, TikTok, Spotify, direct video/audio links")}
         @sl-change=${this.handleUrlInput}
         style="width: 80%"
       >
@@ -155,35 +160,35 @@ export class VideoInputOverlay extends LitElementWw {
 
       <sl-dialog
         id="youtube-disclaimer-dialog"
-        label=${msg("YouTube videos only play on a web server")}
+        label=${this.msg("YouTube videos only play on a web server")}
         @sl-after-show=${this.handleYoutubeDisclaimerShow}
         @sl-after-hide=${this.handleYoutubeDisclaimerHide}
       >
         <p>
-          ${msg("YouTube only plays embedded videos on pages that are served by a web server. This is a restriction imposed by YouTube, not by WebWriter.")}
+          ${this.msg("YouTube only plays embedded videos on pages that are served by a web server. This is a restriction imposed by YouTube, not by WebWriter.")}
         </p>
         <p>
-          ${msg("As a result, this video will not load in WebWriter's preview mode and in documents opened directly from a device. To let your students watch it, publish the document to a web server (e.g. WebWriter Cloud) and share the link from there.")}
+          ${this.msg("As a result, this video will not load in WebWriter's preview mode and in documents opened directly from a device. To let your students watch it, publish the document to a web server (e.g. WebWriter Cloud) and share the link from there.")}
         </p>
         <p>
-          <strong>${msg("If you want to distribute this document as a file rather than through a web server, use a different video source instead of YouTube.")}</strong>
+          <strong>${this.msg("If you want to distribute this document as a file rather than through a web server, use a different video source instead of YouTube.")}</strong>
         </p>
         <p>
-          ${msg("Videos from other sources and uploaded video or audio files aren't affected by this.")}
+          ${this.msg("Videos from other sources and uploaded video or audio files aren't affected by this.")}
         </p>
         <sl-button
           slot="footer"
           variant="text"
           @click=${this.rejectYoutubeDisclaimer}
         >
-          ${msg("Choose a different source")}
+          ${this.msg("Choose a different source")}
         </sl-button>
         <sl-button
           slot="footer"
           variant="primary"
           @click=${this.acceptYoutubeDisclaimer}
         >
-          ${msg("Use YouTube anyway")}
+          ${this.msg("Use YouTube anyway")}
         </sl-button>
       </sl-dialog>
     </div>`;
@@ -269,14 +274,14 @@ export class VideoInputOverlay extends LitElementWw {
       };
       reader.onerror = (error) => {
         console.error("Error reading file:", error);
-        this.fileError = () => msg("This file could not be read. Please try again or choose a different file.");
+        this.fileError = () => this.msg("This file could not be read. Please try again or choose a different file.");
       };
       reader.readAsDataURL(file);
     }
     //
     else {
       console.error("Unsupported file type:", file.type);
-      this.fileError = () => msg("This file type isn't supported. Please choose an MP4 or WebM video, or an MP3, WAV, AAC, FLAC or OGG audio file.");
+      this.fileError = () => this.msg("This file type isn't supported. Please choose an MP4 or WebM video, or an MP3, WAV, AAC, FLAC or OGG audio file.");
     }
   }
 

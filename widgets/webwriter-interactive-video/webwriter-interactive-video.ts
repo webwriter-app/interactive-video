@@ -1,10 +1,10 @@
+import type { MsgFn } from "@lit/localize";
+import { effectiveLanguage, localizeElement, nativeLanguageAttributes, sourceMsg } from "../../localization/localizer";
 import { html, PropertyValues } from "lit";
 import { LitElementWw } from "@webwriter/lit";
 
 import { customElement, property, query, queryAssignedElements, state } from "lit/decorators.js";
 
-// @ts-ignore
-import LOCALIZE from "../../localization/generated";
 
 // @ts-ignore
 import "@shoelace-style/shoelace/dist/themes/light.css";
@@ -32,7 +32,7 @@ import { PlayerType, VideoPlayer } from "../../components/video-player/video-pla
 
 import { formatTime } from "../../utils/timeFormatter";
 import { timeoutErrorMessage } from "../../utils/media-errors";
-import { msg } from "@lit/localize";
+import { chapterSeedSelector, readData, writeData } from "./data";
 
 /** How long a media source may take to become playable before it counts as failed. */
 const LOAD_TIMEOUT_MS = 30000;
@@ -43,6 +43,73 @@ const LOAD_TIMEOUT_MS = 30000;
  * This class extends the `LitElementWw` class.
  */
 export class WebwriterInteractiveVideo extends LitElementWw {
+  static override get observedAttributes() { return nativeLanguageAttributes(this, super.observedAttributes); }
+
+  override get lang(): string { return effectiveLanguage(this); }
+  override set lang(value: string) { this.setAttribute("lang", value); }
+  public readonly msg = localizeElement(this, true);
+  static dataType = "application/json";
+  readonly options = WebwriterInteractiveVideo.buildOptions(this.msg);
+  readonly actions = WebwriterInteractiveVideo.buildActions(this.msg);
+  static get options(): Record<string, any> { return this.buildOptions(sourceMsg); }
+
+  private static buildOptions(msg: MsgFn): Record<string, any> {
+    return {
+      "hide-interactions": { type: "boolean", group: "playback", label: { get _() { return msg("Hide interactions"); } } },
+      "hide-chapters": { type: "boolean", group: "playback", label: { get _() { return msg("Hide chapters"); } } },
+      "disable-playback-rate-change": { type: "boolean", group: "playback", label: { get _() { return msg("Disable playback rate changes"); } } },
+    };
+  }
+
+  static get actions(): Record<string, any> { return this.buildActions(sourceMsg); }
+
+  private static buildActions(msg: MsgFn): Record<string, any> {
+    return {
+      importMedia: {
+        label: { get _() { return msg("Import media file"); } },
+        group: "playback",
+        icon: "Upload",
+        input: { type: "file", accept: "video/*,audio/*", multiple: false },
+      },
+      removeMedia: {
+        label: { get _() { return msg("Remove media"); } },
+        group: "playback",
+        icon: "Delete",
+        intent: "danger",
+        confirm: { get _() { return msg("Remove the current media and keep its interactions and chapters?"); } },
+      },
+    };
+  }
+
+  readonly optionGroups = WebwriterInteractiveVideo.buildOptionGroups(this.msg);
+
+  static get optionGroups(): Record<string, any> { return this.buildOptionGroups(sourceMsg); }
+
+  private static buildOptionGroups(msg: MsgFn) {
+    return {
+      playback: { label: { get _() { return msg("Playback"); } }, collapsible: true, advanced: false },
+    };
+  }
+
+  async importMedia(files: File[]): Promise<void> {
+    const file = files[0];
+    if (!file || (!file.type.startsWith("video/") && !file.type.startsWith("audio/"))) return;
+    const dataUrl = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(reader.error ?? new Error("Unable to read media file"));
+      reader.onload = () => typeof reader.result === "string" ? resolve(reader.result) : reject(new Error("Invalid media file"));
+      reader.readAsDataURL(file);
+    });
+    this.videoBase64 = dataUrl;
+    this.videoURL = "";
+    this.videoType = file.type.startsWith("audio/") ? "htmlaudio" : "htmlvideo";
+    this.videoDetails = { title: file.name, author: "", duration: 0 };
+    this.updateContext();
+  }
+
+  removeMedia(): void {
+    this.clearVideo(false);
+  }
   /**
    * Returns an object that maps custom element names to their corresponding classes.
    * These custom elements can be used within the scope of the `webwriter-interactive-video` component.
@@ -69,8 +136,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * The styles for the webwriter-interactive-video component.
    */
   static styles = [styles];
-
-  protected localize = LOCALIZE;
 
   /** The context for the interactive video component, containing all widget data in a JSON object. */
   @provide({
@@ -114,7 +179,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   /** CONTEXT: Video Properties */
 
   /** Video file as a base64 string for offline storage. */
-  @property({ type: String, attribute: "video-base64", reflect: true })
+  @property({ type: String, attribute: false, state: true })
   accessor videoBase64: string = "";
 
   /** Video URL for online playback. */
@@ -130,7 +195,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   accessor videoType: string = "placeholder"; // "youtube", "vimeo", "spotify", "tiktok", "htmlvideo", "htmlaudio", "placeholder"
 
   /** Details of the video, such as title, author, and duration. */
-  @property({ type: Object, attribute: "video-details", reflect: true })
+  @property({ type: Object, attribute: false, state: true })
   accessor videoDetails: { title: string; author: string; duration: number } = {
     title: "",
     author: "",
@@ -138,13 +203,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   };
 
   /** Waveform data for audio visualization generated by WaveSurfer.js. */
-  @property({ type: Array, attribute: "waveform-data", reflect: true })
+  @property({ type: Array, attribute: false, state: true })
   accessor waveformData: number[][] = null;
 
   /** CONTEXT: Chapter Properties */
 
   /** Contains the current chapter configuration as an object. */
-  @property({ type: Array, attribute: "chapter-config", reflect: true })
+  @property({ type: Array, attribute: false, state: true })
   accessor chapterConfig: { title: string, startTime: number }[] = [];
 
   /** CONTEXT: Interaction Properties */
@@ -249,9 +314,25 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * Also builds the interaction configuration and renders the chapters list, if available.
    */
   connectedCallback() {
+    const data = readData<{
+      videoBase64: string;
+      videoDetails: { title: string; author: string; duration: number };
+      waveformData: number[][];
+      chapterConfig: { title: string; startTime: number }[];
+    }>(this);
+    if (data.videoBase64 !== undefined) this.videoBase64 = data.videoBase64;
+    if (data.videoDetails !== undefined) this.videoDetails = data.videoDetails;
+    if (data.waveformData !== undefined) this.waveformData = data.waveformData;
+    const chapterSeed = this.querySelector(chapterSeedSelector);
+    const seededChapters = chapterSeed
+      ? readData<{ chapterConfig: { title: string; startTime: number }[] }>(this, chapterSeedSelector).chapterConfig
+      : undefined;
+    if (Array.isArray(seededChapters)) this.chapterConfig = seededChapters;
+    else if (Array.isArray(data.chapterConfig)) this.chapterConfig = data.chapterConfig;
     super.connectedCallback();
     this.videoLoaded = false;
     this.updateContext();
+    if (Array.isArray(seededChapters)) chapterSeed?.remove();
     document.addEventListener("fullscreenchange", this.handleFullscreenChange);
 
     this.observer = new MutationObserver(this.monitorSlot);
@@ -468,16 +549,16 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           </div>
           <!-- CONFIRM INTERACTION DELETE DIALOG -->
           <div id="confirm-delete-dialog">
-            <sl-dialog label=${msg("Remove media?")} id="remove-video-dialog">
-              <p>${this.isAudio() ? msg("Are you sure you want to remove the current audio?") : msg("Are you sure you want to remove the current video?")}</p>
-              <sl-checkbox id="remove-interactions-checkbox">${msg("Also remove all interactions and chapters")}</sl-checkbox>
+            <sl-dialog label=${this.msg("Remove media?")} id="remove-video-dialog">
+              <p>${this.isAudio() ? this.msg("Are you sure you want to remove the current audio?") : this.msg("Are you sure you want to remove the current video?")}</p>
+              <sl-checkbox id="remove-interactions-checkbox">${this.msg("Also remove all interactions and chapters")}</sl-checkbox>
               <sl-button slot="footer" variant="primary" @click=${() => {
                 this.clearVideo(this.removeInteractionsCheckbox.checked);
                 this.removeVideoDialog.hide();
-              }}>${msg("Yes, remove it")}</sl-button>
+              }}>${this.msg("Yes, remove it")}</sl-button>
               <sl-button slot="footer" variant="text" @click=${() => {
                 this.removeVideoDialog.hide();
-              }}>${msg("No, keep it")}</sl-button>
+              }}>${this.msg("No, keep it")}</sl-button>
             </sl-dialog>
           </div>
         </div>
@@ -494,17 +575,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
         ></video-chapter-drawer>
       </div>
 
-      <!-- OPTIONS PANEL -->
-      <interactive-video-options
-        contenteditable=${this.isContentEditable}
-        style="outline: none"
-        part="options"
-        class="author-only"
-        @updateContext=${() => this.updateContext()}
-        @updateBaublePositions=${() => this.updateBaublePositions()}
-        @playbackRateChange=${(e: CustomEvent) =>
-                this.changePlaybackRate(e.detail.value)}
-      ></interactive-video-options>
     `;
   }
 
@@ -544,7 +614,27 @@ export class WebwriterInteractiveVideo extends LitElementWw {
    * This is necessary to keep the context in sync with the component's properties.
    */
   updateContext() {
+    writeData(this, {
+      videoBase64: this.videoBase64,
+      videoDetails: this.videoDetails,
+      waveformData: this.waveformData,
+      chapterConfig: this.chapterConfig,
+    });
     this.requestUpdate();
+  }
+
+  dataChanged(text: string | null): void {
+    if (!text) return;
+    try {
+      const data = JSON.parse(text);
+      if (typeof data.videoBase64 === "string") this.videoBase64 = data.videoBase64;
+      if (data.videoDetails && typeof data.videoDetails === "object") this.videoDetails = data.videoDetails;
+      if (Array.isArray(data.waveformData) || data.waveformData === null) this.waveformData = data.waveformData;
+      if (Array.isArray(data.chapterConfig)) this.chapterConfig = data.chapterConfig;
+      this.requestUpdate();
+    } catch {
+      // Leave malformed authored data untouched for repair in the document.
+    }
   }
 
   private isAudio() {
@@ -982,7 +1072,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     this.loadTimeout = window.setTimeout(() => {
       this.loadTimeout = null;
       if (this.videoLoaded) return;
-      this.handleLoadingError("Media did not become playable in time", timeoutErrorMessage());
+      this.handleLoadingError("Media did not become playable in time", timeoutErrorMessage(this.msg));
     }, LOAD_TIMEOUT_MS);
   }
 
@@ -1143,7 +1233,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
       }
       if (!this.chapterConfig || this.chapterConfig.length === 0) {
         const defaultChapter = [
-          { title: `${msg("Chapter")} 1`, startTime: 0 },
+          { title: `${this.msg("Chapter")} 1`, startTime: 0 },
         ];
         this.chapterConfig = defaultChapter;
       }

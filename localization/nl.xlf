@@ -1,4 +1,5 @@
-<xliff xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2">
   <file original="lit-localize-inputs" datatype="plaintext" source-language="en" target-language="nl">
     <body>
       <trans-unit id="s15733d7d0f6d1d73">
@@ -289,6 +290,60 @@
         <source>The media took too long to load. Please check the link and your internet connection, then try again.</source>
         <target>Het laden van de media duurde te lang. Controleer de link en je internetverbinding en probeer het vervolgens opnieuw.</target>
       </trans-unit>
-    </body>
+    <trans-unit id="s97f78c37615bdaf2">
+  <source>Hide interactions</source>
+<target>Interacties verbergen</target></trans-unit>
+<trans-unit id="sc7e2b06a922c3979">
+  <source>Hide chapters</source>
+<target>Hoofdstukken verbergen</target></trans-unit>
+<trans-unit id="s089b6f6551227e0b">
+  <source>Disable playback rate changes</source>
+<target>Wijzigingen van de afspeelsnelheid uitschakelen</target></trans-unit>
+<trans-unit id="s8fef389de26459e6">
+  <source>Import media file</source>
+<target>Mediabestand importeren</target></trans-unit>
+<trans-unit id="s87a7c34815708e19">
+  <source>Remove media</source>
+<target>Media verwijderen</target></trans-unit>
+<trans-unit id="s491dc50bced9bedc">
+  <source>Remove the current media and keep its interactions and chapters?</source>
+<target>Huidige media verwijderen en de interacties en hoofdstukken behouden?</target></trans-unit>
+<trans-unit id="sac494a087707be4c">
+  <source>Playback</source>
+<target>Afspelen</target></trans-unit>
+<trans-unit id="sef5852ec91873a6c">
+  <source>Start time</source>
+<target>Begintijd</target></trans-unit>
+<trans-unit id="s2e33731c2ead8d57">
+  <source>End time</source>
+<target>Eindtijd</target></trans-unit>
+<trans-unit id="sfc902fb1179ecb70">
+  <source>Do not pause when shown</source>
+<target>Afspelen niet pauzeren bij weergave</target></trans-unit>
+<trans-unit id="s6a0937ef686b96c4">
+  <source>X position (%)</source>
+<target>X-positie (%)</target></trans-unit>
+<trans-unit id="s7751f12230bb00e5">
+  <source>Y position (%)</source>
+<target>Y-positie (%)</target></trans-unit>
+<trans-unit id="s95836eab7093947c">
+  <source>Overlay color</source>
+<target>Overlaykleur</target></trans-unit>
+<trans-unit id="s1c5b38a1790e5663">
+  <source>Interaction timing</source>
+<target>Timing van interactie</target></trans-unit>
+<trans-unit id="s1d2c9dcc771033fc">
+  <source>Position and size</source>
+<target>Positie en grootte</target></trans-unit>
+<trans-unit id="sf0e261e04eda82ff">
+  <source>Appearance</source>
+<target>Weergave</target></trans-unit>
+<trans-unit id="s7ac532234bc05506">
+  <source>Delete interaction</source>
+<target>Interactie verwijderen</target></trans-unit>
+<trans-unit id="s54296d2feba264b7">
+  <source>Delete this interaction?</source>
+<target>Deze interactie verwijderen?</target></trans-unit>
+</body>
   </file>
 </xliff>

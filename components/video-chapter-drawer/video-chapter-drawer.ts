@@ -1,3 +1,4 @@
+import { effectiveLanguage, localizeElement, nativeLanguageAttributes } from "../../localization/localizer";
 import { html, css, LitElement, PropertyValues } from "lit";
 
 import { LitElementWw } from "@webwriter/lit";
@@ -28,11 +29,15 @@ import bookmarks from "@tabler/icons/outline/plus.svg";
 import jumpTo from "@tabler/icons/filled/player-track-next.svg";
 
 import trash from "@tabler/icons/outline/trash.svg";
-import { msg } from "@lit/localize";
 
 //Tabler
 
 export class VideoChapterDrawer extends LitElementWw {
+  static override get observedAttributes() { return nativeLanguageAttributes(this, super.observedAttributes); }
+
+  override get lang(): string { return effectiveLanguage(this); }
+  override set lang(value: string) { this.setAttribute("lang", value); }
+  private readonly msg = localizeElement(this);
   @consume({ context: videoContext, subscribe: true })
   accessor videoContext: InteractiveVideoContext;
 
@@ -73,7 +78,7 @@ export class VideoChapterDrawer extends LitElementWw {
     const chapters = this.videoContext.chapterConfig;
 
     return html`
-      <sl-drawer contained label=${msg("Chapters")} id="chapters-drawer">
+      <sl-drawer contained label=${this.msg("Chapters")} id="chapters-drawer">
         <!-- class="author-only" -->
         ${this.isContentEditable
           ? html`
@@ -89,7 +94,7 @@ export class VideoChapterDrawer extends LitElementWw {
                   )}
               >
                 <sl-icon slot="prefix" src=${bookmarks}></sl-icon>
-                ${msg("Add")}</sl-button
+                ${this.msg("Add")}</sl-button
               >
             `
           : null}
@@ -102,7 +107,7 @@ export class VideoChapterDrawer extends LitElementWw {
                       <!-- Render Chapter Title-->
                       <sl-input
                         size="small"
-                        label=${msg("Title")}
+                        label=${this.msg("Title")}
                         value=${chapter.title}
                         @sl-change=${(e) =>
                           this.updateChapterTitle(index, e.target.value)}
@@ -114,7 +119,7 @@ export class VideoChapterDrawer extends LitElementWw {
                         pill
                         class="timeInput"
                         size="small"
-                        label=${msg("Start")}
+                        label=${this.msg("Start")}
                         style="width: 65px"
                         value=${formatTime(chapter.startTime)}
                         @sl-change=${(e) =>
@@ -131,7 +136,7 @@ export class VideoChapterDrawer extends LitElementWw {
                               variant="text"
                               style="margin-right: auto"
                               @click=${() => this.jumpToChapter(index)}
-                              >${msg("Skip to Chapter")}
+                              >${this.msg("Skip to Chapter")}
                               <sl-icon slot="prefix" src=${jumpTo}></sl-icon>
                             </sl-button>
                             <sl-icon-button
@@ -142,7 +147,7 @@ export class VideoChapterDrawer extends LitElementWw {
                         : html`<sl-button
                             variant="text"
                             @click=${() => this.jumpToChapter(index)}
-                            >${msg("Skip to Chapter")}
+                            >${this.msg("Skip to Chapter")}
                             <sl-icon slot="prefix" src=${jumpTo}></sl-icon>
                           </sl-button>`}
                     `
@@ -157,7 +162,7 @@ export class VideoChapterDrawer extends LitElementWw {
                           <sl-button
                             variant="text"
                             @click=${() => this.jumpToChapter(index)}
-                            >${msg("Skip to Chapter")}
+                            >${this.msg("Skip to Chapter")}
                             <sl-icon slot="prefix" src=${jumpTo}></sl-icon>
                           </sl-button>
                         </div>
@@ -223,7 +228,7 @@ export class VideoChapterDrawer extends LitElementWw {
       ? Math.min(lastChapter.startTime + 60, duration)
       : 0;
     chapters.push({
-      title: `${msg("Chapter")} ${chapters.length + 1}`,
+      title: `${this.msg("Chapter")} ${chapters.length + 1}`,
       startTime: newStartTime,
     });
     this.updateChapters(chapters);
@@ -269,7 +274,7 @@ export class VideoChapterDrawer extends LitElementWw {
       }
       input.value = formatTime(newTime);
     } else {
-      input.helpText = msg("Invalid time format. Use hh:mm:ss or mm:ss");
+      input.helpText = this.msg("Invalid time format. Use hh:mm:ss or mm:ss");
     }
     // change bauble positions to reflect new time and request an update
     // this.updateBaublePositions();

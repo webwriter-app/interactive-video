@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+<file target-language="bn" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+<body>
+<trans-unit id="s08e6bd98452e6bb9">
+  <source>Audio</source>
+<target>অডিও</target></trans-unit>
+<trans-unit id="s85186a61e0d55bac">
+  <source>Video</source>
+<target>ভিডিও</target></trans-unit>
+<trans-unit id="s62155488d6519cf3">
+  <source>Remove audio</source>
+<target>অডিও সরান</target></trans-unit>
+<trans-unit id="sdcb649c4baf8dafa">
+  <source>Remove video</source>
+<target>ভিডিও সরান</target></trans-unit>
+<trans-unit id="s486ef6c2cdc505d7">
+  <source>Show Popups</source>
+<target>পপআপ দেখান</target></trans-unit>
+<trans-unit id="see2eca66ecd60d30">
+  <source>Enable chapters</source>
+<target>অধ্যায় চালু করুন</target></trans-unit>
+<trans-unit id="s39691ba3f371adc1">
+  <source>Allow playback rate change</source>
+<target>প্লেব্যাকের গতি পরিবর্তনের অনুমতি দিন</target></trans-unit>
+<trans-unit id="s6fa430a5a501eb4b">
+  <source>Interaction</source>
+<target>ইন্টারঅ্যাকশন</target></trans-unit>
+<trans-unit id="s167f53f89012d24c">
+  <source>Start Time</source>
+<target>শুরুর সময়</target></trans-unit>
+<trans-unit id="s58c17428301e0137">
+  <source>End Time</source>
+<target>শেষের সময়</target></trans-unit>
+<trans-unit id="seed71b0ff741f5c3">
+  <source>Pause video when shown</source>
+<target>দেখালে ভিডিও থামান</target></trans-unit>
+<trans-unit id="s9c356016f81585f6">
+  <source>Background Color</source>
+<target>পটভূমির রং</target></trans-unit>
+<trans-unit id="s55435611e2a8e6dc">
+  <source>Overlay Color</source>
+<target>ওভারলে রং</target></trans-unit>
+<trans-unit id="s3d09398e555ee5f9">
+  <source>Advanced Options</source>
+<target>উন্নত বিকল্প</target></trans-unit>
+<trans-unit id="s8de4d921e17c46aa">
+  <source>X Position</source>
+<target>X অবস্থান</target></trans-unit>
+<trans-unit id="s58369cf8082f2d5f">
+  <source>Y Position</source>
+<target>Y অবস্থান</target></trans-unit>
+<trans-unit id="sf21fb4f4b9e8911f">
+  <source>Width</source>
+<target>প্রস্থ</target></trans-unit>
+<trans-unit id="sffdadf0a576fd802">
+  <source>Height</source>
+<target>উচ্চতা</target></trans-unit>
+<trans-unit id="sdc673e73b5c13aea">
+  <source>Delete</source>
+<target>মুছুন</target></trans-unit>
+<trans-unit id="s1ad02de8e1d50d2c">
+  <source>Select an interaction to view details</source>
+<target>বিস্তারিত দেখতে একটি ইন্টারঅ্যাকশন নির্বাচন করুন</target></trans-unit>
+<trans-unit id="s0960574e3b6ca412">
+  <source>Video File</source>
+<target>ভিডিও ফাইল</target></trans-unit>
+<trans-unit id="s3cda547ac2158bf5">
+  <source>Audio File</source>
+<target>অডিও ফাইল</target></trans-unit>
+<trans-unit id="s15733d7d0f6d1d73">
+  <source>Chapters</source>
+<target>অধ্যায়</target></trans-unit>
+<trans-unit id="sf9aee319a006c9b4">
+  <source>Add</source>
+<target>যোগ করুন</target></trans-unit>
+<trans-unit id="s99f110d27e30b289">
+  <source>Title</source>
+<target>শিরোনাম</target></trans-unit>
+<trans-unit id="sae1c7f13b7c0c47f">
+  <source>Start</source>
+<target>শুরু</target></trans-unit>
+<trans-unit id="s58d4e5482a78f056">
+  <source>Skip to Chapter</source>
+<target>অধ্যায়ে যান</target></trans-unit>
+<trans-unit id="s178bb121d5131532">
+  <source>Chapter</source>
+<target>অধ্যায়</target></trans-unit>
+<trans-unit id="sa76bb33ac0cfda96">
+  <source>Invalid time format. Use hh:mm:ss or mm:ss</source>
+<target>সময়ের বিন্যাস ভুল। hh:mm:ss অথবা mm:ss ব্যবহার করুন</target></trans-unit>
+<trans-unit id="sb2e1884d9dace006">
+  <source>Add Popup</source>
+<target>পপআপ যোগ করুন</target></trans-unit>
+<trans-unit id="scd1dd6ff53d0d01a">
+  <source>Try again</source>
+<target>আবার চেষ্টা করুন</target></trans-unit>
+<trans-unit id="s3c25c6a16358737f">
+  <source>Choose a different source</source>
+<target>অন্য উৎস বেছে নিন</target></trans-unit>
+<trans-unit id="s4f9913323d0454e8">
+  <source>No media has been added here yet.</source>
+<target>এখানে এখনও কোনো মিডিয়া যোগ করা হয়নি।</target></trans-unit>
+<trans-unit id="s75ff661d0f492c89">
+  <source>Select video or audio file</source>
+<target>ভিডিও বা অডিও ফাইল নির্বাচন করুন</target></trans-unit>
+<trans-unit id="s08b05407b5565ca4">
+  <source>or</source>
+<target>অথবা</target></trans-unit>
+<trans-unit id="s2f4a323ed88d2650">
+  <source>Enter video or audio URL</source>
+<target>ভিডিও বা অডিও URL লিখুন</target></trans-unit>
+<trans-unit id="s8d3cb828b9649568">
+  <source>Supported services: YouTube, Vimeo, TikTok, Spotify, direct video/audio links</source>
+<target>সমর্থিত পরিষেবা: YouTube, Vimeo, TikTok, Spotify, সরাসরি ভিডিও/অডিও লিংক</target></trans-unit>
+<trans-unit id="sd974a9bae026bd45">
+  <source>YouTube videos only play on a web server</source>
+<target>YouTube ভিডিও কেবল ওয়েব সার্ভারে চলে</target></trans-unit>
+<trans-unit id="sce061dbb316d94ea">
+  <source>YouTube only plays embedded videos on pages that are served by a web server. This is a restriction imposed by YouTube, not by WebWriter.</source>
+<target>YouTube কেবল ওয়েব সার্ভারে পরিবেশিত পৃষ্ঠায় এমবেড করা ভিডিও চালায়। এটি YouTube-এর বিধিনিষেধ, WebWriter-এর নয়।</target></trans-unit>
+<trans-unit id="s5383b85bb420a2bb">
+  <source>As a result, this video will not load in WebWriter's preview mode and in documents opened directly from a device. To let your students watch it, publish the document to a web server (e.g. WebWriter Cloud) and share the link from there.</source>
+<target>তাই এই ভিডিওটি WebWriter-এর প্রিভিউ মোডে বা ডিভাইস থেকে সরাসরি খোলা নথিতে চলবে না। শিক্ষার্থীদের দেখাতে নথিটি ওয়েব সার্ভারে (যেমন WebWriter Cloud) প্রকাশ করুন এবং সেখানকার লিংক শেয়ার করুন।</target></trans-unit>
+<trans-unit id="s349093a6b4a3a15e">
+  <source>If you want to distribute this document as a file rather than through a web server, use a different video source instead of YouTube.</source>
+<target>ওয়েব সার্ভারের বদলে ফাইল হিসেবে নথিটি বিতরণ করতে চাইলে YouTube-এর বদলে অন্য ভিডিও উৎস ব্যবহার করুন।</target></trans-unit>
+<trans-unit id="sb459c43758ae0ae9">
+  <source>Videos from other sources and uploaded video or audio files aren't affected by this.</source>
+<target>অন্য উৎসের ভিডিও এবং আপলোড করা ভিডিও বা অডিও ফাইল এতে প্রভাবিত হয় না।</target></trans-unit>
+<trans-unit id="s2ec9e13e6bb4b91e">
+  <source>Use YouTube anyway</source>
+<target>তবুও YouTube ব্যবহার করুন</target></trans-unit>
+<trans-unit id="sed50aa23ed358b33">
+  <source>This file could not be read. Please try again or choose a different file.</source>
+<target>এই ফাইলটি পড়া যায়নি। আবার চেষ্টা করুন অথবা অন্য ফাইল বেছে নিন।</target></trans-unit>
+<trans-unit id="s4b93a142098860d9">
+  <source>This file type isn't supported. Please choose an MP4 or WebM video, or an MP3, WAV, AAC, FLAC or OGG audio file.</source>
+<target>এই ফাইলের ধরন সমর্থিত নয়। MP4 বা WebM ভিডিও, অথবা MP3, WAV, AAC, FLAC বা OGG অডিও ফাইল বেছে নিন।</target></trans-unit>
+<trans-unit id="sc255dd92bfffab10">
+  <source>The media player could not be started. Please try again.</source>
+<target>মিডিয়া প্লেয়ার চালু করা যায়নি। আবার চেষ্টা করুন।</target></trans-unit>
+<trans-unit id="s1748fa0e940a7f04">
+  <source>This file could not be loaded. It is damaged or isn't a video or audio file.</source>
+<target>এই ফাইলটি লোড করা যায়নি। এটি ক্ষতিগ্রস্ত অথবা ভিডিও/অডিও ফাইল নয়।</target></trans-unit>
+<trans-unit id="s11f3370df4b0a8a1">
+  <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
+<target>Spotify অ্যালবাম ও প্লেলিস্ট সমর্থিত নয়। একটি একক ট্র্যাক বা পর্বের লিংক ব্যবহার করুন।</target></trans-unit>
+<trans-unit id="s23811970ee056cd6">
+  <source>The media could not be loaded. The link may be broken or the file may no longer exist.</source>
+<target>মিডিয়া লোড করা যায়নি। লিংকটি নষ্ট হতে পারে অথবা ফাইলটি আর নেই।</target></trans-unit>
+<trans-unit id="sc282195e53905990">
+  <source>This link doesn't point to a video or audio file. Please check the link, or use a link to a supported service.</source>
+<target>এই লিংকটি ভিডিও বা অডিও ফাইলের দিকে নির্দেশ করে না। লিংকটি পরীক্ষা করুন অথবা সমর্থিত পরিষেবার লিংক ব্যবহার করুন।</target></trans-unit>
+<trans-unit id="s9d2a1c7fe017a7cd">
+  <source>Loading audio...</source>
+<target>অডিও লোড হচ্ছে...</target></trans-unit>
+<trans-unit id="s55b6789531afffdb">
+  <source>Loading the media was aborted. Please try again.</source>
+<target>মিডিয়া লোড করা বাতিল হয়েছে। আবার চেষ্টা করুন।</target></trans-unit>
+<trans-unit id="s29fdfa31c7b42598">
+  <source>The media could not be loaded because of a network error. Please check your internet connection, then try again.</source>
+<target>নেটওয়ার্ক ত্রুটির কারণে মিডিয়া লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</target></trans-unit>
+<trans-unit id="sa656bae1f3f1213a">
+  <source>The media file is damaged or uses a format your browser cannot play.</source>
+<target>মিডিয়া ফাইলটি ক্ষতিগ্রস্ত অথবা আপনার ব্রাউজার চালাতে পারে না এমন ফরম্যাটে রয়েছে।</target></trans-unit>
+<trans-unit id="sa4fda558b6798486">
+  <source>The media could not be loaded. The link may be broken, or the format isn't supported by your browser.</source>
+<target>মিডিয়া লোড করা যায়নি। লিংকটি নষ্ট হতে পারে অথবা ফরম্যাটটি আপনার ব্রাউজারে সমর্থিত নয়।</target></trans-unit>
+<trans-unit id="sfa88e6145d78a722">
+  <source>The media could not be loaded. Please check the link and your internet connection, then try again.</source>
+<target>মিডিয়া লোড করা যায়নি। লিংক ও ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</target></trans-unit>
+<trans-unit id="sa7e813528c029362">
+  <source>This YouTube link is invalid. Please check the link and try again.</source>
+<target>এই YouTube লিংকটি অবৈধ। লিংক পরীক্ষা করে আবার চেষ্টা করুন।</target></trans-unit>
+<trans-unit id="s964cac1bdaaf41b4">
+  <source>This YouTube video doesn't exist or is private.</source>
+<target>এই YouTube ভিডিওটি নেই অথবা ব্যক্তিগত।</target></trans-unit>
+<trans-unit id="s97ea3e96d4a6d036">
+  <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+<target>এই YouTube ভিডিওর মালিক এমবেড করার অনুমতি দেননি। অন্য ভিডিও ব্যবহার করুন।</target></trans-unit>
+<trans-unit id="sfbf044c175e1bc7a">
+  <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+<target>YouTube এখানে এই ভিডিও চালাতে অস্বীকার করছে, কারণ পৃষ্ঠাটি YouTube-এর কাছে নিজের পরিচয় দেয় না। WebWriter-এর প্রিভিউ মোডে বা ডিভাইস থেকে সরাসরি খোলা নথিতে এটি ঘটে। নথিটি ওয়েব সার্ভারে (যেমন WebWriter Cloud) প্রকাশ করে সেখান থেকে খুলুন।</target></trans-unit>
+<trans-unit id="sb09bf8953fdb009c">
+  <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+<target>YouTube ভিডিওটি লোড করা যায়নি। লিংক ও ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</target></trans-unit>
+<trans-unit id="s97becfe48a3d368f">
+  <source>The Vimeo video could not be loaded. It may not exist, may be private, or may not allow being embedded.</source>
+<target>Vimeo ভিডিওটি লোড করা যায়নি। এটি নাও থাকতে পারে, ব্যক্তিগত হতে পারে অথবা এমবেড করার অনুমতি নাও দিতে পারে।</target></trans-unit>
+<trans-unit id="s5507d0b5ed2397d5">
+  <source>The TikTok video could not be loaded. It may not exist, may be private, or may not allow being embedded.</source>
+<target>TikTok ভিডিওটি লোড করা যায়নি। এটি নাও থাকতে পারে, ব্যক্তিগত হতে পারে অথবা এমবেড করার অনুমতি নাও দিতে পারে।</target></trans-unit>
+<trans-unit id="sf0da5b972a25370a">
+  <source>The Spotify track could not be loaded. It may not exist or may not be available in your region.</source>
+<target>Spotify ট্র্যাকটি লোড করা যায়নি। এটি নাও থাকতে পারে অথবা আপনার অঞ্চলে উপলভ্য নাও হতে পারে।</target></trans-unit>
+<trans-unit id="se6ba3e3a2756df92">
+  <source>The media took too long to load. Please check the link and your internet connection, then try again.</source>
+<target>মিডিয়া লোড হতে বেশি সময় লেগেছে। লিংক ও ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</target></trans-unit>
+<trans-unit id="sf29ef97c6e418a92">
+  <source>Remove media?</source>
+<target>মিডিয়া সরাবেন?</target></trans-unit>
+<trans-unit id="s9aa13e6e7201d216">
+  <source>Are you sure you want to remove the current audio?</source>
+<target>বর্তমান অডিও সরাতে চান?</target></trans-unit>
+<trans-unit id="sadb8fadf3bbadd95">
+  <source>Are you sure you want to remove the current video?</source>
+<target>বর্তমান ভিডিও সরাতে চান?</target></trans-unit>
+<trans-unit id="sc2a0d87e2a79ff83">
+  <source>Also remove all interactions and chapters</source>
+<target>সব ইন্টারঅ্যাকশন ও অধ্যায়ও সরান</target></trans-unit>
+<trans-unit id="s55cb5824c6210259">
+  <source>Yes, remove it</source>
+<target>হ্যাঁ, সরান</target></trans-unit>
+<trans-unit id="s8213840a0f7d2644">
+  <source>No, keep it</source>
+<target>না, রেখে দিন</target></trans-unit>
+<trans-unit id="s86d33eabf23f17c4">
+  <source>Add something here...</source>
+<target>এখানে কিছু যোগ করুন...</target></trans-unit>
+<trans-unit id="s97f78c37615bdaf2">
+  <source>Hide interactions</source>
+<target>ইন্টারঅ্যাকশন লুকান</target></trans-unit>
+<trans-unit id="sc7e2b06a922c3979">
+  <source>Hide chapters</source>
+<target>অধ্যায় লুকান</target></trans-unit>
+<trans-unit id="s089b6f6551227e0b">
+  <source>Disable playback rate changes</source>
+<target>প্লেব্যাকের গতি পরিবর্তন নিষ্ক্রিয় করুন</target></trans-unit>
+<trans-unit id="s8fef389de26459e6">
+  <source>Import media file</source>
+<target>মিডিয়া ফাইল আমদানি করুন</target></trans-unit>
+<trans-unit id="s87a7c34815708e19">
+  <source>Remove media</source>
+<target>মিডিয়া সরান</target></trans-unit>
+<trans-unit id="s491dc50bced9bedc">
+  <source>Remove the current media and keep its interactions and chapters?</source>
+<target>বর্তমান মিডিয়া সরিয়ে তার ইন্টারঅ্যাকশন ও অধ্যায় রেখে দেবেন?</target></trans-unit>
+<trans-unit id="sac494a087707be4c">
+  <source>Playback</source>
+<target>প্লেব্যাক</target></trans-unit>
+<trans-unit id="sef5852ec91873a6c">
+  <source>Start time</source>
+<target>শুরুর সময়</target></trans-unit>
+<trans-unit id="s2e33731c2ead8d57">
+  <source>End time</source>
+<target>শেষের সময়</target></trans-unit>
+<trans-unit id="sfc902fb1179ecb70">
+  <source>Do not pause when shown</source>
+<target>দেখানোর সময় থামাবেন না</target></trans-unit>
+<trans-unit id="s6a0937ef686b96c4">
+  <source>X position (%)</source>
+<target>X অবস্থান (%)</target></trans-unit>
+<trans-unit id="s7751f12230bb00e5">
+  <source>Y position (%)</source>
+<target>Y অবস্থান (%)</target></trans-unit>
+<trans-unit id="s95836eab7093947c">
+  <source>Overlay color</source>
+<target>ওভারলে রং</target></trans-unit>
+<trans-unit id="s1c5b38a1790e5663">
+  <source>Interaction timing</source>
+<target>ইন্টারঅ্যাকশনের সময়</target></trans-unit>
+<trans-unit id="s1d2c9dcc771033fc">
+  <source>Position and size</source>
+<target>অবস্থান ও আকার</target></trans-unit>
+<trans-unit id="sf0e261e04eda82ff">
+  <source>Appearance</source>
+<target>চেহারা</target></trans-unit>
+<trans-unit id="s7ac532234bc05506">
+  <source>Delete interaction</source>
+<target>ইন্টারঅ্যাকশন মুছুন</target></trans-unit>
+<trans-unit id="s54296d2feba264b7">
+  <source>Delete this interaction?</source>
+<target>এই ইন্টারঅ্যাকশনটি মুছবেন?</target></trans-unit>
+</body>
+</file>
+</xliff>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+<file target-language="tl" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+<body>
+<trans-unit id="s08e6bd98452e6bb9">
+  <source>Audio</source>
+<target>Audio</target></trans-unit>
+<trans-unit id="s85186a61e0d55bac">
+  <source>Video</source>
+<target>Video</target></trans-unit>
+<trans-unit id="s62155488d6519cf3">
+  <source>Remove audio</source>
+<target>Alisin ang audio</target></trans-unit>
+<trans-unit id="sdcb649c4baf8dafa">
+  <source>Remove video</source>
+<target>Alisin ang video</target></trans-unit>
+<trans-unit id="s486ef6c2cdc505d7">
+  <source>Show Popups</source>
+<target>Ipakita ang mga popup</target></trans-unit>
+<trans-unit id="see2eca66ecd60d30">
+  <source>Enable chapters</source>
+<target>Paganahin ang mga kabanata</target></trans-unit>
+<trans-unit id="s39691ba3f371adc1">
+  <source>Allow playback rate change</source>
+<target>Payagan ang pagbabago ng bilis ng playback</target></trans-unit>
+<trans-unit id="s6fa430a5a501eb4b">
+  <source>Interaction</source>
+<target>Interaksiyon</target></trans-unit>
+<trans-unit id="s167f53f89012d24c">
+  <source>Start Time</source>
+<target>Oras ng pagsisimula</target></trans-unit>
+<trans-unit id="s58c17428301e0137">
+  <source>End Time</source>
+<target>Oras ng pagtatapos</target></trans-unit>
+<trans-unit id="seed71b0ff741f5c3">
+  <source>Pause video when shown</source>
+<target>I-pause ang video kapag ipinakita</target></trans-unit>
+<trans-unit id="s9c356016f81585f6">
+  <source>Background Color</source>
+<target>Kulay ng background</target></trans-unit>
+<trans-unit id="s55435611e2a8e6dc">
+  <source>Overlay Color</source>
+<target>Kulay ng overlay</target></trans-unit>
+<trans-unit id="s3d09398e555ee5f9">
+  <source>Advanced Options</source>
+<target>Mga advanced na opsyon</target></trans-unit>
+<trans-unit id="s8de4d921e17c46aa">
+  <source>X Position</source>
+<target>Posisyon X</target></trans-unit>
+<trans-unit id="s58369cf8082f2d5f">
+  <source>Y Position</source>
+<target>Posisyon Y</target></trans-unit>
+<trans-unit id="sf21fb4f4b9e8911f">
+  <source>Width</source>
+<target>Lapad</target></trans-unit>
+<trans-unit id="sffdadf0a576fd802">
+  <source>Height</source>
+<target>Taas</target></trans-unit>
+<trans-unit id="sdc673e73b5c13aea">
+  <source>Delete</source>
+<target>Tanggalin</target></trans-unit>
+<trans-unit id="s1ad02de8e1d50d2c">
+  <source>Select an interaction to view details</source>
+<target>Pumili ng interaksiyon para makita ang mga detalye</target></trans-unit>
+<trans-unit id="s0960574e3b6ca412">
+  <source>Video File</source>
+<target>Video file</target></trans-unit>
+<trans-unit id="s3cda547ac2158bf5">
+  <source>Audio File</source>
+<target>Audio file</target></trans-unit>
+<trans-unit id="s15733d7d0f6d1d73">
+  <source>Chapters</source>
+<target>Mga kabanata</target></trans-unit>
+<trans-unit id="sf9aee319a006c9b4">
+  <source>Add</source>
+<target>Idagdag</target></trans-unit>
+<trans-unit id="s99f110d27e30b289">
+  <source>Title</source>
+<target>Pamagat</target></trans-unit>
+<trans-unit id="sae1c7f13b7c0c47f">
+  <source>Start</source>
+<target>Simulan</target></trans-unit>
+<trans-unit id="s58d4e5482a78f056">
+  <source>Skip to Chapter</source>
+<target>Lumaktaw sa Kabanata</target></trans-unit>
+<trans-unit id="s178bb121d5131532">
+  <source>Chapter</source>
+<target>Kabanata</target></trans-unit>
+<trans-unit id="sa76bb33ac0cfda96">
+  <source>Invalid time format. Use hh:mm:ss or mm:ss</source>
+<target>Di-wasto ang format ng oras. Gamitin ang hh:mm:ss o mm:ss</target></trans-unit>
+<trans-unit id="sb2e1884d9dace006">
+  <source>Add Popup</source>
+<target>Magdagdag ng Popup</target></trans-unit>
+<trans-unit id="scd1dd6ff53d0d01a">
+  <source>Try again</source>
+<target>Subukan muli</target></trans-unit>
+<trans-unit id="s3c25c6a16358737f">
+  <source>Choose a different source</source>
+<target>Pumili ng ibang source</target></trans-unit>
+<trans-unit id="s4f9913323d0454e8">
+  <source>No media has been added here yet.</source>
+<target>Wala pang media na naidagdag dito.</target></trans-unit>
+<trans-unit id="s75ff661d0f492c89">
+  <source>Select video or audio file</source>
+<target>Pumili ng video o audio file</target></trans-unit>
+<trans-unit id="s08b05407b5565ca4">
+  <source>or</source>
+<target>o</target></trans-unit>
+<trans-unit id="s2f4a323ed88d2650">
+  <source>Enter video or audio URL</source>
+<target>Ilagay ang URL ng video o audio</target></trans-unit>
+<trans-unit id="s8d3cb828b9649568">
+  <source>Supported services: YouTube, Vimeo, TikTok, Spotify, direct video/audio links</source>
+<target>Mga sinusuportahang serbisyo: YouTube, Vimeo, TikTok, Spotify, direktang link ng video/audio</target></trans-unit>
+<trans-unit id="sd974a9bae026bd45">
+  <source>YouTube videos only play on a web server</source>
+<target>Sa web server lang nagpe-play ang mga video sa YouTube</target></trans-unit>
+<trans-unit id="sce061dbb316d94ea">
+  <source>YouTube only plays embedded videos on pages that are served by a web server. This is a restriction imposed by YouTube, not by WebWriter.</source>
+<target>Nagpe-play lang ang YouTube ng mga naka-embed na video sa mga pahinang inihahatid ng web server. Paghihigpit ito ng YouTube, hindi ng WebWriter.</target></trans-unit>
+<trans-unit id="s5383b85bb420a2bb">
+  <source>As a result, this video will not load in WebWriter's preview mode and in documents opened directly from a device. To let your students watch it, publish the document to a web server (e.g. WebWriter Cloud) and share the link from there.</source>
+<target>Dahil dito, hindi maglo-load ang video sa preview mode ng WebWriter at sa mga dokumentong direktang binuksan mula sa device. Para mapanood ito ng mga mag-aaral, i-publish ang dokumento sa web server (hal. WebWriter Cloud) at ibahagi ang link doon.</target></trans-unit>
+<trans-unit id="s349093a6b4a3a15e">
+  <source>If you want to distribute this document as a file rather than through a web server, use a different video source instead of YouTube.</source>
+<target>Kung ipamamahagi mo ang dokumento bilang file sa halip na sa web server, gumamit ng ibang source ng video sa halip na YouTube.</target></trans-unit>
+<trans-unit id="sb459c43758ae0ae9">
+  <source>Videos from other sources and uploaded video or audio files aren't affected by this.</source>
+<target>Hindi naaapektuhan ang mga video mula sa ibang source at mga in-upload na video o audio file.</target></trans-unit>
+<trans-unit id="s2ec9e13e6bb4b91e">
+  <source>Use YouTube anyway</source>
+<target>Gamitin pa rin ang YouTube</target></trans-unit>
+<trans-unit id="sed50aa23ed358b33">
+  <source>This file could not be read. Please try again or choose a different file.</source>
+<target>Hindi mabasa ang file na ito. Subukan muli o pumili ng ibang file.</target></trans-unit>
+<trans-unit id="s4b93a142098860d9">
+  <source>This file type isn't supported. Please choose an MP4 or WebM video, or an MP3, WAV, AAC, FLAC or OGG audio file.</source>
+<target>Hindi sinusuportahan ang uri ng file na ito. Pumili ng MP4 o WebM na video, o MP3, WAV, AAC, FLAC o OGG na audio file.</target></trans-unit>
+<trans-unit id="sc255dd92bfffab10">
+  <source>The media player could not be started. Please try again.</source>
+<target>Hindi masimulan ang media player. Subukan muli.</target></trans-unit>
+<trans-unit id="s1748fa0e940a7f04">
+  <source>This file could not be loaded. It is damaged or isn't a video or audio file.</source>
+<target>Hindi ma-load ang file na ito. Sira ito o hindi ito video/audio file.</target></trans-unit>
+<trans-unit id="s11f3370df4b0a8a1">
+  <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
+<target>Hindi sinusuportahan ang mga album at playlist ng Spotify. Gumamit ng link sa iisang track o episode.</target></trans-unit>
+<trans-unit id="s23811970ee056cd6">
+  <source>The media could not be loaded. The link may be broken or the file may no longer exist.</source>
+<target>Hindi ma-load ang media. Maaaring sira ang link o wala na ang file.</target></trans-unit>
+<trans-unit id="sc282195e53905990">
+  <source>This link doesn't point to a video or audio file. Please check the link, or use a link to a supported service.</source>
+<target>Hindi tumuturo sa video o audio file ang link na ito. Suriin ang link o gumamit ng link sa sinusuportahang serbisyo.</target></trans-unit>
+<trans-unit id="s9d2a1c7fe017a7cd">
+  <source>Loading audio...</source>
+<target>Naglo-load ang audio...</target></trans-unit>
+<trans-unit id="s55b6789531afffdb">
+  <source>Loading the media was aborted. Please try again.</source>
+<target>Nahinto ang pag-load ng media. Subukan muli.</target></trans-unit>
+<trans-unit id="s29fdfa31c7b42598">
+  <source>The media could not be loaded because of a network error. Please check your internet connection, then try again.</source>
+<target>Hindi ma-load ang media dahil sa error sa network. Suriin ang koneksyon sa internet at subukan muli.</target></trans-unit>
+<trans-unit id="sa656bae1f3f1213a">
+  <source>The media file is damaged or uses a format your browser cannot play.</source>
+<target>Sira ang media file o gumagamit ito ng format na hindi mapapatugtog ng browser mo.</target></trans-unit>
+<trans-unit id="sa4fda558b6798486">
+  <source>The media could not be loaded. The link may be broken, or the format isn't supported by your browser.</source>
+<target>Hindi ma-load ang media. Maaaring sira ang link o hindi sinusuportahan ng browser mo ang format.</target></trans-unit>
+<trans-unit id="sfa88e6145d78a722">
+  <source>The media could not be loaded. Please check the link and your internet connection, then try again.</source>
+<target>Hindi ma-load ang media. Suriin ang link at koneksyon sa internet, saka subukan muli.</target></trans-unit>
+<trans-unit id="sa7e813528c029362">
+  <source>This YouTube link is invalid. Please check the link and try again.</source>
+<target>Di-wasto ang link na ito sa YouTube. Suriin ang link at subukan muli.</target></trans-unit>
+<trans-unit id="s964cac1bdaaf41b4">
+  <source>This YouTube video doesn't exist or is private.</source>
+<target>Wala o pribado ang video na ito sa YouTube.</target></trans-unit>
+<trans-unit id="s97ea3e96d4a6d036">
+  <source>The owner of this YouTube video doesn't allow it to be embedded. Please use a different video.</source>
+<target>Hindi pinapayagan ng may-ari ng video na ito sa YouTube ang pag-embed. Gumamit ng ibang video.</target></trans-unit>
+<trans-unit id="sfbf044c175e1bc7a">
+  <source>YouTube refuses to play this video here because the page doesn't identify itself to YouTube. This happens in WebWriter's preview mode or in documents opened directly from your device. Publish this document to a web server (e.g. WebWriter Cloud) and open it from there.</source>
+<target>Tumangging i-play ng YouTube ang video rito dahil hindi nagpapakilala sa YouTube ang pahina. Nangyayari ito sa preview mode ng WebWriter o sa mga dokumentong direktang binuksan mula sa device. I-publish ang dokumento sa web server (hal. WebWriter Cloud) at buksan ito roon.</target></trans-unit>
+<trans-unit id="sb09bf8953fdb009c">
+  <source>The YouTube video could not be loaded. Please check the link and your internet connection, then try again.</source>
+<target>Hindi ma-load ang video sa YouTube. Suriin ang link at koneksyon sa internet at subukan muli.</target></trans-unit>
+<trans-unit id="s97becfe48a3d368f">
+  <source>The Vimeo video could not be loaded. It may not exist, may be private, or may not allow being embedded.</source>
+<target>Hindi ma-load ang video sa Vimeo. Maaaring wala ito, pribado, o hindi pinapayagan ang pag-embed.</target></trans-unit>
+<trans-unit id="s5507d0b5ed2397d5">
+  <source>The TikTok video could not be loaded. It may not exist, may be private, or may not allow being embedded.</source>
+<target>Hindi ma-load ang video sa TikTok. Maaaring wala ito, pribado, o hindi pinapayagan ang pag-embed.</target></trans-unit>
+<trans-unit id="sf0da5b972a25370a">
+  <source>The Spotify track could not be loaded. It may not exist or may not be available in your region.</source>
+<target>Hindi ma-load ang track sa Spotify. Maaaring wala ito o hindi available sa rehiyon mo.</target></trans-unit>
+<trans-unit id="se6ba3e3a2756df92">
+  <source>The media took too long to load. Please check the link and your internet connection, then try again.</source>
+<target>Masyadong matagal mag-load ang media. Suriin ang link at koneksyon sa internet at subukan muli.</target></trans-unit>
+<trans-unit id="sf29ef97c6e418a92">
+  <source>Remove media?</source>
+<target>Alisin ang media?</target></trans-unit>
+<trans-unit id="s9aa13e6e7201d216">
+  <source>Are you sure you want to remove the current audio?</source>
+<target>Sigurado ka bang aalisin ang kasalukuyang audio?</target></trans-unit>
+<trans-unit id="sadb8fadf3bbadd95">
+  <source>Are you sure you want to remove the current video?</source>
+<target>Sigurado ka bang aalisin ang kasalukuyang video?</target></trans-unit>
+<trans-unit id="sc2a0d87e2a79ff83">
+  <source>Also remove all interactions and chapters</source>
+<target>Alisin din ang lahat ng interaksiyon at kabanata</target></trans-unit>
+<trans-unit id="s55cb5824c6210259">
+  <source>Yes, remove it</source>
+<target>Oo, alisin ito</target></trans-unit>
+<trans-unit id="s8213840a0f7d2644">
+  <source>No, keep it</source>
+<target>Hindi, panatilihin ito</target></trans-unit>
+<trans-unit id="s86d33eabf23f17c4">
+  <source>Add something here...</source>
+<target>Magdagdag ng anuman dito...</target></trans-unit>
+<trans-unit id="s97f78c37615bdaf2">
+  <source>Hide interactions</source>
+<target>Itago ang mga interaksiyon</target></trans-unit>
+<trans-unit id="sc7e2b06a922c3979">
+  <source>Hide chapters</source>
+<target>Itago ang mga kabanata</target></trans-unit>
+<trans-unit id="s089b6f6551227e0b">
+  <source>Disable playback rate changes</source>
+<target>Huwag payagan ang pagbabago ng bilis ng playback</target></trans-unit>
+<trans-unit id="s8fef389de26459e6">
+  <source>Import media file</source>
+<target>Mag-import ng media file</target></trans-unit>
+<trans-unit id="s87a7c34815708e19">
+  <source>Remove media</source>
+<target>Alisin ang media</target></trans-unit>
+<trans-unit id="s491dc50bced9bedc">
+  <source>Remove the current media and keep its interactions and chapters?</source>
+<target>Alisin ang kasalukuyang media at panatilihin ang mga interaksiyon at kabanata nito?</target></trans-unit>
+<trans-unit id="sac494a087707be4c">
+  <source>Playback</source>
+<target>Playback</target></trans-unit>
+<trans-unit id="sef5852ec91873a6c">
+  <source>Start time</source>
+<target>Oras ng pagsisimula</target></trans-unit>
+<trans-unit id="s2e33731c2ead8d57">
+  <source>End time</source>
+<target>Oras ng pagtatapos</target></trans-unit>
+<trans-unit id="sfc902fb1179ecb70">
+  <source>Do not pause when shown</source>
+<target>Huwag i-pause kapag ipinakita</target></trans-unit>
+<trans-unit id="s6a0937ef686b96c4">
+  <source>X position (%)</source>
+<target>Posisyon X (%)</target></trans-unit>
+<trans-unit id="s7751f12230bb00e5">
+  <source>Y position (%)</source>
+<target>Posisyon Y (%)</target></trans-unit>
+<trans-unit id="s95836eab7093947c">
+  <source>Overlay color</source>
+<target>Kulay ng overlay</target></trans-unit>
+<trans-unit id="s1c5b38a1790e5663">
+  <source>Interaction timing</source>
+<target>Oras ng interaksiyon</target></trans-unit>
+<trans-unit id="s1d2c9dcc771033fc">
+  <source>Position and size</source>
+<target>Posisyon at laki</target></trans-unit>
+<trans-unit id="sf0e261e04eda82ff">
+  <source>Appearance</source>
+<target>Hitsura</target></trans-unit>
+<trans-unit id="s7ac532234bc05506">
+  <source>Delete interaction</source>
+<target>Tanggalin ang interaksiyon</target></trans-unit>
+<trans-unit id="s54296d2feba264b7">
+  <source>Delete this interaction?</source>
+<target>Tanggalin ang interaksiyong ito?</target></trans-unit>
+</body>
+</file>
+</xliff>
