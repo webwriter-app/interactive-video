@@ -140,8 +140,8 @@
   "license": "MIT",
   "author": "Andreas Dymek, based on previous work by Tarik Vural",
   "scripts": {
-    "prepublishOnly": "npx @webwriter/build",
-    "dev": "npx @webwriter/build dev",
+    "prepublishOnly": "npx @webwriter/build --shared-dependencies",
+    "dev": "npx @webwriter/build dev --shared-dependencies",
     "localize": "lit-localize extract && npx @webwriter/build localize && lit-localize build"
   },
   "dependencies": {
@@ -149,9 +149,9 @@
     "@lit/localize": "^0.12.2",
     "@shoelace-style/shoelace": "^2.20.1",
     "@tabler/icons": "^3.52.0",
-    "@types/node": "^26.6.6",
-    "@webwriter/lit": "^3.0.0",
-    "lit": "^3.3.1",
+    "@webwriter/lit": "^3.2.0",
+    "@webwriter/widget": "^1.2.0",
+    "lit": "^3.3.0",
     "spotify-audio-element": "^1.0.5",
     "tiktok-video-element": "^0.1.1",
     "vimeo-video-element": "^1.7.5",
@@ -159,9 +159,12 @@
     "youtube-video-element": "^1.9.1"
   },
   "devDependencies": {
-    "@webwriter/build": "^1.13.1",
     "@lit/localize-tools": "^0.8.0",
-    "@types/drawflow": "^0.0.12",
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
+    "@webwriter/build": "^1.14.0",
+    "chai": "^6.3.0",
+    "mocha": "^12.0.3",
     "typescript": "^7.0.2"
   },
   "publishConfig": {
@@ -169,14 +172,30 @@
   },
   "exports": {
     "./widgets/webwriter-interactive-video.*": {
-      "source": "./widgets/webwriter-interactive-video/webwriter-interactive-video.ts",
+      "source": "./src/widgets/webwriter-interactive-video.ts",
       "default": "./dist/widgets/webwriter-interactive-video.*"
     },
     "./widgets/webwriter-video-interaction.*": {
-      "source": "./widgets/webwriter-video-interaction/webwriter-video-interaction.ts",
+      "source": "./src/widgets/webwriter-video-interaction.ts",
       "default": "./dist/widgets/webwriter-video-interaction.*"
     },
     "./snippets/Mondlandung.html": "./snippets/Mondlandung.html",
+    "./tests/data.*": {
+      "source": "./tests/data.test.ts",
+      "default": "./dist/tests/data.*"
+    },
+    "./tests/permissions.*": {
+      "source": "./tests/permissions.test.ts",
+      "default": "./dist/tests/permissions.*"
+    },
+    "./tests/shortcuts.*": {
+      "source": "./tests/shortcuts.test.ts",
+      "default": "./dist/tests/shortcuts.*"
+    },
+    "./tests/localization.*": {
+      "source": "./tests/localization.test.ts",
+      "default": "./dist/tests/localization.*"
+    },
     "./package.json": "./package.json",
     "./icon": "./icon.svg",
     "./editing-config.json": "./editing-config.json",

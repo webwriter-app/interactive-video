@@ -1,0 +1,597 @@
+import { widgetMsg } from "@webwriter/lit/localize";
+import { html, PropertyValues } from "lit";
+
+import { LitElementWw } from "@webwriter/lit";
+import { property } from "lit/decorators.js";
+
+import SlSwitch from "@shoelace-style/shoelace/dist/components/switch/switch.component.js";
+import SlIcon from "@shoelace-style/shoelace/dist/components/icon/icon.component.js";
+import SlColorPicker from "@shoelace-style/shoelace/dist/components/color-picker/color-picker.component.js";
+import SlDetails from "@shoelace-style/shoelace/dist/components/details/details.component.js";
+import SlInput from "@shoelace-style/shoelace/dist/components/input/input.component.js";
+import SlButton from "@shoelace-style/shoelace/dist/components/button/button.component.js";
+import SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.component.js";
+import SlCheckbox from "@shoelace-style/shoelace/dist/components/checkbox/checkbox.component.js";
+import "@shoelace-style/shoelace/dist/themes/light.css";
+
+import {
+  videoContext,
+  InteractiveVideoContext,
+} from "./interactive-video-context";
+
+import { consume } from "@lit/context";
+
+// CSS
+import styles from "./interactive-video-options.styles";
+
+// Icons
+import movie from "@tabler/icons/outline/movie.svg";
+import headphones from "@tabler/icons/outline/headphones.svg";
+import timelineEvent from "@tabler/icons/outline/timeline-event.svg";
+import trash from "@tabler/icons/outline/trash.svg";
+import youtubeIcon from "@tabler/icons/filled/brand-youtube.svg";
+import spotifyIcon from "@tabler/icons/filled/brand-spotify.svg";
+import vimeoIcon from "@tabler/icons/filled/brand-vimeo.svg";
+import tiktokIcon from "@tabler/icons/filled/brand-tiktok.svg";
+
+// Util
+import { formatTime, parseTime } from "../model/time-format";
+import type { WebwriterVideoInteraction } from "../widgets/webwriter-video-interaction";
+import type { WebwriterInteractiveVideo } from "../widgets/webwriter-interactive-video";
+
+export class InteractiveVideoOptions extends LitElementWw {
+  private readonly msg = widgetMsg(this);
+  @consume({ context: videoContext, subscribe: true })
+  @property({ attribute: false })
+  accessor videoContext: InteractiveVideoContext;
+
+  @property({ type: Object, attribute: true, reflect: false })
+  accessor selectedInteraction: WebwriterVideoInteraction | undefined = undefined;
+
+  @property({ type: Number, attribute: true, reflect: true })
+  accessor tabIndex = -1;
+
+  @property({ type: String })
+  accessor interactionXPos: string = "0";
+  @property({ type: String })
+  accessor interactionYPos: string = "0";
+  @property({ type: String })
+  accessor interactionWidth: string = "0";
+  @property({ type: String })
+  accessor interactionHeight: string = "0";
+
+  /**
+   * Returns an object that maps custom element names to their corresponding classes.
+   * These custom elements can be used within the scope of the `webwriter-interactive-video` component.
+   *
+   * @returns An object mapping custom element names to their corresponding classes.
+   */
+  static get scopedElements() {
+    return {
+      "sl-switch": SlSwitch,
+      "sl-icon": SlIcon,
+      "sl-input": SlInput,
+      "sl-details": SlDetails,
+      "sl-color-picker": SlColorPicker,
+      "sl-button": SlButton,
+    };
+  }
+
+  //import CSS
+  static styles = [styles];
+
+  protected updated(_changedProperties: PropertyValues): void {
+    if (_changedProperties.has("selectedInteraction")) {
+      this.updateInteractionProperties();
+
+      this.selectedInteraction?.addEventListener("positionChanged", () => {
+        this.updateInteractionProperties();
+      });
+    }
+  }
+
+  private updateInteractionProperties() {
+    if (this.selectedInteraction) {
+      this.interactionXPos = String(Math.round(this.selectedInteraction.posX * 100) / 100 || 0);
+      this.interactionYPos = String(Math.round(this.selectedInteraction.posY * 100) / 100 || 0);
+      this.interactionWidth = String(Math.round(this.selectedInteraction.width / this.selectedInteraction.videoBaseWidth * 10000) / 100 || 0);
+      this.interactionHeight = String(Math.round(this.selectedInteraction.height / this.selectedInteraction.videoBaseHeight * 10000) / 100 || 0);
+    }
+  }
+
+  render() {
+    const root = this.getRootNode(); // The shadowRoot or document the element sits in
+
+    if (this.videoContext?.selectedInteractionID !== -1) {
+      if (root instanceof ShadowRoot) {
+        const slot = root.querySelector("slot"); // Find the slot
+        if (slot) {
+          const assignedElements = slot.assignedElements();
+          const hasVideoInteraction = assignedElements.some(
+            (el) =>
+              el.tagName.toLowerCase() ===
+              "webwriter-video-interaction"
+          );
+          if (hasVideoInteraction) {
+            const interaction = assignedElements.filter(
+              (interaction) =>
+                String(interaction.id) ===
+                String(this.videoContext?.selectedInteractionID)
+            )[0] as WebwriterVideoInteraction;
+
+            this.selectedInteraction = interaction;
+          }
+          else {
+            // The parentNode's shadow root belongs to a WebwriterVideoInteraction component
+            const parentComponent = root.host;
+
+            if (parentComponent.tagName.toLowerCase() === 'webwriter-video-interaction') {
+              this.selectedInteraction = parentComponent as WebwriterVideoInteraction;
+            }
+          }
+        }
+      }
+    } else {
+      this.selectedInteraction = undefined;
+    }
+
+    return html`
+      <div
+        style="display:flex; flex-direction: column; gap: 30px; "
+        id="temporary-teacher-options-container"
+        class="author-only"
+      >
+        ${this.videoContext?.videoLoaded
+          ? html` <!--  -->
+              <div
+                style="display:flex; flex-direction: column; gap: 10px;"
+              >
+                <div class="header">
+                  ${this.isAudio() ? html`
+                    <sl-icon src=${headphones}></sl-icon>
+                    <p>${this.msg("Audio")}</p>
+                  ` : html`
+                    <sl-icon src=${movie}></sl-icon>
+                    <p>${this.msg("Video")}</p>
+                  `}
+                </div>
+                ${this.videoContext.videoDetails ? html`
+                  <div class="video-details">
+                    <p class="video-title" title=${this.videoContext?.videoDetails.title}>${this.videoContext?.videoDetails.title}</p>
+                    <p class="video-author" title=${this.videoContext?.videoDetails.author}>${this.videoContext?.videoDetails.author}</p>
+                    <div class="video-source">
+                      ${this.renderSourceInfo()}
+                    </div>
+                  </div>
+                  <sl-button
+                    size="small"
+                    @click=${() => {
+                      this.dispatchEvent(new CustomEvent("showRemoveVideoDialog", {
+                        bubbles: true,
+                        composed: true,
+                      }));
+                    }}
+                    >${this.isAudio() ? this.msg("Remove audio") : this.msg("Remove video")}</sl-button
+                  >
+                ` : null }
+                <sl-switch
+                  @sl-change=${this.handleShowOverlayChange}
+                  class="temporary-teacher-options"
+                  ?checked=${this.videoContext?.showOverlay}
+                  >${this.msg("Show Popups")}</sl-switch
+                >
+                <sl-switch
+                  @sl-change=${this
+                    .handleEnableChaptersChange}
+                  class="temporary-teacher-options"
+                  ?checked=${this.videoContext?.hasChapters}
+                  >${this.msg("Enable chapters")}</sl-switch
+                >
+                ${!["spotify", "tiktok"].includes(this.videoContext?.videoType) ? html`
+                  <sl-switch
+                    @sl-change=${this.handleAllowPlaybackRateChangeChage}
+                    class="temporary-teacher-options"
+                    ?checked=${this.videoContext?.allowPlaybackRateChange}
+                    >${this.msg("Allow playback rate change")}</sl-switch
+                  >
+                ` : null }
+                  
+              </div>
+
+              <!--  -->
+              <div
+                style="display:flex; flex-direction: column; gap: 10px; "
+              >
+                ${this.selectedInteraction !== undefined
+                  ? html` <!--  -->
+                      <div class="header">
+                        <sl-icon
+                          src=${timelineEvent}
+                        ></sl-icon>
+                        <p>${this.msg("Interaction")}</p>
+                        <p style="margin-left: auto">
+                          ID:
+                          ${this.selectedInteraction
+                            ?.id + 1}
+                        </p>
+                      </div>
+                      <div
+                        id="overlay-interaction-settings"
+                      >
+                        <sl-input
+                          id="overlay-start-time-input"
+                          label=${this.msg("Start Time")}
+                          size="small"
+                          value=${formatTime(
+                            this.selectedInteraction
+                              ?.startTime
+                          )}
+                          @sl-change=${this
+                            .handleStartTimeInputChange}
+                        ></sl-input>
+                        <sl-input
+                          id="overlay-end-time-input"
+                          label=${this.msg("End Time")}
+                          size="small"
+                          value=${formatTime(
+                            this.selectedInteraction
+                              ?.endTime
+                          )}
+                          @sl-change=${this
+                            .handleEndTimeInputChange}
+                        ></sl-input>
+                        <sl-switch
+                          @sl-change=${(e: CustomEvent) => {
+                            const target = e.target as SlSwitch;
+                            this.selectedInteraction!.noInitialPause = !target.checked;
+                            this.selectedInteraction!.hasPaused = false;
+                            this.selectedInteraction!.requestUpdate();
+                          }}
+                          class="temporary-teacher-options"
+                          ?checked=${!this.selectedInteraction?.noInitialPause}
+                          >${this.msg("Pause video when shown")}</sl-switch
+                        >
+                        <div>
+                          <p
+                            style="font-size: 17px; margin: 0px; padding: 0px; margin-bottom: 5px; font-size: 14px;"
+                          >
+                            ${this.msg(
+                              "Background Color"
+                            )}
+                          </p>
+                          <sl-color-picker
+                            label=${this.msg(
+                              "Overlay Color"
+                            )}
+                            id="color-picker"
+                            size="small"
+                            value=${getComputedStyle(
+                              this
+                                .selectedInteraction
+                            ).backgroundColor}
+                            @sl-change=${this
+                              .handleOverlayColorChange}
+                          ></sl-color-picker>
+                        </div>
+                        <sl-details
+                          summary=${this.msg(
+                            "Advanced Options"
+                          )}
+                        >
+                          <div
+                            style="display: flex; flex-direction: column; gap: 10px;"
+                          >
+                            <sl-input
+                              label=${this.msg(
+                                "X Position"
+                              )}
+                              id="overlay-x-position-input"
+                              type="number"
+                              min="0"
+                              .max=${100 - Number(this.interactionWidth)}
+                              .value=${this.interactionXPos}
+                              @sl-input=${(e: CustomEvent) => {
+                                const newValue = parseFloat((e.target as SlInput).value) || 0;
+                                this.interactionXPos = String(newValue);
+                                this.selectedInteraction!.posX = newValue;
+                              }}
+                              size="small"
+                            >
+                            </sl-input>
+                            <sl-input
+                              label=${this.msg(
+                                "Y Position"
+                              )}
+                              id="overlay-y-position-input"
+                              type="number"
+                              min="0"
+                              .max=${100 - Number(this.interactionHeight)}
+                              .value=${this.interactionYPos}
+                              @sl-input=${(e: CustomEvent) => {
+                                const newValue = parseFloat((e.target as SlInput).value) || 0;
+                                this.interactionYPos = String(newValue);
+                                this.selectedInteraction!.posY = newValue;
+                              }}
+                              size="small"
+                            >
+                            </sl-input>
+                            <sl-input
+                              label=${this.msg(
+                                "Width"
+                              )}
+                              id="overlay-width-input"
+                              type="number"
+                              min="10"
+                              .max=${100 - Number(this.interactionXPos)}
+                              .value=${this.interactionWidth}
+                              @sl-input=${(e: CustomEvent) => {
+                                const newValue = parseFloat((e.target as SlInput).value) || 0;
+                                this.interactionWidth = String(newValue);
+                                this.selectedInteraction!.width = (newValue / 100 * this.selectedInteraction!.videoBaseWidth) || 0;
+                              }}
+                              size="small"
+                            >
+                            </sl-input>
+                            <sl-input
+                              label=${this.msg(
+                                "Height"
+                              )}
+                              id="overlay-height-input"
+                              type="number"
+                              min="10"
+                              .max=${100 - Number(this.interactionYPos)}
+                              .value=${this.interactionHeight}
+                              @sl-input=${(e: CustomEvent) => {
+                                const newValue = parseFloat((e.target as SlInput).value) || 0;
+                                this.interactionHeight = String(newValue);
+                                this.selectedInteraction!.height = (newValue / 100 * this.selectedInteraction!.videoBaseHeight) || 0;
+                              }}
+                              size="small"
+                            >
+                            </sl-input>
+                          </div>
+                        </sl-details>
+                        <sl-button
+                          slot="footer"
+                          style="margin-left: auto; width: 100px"
+                          variant="danger"
+                          outline
+                          @click=${this.deleteElement}
+                        >
+                          <sl-icon
+                            slot="prefix"
+                            src=${trash}
+                          ></sl-icon>
+                          ${this.msg("Delete")}
+                        </sl-button>
+                      </div>`
+                  : html` <!--  -->
+                      <div class="header">
+                        <sl-icon
+                          src=${timelineEvent}
+                        ></sl-icon>
+                        <p>${this.msg("Interaction")}</p>
+                      </div>
+                      <p
+                        style="padding: 0px; margin: 0px; font-size: 14px;"
+                      >
+                        ${this.msg(
+                          "Select an interaction to view details"
+                        )}
+                      </p>`}
+              </div>`
+          : null}
+      </div>
+    `;
+  }
+
+  renderSourceInfo() {
+    switch (this.videoContext.videoType) {
+      case "youtube":
+        return html`<sl-icon
+          .src=${youtubeIcon}
+        ></sl-icon>
+        <p>YouTube</p>`;
+      case "spotify":
+        return html`<sl-icon
+          .src=${spotifyIcon}
+        ></sl-icon>
+        <p>Spotify</p>`;
+      case "vimeo":
+        return html`<sl-icon
+          .src=${vimeoIcon}
+        ></sl-icon>
+        <p>Vimeo</p>`;
+      case "tiktok":
+        return html`<sl-icon
+          .src=${tiktokIcon}
+        ></sl-icon>
+        <p>TikTok</p>`;
+      case "htmlvideo":
+        return html`<sl-icon
+          .src=${movie}
+        ></sl-icon>
+        <p>${this.msg("Video File")}</p>`;
+      case "htmlaudio":
+        return html`<sl-icon
+          .src=${headphones}
+        ></sl-icon>
+        <p>${this.msg("Audio File")}</p>`;
+      default:
+        return null;
+    }
+  }
+
+  isAudio() {
+    return ["spotify", "htmlaudio"].includes(this.videoContext?.videoType);
+  }
+
+  deleteElement() {
+    if (this.selectedInteraction) {
+      this.dispatchEvent(
+        new CustomEvent("updateContext", {
+          bubbles: true,
+          composed: true,
+        })
+      );
+      this.selectedInteraction.remove();
+    }
+  }
+
+  /**
+   * Handles the change event when teacher options for showing Overlays is triggered.
+   *
+   * @param e - The custom event object.
+   */
+  handleShowOverlayChange = (e: CustomEvent) => {
+    const target = e.target as SlSwitch;
+    this.dispatchEvent(
+      new CustomEvent("setShowOverlay", {
+        bubbles: true,
+        composed: true,
+        detail: { value: target.checked },
+      })
+    );
+
+    this.requestUpdate();
+  };
+
+  /**
+   * Handles the change event when teacher options for enabling chapters is triggered.
+   *
+   * @param e - The custom event object.
+   */
+  handleEnableChaptersChange = (e: CustomEvent) => {
+    const target = e.target as SlSwitch;
+    this.dispatchEvent(
+      new CustomEvent("setHasChapters", {
+        bubbles: true,
+        composed: true,
+        detail: { value: target.checked },
+      })
+    );
+
+    if (
+      target.checked &&
+      this.videoContext.chapterConfig.length === 0
+    ) {
+      this.dispatchEvent(
+        new CustomEvent("setChapterConfig", {
+          bubbles: true,
+          composed: true,
+          detail: { value: [
+            {
+              title: `${this.msg("Chapter")} 1`,
+              startTime: 0,
+            },
+          ]},
+        })
+      );
+    } else if (!this.videoContext.hasChapters) {
+      this.dispatchEvent(
+        new CustomEvent("closeChaptersDrawer", {
+          bubbles: true,
+          composed: true,
+        })
+      );
+    }
+
+    this.requestUpdate();
+  };
+
+  handleAllowPlaybackRateChangeChage = (e: CustomEvent) => {
+    const target = e.target as SlSwitch;
+    this.dispatchEvent(
+      new CustomEvent("setAllowPlaybackRateChange", {
+        bubbles: true,
+        composed: true,
+        detail: { value: target.checked },
+      })
+    );
+
+    this.requestUpdate();
+  };
+
+  handleStartTimeInputChange = (e: CustomEvent, index?: number) => {
+    if (!this.selectedInteraction) return;
+    const input = e.target as SlInput;
+    const newTime = parseTime(input.value);
+    if (newTime !== null) {
+      if (newTime < this.selectedInteraction.endTime) {
+        this.selectedInteraction.startTime = newTime;
+        this.selectedInteraction.setAttribute(
+          "startTime",
+          String(newTime)
+        );
+
+        input.value = formatTime(newTime);
+
+        // Change the bauble positions to reflect the new time.
+        (
+          this.selectedInteraction
+            .parentNode as WebwriterInteractiveVideo
+        ).updateBaublePositions();
+
+        // Jump to the new time.
+        (
+          this.selectedInteraction
+            .parentNode as WebwriterInteractiveVideo
+        ).videoPlayer.currentTime = this.selectedInteraction.startTime;
+      } else {
+        console.error("The Start Time must be before the End Time.");
+        input.value = formatTime(this.selectedInteraction.startTime);
+      }
+    } else {
+      input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
+      input.value = formatTime(this.selectedInteraction.startTime);
+    }
+  };
+
+  handleEndTimeInputChange = (e: CustomEvent, index?: number) => {
+    if (!this.selectedInteraction) return;
+    const input = e.target as SlInput;
+    const newTime = parseTime(input.value);
+    if (newTime !== null) {
+      if (newTime > this.selectedInteraction.startTime) {
+        this.selectedInteraction.endTime = newTime;
+        this.selectedInteraction.setAttribute(
+          "endTime",
+          String(newTime)
+        );
+
+        input.value = formatTime(newTime);
+
+        // Change the bauble positions to reflect the new time.
+        (
+          this.selectedInteraction
+            .parentNode as WebwriterInteractiveVideo
+        ).updateBaublePositions();
+
+        // Jump to the new time.
+        (
+          this.selectedInteraction
+            .parentNode as WebwriterInteractiveVideo
+        ).videoPlayer.currentTime = this.selectedInteraction.startTime;
+      } else {
+        console.error("The End Time must be after the Start Time.");
+        input.value = formatTime(this.selectedInteraction.endTime);
+      }
+    } else {
+      input.helpText = "Invalid time format. Use hh:mm:ss or mm:ss";
+      input.value = formatTime(this.selectedInteraction.endTime);
+    }
+  };
+
+  /**
+   * Handles the change event when the overlay color is changed.
+   *
+   * @param e - The custom event containing the color picker target.
+   */
+  handleOverlayColorChange(e: CustomEvent) {
+    if (!this.selectedInteraction) return;
+    const colorPicker = e.target as SlColorPicker;
+    this.selectedInteraction.style.backgroundColor = String(
+      colorPicker.value
+    );
+  }
+}
