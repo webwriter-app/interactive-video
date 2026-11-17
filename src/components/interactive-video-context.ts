@@ -63,11 +63,4 @@ export class InteractiveVideoContext {
    * Contains the current chapter configuration as an object.
    */
   chapterConfig: { title: string, startTime: number }[] = [];
-
-  // ******* INTERACTION PROPERTIES *******
-
-  /**
-   * Indicates whether the interaction view is active.
-   */
-  selectedInteractionID: number = -1;
 }

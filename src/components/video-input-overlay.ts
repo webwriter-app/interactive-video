@@ -1,5 +1,5 @@
 import { widgetMsg } from "@webwriter/lit/localize";
-import { html, css } from "lit";
+import { html } from "lit";
 
 import { LitElementWw } from "@webwriter/lit";
 import { widgetPermissions } from "@webwriter/lit/permissions";
@@ -69,7 +69,6 @@ export class VideoInputOverlay extends LitElementWw {
 
   */
 
-  firstUpdated() {}
 
   private get showErrorOverlay() {
     return this.error && (!this.#permissions.editing || this.hasVideo);

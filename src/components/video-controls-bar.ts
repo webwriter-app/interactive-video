@@ -36,7 +36,7 @@ import fullscreenExit from "@tabler/icons/outline/arrows-minimize.svg";
 
 import brandSpeedtest from "@tabler/icons/outline/brand-speedtest.svg";
 
-import { formatTime, parseTime } from "../model/time-format";
+import { formatTime } from "../model/time-format";
 
 import styles from "./video-controls-bar.styles";
 
@@ -80,12 +80,6 @@ export class VideoControlsBar extends LitElementWw {
    */
   @query("#mute-volume-button")
   accessor muteButton: SlIconButton;
-
-  /**
-   * Query for the add interactions button.
-   */
-  @query("#add-button")
-  accessor addButton: SlButton;
 
   /**
    * Query for the volume slider.
@@ -413,19 +407,8 @@ export class VideoControlsBar extends LitElementWw {
 
   /**
    * Handles the click event for the fullscreen button.
-   * If the document is currently in fullscreen mode, it exits fullscreen and updates the fullscreen button icon.
-   * If the document is not in fullscreen mode, it enters fullscreen, updates the fullscreen button icon,
-   * The controls should be sticky in fullscreen mode, i.e. stick to the lower part of the screen if the video is not fully in view. I didnt get around to doing this.
    */
   handleFullscreenClick = () => {
-    if (document.fullscreenElement) {
-      this.removeEventListener("resize", this.handleFullscreenResize);
-    } else {
-      this.addEventListener("resize", this.handleFullscreenResize);
-      if (!this.checkControlsVisible()) {
-        this.makeControlsSticky();
-      }
-    }
     this.dispatchEvent(
       new CustomEvent("toggleFullscreen", {
         bubbles: true,
@@ -490,32 +473,6 @@ export class VideoControlsBar extends LitElementWw {
       })
     );
   };
-
-  //TODO: implement
-  makeControlsSticky() {
-    const e = new Error("Not implemented");
-  }
-
-  /**
-   * Checks if the controls are visible based on the height of the window and the offset height of the element.
-   * @returns {boolean} Returns true if the controls are visible, false otherwise.
-   */
-  checkControlsVisible(): Boolean {
-    if (window.innerHeight < this.offsetHeight) {
-      return false;
-    }
-    return true;
-  }
-
-  /**
-   * Handles the resize event when the video player enters or exits fullscreen mode.
-   * If the controls are not visible, makes the controls sticky.
-   */
-  handleFullscreenResize() {
-    if (!this.checkControlsVisible) {
-      this.makeControlsSticky();
-    }
-  }
 
   handleTimeUpdate(time: number) {
     this.currentTime = time;

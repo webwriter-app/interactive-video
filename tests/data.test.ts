@@ -76,6 +76,19 @@ describe("<webwriter-interactive-video> data block", function () {
     const stored = block ? JSON.parse(block.textContent!) : null;
     assert.isTrue(!!stored && ["videoBase64", "videoDetails", "chapterConfig"].every((k) => k in stored) && block.getAttribute("slot") === "data" && block.type === "application/json", block?.outerHTML);
   });
+
+  it("keeps the context object across time updates and renews it when a setting changes", async function () {
+    const w: any = await mountExtra();
+    await settle(w);
+    const before = w.videoContext;
+    w.lastTimeUpdate = 5;
+    await w.updateComplete;
+    assert.strictEqual(w.videoContext, before);
+    w.hideChapters = true;
+    await w.updateComplete;
+    assert.notStrictEqual(w.videoContext, before);
+    assert.isFalse(w.videoContext.hasChapters);
+  });
 });
 
 mocha.run();

@@ -17,7 +17,6 @@ import SlRange from "@shoelace-style/shoelace/dist/components/range/range.compon
 
 import styles from "../components/webwriter-interactive-video.styles";
 import { InteractiveVideoContext, videoContext } from "../components/interactive-video-context";
-import { InteractiveVideoOptions } from "../components/interactive-video-options";
 import { VideoInputOverlay } from "../components/video-input-overlay";
 import { VideoControlsBar } from "../components/video-controls-bar";
 import { VideoChapterDrawer } from "../components/video-chapter-drawer";
@@ -61,7 +60,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     "sl-dialog": SlDialog,
     "sl-button": SlButton,
     "sl-checkbox": SlCheckbox,
-    "interactive-video-options": InteractiveVideoOptions,
     "video-input-overlay": VideoInputOverlay,
     "video-controls-bar": VideoControlsBar,
     "video-chapter-drawer": VideoChapterDrawer,
@@ -154,7 +152,6 @@ export class WebwriterInteractiveVideo extends LitElementWw {
     context.videoDetails = this.videoDetails;
     context.waveformData = this.waveformData;
     context.chapterConfig = this.chapterConfig;
-    context.selectedInteractionID = this.selectedInteractionId;
 
     return context;
   }
@@ -329,7 +326,10 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   /** Regenerates the video context when properties change. */
   protected willUpdate(_changedProperties: PropertyValues): void {
-    if (_changedProperties.size > 0) {
+    // The player time, the size of the area and the visibility of controls are not part of the context.
+    // Without this check every time update rebuilt the context and rendered all consumers again.
+    const contextKeys = ["hideInteractions", "hideChapters", "disablePlaybackRateChange", "videoBase64", "videoURL", "videoLoaded", "videoType", "videoDetails", "waveformData", "chapterConfig"];
+    if (!this.videoContext || contextKeys.some((key) => _changedProperties.has(key))) {
       this.videoContext = this._composedContext;
       this.updateContext();
     }

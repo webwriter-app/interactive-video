@@ -27,7 +27,7 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{ \"sl-range\": SlRange, \"sl-dialog\": SlDialog, \"sl-button\": SlButton, \"sl-checkbox\": SlCheckbox, \"interactive-video-options\": InteractiveVideoOptions, \"video-input-overlay\": VideoInputOverlay, \"video-controls-bar\": VideoControlsBar, \"video-chapter-drawer\": VideoChapterDrawer, \"interactions-progress-bar\": InteractionsProgressBar, \"video-player\": VideoPlayer, }",
+              "default": "{ \"sl-range\": SlRange, \"sl-dialog\": SlDialog, \"sl-button\": SlButton, \"sl-checkbox\": SlCheckbox, \"video-input-overlay\": VideoInputOverlay, \"video-controls-bar\": VideoControlsBar, \"video-chapter-drawer\": VideoChapterDrawer, \"interactions-progress-bar\": InteractionsProgressBar, \"video-player\": VideoPlayer, }",
               "description": "The custom elements that can be used within the scope of the `webwriter-interactive-video` component."
             },
             {
@@ -746,7 +746,7 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{ \"sl-icon\": SlIcon, \"interactive-video-options\": InteractiveVideoOptions, }"
+              "default": "{ \"sl-icon\": SlIcon, }"
             },
             {
               "kind": "field",

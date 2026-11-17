@@ -1,4 +1,4 @@
-import { html, css } from "lit";
+import { html } from "lit";
 
 import { LitElementWw } from "@webwriter/lit";
 import { widgetPermissions } from "@webwriter/lit/permissions";
@@ -19,14 +19,12 @@ import SlIcon from "@shoelace-style/shoelace/dist/components/icon/icon.component
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import type { VideoPlayer } from "./video-player";
 
-import type { WebwriterVideoInteraction } from "../widgets/webwriter-video-interaction";
 import type { WebwriterInteractiveVideo } from "../widgets/webwriter-interactive-video";
 
 import { WwInteractiveBauble } from "./webwriter-interactive-bauble";
 
 import { consume } from "@lit/context";
 
-import add from "@tabler/icons/outline/timeline-event-plus.svg";
 import bookmark from "@tabler/icons/filled/bookmark.svg";
 
 //CSS
@@ -116,7 +114,7 @@ export class InteractionsProgressBar extends LitElementWw {
               </webwriter-interactive-bauble>`;
             })}
             ${this.videoContext.hasChapters ? this.videoContext.chapterConfig.map(
-              ({ title, startTime }) => {
+              ({ startTime }) => {
                 return html`<sl-icon
                   src=${bookmark}
                   style="
@@ -218,7 +216,7 @@ export class InteractionsProgressBar extends LitElementWw {
    *
    * @param e - The DragEvent object representing the drag event.
    */
-  handleBaubleDraggedOverDropArea(e: DragEvent) {
+  handleBaubleDraggedOverDropArea() {
     this.dropArea.style.background = "rgba(0.5,0.5,0.5,0.5)";
   }
 
@@ -228,7 +226,7 @@ export class InteractionsProgressBar extends LitElementWw {
    *
    * @param e - The DragEvent object representing the drag event.
    */
-  handleBaubleLeaveDropArea(e: DragEvent) {
+  handleBaubleLeaveDropArea() {
     this.dropArea.style.background = "none";
   }
 
@@ -237,7 +235,7 @@ export class InteractionsProgressBar extends LitElementWw {
    *
    * @param e - The drag event.
    */
-  handleBaubleDragEnd = (e: DragEvent) => {
+  handleBaubleDragEnd = () => {
     this.dropArea.style.background = "none";
   };
 

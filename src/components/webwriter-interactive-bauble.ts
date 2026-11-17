@@ -27,28 +27,11 @@ export class WwInteractiveBauble extends LitElementWw {
   accessor id: string;
 
   /**
-   * Initial offset of the bauble.
-   * This property is reflected as an attribute.
-   */
-  @property({ type: Number, attribute: true, reflect: true })
-  accessor initialOffset: number;
-
-  /**
    * Offset of the bauble, this property is used to update the position of the bauble.
    * This property is reflected as an attribute.
    */
   @property({ type: Number, attribute: true, reflect: true })
   accessor offset: number;
-
-  /**
-   * Lifecycle method called after the component's first update.
-   * Sets the initial position of the bauble based on the `initialOffset` property.
-   *
-   * @param _changedProperties - Map of changed properties with their previous values.
-   */
-  protected firstUpdated(_changedProperties: PropertyValues): void {
-    this.style.left = `${this.initialOffset}px`;
-  }
 
   /**
    * Lifecycle method called when the component is updated.

@@ -8,6 +8,7 @@ export class InteractionsController implements ReactiveController {
   #mutations: MutationObserver | null = null;
   #resize: ResizeObserver | null = null;
   #observedArea: Element | null = null;
+  #frame = 0;
 
   constructor(private host: WebwriterInteractiveVideo) {
     host.addController(this);
@@ -27,17 +28,22 @@ export class InteractionsController implements ReactiveController {
     this.#mutations?.disconnect();
     this.#mutations = null;
     this.#resize?.disconnect();
+    cancelAnimationFrame(this.#frame);
   }
 
   /** Follows the size of the player area; the interactions are scaled with it. */
   observeSize(area: Element) {
     this.#observedArea = area;
+    // The new size changes the layout inside the area; applying it in the next frame keeps the browser from
+    // reporting "ResizeObserver loop completed with undelivered notifications", and merges a burst into one update.
     this.#resize = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        this.host.videoContainerWidth = entry.contentRect.width;
-        this.host.videoContainerHeight = entry.contentRect.height;
+      const { width, height } = entries[entries.length - 1].contentRect;
+      cancelAnimationFrame(this.#frame);
+      this.#frame = requestAnimationFrame(() => {
+        this.host.videoContainerWidth = width;
+        this.host.videoContainerHeight = height;
         this.syncGeometry();
-      }
+      });
     });
     this.#resize.observe(area);
     this.syncGeometry();

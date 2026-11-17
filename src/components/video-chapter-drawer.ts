@@ -51,15 +51,6 @@ export class VideoChapterDrawer extends LitElementWw {
   //import CSS
   static styles = [styles];
 
-  /*
-
-  */
-
-  /*
-
-  */
-  firstUpdated() {}
-
   /**
    * Renders the chapters drawer.
    *

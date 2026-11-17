@@ -13,7 +13,6 @@ import radiusBottomRight from "@tabler/icons/outline/radius-bottom-right.svg";
 import gripHorizontal from "@tabler/icons/outline/grip-horizontal.svg";
 
 import styles from "../components/webwriter-video-interaction.styles";
-import { InteractiveVideoOptions } from "../components/interactive-video-options";
 
 type Labelled = { msg: MsgFn };
 
@@ -27,7 +26,6 @@ export class WebwriterVideoInteraction extends LitElementWw {
 
   static scopedElements = {
     "sl-icon": SlIcon,
-    "interactive-video-options": InteractiveVideoOptions,
   };
 
   static options = {
@@ -167,6 +165,12 @@ export class WebwriterVideoInteraction extends LitElementWw {
    * Called when the component is removed from the DOM.
    * Cleans up event listeners and disconnects observers.
    */
+  connectedCallback(): void {
+    super.connectedCallback();
+    // Only the childList is acted on, so attribute and text changes inside the content are not observed.
+    this.mutationObserver.observe(this, { childList: true, subtree: true });
+  }
+
   disconnectedCallback(): void {
     super.disconnectedCallback();
     this.mutationObserver.disconnect();
@@ -174,20 +178,10 @@ export class WebwriterVideoInteraction extends LitElementWw {
 
   /**
    * Called after the component's first update.
-   * Sets up the mutation observer to monitor changes in the component's content.
+   * Adds a paragraph when the content is empty.
    * @param _changedProperties - The properties that have changed.
    */
   protected firstUpdated(_changedProperties: PropertyValues): void {
-    // Options for the observer (which mutations to observe)
-    const config = {
-      attributes: true,
-      childList: true,
-      subtree: true,
-      characterData: true,
-    };
-    // Start observing the target node for configured mutations
-    this.mutationObserver.observe(this, config);
-
     //create an empty p element if container has no children
     const slot = this.shadowRoot?.querySelector("slot");
 
@@ -210,8 +204,7 @@ export class WebwriterVideoInteraction extends LitElementWw {
 
   private mutationCallback = (mutationList: MutationRecord[]) => {
     mutationList.forEach(
-      ({ type, removedNodes, addedNodes, attributeName, target }) => {
-        //
+      ({ type }) => {
         if (type === "childList") {
           // Check if there is at least one paragraph <p> element in the container
           const paragraphs = this.querySelectorAll("p");
