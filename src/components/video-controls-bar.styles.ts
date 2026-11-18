@@ -21,7 +21,7 @@ export default css`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     margin-right: auto;
     margin-left: 5px;
     gap: 2px;
@@ -34,7 +34,7 @@ export default css`
   }
 
   #chapters-button {
-    min-width: 0;
+    min-width: 2rem;
     flex-shrink: 1;
   }
 
@@ -105,6 +105,7 @@ export default css`
   #volume-slider {
     --track-color-active: #e9e9e9;
     --track-color-inactive: #4d4d4d;
+    --sl-color-primary-600: var(--ww-theme-accent-1, #0284c7);
     width: 80px;
   }
 
@@ -126,6 +127,15 @@ export default css`
     align-items: center;
   }
 
+  #volume-slider::part(form-control-label) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
   #time-stamp {
     color: white;
     user-select: none;
@@ -144,7 +154,7 @@ export default css`
   }
 
   #chapters-button::part(base):hover, #add-button::part(base):hover {
-    color: #0084c6;
+    color: var(--ww-theme-accent-1, #0084c6);
   }
 
   .scale-animation {
@@ -154,5 +164,39 @@ export default css`
 
   .scale-animation:hover {
     transform: scale(1.3);
+  }
+
+  #controls-lower:has(.volume-control.narrow) #controls-lower-right {
+    gap: 2px;
+  }
+
+  #controls-lower:has(.volume-control.narrow) {
+    flex-wrap: wrap;
+  }
+
+  #controls-lower:has(.volume-control.narrow) #controls-lower-right {
+    margin-left: auto;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .icon-button::part(base),
+  .volume-button::part(base) {
+    min-width: 24px;
+    min-height: 24px;
+  }
+
+  @media (pointer: coarse) {
+    .icon-button,
+    .volume-button {
+      font-size: 1.6rem;
+    }
   }
 `;

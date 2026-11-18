@@ -172,6 +172,7 @@ export class VideoControlsBar extends LitElementWw {
           <sl-icon-button
             class="icon-button"
             id="play"
+            label=${this.msg("Play or pause")}
             @click=${this.handlePlayClick}
             src="${playerPlay}"
           ></sl-icon-button>
@@ -190,7 +191,7 @@ export class VideoControlsBar extends LitElementWw {
                   slot="prefix"
                   src=${list}
                 ></sl-icon>
-                ${this.narrow ? null : this.renderCurrentChapter()}
+                ${this.narrow ? html`<span class="sr-only">${this.msg("Chapters")}</span>` : this.renderCurrentChapter()}
               </sl-button>`
             : null}
         </div>
@@ -206,7 +207,7 @@ export class VideoControlsBar extends LitElementWw {
               src=${add}
               style="height: 20px; width: 20px;"
             ></sl-icon>
-            ${this.narrow ? null : this.msg("Add Popup")}
+            ${this.narrow ? html`<span class="sr-only">${this.msg("Add Popup")}</span>` : this.msg("Add Popup")}
           </sl-button>` : null}
           ${!this.volumeHidden ? html`
             <div
@@ -215,6 +216,7 @@ export class VideoControlsBar extends LitElementWw {
               <sl-icon-button
                 class="volume-button"
                 id="mute-volume-button"
+                label=${this.msg("Volume")}
                 @click=${this.handleVolumeButtonClick}
                 @sl-blur=${this.handleVolumeButtonBlur}
                 src="${volumeUp}"
@@ -222,6 +224,7 @@ export class VideoControlsBar extends LitElementWw {
               </sl-icon-button>
               <sl-range
                 id="volume-slider"
+                label=${this.msg("Volume")}
                 style="--thumb-size: 15px; --track-height: 5px; --tooltip-offset: 22px"
                 .tooltipFormatter=${(value: number) => Math.round(value) + "\u2009%"}
                 @sl-input=${this.handleVolumeChange}
@@ -239,6 +242,7 @@ export class VideoControlsBar extends LitElementWw {
               <sl-icon-button
                 class="icon-button"
                 id="settings-button"
+                label=${this.msg("Playback speed")}
                 src="${brandSpeedtest}"
                 slot="trigger"
               ></sl-icon-button>
@@ -255,6 +259,7 @@ export class VideoControlsBar extends LitElementWw {
           <sl-icon-button
             class="icon-button"
             id="fullscreen-button"
+            label=${this.msg("Fullscreen")}
             src="${fullscreenEnter}"
             @click=${this.handleFullscreenClick}
           ></sl-icon-button>

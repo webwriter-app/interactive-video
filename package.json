@@ -15,6 +15,7 @@
     "isced2011-6",
     "isced2011-7",
     "isced2011-8",
+    "iscedf2013-00",
     "iscedf2013-01",
     "iscedf2013-02",
     "iscedf2013-03",
@@ -25,6 +26,29 @@
     "iscedf2013-08",
     "iscedf2013-09",
     "iscedf2013-10",
+    "widget-editable",
+    "widget-allows-pointer-input",
+    "widget-allows-keyboard-input",
+    "widget-allows-touch-input",
+    "widget-has-content",
+    "widget-convertible-to-video",
+    "widget-convertible-to-audio",
+    "widget-convertible-to-text/vtt",
+    "widget-convertible-from-video",
+    "widget-convertible-from-audio",
+    "widget-convertible-from-text/vtt",
+    "widget-responsive",
+    "widget-themeable",
+    "widget-printable",
+    "widget-stateful",
+    "widget-configurable",
+    "widget-reactive",
+    "widget-testable",
+    "video",
+    "audio",
+    "interaction",
+    "chapters",
+    "popup",
     "widget-lang-en",
     "widget-lang-en-US",
     "widget-lang-en-GB",
@@ -192,6 +216,14 @@
       "source": "./tests/shortcuts.test.ts",
       "default": "./dist/tests/shortcuts.*"
     },
+    "./tests/presentation.*": {
+      "source": "./tests/presentation.test.ts",
+      "default": "./dist/tests/presentation.*"
+    },
+    "./tests/conversions.*": {
+      "source": "./tests/conversions.test.ts",
+      "default": "./dist/tests/conversions.*"
+    },
     "./tests/localization.*": {
       "source": "./tests/localization.test.ts",
       "default": "./dist/tests/localization.*"
@@ -213,7 +245,14 @@
     "./widgets/webwriter-interactive-video": {
       "draggable": false,
       "definingAsContext": true,
-      "content": "(webwriter-video-interaction)*"
+      "content": "(webwriter-video-interaction)*",
+      "importFormats": [
+        ".vtt",
+        "text/vtt"
+      ],
+      "exportFormats": [
+        "text/vtt"
+      ]
     }
   },
   "customElements": "custom-elements.json"

@@ -18,6 +18,14 @@ The media is a file (stored as base64 in the widget's JSON data block, together 
 or a link to YouTube, Vimeo, TikTok, Spotify or a direct file. The player libraries for each kind of source are loaded when it is first used.
 Interactions are `webwriter-video-interaction` children; keys the data block does not know are kept.
 Space and K play and pause, F toggles fullscreen, M mutes, the arrow keys change volume and skip 5 s, J and L skip 10 s, C opens the chapters.
+Interaction and chapter markers on the progress bar are buttons; in edit mode the arrow keys on an interaction marker move its start time by 1 s, and a touch drag moves it too.
+The layout follows the container width (300 to 2100 px) and the controls collapse when it is narrow. The accent of the sliders and markers follows `--ww-theme-accent-1`, the font `--ww-font-family`.
+On paper the media and its controls are replaced by the title, the chapters and the interactions with their time spans.
+
+Conversions: a `video` or `audio` element with a source becomes the media of a new widget, and a media file or direct link becomes a `video` or `audio` element (interactions and chapters are dropped).
+WebVTT (`.vtt`, `text/vtt`) holds the chapters as cues and the interactions as cues `interaction-<id>` with the text of their content; formatting, images and position are dropped.
+An import replaces the chapters, retimes the interactions with the same id and adds the other cues as new interactions.
+Signals: `time` (number, seconds) and `chapter` (string, title of the current chapter). The widget takes no effects.
 
 ### Usage
 
@@ -46,6 +54,8 @@ npm install @webwriter/interactive-video
 | `WebwriterInteractiveVideo.dataType` | `string` | - | `"application/json"` | ✗ |
 | `WebwriterInteractiveVideo.scopedElements` | `object` | The custom elements that can be used within the scope of the `webwriter-interactive-video` component. | `{ "sl-range": SlRange, "sl-dialog": SlDialog, "sl-button": SlButton, "sl-checkbox": SlCheckbox, "video-input-overlay": VideoInputOverlay, "video-controls-bar": VideoControlsBar, "video-chapter-drawer": VideoChapterDrawer, "interactions-progress-bar": InteractionsProgressBar, "video-player": VideoPlayer, }` | ✗ |
 | `WebwriterInteractiveVideo.options` | `object` | - | `{ "hide-interactions": { type: "boolean" as const, group: "playback", label: (widget: Labelled) => widget.msg("Hide interactions") }, "hide-chapters": { type: "boolean" as const, group: "playback", label: (widget: Labelled) => widget.msg("Hide chapters") }, "disable-playback-rate-change": { type: "boolean" as const, group: "playback", label: (widget: Labelled) => widget.msg("Disable playback rate changes") }, }` | ✗ |
+| `WebwriterInteractiveVideo.convertFrom` | `object` | - | `{ video: loadMediaElement, audio: loadMediaElement, ".vtt": importWebVtt, "text/vtt": importWebVtt }` | ✗ |
+| `WebwriterInteractiveVideo.convertTo` | `object` | - | `{ video: toVideoElement, audio: toAudioElement, "text/vtt": exportWebVtt }` | ✗ |
 | `WebwriterInteractiveVideo.optionGroups` | `object` | - | `{ playback: { label: (widget: Labelled) => widget.msg("Playback"), collapsible: true, advanced: false }, }` | ✗ |
 | `WebwriterInteractiveVideo.actions` | `object` | - | `{ importMedia: { label: (widget: Labelled) => widget.msg("Import media file"), group: "playback", icon: "Upload", input: { type: "file" as const, accept: "video/*,audio/*", multiple: false }, }, removeMedia: { label: (widget: Labelled) => widget.msg("Remove media"), group: "playback", icon: "Delete", intent: "danger" as const, confirm: (widget: Labelled) => widget.msg("Remove the current media and keep its interactions and chapters?"), }, // Player keys. They have no button in the editor's drawer. playPause: { hidden: true, shortcut: ["Space", "K"] }, toggleFullscreenByKey: { hidden: true, shortcut: "F" }, toggleMuteByKey: { hidden: true, shortcut: "M" }, volumeUp: { hidden: true, shortcut: "ArrowUp" }, volumeDown: { hidden: true, shortcut: "ArrowDown" }, skipForward: { hidden: true, shortcut: "ArrowRight" }, skipBackward: { hidden: true, shortcut: "ArrowLeft" }, skipForwardLong: { hidden: true, shortcut: "L" }, skipBackwardLong: { hidden: true, shortcut: "J" }, toggleChapters: { hidden: true, shortcut: "C" }, }` | ✗ |
 | `localize` | - | - | - | ✗ |
@@ -54,6 +64,7 @@ npm install @webwriter/interactive-video
 | `interactions` | - | - | `new InteractionsController(this)` | ✗ |
 | `loading` | - | - | `new LoadingController(this)` | ✗ |
 | `playback` | - | - | `new PlaybackController(this)` | ✗ |
+| `signals` | - | Read-only values for other widgets, see the class description. | - | ✗ |
 | `hideInteractions` (`hide-interactions`) | `boolean` | Whether interactions should be shown | `false` | ✓ |
 | `hideChapters` (`hide-chapters`) | `boolean` | Whether the video has chapters and they should be shown | `false` | ✓ |
 | `disablePlaybackRateChange` (`disable-playback-rate-change`) | `boolean` | Whether the user is allowed to change the playback rate | `false` | ✓ |
@@ -102,21 +113,33 @@ npm install @webwriter/interactive-video
 
 *[Methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions) allow programmatic access to the widget.*
 
+## CSS parts
+| Name | Description |
+| :--: | :---------: |
+| video | The area that holds the media and the interactions. |
+| controls | The progress bar and the control bar. |
+
+*[CSS parts](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_shadow_parts) allow freely styling internals of the widget with CSS.*
+
 ## Editing config
 | Name | Value |
 | :--: | :---------: |
 | `draggable` | `false` |
 | `definingAsContext` | `true` |
 | `content` | `(webwriter-video-interaction)*` |
+| `importFormats` | `.vtt,text/vtt` |
+| `exportFormats` | `text/vtt` |
 
 *The [editing config](https://webwriter.app/docs/packages/configuring/#editingconfig) defines how explorable authoring tools such as [WebWriter](https://webwriter.app) treat the widget.*
 
-*No public slots, events, custom CSS properties, or CSS parts.*
+*No public slots, events, or custom CSS properties.*
 
 
 ## `WebwriterVideoInteraction` (`<webwriter-video-interaction>`)
 `webwriter-video-interaction` is a custom element that represents an interaction in a `replace` interaction.
 It extends `LitElementWw` and provides a slot for content insertion.
+In edit mode the grip at the top moves the popup and the corner handle resizes it, with the pointer, by touch or with the arrow keys (1 % or 10 px; Shift for five times as much).
+On paper the popup is printed as a block with its time span.
 
 ### Usage
 
@@ -181,6 +204,13 @@ npm install @webwriter/interactive-video
 
 *[Events](https://developer.mozilla.org/en-US/docs/Web/Events) are dispatched by the widget after certain triggers.*
 
+## CSS parts
+| Name | Description |
+| :--: | :---------: |
+| interaction | The popup box. |
+
+*[CSS parts](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_shadow_parts) allow freely styling internals of the widget with CSS.*
+
 ## Editing config
 | Name | Value |
 | :--: | :---------: |
@@ -192,8 +222,8 @@ npm install @webwriter/interactive-video
 
 *The [editing config](https://webwriter.app/docs/packages/configuring/#editingconfig) defines how explorable authoring tools such as [WebWriter](https://webwriter.app) treat the widget.*
 
-*No public slots, custom CSS properties, or CSS parts.*
+*No public slots, or custom CSS properties.*
 
 
 ---
-*Generated with @webwriter/build@1.9.1*
+*Generated with @webwriter/build@1.14.0*

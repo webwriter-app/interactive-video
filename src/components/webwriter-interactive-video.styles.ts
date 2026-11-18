@@ -2,7 +2,17 @@ import { css } from "lit";
 
 export default css`
   :host {
+    display: block;
+    box-sizing: border-box;
+    min-width: min(300px, 100%);
+    max-width: 2100px;
+    min-height: 10rem;
     overflow-y: hidden !important; /* Prevent scrollbars */
+    font-family: var(--ww-font-family, inherit);
+  }
+
+  .print-view {
+    display: none;
   }
 
   :host * {
@@ -108,6 +118,7 @@ export default css`
     --track-color-active: #e9e9e9;
     --track-color-inactive: #4d4d4d;
     --tooltip-offset: 21px;
+    --sl-color-primary-600: var(--ww-theme-accent-1, #0284c7);
   }
 
   #progress-bar::part(base) {
@@ -116,6 +127,15 @@ export default css`
     max-height: 6px;
     display: flex;
     align-items: center;
+  }
+
+  #progress-bar::part(form-control-label) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   #confirm-delete-dialog {
@@ -128,5 +148,73 @@ export default css`
 
   #remove-video-dialog {
     pointer-events: all;
+  }
+
+  @media print {
+    :host {
+      overflow: visible !important;
+      min-height: 0;
+      max-width: none;
+    }
+
+    #widget {
+      display: block;
+      height: auto;
+      overflow: visible;
+    }
+
+    .print-view {
+      display: block;
+      break-inside: avoid;
+      margin-bottom: 0.75rem;
+      color: var(--ww-text-color, inherit);
+    }
+
+    .print-view p,
+    .print-view ol {
+      margin: 0 0 0.4rem;
+    }
+
+    .print-title {
+      font-weight: bold;
+      font-size: 1.15em;
+    }
+
+    .print-chapters {
+      padding-left: 1.5rem;
+    }
+
+    #container-vertical {
+      display: block;
+      height: auto;
+    }
+
+    #container-video-area {
+      display: block;
+      height: auto;
+      background: none;
+    }
+
+    #container-video {
+      display: block;
+      width: auto !important;
+      height: auto !important;
+    }
+
+    #video,
+    #controls,
+    video-chapter-drawer,
+    video-input-overlay,
+    #confirm-delete-dialog {
+      display: none !important;
+    }
+
+    :host([hide-interactions]) ::slotted(*) {
+      display: none !important;
+    }
+
+    ::slotted(webwriter-video-interaction) {
+      display: block !important;
+    }
   }
 `;

@@ -123,6 +123,7 @@ export class VideoChapterDrawer extends LitElementWw {
                             </sl-button>
                             <sl-icon-button
                               src=${trash}
+                              label=${this.msg("Delete chapter")}
                               @click=${() => this.deleteChapter(index)}
                             ></sl-icon-button>
                           </div>`

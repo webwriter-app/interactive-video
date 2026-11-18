@@ -8,8 +8,18 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "An audio or video player to which authors add interactions: popups that appear at a given time and pause the media, and chapters.\nThe media is a file (stored as base64 in the widget's JSON data block, together with its details, the waveform and the chapters)\nor a link to YouTube, Vimeo, TikTok, Spotify or a direct file. The player libraries for each kind of source are loaded when it is first used.\nInteractions are `webwriter-video-interaction` children; keys the data block does not know are kept.\nSpace and K play and pause, F toggles fullscreen, M mutes, the arrow keys change volume and skip 5 s, J and L skip 10 s, C opens the chapters.",
+          "description": "An audio or video player to which authors add interactions: popups that appear at a given time and pause the media, and chapters.\nThe media is a file (stored as base64 in the widget's JSON data block, together with its details, the waveform and the chapters)\nor a link to YouTube, Vimeo, TikTok, Spotify or a direct file. The player libraries for each kind of source are loaded when it is first used.\nInteractions are `webwriter-video-interaction` children; keys the data block does not know are kept.\nSpace and K play and pause, F toggles fullscreen, M mutes, the arrow keys change volume and skip 5 s, J and L skip 10 s, C opens the chapters.\nInteraction and chapter markers on the progress bar are buttons; in edit mode the arrow keys on an interaction marker move its start time by 1 s, and a touch drag moves it too.\nThe layout follows the container width (300 to 2100 px) and the controls collapse when it is narrow. The accent of the sliders and markers follows `--ww-theme-accent-1`, the font `--ww-font-family`.\nOn paper the media and its controls are replaced by the title, the chapters and the interactions with their time spans.\n\nConversions: a `video` or `audio` element with a source becomes the media of a new widget, and a media file or direct link becomes a `video` or `audio` element (interactions and chapters are dropped).\nWebVTT (`.vtt`, `text/vtt`) holds the chapters as cues and the interactions as cues `interaction-<id>` with the text of their content; formatting, images and position are dropped.\nAn import replaces the chapters, retimes the interactions with the same id and adds the other cues as new interactions.\nSignals: `time` (number, seconds) and `chapter` (string, title of the current chapter). The widget takes no effects.",
           "name": "WebwriterInteractiveVideo",
+          "cssParts": [
+            {
+              "description": "The area that holds the media and the interactions.",
+              "name": "video"
+            },
+            {
+              "description": "The progress bar and the control bar.",
+              "name": "controls"
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -38,6 +48,24 @@
               },
               "static": true,
               "default": "{ \"hide-interactions\": { type: \"boolean\" as const, group: \"playback\", label: (widget: Labelled) => widget.msg(\"Hide interactions\") }, \"hide-chapters\": { type: \"boolean\" as const, group: \"playback\", label: (widget: Labelled) => widget.msg(\"Hide chapters\") }, \"disable-playback-rate-change\": { type: \"boolean\" as const, group: \"playback\", label: (widget: Labelled) => widget.msg(\"Disable playback rate changes\") }, }"
+            },
+            {
+              "kind": "field",
+              "name": "convertFrom",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ video: loadMediaElement, audio: loadMediaElement, \".vtt\": importWebVtt, \"text/vtt\": importWebVtt }"
+            },
+            {
+              "kind": "field",
+              "name": "convertTo",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ video: toVideoElement, audio: toAudioElement, \"text/vtt\": exportWebVtt }"
             },
             {
               "kind": "field",
@@ -113,6 +141,12 @@
               "name": "playback",
               "readonly": true,
               "default": "new PlaybackController(this)"
+            },
+            {
+              "kind": "field",
+              "name": "signals",
+              "readonly": true,
+              "description": "Read-only values for other widgets, see the class description."
             },
             {
               "kind": "field",
@@ -736,8 +770,14 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "`webwriter-video-interaction` is a custom element that represents an interaction in a `replace` interaction.\nIt extends `LitElementWw` and provides a slot for content insertion.",
+          "description": "`webwriter-video-interaction` is a custom element that represents an interaction in a `replace` interaction.\nIt extends `LitElementWw` and provides a slot for content insertion.\nIn edit mode the grip at the top moves the popup and the corner handle resizes it, with the pointer, by touch or with the arrow keys (1 % or 10 px; Shift for five times as much).\nOn paper the popup is printed as a block with its time span.",
           "name": "WebwriterVideoInteraction",
+          "cssParts": [
+            {
+              "description": "The popup box.",
+              "name": "interaction"
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -1058,6 +1098,39 @@
                 }
               ],
               "description": "Initiates the resizing process when the user starts dragging the resize handle."
+            },
+            {
+              "kind": "method",
+              "name": "moveByKey",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ],
+              "description": "Moves the popup with the arrow keys on the grip, so that it can be placed without a pointer."
+            },
+            {
+              "kind": "method",
+              "name": "resizeByKey",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ],
+              "description": "Resizes the popup with the arrow keys on the corner handle."
+            },
+            {
+              "kind": "method",
+              "name": "announcePositionChange",
+              "privacy": "private"
             },
             {
               "kind": "method",

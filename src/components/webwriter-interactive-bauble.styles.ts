@@ -9,6 +9,16 @@ export default css`
     position: relative;
   }
 
+  :host([draggable="true"]) {
+    touch-action: none;
+  }
+
+  :host::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+  }
+
   #bauble {
     display: flex;
     justify-content: center;
@@ -22,7 +32,12 @@ export default css`
   }
 
   #bauble:hover {
-    background-color: #0084c6;
+    background-color: var(--ww-theme-accent-1, #0084c6);
+    color: white;
+  }
+
+  :host(:focus-visible) #bauble {
+    background-color: var(--ww-theme-accent-1, #0084c6);
     color: white;
   }
 

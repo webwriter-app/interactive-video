@@ -1,3 +1,4 @@
+import { computed, signal } from "@webwriter/lit";
 import SlRange from "@shoelace-style/shoelace/dist/components/range/range.component.js";
 import playerPlay from "@tabler/icons/filled/player-play.svg";
 import playerPause from "@tabler/icons/filled/player-pause.svg";
@@ -11,6 +12,14 @@ export class PlaybackController {
   rate = 1;
   /** Whether the progress bar is being dragged; the bar then follows the pointer, not the media. */
   scrubbing = false;
+
+  readonly #time = signal(0);
+  readonly #chapter = signal("");
+  /** The values that the widget publishes to other widgets. */
+  readonly signals = {
+    time: computed(() => this.#time.get()),
+    chapter: computed(() => this.#chapter.get()),
+  };
 
   constructor(private host: WebwriterInteractiveVideo) {}
 
@@ -58,6 +67,12 @@ export class PlaybackController {
     this.host.requestUpdate();
   }
 
+  /** Publishes the position and the chapter. */
+  publishTime(time: number) {
+    this.#time.set(time);
+    this.#chapter.set(this.host.hideChapters ? "" : chapterAt(this.host.chapterConfig, time)?.title ?? "");
+  }
+
   /** Keeps the controls that show the current chapter in step with the current time. */
   updateCurrentChapter() {
     const { host } = this;
@@ -84,6 +99,7 @@ export class PlaybackController {
 
     const time = host.videoPlayer.currentTime;
     host.lastTimeUpdate = time;
+    this.publishTime(time);
     host.progressBar.value = time;
     host.videoControlsBar.handleTimeUpdate(time);
     this.updateCurrentChapter();

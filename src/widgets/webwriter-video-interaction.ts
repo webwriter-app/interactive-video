@@ -13,12 +13,29 @@ import radiusBottomRight from "@tabler/icons/outline/radius-bottom-right.svg";
 import gripHorizontal from "@tabler/icons/outline/grip-horizontal.svg";
 
 import styles from "../components/webwriter-video-interaction.styles";
+import { formatTime } from "../model/time-format";
 
 type Labelled = { msg: MsgFn };
+
+/** The step of an arrow key, five times as large with Shift; null for other keys. */
+function arrowDelta(e: KeyboardEvent): { x: number; y: number } | null {
+  const step = e.shiftKey ? 5 : 1;
+  switch (e.key) {
+    case "ArrowLeft": return { x: -step, y: 0 };
+    case "ArrowRight": return { x: step, y: 0 };
+    case "ArrowUp": return { x: 0, y: -step };
+    case "ArrowDown": return { x: 0, y: step };
+    default: return null;
+  }
+}
 
 /**
  * `webwriter-video-interaction` is a custom element that represents an interaction in a `replace` interaction.
  * It extends `LitElementWw` and provides a slot for content insertion.
+ * In edit mode the grip at the top moves the popup and the corner handle resizes it, with the pointer, by touch or with the arrow keys (1 % or 10 px; Shift for five times as much).
+ * On paper the popup is printed as a block with its time span.
+ *
+ * @part interaction - The popup box.
  */
 @customElement("webwriter-video-interaction")
 export class WebwriterVideoInteraction extends LitElementWw {
@@ -284,6 +301,32 @@ export class WebwriterVideoInteraction extends LitElementWw {
     this.bottomRight.addEventListener("pointerup", onPointerUp);
   }
 
+  /** Moves the popup with the arrow keys on the grip, so that it can be placed without a pointer. */
+  private moveByKey(e: KeyboardEvent) {
+    const delta = arrowDelta(e);
+    if (!delta) return;
+    e.preventDefault();
+    e.stopPropagation();
+    this.posX = Math.min(100, Math.max(0, (this.posX ?? 0) + delta.x));
+    this.posY = Math.min(100, Math.max(0, (this.posY ?? 0) + delta.y));
+    this.announcePositionChange();
+  }
+
+  /** Resizes the popup with the arrow keys on the corner handle. */
+  private resizeByKey(e: KeyboardEvent) {
+    const delta = arrowDelta(e);
+    if (!delta) return;
+    e.preventDefault();
+    e.stopPropagation();
+    this.width = Math.max(50, (this.width ?? 0) + delta.x * 10);
+    this.height = Math.max(50, (this.height ?? 0) + delta.y * 10);
+    this.announcePositionChange();
+  }
+
+  private announcePositionChange() {
+    this.dispatchEvent(new CustomEvent("positionChanged", { detail: { id: this.id }, bubbles: true, composed: true }));
+  }
+
   /**
    * Initiates the dragging process when the user starts dragging the drag icon.
    * @param e - PointerEvent that initiates the dragging.
@@ -360,6 +403,7 @@ export class WebwriterVideoInteraction extends LitElementWw {
     return html`
       <div 
         id="container"
+        part="interaction"
         style="width: ${this.isResizing ? this.resizingWidth : this.width}px;
           height: ${this.isResizing ? this.resizingHeight : this.height}px;
           background-color: ${this.backgroundColor || "inherit"};
@@ -382,12 +426,16 @@ export class WebwriterVideoInteraction extends LitElementWw {
               })
             )}
         >
+          <p class="print-time">${formatTime(this.startTime)} – ${formatTime(this.endTime)}</p>
           ${this.#permissions.editing
             ? html`<sl-icon
                 id="dragIcon"
                 style="position: sticky; top: 0; /* Keeps it at the top */"
                 src=${gripHorizontal}
+                tabindex="0"
+                label=${this.msg("Move interaction")}
                 @pointerdown="${this.startDragging}"
+                @keydown=${this.moveByKey}
               >
               </sl-icon>`
             : null}
@@ -399,7 +447,10 @@ export class WebwriterVideoInteraction extends LitElementWw {
                 id="bottomRight"
                 style="position: absolute; bottom: 5px; right: 5px; "
                 src=${radiusBottomRight}
+                tabindex="0"
+                label=${this.msg("Resize interaction")}
                 @pointerdown=${this.startResizing}
+                @keydown=${this.resizeByKey}
               >
               </sl-icon>`
             : null}

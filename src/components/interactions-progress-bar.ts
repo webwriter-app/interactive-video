@@ -2,6 +2,7 @@ import { html } from "lit";
 
 import { LitElementWw } from "@webwriter/lit";
 import { widgetPermissions } from "@webwriter/lit/permissions";
+import { widgetMsg } from "@webwriter/lit/localize";
 import { query } from "lit/decorators.js";
 
 import {
@@ -32,6 +33,7 @@ import styles from "./interactions-progress-bar.styles";
 
 export class InteractionsProgressBar extends LitElementWw {
   readonly #permissions = widgetPermissions(this);
+  private readonly msg = widgetMsg(this);
   @consume({ context: videoContext, subscribe: true })
   accessor videoContext: InteractiveVideoContext;
 
@@ -108,24 +110,23 @@ export class InteractionsProgressBar extends LitElementWw {
                 @dragstart=${this.handleBaubleDragStart}
                 @dragend=${this.handleBaubleDragEnd}
                 draggable=${this.#permissions.editing ? "true" : "false"}
+                role="button"
+                tabindex="0"
+                aria-label=${this.msg("Interaction") + " " + (Number(interaction.id) + 1)}
                 @click=${this.handleBaubleClick}
+                @keydown=${this.handleBaubleKey}
+                @pointerdown=${this.handleBaublePointerDown}
                 id=${interaction.id}
               >
               </webwriter-interactive-bauble>`;
             })}
             ${this.videoContext.hasChapters ? this.videoContext.chapterConfig.map(
-              ({ startTime }) => {
-                return html`<sl-icon
-                  src=${bookmark}
-                  style="
-                    width: 15px; 
-                    height: 15px; 
-                    color: #E9E9E9; 
-                    position: absolute; 
-                    left: ${this.calculateOffset(startTime)}px;
-                  "
-                  @mouseover=${(e: MouseEvent) => ((e.target as HTMLElement).style.color = "#0084C6")}
-                  @mouseleave=${(e: MouseEvent) => ((e.target as HTMLElement).style.color = "#E9E9E9")}
+              ({ startTime, title }) => {
+                return html`<button
+                  type="button"
+                  class="chapter-mark"
+                  style="left: ${this.calculateOffset(startTime)}px;"
+                  aria-label=${this.msg("Skip to Chapter") + ": " + title}
                   @click=${() => {
                     this.dispatchEvent(
                       new CustomEvent("jumpToChapter", {
@@ -135,7 +136,7 @@ export class InteractionsProgressBar extends LitElementWw {
                       })
                     );
                   }}
-                ></sl-icon>`;
+                ><sl-icon src=${bookmark}></sl-icon></button>`;
               }
             ) : null}
           </div>
@@ -166,6 +167,84 @@ export class InteractionsProgressBar extends LitElementWw {
         bubbles: true,
         composed: true,
       })
+    );
+  }
+
+  /** Enter and Space open the interaction, in edit mode the arrow keys move its start time by one second. */
+  handleBaubleKey(event: KeyboardEvent) {
+    const bauble = event.currentTarget as WwInteractiveBauble;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+      bauble.click();
+      return;
+    }
+    if (!this.#permissions.editing || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) return;
+    const duration = this.videoPlayer?.duration;
+    const interaction = this.#interaction(bauble.id);
+    if (!duration || !interaction) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const step = (event.key === "ArrowRight" ? 1 : -1) * (event.shiftKey ? 5 : 1);
+    const newTime = Math.min(duration, Math.max(0, interaction.startTime + step));
+    this.dispatchEvent(
+      new CustomEvent("changeInteractionStartTime", {
+        detail: { newTime, index: parseInt(bauble.id) },
+        bubbles: true,
+        composed: true,
+      })
+    );
+    this.updateBaublePositions();
+    this.updateComplete.then(() => this.upperControls?.querySelector<HTMLElement>(`[id="${bauble.id}"]`)?.focus());
+  }
+
+  /**
+   * Moves a bauble by touch or pen, where the browser starts no drag and drop. A mouse keeps using drag and drop.
+   * The bauble is moved to where the finger is lifted.
+   */
+  handleBaublePointerDown(event: PointerEvent) {
+    if (!this.#permissions.editing || event.pointerType === "mouse" || !event.isPrimary) return;
+    const bauble = event.currentTarget as WwInteractiveBauble;
+    const duration = this.videoPlayer?.duration;
+    if (!duration) return;
+    const startX = event.clientX;
+    let moved = false;
+    try { bauble.setPointerCapture(event.pointerId); } catch { /* the pointer ended already */ }
+    const timeAt = (clientX: number) => {
+      const rect = this.dropArea.getBoundingClientRect();
+      return Math.floor(duration * Math.min(1, Math.max(0, (clientX - rect.left) / rect.width)) * 1000) / 1000;
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!moved && Math.abs(e.clientX - startX) < 6) return;
+      moved = true;
+      const offset = this.calculateOffset(timeAt(e.clientX));
+      if (offset !== undefined) bauble.style.left = `${offset}px`;
+    };
+    const finish = (e: PointerEvent) => {
+      bauble.removeEventListener("pointermove", onMove);
+      bauble.removeEventListener("pointerup", finish);
+      bauble.removeEventListener("pointercancel", finish);
+      if (bauble.hasPointerCapture?.(e.pointerId)) bauble.releasePointerCapture(e.pointerId);
+      if (!moved) return;
+      if (e.type === "pointerup") {
+        this.dispatchEvent(
+          new CustomEvent("changeInteractionStartTime", {
+            detail: { newTime: timeAt(e.clientX), index: parseInt(bauble.id) },
+            bubbles: true,
+            composed: true,
+          })
+        );
+      }
+      this.updateBaublePositions();
+    };
+    bauble.addEventListener("pointermove", onMove);
+    bauble.addEventListener("pointerup", finish);
+    bauble.addEventListener("pointercancel", finish);
+  }
+
+  #interaction(id: string) {
+    return ((this.getRootNode() as ShadowRoot).host as WebwriterInteractiveVideo).videoInteractions.find(
+      (interaction) => Number(interaction.id) === Number(id)
     );
   }
 

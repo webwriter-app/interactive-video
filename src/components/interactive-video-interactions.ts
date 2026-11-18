@@ -128,14 +128,15 @@ export class InteractionsController implements ReactiveController {
     host.updateContext();
   }
 
-  /** Adds an interaction at the current time that lasts five seconds. */
-  add() {
+  /** Adds an interaction that lasts five seconds from the current time, or the given span; a text becomes its first paragraph. */
+  add(time = this.host.videoPlayer.currentTime, length = 5, text?: string) {
     const { host } = this;
     const id = nextInteractionId(host.videoInteractions.map((interaction) => Number(interaction.id)));
     const interaction = document.createElement("webwriter-video-interaction") as WebwriterVideoInteraction;
     const area = host.videoAreaSize;
     const base = host.videoBaseSize;
-    const time = host.videoPlayer.currentTime;
+    const width = area.width || base.width;
+    const height = area.height || base.height;
 
     interaction.setAttribute("parentWidth", `${area.width}`);
     interaction.setAttribute("parentHeight", `${area.height}`);
@@ -144,16 +145,23 @@ export class InteractionsController implements ReactiveController {
 
     interaction.setAttribute("posY", "25");
     interaction.setAttribute("posX", "25");
-    interaction.setAttribute("width", `${area.width / 2}`);
-    interaction.setAttribute("height", `${area.height / 2}`);
+    interaction.setAttribute("width", `${width / 2}`);
+    interaction.setAttribute("height", `${height / 2}`);
 
     interaction.setAttribute("id", `${id}`);
     interaction.setAttribute("startTime", `${time}`);
-    interaction.setAttribute("endTime", `${time + 5}`);
+    interaction.setAttribute("endTime", `${time + length}`);
+
+    if (text) {
+      const paragraph = document.createElement("p");
+      paragraph.textContent = text;
+      interaction.append(paragraph);
+    }
 
     host.appendChild(interaction);
     // Renders the bauble.
     host.updateContext();
+    return interaction;
   }
 
   #find(id: number) {

@@ -22,4 +22,34 @@ export default css`
     width: 100%;
     padding: 4px 0;
   }
+
+  .chapter-mark {
+    position: absolute;
+    display: flex;
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #e9e9e9;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  .chapter-mark::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+  }
+
+  .chapter-mark:hover,
+  .chapter-mark:focus-visible {
+    color: var(--ww-theme-accent-1, #0084c6);
+  }
+
+  .chapter-mark:focus-visible,
+  webwriter-interactive-bauble:focus-visible {
+    outline: 2px solid var(--ww-theme-accent-1, #0084c6);
+    outline-offset: 2px;
+  }
 `;
