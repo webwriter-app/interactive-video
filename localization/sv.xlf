@@ -1,4 +1,5 @@
-<xliff xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+<?xml version='1.0' encoding='UTF-8'?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2">
   <file original="lit-localize-inputs" datatype="plaintext" source-language="en" target-language="sv">
     <body>
       <trans-unit id="s15733d7d0f6d1d73">
@@ -29,45 +30,9 @@
         <source>Invalid time format. Use hh:mm:ss or mm:ss</source>
         <target>Ogiltigt tidsformat. Använd hh:mm:ss eller mm:ss</target>
       </trans-unit>
-      <trans-unit id="s85186a61e0d55bac">
-        <source>Video</source>
-        <target>Video</target>
-      </trans-unit>
-      <trans-unit id="s486ef6c2cdc505d7">
-        <source>Show Popups</source>
-        <target>Visa popup-fönster</target>
-      </trans-unit>
       <trans-unit id="s6fa430a5a501eb4b">
         <source>Interaction</source>
         <target>Interaktion</target>
-      </trans-unit>
-      <trans-unit id="s167f53f89012d24c">
-        <source>Start Time</source>
-        <target>Starttid</target>
-      </trans-unit>
-      <trans-unit id="s58c17428301e0137">
-        <source>End Time</source>
-        <target>Sluttid</target>
-      </trans-unit>
-      <trans-unit id="s9c356016f81585f6">
-        <source>Background Color</source>
-        <target>Bakgrundsfärg</target>
-      </trans-unit>
-      <trans-unit id="s55435611e2a8e6dc">
-        <source>Overlay Color</source>
-        <target>Färg på överlägg</target>
-      </trans-unit>
-      <trans-unit id="s3d09398e555ee5f9">
-        <source>Advanced Options</source>
-        <target>Avancerade alternativ</target>
-      </trans-unit>
-      <trans-unit id="s8de4d921e17c46aa">
-        <source>X Position</source>
-        <target>X Position</target>
-      </trans-unit>
-      <trans-unit id="s58369cf8082f2d5f">
-        <source>Y Position</source>
-        <target>Y Position</target>
       </trans-unit>
       <trans-unit id="sf21fb4f4b9e8911f">
         <source>Width</source>
@@ -77,14 +42,6 @@
         <source>Height</source>
         <target>Höjd</target>
       </trans-unit>
-      <trans-unit id="sdc673e73b5c13aea">
-        <source>Delete</source>
-        <target>Radera</target>
-      </trans-unit>
-      <trans-unit id="s1ad02de8e1d50d2c">
-        <source>Select an interaction to view details</source>
-        <target>Välj en interaktion för att se detaljer</target>
-      </trans-unit>
       <trans-unit id="sb2e1884d9dace006">
         <source>Add Popup</source>
         <target>Lägg till popup-fönster</target>
@@ -92,18 +49,6 @@
       <trans-unit id="s08b05407b5565ca4">
         <source>or</source>
         <target>eller</target>
-      </trans-unit>
-      <trans-unit id="see2eca66ecd60d30">
-        <source>Enable chapters</source>
-        <target>Aktivera kapitel</target>
-      </trans-unit>
-      <trans-unit id="s86d33eabf23f17c4">
-        <source>Add something here...</source>
-        <target>Lägg till något här...</target>
-      </trans-unit>
-      <trans-unit id="s39691ba3f371adc1">
-        <source>Allow playback rate change</source>
-        <target>Tillåt ändring av uppspelningshastighet</target>
       </trans-unit>
       <trans-unit id="s75ff661d0f492c89">
         <source>Select video or audio file</source>
@@ -137,26 +82,6 @@
         <source>No, keep it</source>
         <target>Nej, behåll den</target>
       </trans-unit>
-      <trans-unit id="s08e6bd98452e6bb9">
-        <source>Audio</source>
-        <target>Ljud</target>
-      </trans-unit>
-      <trans-unit id="s62155488d6519cf3">
-        <source>Remove audio</source>
-        <target>Ta bort ljud</target>
-      </trans-unit>
-      <trans-unit id="sdcb649c4baf8dafa">
-        <source>Remove video</source>
-        <target>Ta bort video</target>
-      </trans-unit>
-      <trans-unit id="s0960574e3b6ca412">
-        <source>Video File</source>
-        <target>Videofil</target>
-      </trans-unit>
-      <trans-unit id="s3cda547ac2158bf5">
-        <source>Audio File</source>
-        <target>Ljudfil</target>
-      </trans-unit>
       <trans-unit id="sf29ef97c6e418a92">
         <source>Remove media?</source>
         <target>Ta bort media?</target>
@@ -164,10 +89,6 @@
       <trans-unit id="s9d2a1c7fe017a7cd">
         <source>Loading audio...</source>
         <target>Laddar ljud...</target>
-      </trans-unit>
-      <trans-unit id="seed71b0ff741f5c3">
-        <source>Pause video when shown</source>
-        <target>Pausa videon när den visas</target>
       </trans-unit>
       <trans-unit id="s11f3370df4b0a8a1">
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
@@ -288,6 +209,206 @@
       <trans-unit id="se6ba3e3a2756df92">
         <source>The media took too long to load. Please check the link and your internet connection, then try again.</source>
         <target>Det tog för lång tid att ladda mediet. Kontrollera länken och din internetanslutning och försök sedan igen.</target>
+      </trans-unit>
+      <trans-unit id="s97f78c37615bdaf2">
+        <source>Hide interactions</source>
+        <target>Dölj interaktioner</target>
+      </trans-unit>
+      <trans-unit id="sc7e2b06a922c3979">
+        <source>Hide chapters</source>
+        <target>Dölj kapitel</target>
+      </trans-unit>
+      <trans-unit id="s089b6f6551227e0b">
+        <source>Disable playback rate changes</source>
+        <target>Inaktivera ändringar av uppspelningshastigheten</target>
+      </trans-unit>
+      <trans-unit id="s8fef389de26459e6">
+        <source>Import media file</source>
+        <target>Importera mediefil</target>
+      </trans-unit>
+      <trans-unit id="s87a7c34815708e19">
+        <source>Remove media</source>
+        <target>Ta bort media</target>
+      </trans-unit>
+      <trans-unit id="s491dc50bced9bedc">
+        <source>Remove the current media and keep its interactions and chapters?</source>
+        <target>Vill du ta bort det aktuella mediet och behålla dess interaktioner och kapitel?</target>
+      </trans-unit>
+      <trans-unit id="sac494a087707be4c">
+        <source>Playback</source>
+        <target>Uppspelning</target>
+      </trans-unit>
+      <trans-unit id="sef5852ec91873a6c">
+        <source>Start time</source>
+        <target>Starttid</target>
+      </trans-unit>
+      <trans-unit id="s2e33731c2ead8d57">
+        <source>End time</source>
+        <target>Sluttid</target>
+      </trans-unit>
+      <trans-unit id="sfc902fb1179ecb70">
+        <source>Do not pause when shown</source>
+        <target>Pausa inte vid visning</target>
+      </trans-unit>
+      <trans-unit id="s6a0937ef686b96c4">
+        <source>X position (%)</source>
+        <target>X-position (%)</target>
+      </trans-unit>
+      <trans-unit id="s7751f12230bb00e5">
+        <source>Y position (%)</source>
+        <target>Y-position (%)</target>
+      </trans-unit>
+      <trans-unit id="s95836eab7093947c">
+        <source>Overlay color</source>
+        <target>Överlagringens färg</target>
+      </trans-unit>
+      <trans-unit id="s1c5b38a1790e5663">
+        <source>Interaction timing</source>
+        <target>Interaktionens tidsinställningar</target>
+      </trans-unit>
+      <trans-unit id="s1d2c9dcc771033fc">
+        <source>Position and size</source>
+        <target>Position och storlek</target>
+      </trans-unit>
+      <trans-unit id="sf0e261e04eda82ff">
+        <source>Appearance</source>
+        <target>Utseende</target>
+      </trans-unit>
+      <trans-unit id="s7ac532234bc05506">
+        <source>Delete interaction</source>
+        <target>Ta bort interaktion</target>
+      </trans-unit>
+      <trans-unit id="s54296d2feba264b7">
+        <source>Delete this interaction?</source>
+        <target>Vill du ta bort den här interaktionen?</target>
+      </trans-unit>
+      <trans-unit id="s984e1dec66277a53">
+        <source>This is not a WebVTT file.</source>
+        <target>Det här är inte en WebVTT-fil.</target>
+      </trans-unit>
+      <trans-unit id="se55acc02cc5769b7">
+        <source>The file has no chapters or interactions.</source>
+        <target>Filen har inga kapitel eller interaktioner.</target>
+      </trans-unit>
+      <trans-unit id="s9f3079fc9709809f">
+        <source>Delete chapter</source>
+        <target>Ta bort kapitel</target>
+      </trans-unit>
+      <trans-unit id="s01c616b90d78dd42">
+        <source>Play or pause</source>
+        <target>Spela upp eller pausa</target>
+      </trans-unit>
+      <trans-unit id="s5b528a7f6c0c40af">
+        <source>Volume</source>
+        <target>Volym</target>
+      </trans-unit>
+      <trans-unit id="sd7b61a3aef0fc1ef">
+        <source>Playback speed</source>
+        <target>Uppspelningshastighet</target>
+      </trans-unit>
+      <trans-unit id="s4b10acae683d2978">
+        <source>Fullscreen</source>
+        <target>Fullskärm</target>
+      </trans-unit>
+      <trans-unit id="s3dabd390085a40e1">
+        <source>Interactive content: open the document online to play the media.</source>
+        <target>Interaktivt innehåll: öppna dokumentet online för att spela upp mediet.</target>
+      </trans-unit>
+      <trans-unit id="s5788d924d55d3ff1">
+        <source>Seek</source>
+        <target>Sök</target>
+      </trans-unit>
+      <trans-unit id="s067549d6fb39e4fc">
+        <source>Move interaction</source>
+        <target>Flytta interaktion</target>
+      </trans-unit>
+      <trans-unit id="sf1524d230abac459">
+        <source>Close popup</source>
+        <target>Stäng popup</target>
+      </trans-unit>
+      <trans-unit id="sc7aeb596f1dcb1bd">
+        <source>Popup</source>
+        <target>Popup</target>
+      </trans-unit>
+      <trans-unit id="s85186a61e0d55bac">
+        <source>Video</source>
+        <target>Video</target>
+      </trans-unit>
+      <trans-unit id="s486ef6c2cdc505d7">
+        <source>Show Popups</source>
+        <target>Visa popup-fönster</target>
+      </trans-unit>
+      <trans-unit id="s167f53f89012d24c">
+        <source>Start Time</source>
+        <target>Starttid</target>
+      </trans-unit>
+      <trans-unit id="s58c17428301e0137">
+        <source>End Time</source>
+        <target>Sluttid</target>
+      </trans-unit>
+      <trans-unit id="s9c356016f81585f6">
+        <source>Background Color</source>
+        <target>Bakgrundsfärg</target>
+      </trans-unit>
+      <trans-unit id="s55435611e2a8e6dc">
+        <source>Overlay Color</source>
+        <target>Färg på överlägg</target>
+      </trans-unit>
+      <trans-unit id="s3d09398e555ee5f9">
+        <source>Advanced Options</source>
+        <target>Avancerade alternativ</target>
+      </trans-unit>
+      <trans-unit id="s8de4d921e17c46aa">
+        <source>X Position</source>
+        <target>X Position</target>
+      </trans-unit>
+      <trans-unit id="s58369cf8082f2d5f">
+        <source>Y Position</source>
+        <target>Y Position</target>
+      </trans-unit>
+      <trans-unit id="sdc673e73b5c13aea">
+        <source>Delete</source>
+        <target>Radera</target>
+      </trans-unit>
+      <trans-unit id="s1ad02de8e1d50d2c">
+        <source>Select an interaction to view details</source>
+        <target>Välj en interaktion för att se detaljer</target>
+      </trans-unit>
+      <trans-unit id="see2eca66ecd60d30">
+        <source>Enable chapters</source>
+        <target>Aktivera kapitel</target>
+      </trans-unit>
+      <trans-unit id="s86d33eabf23f17c4">
+        <source>Add something here...</source>
+        <target>Lägg till något här...</target>
+      </trans-unit>
+      <trans-unit id="s39691ba3f371adc1">
+        <source>Allow playback rate change</source>
+        <target>Tillåt ändring av uppspelningshastighet</target>
+      </trans-unit>
+      <trans-unit id="s08e6bd98452e6bb9">
+        <source>Audio</source>
+        <target>Ljud</target>
+      </trans-unit>
+      <trans-unit id="s62155488d6519cf3">
+        <source>Remove audio</source>
+        <target>Ta bort ljud</target>
+      </trans-unit>
+      <trans-unit id="sdcb649c4baf8dafa">
+        <source>Remove video</source>
+        <target>Ta bort video</target>
+      </trans-unit>
+      <trans-unit id="s0960574e3b6ca412">
+        <source>Video File</source>
+        <target>Videofil</target>
+      </trans-unit>
+      <trans-unit id="s3cda547ac2158bf5">
+        <source>Audio File</source>
+        <target>Ljudfil</target>
+      </trans-unit>
+      <trans-unit id="seed71b0ff741f5c3">
+        <source>Pause video when shown</source>
+        <target>Pausa videon när den visas</target>
       </trans-unit>
     </body>
   </file>
