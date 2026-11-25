@@ -568,6 +568,24 @@
             },
             {
               "kind": "method",
+              "name": "handleInteractionSlotChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleInteractionClosed",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "clearVideo",
               "parameters": [
                 {
@@ -740,9 +758,7 @@
             "package": "@webwriter/lit"
           },
           "tagName": "webwriter-interactive-video",
-          "customElement": true,
-          "modulePath": "src/widgets/webwriter-interactive-video.ts",
-          "definitionPath": "src/widgets/webwriter-interactive-video.ts"
+          "customElement": true
         }
       ],
       "exports": [
@@ -1018,6 +1034,11 @@
             },
             {
               "kind": "method",
+              "name": "ensureParagraph",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
               "name": "deleteInteraction",
               "return": {
                 "type": {
@@ -1058,6 +1079,16 @@
                 }
               ],
               "description": "Initiates the dragging process when the user starts dragging the drag icon."
+            },
+            {
+              "kind": "method",
+              "name": "handleClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "closePopup",
+              "privacy": "private"
             }
           ],
           "events": [
@@ -1077,11 +1108,17 @@
               "name": "interactionClosed",
               "type": {
                 "text": "CustomEvent"
-              },
-              "description": "The player dismisses the popup for its current time window."
+              }
             }
           ],
           "attributes": [
+            {
+              "type": {
+                "text": "string"
+              },
+              "description": "The unique interaction ID.",
+              "name": "id"
+            },
             {
               "name": "tabIndex",
               "type": {
@@ -1090,13 +1127,6 @@
               "default": "-1",
               "description": "The tab index of the component.",
               "fieldName": "tabIndex"
-            },
-            {
-              "name": "id",
-              "type": {
-                "text": "string"
-              },
-              "description": "The unique interaction ID."
             },
             {
               "name": "startTime",
@@ -1213,9 +1243,7 @@
             "package": "@webwriter/lit"
           },
           "tagName": "webwriter-video-interaction",
-          "customElement": true,
-          "modulePath": "src/widgets/webwriter-video-interaction.ts",
-          "definitionPath": "src/widgets/webwriter-video-interaction.ts"
+          "customElement": true
         }
       ],
       "exports": [

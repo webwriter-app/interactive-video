@@ -173,7 +173,6 @@ npm install @webwriter/interactive-video
 | `localize` | - | - | - | ✗ |
 | `msg` | - | - | - | ✗ |
 | `tabIndex` (`tabIndex`) | `number` | The tab index of the component. | `-1` | ✓ |
-| `id` (`id`) | `string` | The unique interaction ID. | - | ✓ |
 | `startTime` (`startTime`) | `number` | The interaction start time in seconds. | - | ✓ |
 | `endTime` (`endTime`) | `number` | The interaction end time in seconds. | - | ✓ |
 | `noInitialPause` (`noInitialPause`) | `boolean` | Whether the interaction should pause the video when shown. | `false` | ✓ |
@@ -202,7 +201,7 @@ npm install @webwriter/interactive-video
 | :--: | :---------: |
 | positionChanged | - |
 | interactionClicked | - |
-| interactionClosed | The player dismisses the popup for its current time window. |
+| interactionClosed | - |
 
 *[Events](https://developer.mozilla.org/en-US/docs/Web/Events) are dispatched by the widget after certain triggers.*
 
@@ -228,4 +227,4 @@ npm install @webwriter/interactive-video
 
 
 ---
-*Generated with @webwriter/build@1.14.0*
+*Generated with @webwriter/build@1.15.0*
