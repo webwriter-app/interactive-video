@@ -1,4 +1,5 @@
-import { html, PropertyValues } from "lit";
+import { html } from "lit";
+import { styleMap } from "lit/directives/style-map.js";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { LitElementWw } from "@webwriter/lit";
 import { localizer } from "@webwriter/lit/localize";
@@ -9,7 +10,7 @@ import { sourceLocale, targetLocales } from "../../localization/generated/locale
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import SlIcon from "@shoelace-style/shoelace/dist/components/icon/icon.component.js";
 
-import radiusBottomRight from "@tabler/icons/outline/radius-bottom-right.svg";
+import x from "@tabler/icons/outline/x.svg";
 import gripHorizontal from "@tabler/icons/outline/grip-horizontal.svg";
 
 import styles from "../components/webwriter-video-interaction.styles";
@@ -32,9 +33,11 @@ function arrowDelta(e: KeyboardEvent): { x: number; y: number } | null {
 /**
  * `webwriter-video-interaction` is a custom element that represents an interaction in a `replace` interaction.
  * It extends `LitElementWw` and provides a slot for content insertion.
- * In edit mode the grip at the top moves the popup and the corner handle resizes it, with the pointer, by touch or with the arrow keys (1 % or 10 px; Shift for five times as much).
+ * In edit mode the grip at the top moves the popup with a pointer or the arrow keys (1 %, or 5 % with Shift).
+ * Closing a popup dismisses it for its current time window. Its timeline marker opens it again.
  * On paper the popup is printed as a block with its time span.
  *
+ * @attr {string} id - The unique interaction ID.
  * @part interaction - The popup box.
  */
 @customElement("webwriter-video-interaction")
@@ -84,10 +87,6 @@ export class WebwriterVideoInteraction extends LitElementWw {
   /** The tab index of the component. */
   @property({ type: Number, attribute: true, reflect: true })
   accessor tabIndex = -1;
-
-  /** The interaction id. Must be unique. HTMLElement types `id` as a string, the Number converter turns the attribute into a number at runtime. */
-  @property({ type: Number, attribute: true, reflect: true })
-  accessor id: string;
 
   /** The interaction start time in seconds. */
   @property({ type: Number, attribute: true, reflect: true })
@@ -150,63 +149,23 @@ export class WebwriterVideoInteraction extends LitElementWw {
   @state()
   private accessor draggingPosY = 0;
 
+  /** @internal Whether the player currently shows the popup. */
   @state()
-  private accessor isResizing = false;
-
-  @state()
-  private accessor resizingWidth = 0;
-
-  @state()
-  private accessor resizingHeight = 0;
+  accessor visible = false;
 
   @query("#container")
   private accessor container: HTMLDivElement;
 
-  @query("#bottomRight")
-  private accessor bottomRight: SlIcon;
-
   @query("#dragIcon")
   private accessor dragIcon: SlIcon;
 
-  private mutationObserver: MutationObserver;
-
-  /**
-   * Creates an instance of the webwriter-video-interaction component.
-   */
-  constructor() {
-    super();
-    this.mutationObserver = new MutationObserver(this.mutationCallback);
+  protected firstUpdated() {
+    this.ensureParagraph();
   }
 
-  /**
-   * Called when the component is removed from the DOM.
-   * Cleans up event listeners and disconnects observers.
-   */
-  connectedCallback(): void {
-    super.connectedCallback();
-    // Only the childList is acted on, so attribute and text changes inside the content are not observed.
-    this.mutationObserver.observe(this, { childList: true, subtree: true });
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback();
-    this.mutationObserver.disconnect();
-  }
-
-  /**
-   * Called after the component's first update.
-   * Adds a paragraph when the content is empty.
-   * @param _changedProperties - The properties that have changed.
-   */
-  protected firstUpdated(_changedProperties: PropertyValues): void {
-    //create an empty p element if container has no children
-    const slot = this.shadowRoot?.querySelector("slot");
-
-    if (slot && slot.assignedElements().length == 0) {
-      const par = document.createElement("p");
-      par.textContent = this.msg("Add something here...");
-      this.appendChild(par);
-    }
+  private ensureParagraph() {
+    if (this.childElementCount || this.textContent?.trim()) return;
+    this.append(this.ownerDocument.createElement("p"));
   }
 
   deleteInteraction(): void {
@@ -217,88 +176,6 @@ export class WebwriterVideoInteraction extends LitElementWw {
     if (video && video.selectedInteractionId === Number(this.id)) video.selectedInteractionId = -1;
     this.remove();
     video?.updateContext?.();
-  }
-
-  private mutationCallback = (mutationList: MutationRecord[]) => {
-    mutationList.forEach(
-      ({ type }) => {
-        if (type === "childList") {
-          // Check if there is at least one paragraph <p> element in the container
-          const paragraphs = this.querySelectorAll("p");
-          if (paragraphs.length === 0) {
-            const par = document.createElement("p");
-            par.textContent = this.msg("Add something here...");
-            this.appendChild(par);
-          }
-        }
-      }
-    );
-  };
-
-  /**
-   * Initiates the resizing process when the user starts dragging the resize handle.
-   * @param e - The pointer event that initiates the resizing.
-   */
-  private startResizing(e: PointerEvent) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const startX = e.clientX;
-    const startY = e.clientY;
-    const startWidth = this.container.offsetWidth;
-    const startHeight = this.container.offsetHeight;
-
-    const parent = this.parentElement?.shadowRoot?.querySelector("#video");
-    if (!parent) return;
-
-    const parentRect = parent.getBoundingClientRect();
-    const rect = this.container.getBoundingClientRect();
-
-    this.bottomRight.setPointerCapture(e.pointerId);
-
-    const onPointerMove = (moveEvent: PointerEvent) => {
-      const scaleFactor = this.parentWidth / this.videoBaseWidth;
-
-      const deltaX = (moveEvent.clientX - startX) / scaleFactor;
-      const deltaY = (moveEvent.clientY - startY) / scaleFactor;
-
-      const maxWidth = (parentRect.width - (rect.left - parentRect.left)) / scaleFactor;
-      const maxHeight = (parentRect.height - (rect.top - parentRect.top)) / scaleFactor;
-
-      const newWidth = Math.max(50, Math.min(startWidth + deltaX, maxWidth));
-      const newHeight = Math.max(50, Math.min(startHeight + deltaY, maxHeight));
-
-      this.resizingWidth = newWidth;
-      this.resizingHeight = newHeight;
-
-      this.isResizing = true;
-    };
-
-    const onPointerUp = () => {
-      this.bottomRight.releasePointerCapture(e.pointerId);
-
-      this.width = this.resizingWidth;
-      this.height = this.resizingHeight;
-
-      this.container.style.willChange = "auto";
-      this.isResizing = false;
-
-      this.bottomRight.removeEventListener("pointermove", onPointerMove);
-      this.bottomRight.removeEventListener("pointerup", onPointerUp);
-
-      this.dispatchEvent(
-        new CustomEvent("positionChanged", {
-          detail: { id: this.id },
-          bubbles: true,
-          composed: true,
-        })
-      );
-    };
-
-    this.container.style.willChange = "width, height";
-
-    this.bottomRight.addEventListener("pointermove", onPointerMove);
-    this.bottomRight.addEventListener("pointerup", onPointerUp);
   }
 
   /** Moves the popup with the arrow keys on the grip, so that it can be placed without a pointer. */
@@ -312,17 +189,6 @@ export class WebwriterVideoInteraction extends LitElementWw {
     this.announcePositionChange();
   }
 
-  /** Resizes the popup with the arrow keys on the corner handle. */
-  private resizeByKey(e: KeyboardEvent) {
-    const delta = arrowDelta(e);
-    if (!delta) return;
-    e.preventDefault();
-    e.stopPropagation();
-    this.width = Math.max(50, (this.width ?? 0) + delta.x * 10);
-    this.height = Math.max(50, (this.height ?? 0) + delta.y * 10);
-    this.announcePositionChange();
-  }
-
   private announcePositionChange() {
     this.dispatchEvent(new CustomEvent("positionChanged", { detail: { id: this.id }, bubbles: true, composed: true }));
   }
@@ -332,9 +198,7 @@ export class WebwriterVideoInteraction extends LitElementWw {
    * @param e - PointerEvent that initiates the dragging.
    */
   private startDragging(e: PointerEvent) {
-    if (e.target === this.bottomRight || e.target !== this.dragIcon) return;
-
-    e.preventDefault();
+    if (!e.isPrimary || e.button !== 0) return;
 
     const startX = e.clientX;
     const startY = e.clientY;
@@ -366,31 +230,36 @@ export class WebwriterVideoInteraction extends LitElementWw {
       this.isDragging = true;
     };
 
-    const onPointerUp = () => {
-      this.posX = (this.draggingPosX / parentRect.width) * 100;
-      this.posY = (this.draggingPosY / parentRect.height) * 100;
-
-      this.container.style.willChange = "auto";
-
-      this.dragIcon.releasePointerCapture(e.pointerId);
+    const finish = (event: PointerEvent) => {
       this.dragIcon.removeEventListener("pointermove", onPointerMove);
-      this.dragIcon.removeEventListener("pointerup", onPointerUp);
-
+      this.dragIcon.removeEventListener("pointerup", finish);
+      this.dragIcon.removeEventListener("lostpointercapture", finish);
+      this.container.style.willChange = "auto";
+      if (this.isDragging && event.type === "pointerup") {
+        this.posX = (this.draggingPosX / parentRect.width) * 100;
+        this.posY = (this.draggingPosY / parentRect.height) * 100;
+        this.announcePositionChange();
+      }
       this.isDragging = false;
-      
-      this.dispatchEvent(
-        new CustomEvent("positionChanged", {
-          detail: { id: this.id },
-          bubbles: true,
-          composed: true,
-        })
-      );
     };
 
     this.container.style.willChange = "transform";
-
     this.dragIcon.addEventListener("pointermove", onPointerMove);
-    this.dragIcon.addEventListener("pointerup", onPointerUp);
+    this.dragIcon.addEventListener("pointerup", finish);
+    this.dragIcon.addEventListener("lostpointercapture", finish);
+  }
+
+  private handleClick() {
+    if (!this.visible) return;
+    this.dispatchEvent(new CustomEvent("interactionClicked", {
+      detail: { id: this.id },
+      bubbles: true,
+      composed: true,
+    }));
+  }
+
+  private closePopup() {
+    this.dispatchEvent(new CustomEvent("interactionClosed", { bubbles: true, composed: true }));
   }
 
   /**
@@ -400,63 +269,51 @@ export class WebwriterVideoInteraction extends LitElementWw {
    * @returns The HTML template for the component.
    */
   render() {
+    const scale = this.parentWidth / this.videoBaseWidth;
     return html`
-      <div 
+      <div
         id="container"
         part="interaction"
-        style="width: ${this.isResizing ? this.resizingWidth : this.width}px;
-          height: ${this.isResizing ? this.resizingHeight : this.height}px;
+        ?hidden=${!this.visible}
+        @click=${this.handleClick}
+        style="width: ${this.width}px;
+          height: ${this.height}px;
           background-color: ${this.backgroundColor || "inherit"};
-          transform: 
+          --popup-scale: ${scale || 1};
+          transform:
             translate(
-              ${this.isDragging ? this.draggingPosX : (this.posX * this.parentWidth / 100)}px, 
+              ${this.isDragging ? this.draggingPosX : (this.posX * this.parentWidth / 100)}px,
               ${this.isDragging ? this.draggingPosY : (this.posY * this.parentHeight / 100)}px
             )
-            scale(${this.parentWidth / this.videoBaseWidth});"
+            scale(${scale});"
       >
-        <div
-          id="popup"
-          style="overflow: scroll; height: 100%; display: flex; flex-direction: column; align-items: center; justify-items: center; "
-          @click=${() =>
-            this.dispatchEvent(
-              new CustomEvent("interactionClicked", {
-                detail: { id: this.id },
-                bubbles: true,
-                composed: true,
-              })
-            )}
-        >
+        <div id="popup">
+          <div class="popup-controls">
+            ${this.#permissions.editing
+              ? html`<sl-icon
+                  id="dragIcon"
+                  src=${gripHorizontal}
+                  tabindex="0"
+                  label=${this.msg("Move interaction")}
+                  @pointerdown=${this.startDragging}
+                  @keydown=${this.moveByKey}
+                ></sl-icon>`
+              : null}
+            <button id="close-popup" type="button" aria-label=${this.msg("Close popup")} @click=${this.closePopup}>
+              <sl-icon src=${x} aria-hidden="true"></sl-icon>
+            </button>
+          </div>
           <p class="print-time">${formatTime(this.startTime)} – ${formatTime(this.endTime)}</p>
-          ${this.#permissions.editing
-            ? html`<sl-icon
-                id="dragIcon"
-                style="position: sticky; top: 0; /* Keeps it at the top */"
-                src=${gripHorizontal}
-                tabindex="0"
-                label=${this.msg("Move interaction")}
-                @pointerdown="${this.startDragging}"
-                @keydown=${this.moveByKey}
-              >
-              </sl-icon>`
-            : null}
-
-          <slot class="page"></slot>
-
-          ${this.#permissions.editing
-            ? html` <sl-icon
-                id="bottomRight"
-                style="position: absolute; bottom: 5px; right: 5px; "
-                src=${radiusBottomRight}
-                tabindex="0"
-                label=${this.msg("Resize interaction")}
-                @pointerdown=${this.startResizing}
-                @keydown=${this.resizeByKey}
-              >
-              </sl-icon>`
-            : null}
+          <div id="popup-content">
+            <div class="page">
+              <slot
+                @slotchange=${this.ensureParagraph}
+                style=${styleMap({ "--ww-placeholder": this.#permissions.editing ? JSON.stringify(this.msg("Popup")) : undefined })}
+              ></slot>
+            </div>
+          </div>
         </div>
       </div>
-
     `;
   }
 }

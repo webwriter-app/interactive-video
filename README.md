@@ -138,7 +138,8 @@ npm install @webwriter/interactive-video
 ## `WebwriterVideoInteraction` (`<webwriter-video-interaction>`)
 `webwriter-video-interaction` is a custom element that represents an interaction in a `replace` interaction.
 It extends `LitElementWw` and provides a slot for content insertion.
-In edit mode the grip at the top moves the popup and the corner handle resizes it, with the pointer, by touch or with the arrow keys (1 % or 10 px; Shift for five times as much).
+In edit mode the grip at the top moves the popup with a pointer or the arrow keys (1 %, or 5 % with Shift).
+Closing a popup dismisses it for its current time window. Its timeline marker opens it again.
 On paper the popup is printed as a block with its time span.
 
 ### Usage
@@ -172,7 +173,7 @@ npm install @webwriter/interactive-video
 | `localize` | - | - | - | ✗ |
 | `msg` | - | - | - | ✗ |
 | `tabIndex` (`tabIndex`) | `number` | The tab index of the component. | `-1` | ✓ |
-| `id` (`id`) | `string` | The interaction id. Must be unique. HTMLElement types `id` as a string, the Number converter turns the attribute into a number at runtime. | - | ✓ |
+| `id` (`id`) | `string` | The unique interaction ID. | - | ✓ |
 | `startTime` (`startTime`) | `number` | The interaction start time in seconds. | - | ✓ |
 | `endTime` (`endTime`) | `number` | The interaction end time in seconds. | - | ✓ |
 | `noInitialPause` (`noInitialPause`) | `boolean` | Whether the interaction should pause the video when shown. | `false` | ✓ |
@@ -201,6 +202,7 @@ npm install @webwriter/interactive-video
 | :--: | :---------: |
 | positionChanged | - |
 | interactionClicked | - |
+| interactionClosed | The player dismisses the popup for its current time window. |
 
 *[Events](https://developer.mozilla.org/en-US/docs/Web/Events) are dispatched by the widget after certain triggers.*
 

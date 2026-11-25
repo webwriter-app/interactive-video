@@ -12,10 +12,23 @@ export default css`
   }
 
   #controls-upper {
-    height: 20px;
+    min-height: 20px;
+  }
+
+  .marker-row {
+    position: relative;
     display: flex;
     align-items: center;
-    width: 100%;
+    height: 20px;
+  }
+
+  webwriter-interactive-bauble {
+    position: absolute;
+    cursor: pointer;
+  }
+
+  webwriter-interactive-bauble[draggable="true"] {
+    cursor: grab;
   }
 
   #drop-area {
@@ -26,6 +39,7 @@ export default css`
   .chapter-mark {
     position: absolute;
     display: flex;
+    margin-left: 1.5px;
     width: 15px;
     height: 15px;
     padding: 0;

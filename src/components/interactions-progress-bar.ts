@@ -1,4 +1,5 @@
 import { html } from "lit";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { LitElementWw } from "@webwriter/lit";
 import { widgetPermissions } from "@webwriter/lit/permissions";
@@ -40,9 +41,6 @@ export class InteractionsProgressBar extends LitElementWw {
   @query("#drop-area")
   accessor dropArea: HTMLDivElement;
 
-  @query("#controls-upper")
-  accessor upperControls: HTMLDivElement;
-
   /**
    * Returns an object that maps custom element names to their corresponding classes.
    * These custom elements can be used within the scope of the `webwriter-interactive-video` component.
@@ -72,19 +70,17 @@ export class InteractionsProgressBar extends LitElementWw {
     this.resizeObserver = new ResizeObserver(() => {
       this.updateBaublePositions();
     });
-    this.updateComplete.then(() => {
-      this.resizeObserver.observe(this);
-    });
+    this.resizeObserver.observe(this);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    if (this.resizeObserver) {
-      this.resizeObserver.unobserve(this);
-    }
+    this.resizeObserver.disconnect();
   }
 
   render() {
+    const interactions = ((this.getRootNode() as ShadowRoot).host as WebwriterInteractiveVideo).videoInteractions;
+    const chapters = this.videoContext.hasChapters ? this.videoContext.chapterConfig : [];
     return html`
       <div class="interactions-progress-bar">
         <div
@@ -94,19 +90,24 @@ export class InteractionsProgressBar extends LitElementWw {
           @dragleave=${this.handleBaubleLeaveDropArea}
         >
           <div id="controls-upper">
-            ${Array.from(
-              (
-                (this.getRootNode() as ShadowRoot)
-                  .host as WebwriterInteractiveVideo
-              ).videoInteractions
-            ).map((interaction) => {
-              return html`<webwriter-interactive-bauble
-                style=${this.#permissions.editing
-                  ? "cursor: grab; position: absolute;"
-                  : "cursor: pointer; position: absolute;"}
-                offset=${this.calculateOffset(
-                  interaction.startTime
-                )}
+            ${chapters.length ? html`<div class="marker-row">
+              ${chapters.map(({ startTime, title }) => html`<button
+                type="button"
+                class="chapter-mark"
+                style="left: ${this.calculateOffset(startTime) ?? 0}px;"
+                aria-label=${this.msg("Skip to Chapter") + ": " + title}
+                @click=${() => {
+                  this.dispatchEvent(new CustomEvent("jumpToChapter", {
+                    detail: { startTime },
+                    bubbles: true,
+                    composed: true,
+                  }));
+                }}
+              ><sl-icon src=${bookmark}></sl-icon></button>`)}
+            </div>` : null}
+            ${interactions.length ? html`<div class="marker-row">
+              ${interactions.map((interaction) => html`<webwriter-interactive-bauble
+                offset=${ifDefined(this.calculateOffset(interaction.startTime))}
                 @dragstart=${this.handleBaubleDragStart}
                 @dragend=${this.handleBaubleDragEnd}
                 draggable=${this.#permissions.editing ? "true" : "false"}
@@ -117,28 +118,8 @@ export class InteractionsProgressBar extends LitElementWw {
                 @keydown=${this.handleBaubleKey}
                 @pointerdown=${this.handleBaublePointerDown}
                 id=${interaction.id}
-              >
-              </webwriter-interactive-bauble>`;
-            })}
-            ${this.videoContext.hasChapters ? this.videoContext.chapterConfig.map(
-              ({ startTime, title }) => {
-                return html`<button
-                  type="button"
-                  class="chapter-mark"
-                  style="left: ${this.calculateOffset(startTime)}px;"
-                  aria-label=${this.msg("Skip to Chapter") + ": " + title}
-                  @click=${() => {
-                    this.dispatchEvent(
-                      new CustomEvent("jumpToChapter", {
-                        detail: { startTime: startTime },
-                        bubbles: true,
-                        composed: true,
-                      })
-                    );
-                  }}
-                ><sl-icon src=${bookmark}></sl-icon></button>`;
-              }
-            ) : null}
+              ></webwriter-interactive-bauble>`)}
+            </div>` : null}
           </div>
         </div>
       </div>
@@ -150,16 +131,9 @@ export class InteractionsProgressBar extends LitElementWw {
     return this.parentNode?.parentNode?.querySelector<VideoPlayer>("#video") ?? null;
   }
 
-  /**
-   * Handles the click event on a bauble element.
-   *
-   * @param event - The MouseEvent object representing the click event.
-   * @remarks
-   * This function is called when a bauble is clicked. It checks if the control key is pressed and if so, it sets the video time to the bauble's start time.
-   * Otherwise, it calls the clickEventHelper function to handle the click event.
-   */
+  /** Opens the popup represented by the activated timeline marker. */
   handleBaubleClick(event: MouseEvent) {
-    const clickedElement = event.target as WwInteractiveBauble;
+    const clickedElement = event.currentTarget as WwInteractiveBauble;
 
     this.dispatchEvent(
       new CustomEvent("interactionBaubleClicked", {
@@ -195,7 +169,7 @@ export class InteractionsProgressBar extends LitElementWw {
       })
     );
     this.updateBaublePositions();
-    this.updateComplete.then(() => this.upperControls?.querySelector<HTMLElement>(`[id="${bauble.id}"]`)?.focus());
+    this.updateComplete.then(() => this.focusBauble(bauble.id));
   }
 
   /**
@@ -318,31 +292,13 @@ export class InteractionsProgressBar extends LitElementWw {
     this.dropArea.style.background = "none";
   };
 
-  /**
-   * Updates the positions of the baubles in the widget.
-   */
   updateBaublePositions() {
-    if (!this.upperControls) return;
-    const children = this.upperControls.children;
-    Array.from(children).forEach((child: Element) => {
-      if (child instanceof WwInteractiveBauble) {
-        const id = parseInt(child.id);
-
-        const slottedInteraction = (
-          (this.getRootNode() as ShadowRoot).host as WebwriterInteractiveVideo
-        ).videoInteractions.filter(
-          (interaction) => Number(interaction.id) === Number(id)
-        )[0];
-
-        if (slottedInteraction) {
-          const newOffset = this.calculateOffset(slottedInteraction.startTime);
-          if (newOffset !== undefined) {
-            child.setAttribute("offset", `${newOffset}`);
-          }
-        }
-      }
-    });
     this.requestUpdate();
+  }
+
+  focusBauble(id: string) {
+    const bauble = this.shadowRoot?.getElementById(String(id));
+    bauble?.focus();
   }
 
   /**
@@ -354,13 +310,10 @@ export class InteractionsProgressBar extends LitElementWw {
   calculateOffset(time: number): number | undefined {
     if (!this.videoContext.videoLoaded) return;
 
-    const videoElement = this.videoPlayer;
-    if (!videoElement) return;
+    const duration = this.videoPlayer?.duration;
+    if (!duration || !Number.isFinite(duration) || !this.dropArea) return;
 
-    return (
-      (time / videoElement.duration) *
-      (this.getBoundingClientRect().width - 38) + 19 /* Padding of 10 on each side + 18px slider thumb */
-      - 9 /* Half the width of the bauble (18px / 2 = 9px) */
-    );
+    // Align each marker's center with the 18px slider thumb.
+    return (time / duration) * (this.dropArea.getBoundingClientRect().width - 18);
   }
 }

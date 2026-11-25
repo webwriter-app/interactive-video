@@ -61,11 +61,11 @@ describe("<webwriter-interactive-video> permissions", function () {
     await until(() => bar(w).shadowRoot.querySelector("#add-button"), "the add button in edit mode");
   });
 
-  it("shows the handles of an interaction in edit mode", async function () {
+  it("shows the move grip without a custom resize handle in edit mode", async function () {
     const w = await mount(undefined, true);
     const interaction = w.querySelector("webwriter-video-interaction") as any;
-    await until(() => interaction.shadowRoot?.querySelector("#dragIcon"), "the interaction's handles");
-    assert.isOk(interaction.shadowRoot.querySelector("#bottomRight"));
+    await until(() => interaction.shadowRoot?.querySelector("#dragIcon"), "the interaction's move grip");
+    assert.isNull(interaction.shadowRoot.querySelector("#bottomRight"));
   });
 
   it("hides the handles of an interaction for readers", async function () {

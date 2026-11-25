@@ -770,7 +770,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "`webwriter-video-interaction` is a custom element that represents an interaction in a `replace` interaction.\nIt extends `LitElementWw` and provides a slot for content insertion.\nIn edit mode the grip at the top moves the popup and the corner handle resizes it, with the pointer, by touch or with the arrow keys (1 % or 10 px; Shift for five times as much).\nOn paper the popup is printed as a block with its time span.",
+          "description": "`webwriter-video-interaction` is a custom element that represents an interaction in a `replace` interaction.\nIt extends `LitElementWw` and provides a slot for content insertion.\nIn edit mode the grip at the top moves the popup with a pointer or the arrow keys (1 %, or 5 % with Shift).\nClosing a popup dismisses it for its current time window. Its timeline marker opens it again.\nOn paper the popup is printed as a block with its time span.",
           "name": "WebwriterVideoInteraction",
           "cssParts": [
             {
@@ -841,16 +841,6 @@
               "default": "-1",
               "description": "The tab index of the component.",
               "attribute": "tabIndex",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "id",
-              "type": {
-                "text": "string"
-              },
-              "description": "The interaction id. Must be unique. HTMLElement types `id` as a string, the Number converter turns the attribute into a number at runtime.",
-              "attribute": "id",
               "reflects": true
             },
             {
@@ -1012,44 +1002,9 @@
             },
             {
               "kind": "field",
-              "name": "isResizing",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "resizingWidth",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "resizingHeight",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "0"
-            },
-            {
-              "kind": "field",
               "name": "container",
               "type": {
                 "text": "HTMLDivElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "bottomRight",
-              "type": {
-                "text": "SlIcon"
               },
               "privacy": "private"
             },
@@ -1062,15 +1017,6 @@
               "privacy": "private"
             },
             {
-              "kind": "field",
-              "name": "mutationObserver",
-              "type": {
-                "text": "MutationObserver"
-              },
-              "privacy": "private",
-              "default": "new MutationObserver(this.mutationCallback)"
-            },
-            {
               "kind": "method",
               "name": "deleteInteraction",
               "return": {
@@ -1078,26 +1024,6 @@
                   "text": "void"
                 }
               }
-            },
-            {
-              "kind": "field",
-              "name": "mutationCallback",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "startResizing",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "PointerEvent"
-                  },
-                  "description": "The pointer event that initiates the resizing."
-                }
-              ],
-              "description": "Initiates the resizing process when the user starts dragging the resize handle."
             },
             {
               "kind": "method",
@@ -1112,20 +1038,6 @@
                 }
               ],
               "description": "Moves the popup with the arrow keys on the grip, so that it can be placed without a pointer."
-            },
-            {
-              "kind": "method",
-              "name": "resizeByKey",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ],
-              "description": "Resizes the popup with the arrow keys on the corner handle."
             },
             {
               "kind": "method",
@@ -1160,6 +1072,13 @@
               "type": {
                 "text": "CustomEvent"
               }
+            },
+            {
+              "name": "interactionClosed",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "The player dismisses the popup for its current time window."
             }
           ],
           "attributes": [
@@ -1177,8 +1096,7 @@
               "type": {
                 "text": "string"
               },
-              "description": "The interaction id. Must be unique. HTMLElement types `id` as a string, the Number converter turns the attribute into a number at runtime.",
-              "fieldName": "id"
+              "description": "The unique interaction ID."
             },
             {
               "name": "startTime",

@@ -42,7 +42,7 @@ export class WwInteractiveBauble extends LitElementWw {
   updated(changedProperties: PropertyValues) {
     changedProperties.forEach((_oldValue, property) => {
       if (property == "offset") {
-        this.style.left = `${this.offset}px`;
+        this.style.left = Number.isFinite(this.offset) ? `${this.offset}px` : "";
       }
     });
   }

@@ -31,6 +31,7 @@ import { chapterSeedSelector, readChapterSeed } from "../model/chapter-seed";
 import { baseVideoSize, DEFAULT_ASPECT_RATIO, fitVideoArea } from "../model/video-geometry";
 import { isAudioType, type Chapter } from "../model/timeline";
 import { formatTime } from "../model/time-format";
+import "./webwriter-video-interaction";
 import type { WebwriterVideoInteraction } from "./webwriter-video-interaction";
 
 type Labelled = { msg: MsgFn };
@@ -354,6 +355,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
 
   /** Republishes the chapter signal when chapters change while the media is paused. */
   protected updated(changed: PropertyValues): void {
+    this.interactions.showPopups();
     if ((changed.has("chapterConfig") || changed.has("hideChapters")) && this.videoPlayer) this.playback.publishTime(this.videoPlayer.currentTime);
   }
 
@@ -405,8 +407,23 @@ export class WebwriterInteractiveVideo extends LitElementWw {
   }
 
   updateBaublePositions() {
-    this.interactionsProgressBar.updateBaublePositions();
-    this.updateContext();
+    this.interactionsProgressBar?.updateBaublePositions();
+  }
+
+  private handleInteractionSlotChange() {
+    if (!this.videoInteractions.some((interaction) => Number(interaction.id) === this.selectedInteractionId)) {
+      this.interactions.select(-1);
+    }
+    this.interactions.syncGeometry();
+    this.updateBaublePositions();
+    this.requestUpdate();
+  }
+
+  private handleInteractionClosed(event: Event) {
+    const interaction = event.target as WebwriterVideoInteraction;
+    const hadFocus = !!interaction.shadowRoot?.activeElement;
+    this.interactions.close(interaction);
+    if (hadFocus) this.interactionsProgressBar.focusBauble(interaction.id);
   }
 
   /** Clears the media and resets the player; the interactions and chapters go with it unless asked to stay. */
@@ -505,13 +522,13 @@ export class WebwriterInteractiveVideo extends LitElementWw {
           <!-- VIDEO ELEMENT -->
           <div
             id="container-video-area"
-            @click=${() => playback.toggle()}
+            @click=${interactions.handleVideoClick}
           >
             <div
               id="container-video"
               part="video"
               @interactionClicked=${(e: CustomEvent) => interactions.select(e.detail.id)}
-              @click=${interactions.handleVideoClick}
+              @interactionClosed=${this.handleInteractionClosed}
               @updateContext=${() => this.updateContext()}
               style=${`width: ${this.videoAreaSize.width}px; height: ${this.videoAreaSize.height}px;`}
             >
@@ -530,8 +547,7 @@ export class WebwriterInteractiveVideo extends LitElementWw {
                 @setvideotype=${(e: CustomEvent) => { this.videoType = e.detail.type; }}
                 @setwaveformdata=${(e: CustomEvent) => { this.waveformData = e.detail.data; }}
               ></video-player>
-              ${this.videoLoaded ? interactions.showPopups() : null}
-              <slot data-ww-shortcuts="off"></slot>
+              <slot data-ww-shortcuts="off" @slotchange=${this.handleInteractionSlotChange}></slot>
             </div>
           </div>
           <!-- CONTROLS -->
