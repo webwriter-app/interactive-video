@@ -12,13 +12,34 @@ export default css`
   }
 
   #controls-upper {
-    height: 20px;
-    display: flex;
-    align-items: center;
-    width: 100%;
+    min-height: 20px;
   }
 
-  #drop-area {
+  .marker-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 20px;
+  }
+
+  webwriter-interactive-bauble {
+    position: absolute;
+    cursor: pointer;
+  }
+
+  webwriter-interactive-bauble[data-editable] {
+    cursor: grab;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  webwriter-interactive-bauble.dragging {
+    z-index: 1;
+    cursor: grabbing;
+  }
+
+  #marker-track {
     width: 100%;
     padding: 4px 0;
   }
@@ -26,6 +47,7 @@ export default css`
   .chapter-mark {
     position: absolute;
     display: flex;
+    margin-left: 1.5px;
     width: 15px;
     height: 15px;
     padding: 0;

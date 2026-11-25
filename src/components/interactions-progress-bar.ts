@@ -1,4 +1,6 @@
 import { html } from "lit";
+import { ifDefined } from "lit/directives/if-defined.js";
+import { repeat } from "lit/directives/repeat.js";
 
 import { LitElementWw } from "@webwriter/lit";
 import { widgetPermissions } from "@webwriter/lit/permissions";
@@ -21,6 +23,7 @@ import "@shoelace-style/shoelace/dist/themes/light.css";
 import type { VideoPlayer } from "./video-player";
 
 import type { WebwriterInteractiveVideo } from "../widgets/webwriter-interactive-video";
+import type { WebwriterVideoInteraction } from "../widgets/webwriter-video-interaction";
 
 import { WwInteractiveBauble } from "./webwriter-interactive-bauble";
 
@@ -31,17 +34,25 @@ import bookmark from "@tabler/icons/filled/bookmark.svg";
 //CSS
 import styles from "./interactions-progress-bar.styles";
 
+const thumbSize = 18;
+
+type BaubleDrag = {
+  marker: WwInteractiveBauble;
+  interaction: WebwriterVideoInteraction;
+  pointerId: number;
+  startX: number;
+  grabOffset: number;
+  moved: boolean;
+};
+
 export class InteractionsProgressBar extends LitElementWw {
   readonly #permissions = widgetPermissions(this);
   private readonly msg = widgetMsg(this);
   @consume({ context: videoContext, subscribe: true })
   accessor videoContext: InteractiveVideoContext;
 
-  @query("#drop-area")
-  accessor dropArea: HTMLDivElement;
-
-  @query("#controls-upper")
-  accessor upperControls: HTMLDivElement;
+  @query("#marker-track")
+  accessor markerTrack: HTMLDivElement;
 
   /**
    * Returns an object that maps custom element names to their corresponding classes.
@@ -66,79 +77,66 @@ export class InteractionsProgressBar extends LitElementWw {
   static styles = [styles];
 
   private resizeObserver: ResizeObserver;
+  #drag?: BaubleDrag;
+  #suppressClick = false;
 
   connectedCallback() {
     super.connectedCallback();
     this.resizeObserver = new ResizeObserver(() => {
       this.updateBaublePositions();
     });
-    this.updateComplete.then(() => {
-      this.resizeObserver.observe(this);
-    });
+    this.resizeObserver.observe(this);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    if (this.resizeObserver) {
-      this.resizeObserver.unobserve(this);
-    }
+    this.resizeObserver.disconnect();
+    this.#endDrag();
+  }
+
+  protected updated() {
+    if (this.#drag && !this.#drag.marker.isConnected) this.#endDrag();
   }
 
   render() {
+    const interactions = ((this.getRootNode() as ShadowRoot).host as WebwriterInteractiveVideo).videoInteractions;
+    const chapters = this.videoContext.hasChapters ? this.videoContext.chapterConfig : [];
     return html`
       <div class="interactions-progress-bar">
-        <div
-          id="drop-area"
-          @drop=${this.handleBaubleDroppedOnDropArea}
-          @dragover=${this.handleBaubleDraggedOverDropArea}
-          @dragleave=${this.handleBaubleLeaveDropArea}
-        >
+        <div id="marker-track">
           <div id="controls-upper">
-            ${Array.from(
-              (
-                (this.getRootNode() as ShadowRoot)
-                  .host as WebwriterInteractiveVideo
-              ).videoInteractions
-            ).map((interaction) => {
-              return html`<webwriter-interactive-bauble
-                style=${this.#permissions.editing
-                  ? "cursor: grab; position: absolute;"
-                  : "cursor: pointer; position: absolute;"}
-                offset=${this.calculateOffset(
-                  interaction.startTime
-                )}
-                @dragstart=${this.handleBaubleDragStart}
-                @dragend=${this.handleBaubleDragEnd}
-                draggable=${this.#permissions.editing ? "true" : "false"}
+            ${chapters.length ? html`<div class="marker-row">
+              ${chapters.map(({ startTime, title }) => html`<button
+                type="button"
+                class="chapter-mark"
+                style="left: ${this.calculateOffset(startTime) ?? 0}px;"
+                aria-label=${this.msg("Skip to Chapter") + ": " + title}
+                @click=${() => {
+                  this.dispatchEvent(new CustomEvent("jumpToChapter", {
+                    detail: { startTime },
+                    bubbles: true,
+                    composed: true,
+                  }));
+                }}
+              ><sl-icon src=${bookmark}></sl-icon></button>`)}
+            </div>` : null}
+            ${interactions.length ? html`<div class="marker-row">
+              ${repeat(interactions, (interaction) => interaction, (interaction) => html`<webwriter-interactive-bauble
+                offset=${ifDefined(this.calculateOffset(interaction.startTime))}
+                ?data-editable=${this.#permissions.editing}
                 role="button"
                 tabindex="0"
                 aria-label=${this.msg("Interaction") + " " + (Number(interaction.id) + 1)}
                 @click=${this.handleBaubleClick}
                 @keydown=${this.handleBaubleKey}
                 @pointerdown=${this.handleBaublePointerDown}
+                @pointermove=${this.handleBaublePointerMove}
+                @pointerup=${this.handleBaublePointerUp}
+                @lostpointercapture=${this.cancelBaubleDrag}
+                @pointercancel=${this.cancelBaubleDrag}
                 id=${interaction.id}
-              >
-              </webwriter-interactive-bauble>`;
-            })}
-            ${this.videoContext.hasChapters ? this.videoContext.chapterConfig.map(
-              ({ startTime, title }) => {
-                return html`<button
-                  type="button"
-                  class="chapter-mark"
-                  style="left: ${this.calculateOffset(startTime)}px;"
-                  aria-label=${this.msg("Skip to Chapter") + ": " + title}
-                  @click=${() => {
-                    this.dispatchEvent(
-                      new CustomEvent("jumpToChapter", {
-                        detail: { startTime: startTime },
-                        bubbles: true,
-                        composed: true,
-                      })
-                    );
-                  }}
-                ><sl-icon src=${bookmark}></sl-icon></button>`;
-              }
-            ) : null}
+              ></webwriter-interactive-bauble>`)}
+            </div>` : null}
           </div>
         </div>
       </div>
@@ -150,16 +148,13 @@ export class InteractionsProgressBar extends LitElementWw {
     return this.parentNode?.parentNode?.querySelector<VideoPlayer>("#video") ?? null;
   }
 
-  /**
-   * Handles the click event on a bauble element.
-   *
-   * @param event - The MouseEvent object representing the click event.
-   * @remarks
-   * This function is called when a bauble is clicked. It checks if the control key is pressed and if so, it sets the video time to the bauble's start time.
-   * Otherwise, it calls the clickEventHelper function to handle the click event.
-   */
+  /** Opens the popup represented by the activated timeline marker. */
   handleBaubleClick(event: MouseEvent) {
-    const clickedElement = event.target as WwInteractiveBauble;
+    if (this.#suppressClick && event.detail > 0) {
+      this.#suppressClick = false;
+      return;
+    }
+    const clickedElement = event.currentTarget as WwInteractiveBauble;
 
     this.dispatchEvent(
       new CustomEvent("interactionBaubleClicked", {
@@ -173,6 +168,12 @@ export class InteractionsProgressBar extends LitElementWw {
   /** Enter and Space open the interaction, in edit mode the arrow keys move its start time by one second. */
   handleBaubleKey(event: KeyboardEvent) {
     const bauble = event.currentTarget as WwInteractiveBauble;
+    if (event.key === "Escape" && this.#drag?.marker === bauble) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.#endDrag();
+      return;
+    }
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       event.stopPropagation();
@@ -187,59 +188,77 @@ export class InteractionsProgressBar extends LitElementWw {
     event.stopPropagation();
     const step = (event.key === "ArrowRight" ? 1 : -1) * (event.shiftKey ? 5 : 1);
     const newTime = Math.min(duration, Math.max(0, interaction.startTime + step));
-    this.dispatchEvent(
-      new CustomEvent("changeInteractionStartTime", {
-        detail: { newTime, index: parseInt(bauble.id) },
-        bubbles: true,
-        composed: true,
-      })
-    );
-    this.updateBaublePositions();
-    this.updateComplete.then(() => this.upperControls?.querySelector<HTMLElement>(`[id="${bauble.id}"]`)?.focus());
+    this.#retime(bauble.id, newTime);
+    this.updateComplete.then(() => this.focusBauble(bauble.id));
   }
 
-  /**
-   * Moves a bauble by touch or pen, where the browser starts no drag and drop. A mouse keeps using drag and drop.
-   * The bauble is moved to where the finger is lifted.
-   */
   handleBaublePointerDown(event: PointerEvent) {
-    if (!this.#permissions.editing || event.pointerType === "mouse" || !event.isPrimary) return;
-    const bauble = event.currentTarget as WwInteractiveBauble;
+    if (!event.isPrimary || event.button !== 0 || this.#drag) return;
+    this.#suppressClick = false;
+    if (!this.#permissions.editing || !this.videoPlayer?.duration) return;
+
+    const marker = event.currentTarget as WwInteractiveBauble;
+    const interaction = this.#interaction(marker.id);
+    if (!interaction) return;
+    const rect = marker.getBoundingClientRect();
+    this.#drag = {
+      marker,
+      interaction,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      grabOffset: event.clientX - rect.left - rect.width / 2,
+      moved: false,
+    };
+    // Untrusted test events can have no active browser pointer.
+    try { marker.setPointerCapture(event.pointerId); } catch { /* No active pointer. */ }
+  }
+
+  handleBaublePointerMove(event: PointerEvent) {
+    const drag = this.#drag;
+    if (!drag || event.pointerId !== drag.pointerId || event.currentTarget !== drag.marker) return;
+    if (!drag.moved && Math.abs(event.clientX - drag.startX) < 6) return;
+
+    const time = this.#timeAt(event.clientX - drag.grabOffset);
+    const offset = time === undefined ? undefined : this.calculateOffset(time);
+    if (offset === undefined) return;
+
+    drag.moved = true;
+    drag.marker.classList.add("dragging");
+    drag.marker.style.translate = `${offset - drag.marker.offset}px`;
+  }
+
+  handleBaublePointerUp(event: PointerEvent) {
+    const drag = this.#drag;
+    if (!drag || event.pointerId !== drag.pointerId || event.currentTarget !== drag.marker) return;
+    this.#endDrag();
+    if (!drag.moved || !this.#permissions.editing || this.#interaction(drag.interaction.id) !== drag.interaction) return;
+
+    const newTime = this.#timeAt(event.clientX - drag.grabOffset);
+    if (newTime !== undefined) this.#retime(drag.interaction.id, newTime);
+  }
+
+  cancelBaubleDrag(event: PointerEvent) {
+    if (event.pointerId === this.#drag?.pointerId && event.currentTarget === this.#drag.marker) this.#endDrag();
+  }
+
+  #endDrag() {
+    const drag = this.#drag;
+    if (!drag) return;
+    this.#drag = undefined;
+    this.#suppressClick = drag.moved;
+    drag.marker.classList.remove("dragging");
+    drag.marker.style.removeProperty("translate");
+    if (drag.marker.hasPointerCapture(drag.pointerId)) drag.marker.releasePointerCapture(drag.pointerId);
+  }
+
+  #timeAt(clientX: number) {
     const duration = this.videoPlayer?.duration;
-    if (!duration) return;
-    const startX = event.clientX;
-    let moved = false;
-    try { bauble.setPointerCapture(event.pointerId); } catch { /* the pointer ended already */ }
-    const timeAt = (clientX: number) => {
-      const rect = this.dropArea.getBoundingClientRect();
-      return Math.floor(duration * Math.min(1, Math.max(0, (clientX - rect.left) / rect.width)) * 1000) / 1000;
-    };
-    const onMove = (e: PointerEvent) => {
-      if (!moved && Math.abs(e.clientX - startX) < 6) return;
-      moved = true;
-      const offset = this.calculateOffset(timeAt(e.clientX));
-      if (offset !== undefined) bauble.style.left = `${offset}px`;
-    };
-    const finish = (e: PointerEvent) => {
-      bauble.removeEventListener("pointermove", onMove);
-      bauble.removeEventListener("pointerup", finish);
-      bauble.removeEventListener("pointercancel", finish);
-      if (bauble.hasPointerCapture?.(e.pointerId)) bauble.releasePointerCapture(e.pointerId);
-      if (!moved) return;
-      if (e.type === "pointerup") {
-        this.dispatchEvent(
-          new CustomEvent("changeInteractionStartTime", {
-            detail: { newTime: timeAt(e.clientX), index: parseInt(bauble.id) },
-            bubbles: true,
-            composed: true,
-          })
-        );
-      }
-      this.updateBaublePositions();
-    };
-    bauble.addEventListener("pointermove", onMove);
-    bauble.addEventListener("pointerup", finish);
-    bauble.addEventListener("pointercancel", finish);
+    const rect = this.markerTrack.getBoundingClientRect();
+    const width = this.markerTrack.clientWidth;
+    if (!duration || !Number.isFinite(duration) || !rect.width || width <= thumbSize) return;
+    const x = (clientX - rect.left) * (width / rect.width) - thumbSize / 2;
+    const fraction = Math.min(1, Math.max(0, x / (width - thumbSize)));
+    return Math.min(duration, Math.round(duration * fraction * 1000) / 1000);
   }
 
   #interaction(id: string) {
@@ -248,101 +267,24 @@ export class InteractionsProgressBar extends LitElementWw {
     );
   }
 
-  /**
-   * Handles the drag start event for a bauble.
-   *
-   * @param e - The drag event.
-   */
-  handleBaubleDragStart = (e: DragEvent) => {
-    e.dataTransfer?.setData("id", (e.target as WwInteractiveBauble).id);
-  };
-
-  /**
-   * Handles the event when a bauble is dropped on the drop area.
-   *
-   * @param e - The DragEvent object representing the drop event.
-   * @remarks
-   * Dropping a bauble on the drop area changes the corresponding interactions starttime to whatever the bauble was dropped at
-   */
-  handleBaubleDroppedOnDropArea(e: DragEvent) {
-    const rect = this.dropArea.getBoundingClientRect();
-    const distanceFromLeft = e.clientX - rect.left;
-
-    const videoElement = this.videoPlayer;
-    if (!videoElement) return;
-
+  #retime(id: string, newTime: number) {
     this.dispatchEvent(
       new CustomEvent("changeInteractionStartTime", {
-        detail: {
-          newTime: Math.floor(
-            videoElement.duration * (distanceFromLeft / rect.width) * 1000
-          ) / 1000,
-          index: parseInt(e.dataTransfer?.getData("id") ?? ""),
-        },
+        detail: { newTime, index: Number(id) },
         bubbles: true,
         composed: true,
       })
     );
-
-    this.dropArea.style.background = "none";
-
     this.updateBaublePositions();
   }
 
-  /**
-   * Handles the event when a bauble is dragged over the drop area.
-   * Changes the background color of the drop area to a semi-transparent gray.
-   *
-   * @param e - The DragEvent object representing the drag event.
-   */
-  handleBaubleDraggedOverDropArea() {
-    this.dropArea.style.background = "rgba(0.5,0.5,0.5,0.5)";
-  }
-
-  /**
-   * Handles the event when a bauble is dragged out of the drop area.
-   * Resets the background of the drop area.
-   *
-   * @param e - The DragEvent object representing the drag event.
-   */
-  handleBaubleLeaveDropArea() {
-    this.dropArea.style.background = "none";
-  }
-
-  /**
-   * Handles the drag end event for the bauble.
-   *
-   * @param e - The drag event.
-   */
-  handleBaubleDragEnd = () => {
-    this.dropArea.style.background = "none";
-  };
-
-  /**
-   * Updates the positions of the baubles in the widget.
-   */
   updateBaublePositions() {
-    if (!this.upperControls) return;
-    const children = this.upperControls.children;
-    Array.from(children).forEach((child: Element) => {
-      if (child instanceof WwInteractiveBauble) {
-        const id = parseInt(child.id);
-
-        const slottedInteraction = (
-          (this.getRootNode() as ShadowRoot).host as WebwriterInteractiveVideo
-        ).videoInteractions.filter(
-          (interaction) => Number(interaction.id) === Number(id)
-        )[0];
-
-        if (slottedInteraction) {
-          const newOffset = this.calculateOffset(slottedInteraction.startTime);
-          if (newOffset !== undefined) {
-            child.setAttribute("offset", `${newOffset}`);
-          }
-        }
-      }
-    });
     this.requestUpdate();
+  }
+
+  focusBauble(id: string) {
+    const bauble = this.shadowRoot?.getElementById(String(id));
+    bauble?.focus();
   }
 
   /**
@@ -354,13 +296,10 @@ export class InteractionsProgressBar extends LitElementWw {
   calculateOffset(time: number): number | undefined {
     if (!this.videoContext.videoLoaded) return;
 
-    const videoElement = this.videoPlayer;
-    if (!videoElement) return;
+    const duration = this.videoPlayer?.duration;
+    if (!duration || !Number.isFinite(duration) || !this.markerTrack) return;
 
-    return (
-      (time / videoElement.duration) *
-      (this.getBoundingClientRect().width - 38) + 19 /* Padding of 10 on each side + 18px slider thumb */
-      - 9 /* Half the width of the bauble (18px / 2 = 9px) */
-    );
+    // Align each marker's center with the 18px slider thumb.
+    return (time / duration) * (this.markerTrack.clientWidth - thumbSize);
   }
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" version="1.2">
   <file original="lit-localize-inputs" datatype="plaintext" source-language="en" target-language="el">
     <body>
@@ -30,45 +30,9 @@
         <source>Invalid time format. Use hh:mm:ss or mm:ss</source>
         <target>Μη έγκυρη μορφή ώρας. Χρησιμοποιήστε hh:mm:ss ή mm:ss</target>
       </trans-unit>
-      <trans-unit id="s85186a61e0d55bac">
-        <source>Video</source>
-        <target>Βίντεο</target>
-      </trans-unit>
-      <trans-unit id="s486ef6c2cdc505d7">
-        <source>Show Popups</source>
-        <target>Εμφάνιση αναδυόμενων παραθύρων</target>
-      </trans-unit>
       <trans-unit id="s6fa430a5a501eb4b">
         <source>Interaction</source>
         <target>Αλληλεπίδραση</target>
-      </trans-unit>
-      <trans-unit id="s167f53f89012d24c">
-        <source>Start Time</source>
-        <target>Ώρα έναρξης</target>
-      </trans-unit>
-      <trans-unit id="s58c17428301e0137">
-        <source>End Time</source>
-        <target>Χρόνος τέλους</target>
-      </trans-unit>
-      <trans-unit id="s9c356016f81585f6">
-        <source>Background Color</source>
-        <target>Χρώμα φόντου</target>
-      </trans-unit>
-      <trans-unit id="s55435611e2a8e6dc">
-        <source>Overlay Color</source>
-        <target>Χρώμα επικάλυψης</target>
-      </trans-unit>
-      <trans-unit id="s3d09398e555ee5f9">
-        <source>Advanced Options</source>
-        <target>Προηγμένες επιλογές</target>
-      </trans-unit>
-      <trans-unit id="s8de4d921e17c46aa">
-        <source>X Position</source>
-        <target>X Θέση</target>
-      </trans-unit>
-      <trans-unit id="s58369cf8082f2d5f">
-        <source>Y Position</source>
-        <target>Y Θέση</target>
       </trans-unit>
       <trans-unit id="sf21fb4f4b9e8911f">
         <source>Width</source>
@@ -78,14 +42,6 @@
         <source>Height</source>
         <target>Ύψος</target>
       </trans-unit>
-      <trans-unit id="sdc673e73b5c13aea">
-        <source>Delete</source>
-        <target>Διαγραφή</target>
-      </trans-unit>
-      <trans-unit id="s1ad02de8e1d50d2c">
-        <source>Select an interaction to view details</source>
-        <target>Επιλέξτε μια αλληλεπίδραση για να δείτε λεπτομέρειες</target>
-      </trans-unit>
       <trans-unit id="sb2e1884d9dace006">
         <source>Add Popup</source>
         <target>Προσθήκη αναδυόμενου παραθύρου</target>
@@ -93,18 +49,6 @@
       <trans-unit id="s08b05407b5565ca4">
         <source>or</source>
         <target>ή</target>
-      </trans-unit>
-      <trans-unit id="see2eca66ecd60d30">
-        <source>Enable chapters</source>
-        <target>Ενεργοποίηση κεφαλαίων</target>
-      </trans-unit>
-      <trans-unit id="s86d33eabf23f17c4">
-        <source>Add something here...</source>
-        <target>Προσθέστε κάτι εδώ...</target>
-      </trans-unit>
-      <trans-unit id="s39691ba3f371adc1">
-        <source>Allow playback rate change</source>
-        <target>Επιτρέψτε την αλλαγή του ρυθμού αναπαραγωγής</target>
       </trans-unit>
       <trans-unit id="s75ff661d0f492c89">
         <source>Select video or audio file</source>
@@ -138,26 +82,6 @@
         <source>No, keep it</source>
         <target>Όχι, κρατήστε το</target>
       </trans-unit>
-      <trans-unit id="s08e6bd98452e6bb9">
-        <source>Audio</source>
-        <target>Ήχος</target>
-      </trans-unit>
-      <trans-unit id="s62155488d6519cf3">
-        <source>Remove audio</source>
-        <target>Αφαίρεση ήχου</target>
-      </trans-unit>
-      <trans-unit id="sdcb649c4baf8dafa">
-        <source>Remove video</source>
-        <target>Αφαίρεση βίντεο</target>
-      </trans-unit>
-      <trans-unit id="s0960574e3b6ca412">
-        <source>Video File</source>
-        <target>Αρχείο βίντεο</target>
-      </trans-unit>
-      <trans-unit id="s3cda547ac2158bf5">
-        <source>Audio File</source>
-        <target>Αρχείο ήχου</target>
-      </trans-unit>
       <trans-unit id="sf29ef97c6e418a92">
         <source>Remove media?</source>
         <target>Να αφαιρέσετε τα μέσα ενημέρωσης;</target>
@@ -165,10 +89,6 @@
       <trans-unit id="s9d2a1c7fe017a7cd">
         <source>Loading audio...</source>
         <target>Φόρτωση ήχου...</target>
-      </trans-unit>
-      <trans-unit id="seed71b0ff741f5c3">
-        <source>Pause video when shown</source>
-        <target>Παύση βίντεο όταν εμφανίζεται</target>
       </trans-unit>
       <trans-unit id="s11f3370df4b0a8a1">
         <source>Spotify albums and playlists aren't supported. Please use a link to a single track or episode.</source>
@@ -290,60 +210,206 @@
         <source>The media took too long to load. Please check the link and your internet connection, then try again.</source>
         <target>Η φόρτωση του αρχείου πολυμέσων διήρκεσε πολύ. Ελέγξτε τον σύνδεσμο και τη σύνδεσή σας στο διαδίκτυο και, στη συνέχεια, δοκιμάστε ξανά.</target>
       </trans-unit>
-    <trans-unit id="s97f78c37615bdaf2">
-  <source>Hide interactions</source>
-<target>Απόκρυψη αλληλεπιδράσεων</target></trans-unit>
-<trans-unit id="sc7e2b06a922c3979">
-  <source>Hide chapters</source>
-<target>Απόκρυψη κεφαλαίων</target></trans-unit>
-<trans-unit id="s089b6f6551227e0b">
-  <source>Disable playback rate changes</source>
-<target>Απενεργοποίηση αλλαγής ταχύτητας αναπαραγωγής</target></trans-unit>
-<trans-unit id="s8fef389de26459e6">
-  <source>Import media file</source>
-<target>Εισαγωγή αρχείου πολυμέσων</target></trans-unit>
-<trans-unit id="s87a7c34815708e19">
-  <source>Remove media</source>
-<target>Αφαίρεση πολυμέσου</target></trans-unit>
-<trans-unit id="s491dc50bced9bedc">
-  <source>Remove the current media and keep its interactions and chapters?</source>
-<target>Να αφαιρεθεί το τρέχον πολυμέσο και να διατηρηθούν οι αλληλεπιδράσεις και τα κεφάλαιά του;</target></trans-unit>
-<trans-unit id="sac494a087707be4c">
-  <source>Playback</source>
-<target>Αναπαραγωγή</target></trans-unit>
-<trans-unit id="sef5852ec91873a6c">
-  <source>Start time</source>
-<target>Χρόνος έναρξης</target></trans-unit>
-<trans-unit id="s2e33731c2ead8d57">
-  <source>End time</source>
-<target>Χρόνος λήξης</target></trans-unit>
-<trans-unit id="sfc902fb1179ecb70">
-  <source>Do not pause when shown</source>
-<target>Χωρίς παύση κατά την εμφάνιση</target></trans-unit>
-<trans-unit id="s6a0937ef686b96c4">
-  <source>X position (%)</source>
-<target>Θέση X (%)</target></trans-unit>
-<trans-unit id="s7751f12230bb00e5">
-  <source>Y position (%)</source>
-<target>Θέση Y (%)</target></trans-unit>
-<trans-unit id="s95836eab7093947c">
-  <source>Overlay color</source>
-<target>Χρώμα επικάλυψης</target></trans-unit>
-<trans-unit id="s1c5b38a1790e5663">
-  <source>Interaction timing</source>
-<target>Χρονισμός αλληλεπίδρασης</target></trans-unit>
-<trans-unit id="s1d2c9dcc771033fc">
-  <source>Position and size</source>
-<target>Θέση και μέγεθος</target></trans-unit>
-<trans-unit id="sf0e261e04eda82ff">
-  <source>Appearance</source>
-<target>Εμφάνιση</target></trans-unit>
-<trans-unit id="s7ac532234bc05506">
-  <source>Delete interaction</source>
-<target>Διαγραφή αλληλεπίδρασης</target></trans-unit>
-<trans-unit id="s54296d2feba264b7">
-  <source>Delete this interaction?</source>
-<target>Να διαγραφεί αυτή η αλληλεπίδραση;</target></trans-unit>
-</body>
+      <trans-unit id="s97f78c37615bdaf2">
+        <source>Hide interactions</source>
+        <target>Απόκρυψη αλληλεπιδράσεων</target>
+      </trans-unit>
+      <trans-unit id="sc7e2b06a922c3979">
+        <source>Hide chapters</source>
+        <target>Απόκρυψη κεφαλαίων</target>
+      </trans-unit>
+      <trans-unit id="s089b6f6551227e0b">
+        <source>Disable playback rate changes</source>
+        <target>Απενεργοποίηση αλλαγής ταχύτητας αναπαραγωγής</target>
+      </trans-unit>
+      <trans-unit id="s8fef389de26459e6">
+        <source>Import media file</source>
+        <target>Εισαγωγή αρχείου πολυμέσων</target>
+      </trans-unit>
+      <trans-unit id="s87a7c34815708e19">
+        <source>Remove media</source>
+        <target>Αφαίρεση πολυμέσου</target>
+      </trans-unit>
+      <trans-unit id="s491dc50bced9bedc">
+        <source>Remove the current media and keep its interactions and chapters?</source>
+        <target>Να αφαιρεθεί το τρέχον πολυμέσο και να διατηρηθούν οι αλληλεπιδράσεις και τα κεφάλαιά του;</target>
+      </trans-unit>
+      <trans-unit id="sac494a087707be4c">
+        <source>Playback</source>
+        <target>Αναπαραγωγή</target>
+      </trans-unit>
+      <trans-unit id="sef5852ec91873a6c">
+        <source>Start time</source>
+        <target>Χρόνος έναρξης</target>
+      </trans-unit>
+      <trans-unit id="s2e33731c2ead8d57">
+        <source>End time</source>
+        <target>Χρόνος λήξης</target>
+      </trans-unit>
+      <trans-unit id="sfc902fb1179ecb70">
+        <source>Do not pause when shown</source>
+        <target>Χωρίς παύση κατά την εμφάνιση</target>
+      </trans-unit>
+      <trans-unit id="s6a0937ef686b96c4">
+        <source>X position (%)</source>
+        <target>Θέση X (%)</target>
+      </trans-unit>
+      <trans-unit id="s7751f12230bb00e5">
+        <source>Y position (%)</source>
+        <target>Θέση Y (%)</target>
+      </trans-unit>
+      <trans-unit id="s95836eab7093947c">
+        <source>Overlay color</source>
+        <target>Χρώμα επικάλυψης</target>
+      </trans-unit>
+      <trans-unit id="s1c5b38a1790e5663">
+        <source>Interaction timing</source>
+        <target>Χρονισμός αλληλεπίδρασης</target>
+      </trans-unit>
+      <trans-unit id="s1d2c9dcc771033fc">
+        <source>Position and size</source>
+        <target>Θέση και μέγεθος</target>
+      </trans-unit>
+      <trans-unit id="sf0e261e04eda82ff">
+        <source>Appearance</source>
+        <target>Εμφάνιση</target>
+      </trans-unit>
+      <trans-unit id="s7ac532234bc05506">
+        <source>Delete interaction</source>
+        <target>Διαγραφή αλληλεπίδρασης</target>
+      </trans-unit>
+      <trans-unit id="s54296d2feba264b7">
+        <source>Delete this interaction?</source>
+        <target>Να διαγραφεί αυτή η αλληλεπίδραση;</target>
+      </trans-unit>
+      <trans-unit id="s984e1dec66277a53">
+        <source>This is not a WebVTT file.</source>
+        <target>Αυτό δεν είναι αρχείο WebVTT.</target>
+      </trans-unit>
+      <trans-unit id="se55acc02cc5769b7">
+        <source>The file has no chapters or interactions.</source>
+        <target>Το αρχείο δεν έχει κεφάλαια ή αλληλεπιδράσεις.</target>
+      </trans-unit>
+      <trans-unit id="s9f3079fc9709809f">
+        <source>Delete chapter</source>
+        <target>Διαγραφή κεφαλαίου</target>
+      </trans-unit>
+      <trans-unit id="s01c616b90d78dd42">
+        <source>Play or pause</source>
+        <target>Αναπαραγωγή ή παύση</target>
+      </trans-unit>
+      <trans-unit id="s5b528a7f6c0c40af">
+        <source>Volume</source>
+        <target>Ένταση ήχου</target>
+      </trans-unit>
+      <trans-unit id="sd7b61a3aef0fc1ef">
+        <source>Playback speed</source>
+        <target>Ταχύτητα αναπαραγωγής</target>
+      </trans-unit>
+      <trans-unit id="s4b10acae683d2978">
+        <source>Fullscreen</source>
+        <target>Πλήρης οθόνη</target>
+      </trans-unit>
+      <trans-unit id="s3dabd390085a40e1">
+        <source>Interactive content: open the document online to play the media.</source>
+        <target>Διαδραστικό περιεχόμενο: ανοίξτε το έγγραφο στο διαδίκτυο για αναπαραγωγή των μέσων.</target>
+      </trans-unit>
+      <trans-unit id="s5788d924d55d3ff1">
+        <source>Seek</source>
+        <target>Αναζήτηση</target>
+      </trans-unit>
+      <trans-unit id="s067549d6fb39e4fc">
+        <source>Move interaction</source>
+        <target>Μετακίνηση αλληλεπίδρασης</target>
+      </trans-unit>
+      <trans-unit id="sf1524d230abac459">
+        <source>Close popup</source>
+        <target>Κλείσιμο αναδυόμενου παραθύρου</target>
+      </trans-unit>
+      <trans-unit id="sc7aeb596f1dcb1bd">
+        <source>Popup</source>
+        <target>Αναδυόμενο παράθυρο</target>
+      </trans-unit>
+      <trans-unit id="s85186a61e0d55bac">
+        <source>Video</source>
+        <target>Βίντεο</target>
+      </trans-unit>
+      <trans-unit id="s486ef6c2cdc505d7">
+        <source>Show Popups</source>
+        <target>Εμφάνιση αναδυόμενων παραθύρων</target>
+      </trans-unit>
+      <trans-unit id="s167f53f89012d24c">
+        <source>Start Time</source>
+        <target>Ώρα έναρξης</target>
+      </trans-unit>
+      <trans-unit id="s58c17428301e0137">
+        <source>End Time</source>
+        <target>Χρόνος τέλους</target>
+      </trans-unit>
+      <trans-unit id="s9c356016f81585f6">
+        <source>Background Color</source>
+        <target>Χρώμα φόντου</target>
+      </trans-unit>
+      <trans-unit id="s55435611e2a8e6dc">
+        <source>Overlay Color</source>
+        <target>Χρώμα επικάλυψης</target>
+      </trans-unit>
+      <trans-unit id="s3d09398e555ee5f9">
+        <source>Advanced Options</source>
+        <target>Προηγμένες επιλογές</target>
+      </trans-unit>
+      <trans-unit id="s8de4d921e17c46aa">
+        <source>X Position</source>
+        <target>X Θέση</target>
+      </trans-unit>
+      <trans-unit id="s58369cf8082f2d5f">
+        <source>Y Position</source>
+        <target>Y Θέση</target>
+      </trans-unit>
+      <trans-unit id="sdc673e73b5c13aea">
+        <source>Delete</source>
+        <target>Διαγραφή</target>
+      </trans-unit>
+      <trans-unit id="s1ad02de8e1d50d2c">
+        <source>Select an interaction to view details</source>
+        <target>Επιλέξτε μια αλληλεπίδραση για να δείτε λεπτομέρειες</target>
+      </trans-unit>
+      <trans-unit id="see2eca66ecd60d30">
+        <source>Enable chapters</source>
+        <target>Ενεργοποίηση κεφαλαίων</target>
+      </trans-unit>
+      <trans-unit id="s86d33eabf23f17c4">
+        <source>Add something here...</source>
+        <target>Προσθέστε κάτι εδώ...</target>
+      </trans-unit>
+      <trans-unit id="s39691ba3f371adc1">
+        <source>Allow playback rate change</source>
+        <target>Επιτρέψτε την αλλαγή του ρυθμού αναπαραγωγής</target>
+      </trans-unit>
+      <trans-unit id="s08e6bd98452e6bb9">
+        <source>Audio</source>
+        <target>Ήχος</target>
+      </trans-unit>
+      <trans-unit id="s62155488d6519cf3">
+        <source>Remove audio</source>
+        <target>Αφαίρεση ήχου</target>
+      </trans-unit>
+      <trans-unit id="sdcb649c4baf8dafa">
+        <source>Remove video</source>
+        <target>Αφαίρεση βίντεο</target>
+      </trans-unit>
+      <trans-unit id="s0960574e3b6ca412">
+        <source>Video File</source>
+        <target>Αρχείο βίντεο</target>
+      </trans-unit>
+      <trans-unit id="s3cda547ac2158bf5">
+        <source>Audio File</source>
+        <target>Αρχείο ήχου</target>
+      </trans-unit>
+      <trans-unit id="seed71b0ff741f5c3">
+        <source>Pause video when shown</source>
+        <target>Παύση βίντεο όταν εμφανίζεται</target>
+      </trans-unit>
+    </body>
   </file>
 </xliff>

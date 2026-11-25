@@ -18,7 +18,7 @@ The media is a file (stored as base64 in the widget's JSON data block, together 
 or a link to YouTube, Vimeo, TikTok, Spotify or a direct file. The player libraries for each kind of source are loaded when it is first used.
 Interactions are `webwriter-video-interaction` children; keys the data block does not know are kept.
 Space and K play and pause, F toggles fullscreen, M mutes, the arrow keys change volume and skip 5 s, J and L skip 10 s, C opens the chapters.
-Interaction and chapter markers on the progress bar are buttons; in edit mode the arrow keys on an interaction marker move its start time by 1 s, and a touch drag moves it too.
+Interaction and chapter markers on the progress bar are buttons; in edit mode the arrow keys on an interaction marker move its start time by 1 s, and a pointer drag moves it too.
 The layout follows the container width (300 to 2100 px) and the controls collapse when it is narrow. The accent of the sliders and markers follows `--ww-theme-accent-1`, the font `--ww-font-family`.
 On paper the media and its controls are replaced by the title, the chapters and the interactions with their time spans.
 
@@ -138,7 +138,8 @@ npm install @webwriter/interactive-video
 ## `WebwriterVideoInteraction` (`<webwriter-video-interaction>`)
 `webwriter-video-interaction` is a custom element that represents an interaction in a `replace` interaction.
 It extends `LitElementWw` and provides a slot for content insertion.
-In edit mode the grip at the top moves the popup and the corner handle resizes it, with the pointer, by touch or with the arrow keys (1 % or 10 px; Shift for five times as much).
+In edit mode the grip at the top moves the popup with a pointer or the arrow keys (1 %, or 5 % with Shift).
+Closing a popup dismisses it for its current time window. Its timeline marker opens it again.
 On paper the popup is printed as a block with its time span.
 
 ### Usage
@@ -172,7 +173,6 @@ npm install @webwriter/interactive-video
 | `localize` | - | - | - | ✗ |
 | `msg` | - | - | - | ✗ |
 | `tabIndex` (`tabIndex`) | `number` | The tab index of the component. | `-1` | ✓ |
-| `id` (`id`) | `string` | The interaction id. Must be unique. HTMLElement types `id` as a string, the Number converter turns the attribute into a number at runtime. | - | ✓ |
 | `startTime` (`startTime`) | `number` | The interaction start time in seconds. | - | ✓ |
 | `endTime` (`endTime`) | `number` | The interaction end time in seconds. | - | ✓ |
 | `noInitialPause` (`noInitialPause`) | `boolean` | Whether the interaction should pause the video when shown. | `false` | ✓ |
@@ -201,6 +201,7 @@ npm install @webwriter/interactive-video
 | :--: | :---------: |
 | positionChanged | - |
 | interactionClicked | - |
+| interactionClosed | - |
 
 *[Events](https://developer.mozilla.org/en-US/docs/Web/Events) are dispatched by the widget after certain triggers.*
 
@@ -226,4 +227,4 @@ npm install @webwriter/interactive-video
 
 
 ---
-*Generated with @webwriter/build@1.14.0*
+*Generated with @webwriter/build@1.15.0*
