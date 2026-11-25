@@ -27,11 +27,19 @@ export default css`
     cursor: pointer;
   }
 
-  webwriter-interactive-bauble[draggable="true"] {
+  webwriter-interactive-bauble[data-editable] {
     cursor: grab;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
-  #drop-area {
+  webwriter-interactive-bauble.dragging {
+    z-index: 1;
+    cursor: grabbing;
+  }
+
+  #marker-track {
     width: 100%;
     padding: 4px 0;
   }

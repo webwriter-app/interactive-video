@@ -21,7 +21,7 @@ describe("<webwriter-interactive-video> permissions", function () {
   it("does not make baubles draggable in read mode", async function () {
     const w = await mount(undefined, false);
     await settle(w);
-    assert.equal(bauble(w)?.getAttribute("draggable"), "false");
+    assert.equal(getComputedStyle(bauble(w)).cursor, "pointer");
   });
 
   describe("when the mode changes to edit", function () {
@@ -38,7 +38,8 @@ describe("<webwriter-interactive-video> permissions", function () {
     });
 
     it("makes baubles draggable and shows their number", function () {
-      assert.isTrue(bauble(w)?.getAttribute("draggable") === "true" && bauble(w).shadowRoot.querySelector("p")?.textContent === "1", bauble(w)?.shadowRoot.innerHTML);
+      assert.equal(getComputedStyle(bauble(w)).cursor, "grab");
+      assert.equal(bauble(w).shadowRoot.querySelector("p")?.textContent, "1");
     });
 
     it("lets the chapter drawer offer adding", function () {

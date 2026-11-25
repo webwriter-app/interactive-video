@@ -9,10 +9,6 @@ export default css`
     position: relative;
   }
 
-  :host([draggable="true"]) {
-    touch-action: none;
-  }
-
   :host::before {
     content: "";
     position: absolute;
@@ -39,9 +35,5 @@ export default css`
   :host(:focus-visible) #bauble {
     background-color: var(--ww-theme-accent-1, #0084c6);
     color: white;
-  }
-
-  :host(.dragging) {
-    cursor: grabbing;
   }
 `;

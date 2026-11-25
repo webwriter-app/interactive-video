@@ -49,7 +49,7 @@ type AuthoredData = {
  * or a link to YouTube, Vimeo, TikTok, Spotify or a direct file. The player libraries for each kind of source are loaded when it is first used.
  * Interactions are `webwriter-video-interaction` children; keys the data block does not know are kept.
  * Space and K play and pause, F toggles fullscreen, M mutes, the arrow keys change volume and skip 5 s, J and L skip 10 s, C opens the chapters.
- * Interaction and chapter markers on the progress bar are buttons; in edit mode the arrow keys on an interaction marker move its start time by 1 s, and a touch drag moves it too.
+ * Interaction and chapter markers on the progress bar are buttons; in edit mode the arrow keys on an interaction marker move its start time by 1 s, and a pointer drag moves it too.
  * The layout follows the container width (300 to 2100 px) and the controls collapse when it is narrow. The accent of the sliders and markers follows `--ww-theme-accent-1`, the font `--ww-font-family`.
  * On paper the media and its controls are replaced by the title, the chapters and the interactions with their time spans.
  *

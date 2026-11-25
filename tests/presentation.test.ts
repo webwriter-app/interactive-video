@@ -9,6 +9,12 @@ mocha.setup(getMochaConfig());
 const baubles = (w: any): HTMLElement[] => [...w.shadowRoot.querySelector("interactions-progress-bar").shadowRoot.querySelectorAll("webwriter-interactive-bauble")];
 const marks = (w: any): HTMLElement[] => [...w.shadowRoot.querySelector("interactions-progress-bar").shadowRoot.querySelectorAll(".chapter-mark")];
 
+function dispatchPointer(marker: HTMLElement, type: string, clientX: number, pointerType = "mouse", pointerId = 7) {
+  marker.dispatchEvent(new PointerEvent(type, {
+    bubbles: true, composed: true, pointerId, pointerType, isPrimary: true, clientX,
+  }));
+}
+
 for (const edit of [false, true]) describe(`<webwriter-interactive-video> input in ${edit ? "edit" : "read"} mode`, function () {
   this.timeout(30000);
   let w: any;
@@ -75,6 +81,20 @@ for (const edit of [false, true]) describe(`<webwriter-interactive-video> input 
     }
   });
 
+  if (!edit) {
+    it("keeps timing fixed when a reader drags a marker", async function () {
+      const [marker] = baubles(w);
+      const interaction = w.videoInteractions[0];
+      const before = interaction.startTime;
+      const from = marker.getBoundingClientRect().left + 9;
+      dispatchPointer(marker, "pointerdown", from);
+      dispatchPointer(marker, "pointermove", from + 40);
+      dispatchPointer(marker, "pointerup", from + 40);
+      await settle(w);
+      assert.equal(interaction.startTime, before);
+    });
+  }
+
   if (edit) {
     it("adds and removes visible markers as popup markup changes", async function () {
       const popup = w.interactions.add(0);
@@ -131,22 +151,47 @@ for (const edit of [false, true]) describe(`<webwriter-interactive-video> input 
       assert.isBelow(Math.abs(interaction.startTime - (before + 1)), 0.01);
     });
 
-    it("a touch drag on an interaction marker moves its start time", async function () {
+    for (const pointerType of ["mouse", "touch", "pen"]) {
+      it(`retimes an interaction when a ${pointerType} drag is released`, async function () {
+        await settle(w);
+        const [marker] = baubles(w);
+        const interaction = w.videoInteractions[0];
+        const before = interaction.startTime;
+        const length = interaction.endTime - before;
+        const area = (marker.getRootNode() as ShadowRoot).getElementById("marker-track")!.getBoundingClientRect();
+        const from = marker.getBoundingClientRect().left + 9;
+        const to = area.left + 9 + (area.width - 18) * (pointerType === "touch" ? 0.5 : 0.7);
+        const send = (type: string, x: number) => dispatchPointer(marker, type, x, pointerType);
+        send("pointerdown", from);
+        send("pointermove", to);
+        assert.equal(interaction.startTime, before, "dragging only previews the placement");
+        assert.closeTo(marker.getBoundingClientRect().left + 9, to, 1);
+        send("pointerup", to);
+        await settle(w);
+
+        const expected = w.videoPlayer.duration * (pointerType === "touch" ? 0.5 : 0.7);
+        assert.closeTo(interaction.startTime, expected, 0.1);
+        assert.closeTo(interaction.endTime - interaction.startTime, length, 0.01);
+        assert.equal(Number(interaction.getAttribute("starttime")), interaction.startTime);
+        assert.closeTo(marker.getBoundingClientRect().left + 9, to, 1);
+      });
+    }
+
+    it("restores the marker after a cancelled drag and ignores a second pointer", async function () {
+      const [marker] = baubles(w);
+      const interaction = w.videoInteractions[0];
+      const before = interaction.startTime;
+      const from = marker.getBoundingClientRect().left + 9;
+      const to = from - 60;
+      dispatchPointer(marker, "pointerdown", from);
+      dispatchPointer(marker, "pointermove", to, "mouse", 8);
+      assert.closeTo(marker.getBoundingClientRect().left + 9, from, 1);
+      dispatchPointer(marker, "pointermove", to);
+      assert.closeTo(marker.getBoundingClientRect().left + 9, to, 1);
+      dispatchPointer(marker, "pointercancel", to);
       await settle(w);
-      const bar = w.shadowRoot.querySelector("interactions-progress-bar");
-      const [first] = baubles(w);
-      const interaction = w.videoInteractions.find((i: any) => Number(i.id) === Number(first.id));
-      const area = bar.shadowRoot.querySelector("#drop-area").getBoundingClientRect();
-      const from = first.getBoundingClientRect();
-      const at = (clientX: number, type: string) =>
-        first.dispatchEvent(new PointerEvent(type, { bubbles: true, composed: true, pointerId: 7, pointerType: "touch", isPrimary: true, clientX, clientY: from.top + 9 }));
-      at(from.left + 9, "pointerdown");
-      at(from.left + 40, "pointermove");
-      at(area.left + area.width * 0.8, "pointermove");
-      at(area.left + area.width * 0.8, "pointerup");
-      await settle(w);
-      const expected = w.videoPlayer.duration * 0.8;
-      assert.isBelow(Math.abs(interaction.startTime - expected), 1.5, `${interaction.startTime} vs ${expected}`);
+      assert.equal(interaction.startTime, before);
+      assert.closeTo(marker.getBoundingClientRect().left + 9, from, 1);
     });
 
     it("the move grip of an interaction works with the arrow keys", async function () {
