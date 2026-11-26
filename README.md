@@ -1,5 +1,5 @@
-# Interactive Video (`@webwriter/interactive-video@4.1.1`)
-[License: MIT](LICENSE) | Version: 4.1.1
+# Interactive Video (`@webwriter/interactive-video@4.1.2`)
+[License: MIT](LICENSE) | Version: 4.1.2
 
 Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).
 
