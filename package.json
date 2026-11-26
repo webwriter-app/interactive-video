@@ -1,6 +1,6 @@
 {
   "name": "@webwriter/interactive-video",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "Add interactive popups to audio and video content. Supports several providers (YouTube, Vimeo, TikTok, direct links).",
   "repository": "https://github.com/webwriter-app/interactive-video",
   "keywords": [
@@ -205,6 +205,7 @@
     },
     "./package.json": "./package.json",
     "./icon": "./icon.svg",
+    "./preview": "./assets/preview.mp4",
     "./editing-config.json": "./editing-config.json",
     "./custom-elements.json": "./custom-elements.json"
   },
